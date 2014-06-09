@@ -250,6 +250,7 @@ Public Function GetForm(Main As Object) As String
     Dim InputValue As String
     Dim FieldFound As Boolean
     Dim FieldPtr As Long
+    Dim editorAddonId As Long
     '
     ProcessError = False
     Content = ""
@@ -769,12 +770,12 @@ Dim FieldNeeded As Boolean
 Dim Selector As String
                 Selector = Main.GetFormInputSelect(RequestNameFormSetID, Formset.Id, "Form Sets")
 Dim Pos As Long
-Dim Cnt As Long
+Dim cnt As Long
                 Pos = 1
-                Do While Pos <> 0 And Cnt < 2
+                Do While Pos <> 0 And cnt < 2
                     Pos = InStr(Pos, Selector, "<option", vbTextCompare)
                     If Pos <> 0 Then
-                        Cnt = Cnt + 1
+                        cnt = cnt + 1
                         Pos = Pos + 1
                     End If
                 Loop
@@ -789,7 +790,7 @@ Dim Cnt As Long
                     & "<TD width=100 align=right>Name&nbsp;<br><img src=/cclib/images/spacer.gif width=100 height=1></td>" _
                     & "<td width=99% align=left>" & Main.GetFormInputText(RequestNameFormSetName, FormSetName, 1, 30) & "</td>" _
                     & "</tr>"
-                If Cnt > 1 Then
+                If cnt > 1 Then
                     Content = Content _
                         & "<TR>" _
                         & "<TD align=left colspan=2>Edit a current multi-page form</td>" _
@@ -905,16 +906,30 @@ Dim Cnt As Long
                 If Main.SiteProperty_BuildVersion < "4.1.372" Then
                     editor = Main.GetFormInputActiveContent(RequestNameHTMLBody, FormHTMLBody)
                 Else
+                    '
+                    ' hack - new editor does not have input fields, force to default editor
+                    '
+                    editorAddonId = 0
+                    SQL = "select editorAddonId from ccfieldtypes where name='html'"
+                    CS = Main.OpenCSSQL("default", SQL)
+                    If Main.IsCSOK(CS) Then
+                        editorAddonId = Main.GetCSInteger(CS, "editorAddonId")
+                    End If
+                    Call Main.CloseCS(CS)
+                    SQL = "update ccfieldtypes set editorAddonId=0 where name='html'"
+                    Call Main.ExecuteSQL("", SQL)
                     editor = Main.GetFormInputHTML3(RequestNameHTMLBody, FormHTMLBody)
+                    SQL = "update ccfieldtypes set editorAddonId=" & editorAddonId & " where name='html'"
+                    Call Main.ExecuteSQL("", SQL)
                 End If
                 Content = Content _
-                    & CR & Main.GetFormInputHidden(RequestNameFormPtr, Formset.FormPtr) _
-                    & CR & "<div class=""fwFormBody"">" _
-                    & CR & "<div class=""fwEditCaption"">Name</div>" _
-                    & CR & "<div class=""fwEditInput"">" & Main.GetFormInputText(RequestNameFormName, FormName, 1, 30) & "</div>" _
-                    & CR & "<div class=""fwEditCaption"">HTML Body</div>" _
-                    & CR & "<div class=""fwEditInput"">" & editor & "</div>" _
-                    & CR & "</div>"
+                    & cr & Main.GetFormInputHidden(RequestNameFormPtr, Formset.FormPtr) _
+                    & cr & "<div class=""fwFormBody"">" _
+                    & cr & "<div class=""fwEditCaption"">Name</div>" _
+                    & cr & "<div class=""fwEditInput"">" & Main.GetFormInputText(RequestNameFormName, FormName, 1, 30) & "</div>" _
+                    & cr & "<div class=""fwEditCaption"">HTML Body</div>" _
+                    & cr & "<div class=""fwEditInput"">" & editor & "</div>" _
+                    & cr & "</div>"
                 
 '                Content = Content _
 '                    & CR & Main.GetFormInputHidden(RequestNameFormPtr, Formset.FormPtr) _
@@ -1174,9 +1189,9 @@ Dim EmailCID As Long
         End Select
         '
         WizardContent = "" _
-            & CR & "<div class=""formWizard"">" _
+            & cr & "<div class=""formWizard"">" _
             & kmaIndent(WizardContent) _
-            & CR & "</div>"
+            & cr & "</div>"
         GetForm = Main.GetAdminFormBody("", "", "", True, True, "", "", 20, WizardContent)
     End If
     '
@@ -1195,7 +1210,7 @@ Private Function ProcessHTMLFormReturnError(Main As Object, Formset As FormSetTy
     On Error GoTo ErrorTrap
     '
     Dim ChrPtr As Long
-    Dim Chr As String
+    Dim chr As String
     Dim CSField As Long
     Dim SQL As String
     Dim DataContentID As Long
@@ -1358,8 +1373,8 @@ Private Function ProcessHTMLFormReturnError(Main As Object, Formset As FormSetTy
                                         ' Test for only alphanumeric
                                         '
                                         For ChrPtr = 1 To Len(InputName)
-                                            Chr = Mid(InputName, ChrPtr, 1)
-                                            If InStr(1, "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", Chr, vbTextCompare) = 0 Then
+                                            chr = Mid(InputName, ChrPtr, 1)
+                                            If InStr(1, "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", chr, vbTextCompare) = 0 Then
                                                 ProcessHTMLFormReturnError = ProcessHTMLFormReturnError & "<div class=ccError>Field """ & InputName & """ is not allowed because field names must only use characters A-Z and 0-9</div>"
                                                 'Exit Function
                                             End If
@@ -1654,7 +1669,7 @@ Public Function GetDynamicForm(Main As Object, FormSetName As String) As String
     Dim DbValue As String
     Dim DbVAlueList As String
     Dim DbValues() As String
-    Dim Cnt As Long
+    Dim cnt As Long
     Dim Ptr As Long
     Dim OptionValue As String
     Dim ButtonBar As String
@@ -2110,7 +2125,7 @@ Hint = "2"
                                                                         With Formset.FormsetResponse.FormResponse(FormResponsePtr)
                                                                             For FieldPtr = 0 To .FieldCnt - 1
                                                                                 If UCase(InputName) = UCase(.Fields(FieldPtr).Name) Then
-                                                                                    Copy = "click to download <a href=""http://" & Main.ServerDomainPrimary & Main.ServerFilePath & Replace(.Fields(FieldPtr).Value, "\", "/") & """><span style=""font-weight:bold;"">&nbsp;" & .Fields(FieldPtr).Value & "&nbsp;</span></a>"
+                                                                                    Copy = "click to download <a href=""http://" & Main.ServerDomainPrimary & Main.serverFilePath & Replace(.Fields(FieldPtr).Value, "\", "/") & """><span style=""font-weight:bold;"">&nbsp;" & .Fields(FieldPtr).Value & "&nbsp;</span></a>"
                                                                                     Exit For
                                                                                 End If
                                                                             Next
@@ -2271,7 +2286,7 @@ Hint = "7"
                                         End If
                                         InputValue = ""
     Dim LcaseInputName As String
-    Dim FieldType As Long
+    Dim fieldType As Long
                                         LcaseInputName = LCase(InputName)
                                         
                                         Select Case ElementTag
@@ -2286,8 +2301,8 @@ Hint = "7"
                                                     '
                                                     If Main.IsCSFieldSupported(CSData, InputName) Then
                                                         InputValue = Main.GetCSText(CSData, InputName)
-                                                        FieldType = Main.GetCSFieldType(CSData, InputName)
-                                                        Select Case FieldType
+                                                        fieldType = Main.GetCSFieldType(CSData, InputName)
+                                                        Select Case fieldType
                                                             Case FieldTypeTextFile, FieldTypeHTMLFile
                                                                 InputValue = Main.ReadVirtualFile(InputValue)
                                                             Case Else
@@ -2341,8 +2356,8 @@ Hint = "7"
                                                                     Copy = Replace(Copy, "value=", "xvalue=", , , vbTextCompare)
                                                                     If Main.IsCSFieldSupported(CSData, InputName) Then
                                                                         InputValue = Main.GetCSText(CSData, InputName)
-                                                                        FieldType = Main.GetCSFieldType(CSData, InputName)
-                                                                        Select Case FieldType
+                                                                        fieldType = Main.GetCSFieldType(CSData, InputName)
+                                                                        Select Case fieldType
                                                                             Case FieldTypeTextFile, FieldTypeHTMLFile
                                                                                 InputValue = Main.ReadVirtualFile(InputValue)
                                                                             Case Else
@@ -2381,8 +2396,8 @@ Hint = "7"
                                                                         DbVAlueList = Trim(Main.GetCSText(CSData, InputName))
                                                                         If DbVAlueList <> "" Then
                                                                             DbValues = Split(DbVAlueList, ",")
-                                                                            Cnt = UBound(DbValues) + 1
-                                                                            For Ptr = 0 To Cnt - 1
+                                                                            cnt = UBound(DbValues) + 1
+                                                                            For Ptr = 0 To cnt - 1
                                                                                 DbValue = Trim(DbValues(Ptr))
                                                                                 If LCase(DbValue) = LCase(InputValue) Then
                                                                                     Copy = Replace(Copy, ">", " checked>", , , vbTextCompare)
@@ -2699,7 +2714,7 @@ Private Sub SaveFormsetResponse(Main As Object, Formset As FormSetType, CSData A
             '
             ' Save the data into the current record
             '
-Dim FieldType As Long
+Dim fieldType As Long
 
             If Main.IsCSOK(CSData) Then
                 For Ptr = 0 To .FormResponseCnt - 1
@@ -2707,8 +2722,8 @@ Dim FieldType As Long
                         For FieldPtr = 0 To .FieldCnt - 1
                             FieldName = .Fields(FieldPtr).Name
                             If Main.IsCSFieldSupported(CSData, FieldName) Then
-                                FieldType = Main.GetCSFieldType(CSData, FieldName)
-                                If FieldType <> FieldTypeManyToMany And FieldType <> FieldTypeRedirect Then
+                                fieldType = Main.GetCSFieldType(CSData, FieldName)
+                                If fieldType <> FieldTypeManyToMany And fieldType <> FieldTypeRedirect Then
                                     Select Case Main.GetCSFieldType(CSData, FieldName)
                                         Case FieldTypeLongText
                                             FieldValue = Left(.Fields(FieldPtr).Value, 4000)
