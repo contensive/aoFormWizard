@@ -206,7 +206,7 @@ Public Function GetForm(Main As Object) As String
     Dim ContentSelectID As Long
     Dim FormNewContentName As String
     Dim CreateContentFields As Boolean
-    Dim FormContentID As Long
+    Dim formContentId As Long
     '
     Dim FormSetName As String
     Dim HeaderCaption As String
@@ -327,15 +327,15 @@ Public Function GetForm(Main As Object) As String
                             Formset = GetFormSet(Main, FormSetID)
                             SubFormID = SubFormPageReview
                         Else
-                            CS = Main.OpenCSContent("Form Sets", "name=" & KmaEncodeSQLText(ValueText))
-                            If Main.IsCSOK(CS) Then
+                            CS = Main.openCsContent("Form Sets", "name=" & KmaEncodeSQLText(ValueText))
+                            If Main.iscsok(CS) Then
                                 '
                                 ' name already used
                                 '
                                 ProcessError = True
                                 Content = Content & "<div class=ccError>A form set with this name already exists. Either create a new name or select this form from the drop-down menu.</div>"
                             End If
-                            Call Main.CloseCS(CS)
+                            Call Main.closeCs(CS)
                             Formset.Name = ValueText
                             Call SaveFormSet(Main, Formset)
                             FormSetID = Main.GetRecordID("Form Sets", ValueText)
@@ -566,16 +566,16 @@ Dim RowPtr As Long
                                         DataTableName = Replace(DataTableName, "'", "")
                                         DataTableName = Replace(DataTableName, "/", "")
                                         DataTableName = Replace(DataTableName, "/", "")
-                                        CS = Main.OpenCSContent("Content", "name=" & KmaEncodeSQLText(DataContentName))
-                                        If Not Main.IsCSOK(CS) Then
-                                            Call Main.CloseCS(CS)
+                                        CS = Main.openCsContent("Content", "name=" & KmaEncodeSQLText(DataContentName))
+                                        If Not Main.iscsok(CS) Then
+                                            Call Main.closeCs(CS)
                                             Call Main.CreateContent("default", DataTableName, DataContentName)
-                                            CS = Main.OpenCSContent("Content", "name=" & KmaEncodeSQLText(DataContentName))
+                                            CS = Main.openCsContent("Content", "name=" & KmaEncodeSQLText(DataContentName))
                                         End If
-                                        If Main.IsCSOK(CS) Then
+                                        If Main.iscsok(CS) Then
                                             DataContentID = Main.GetCSInteger(CS, "ID")
                                         End If
-                                        Call Main.CloseCS(CS)
+                                        Call Main.closeCs(CS)
                                         .ContentID = DataContentID
                                         If DataContentID = 0 Then
                                             ProcessError = True
@@ -597,13 +597,13 @@ Dim RowPtr As Long
                                     .NewContentName = ""
                                     .UseAuthMemberContent = True
                                     .UseAuthOrgContent = False
-                                    DataContentID = Main.GetContentID("people")
+                                    DataContentID = Main.getContentId("people")
                                 Case ContentSelectUseAuthOrgContent
                                     .ContentID = 0
                                     .NewContentName = ""
                                     .UseAuthMemberContent = False
                                     .UseAuthOrgContent = True
-                                    DataContentID = Main.GetContentID("organizations")
+                                    DataContentID = Main.getContentId("organizations")
                                 Case Else
                                     ProcessError = True
                                     Content = Content & "<div class=ccError>Please select the appropriate checkbox.</div>"
@@ -628,8 +628,8 @@ Dim FieldNeeded As Boolean
                                 For Ptr = 0 To .FieldCnt - 1
                                     SQL = "select id from ccfields where name=" & KmaEncodeSQLText(.Fields(Ptr).Name) & " and contentid=" & DataContentID
                                     CS = Main.OpenCSSQL("default", SQL)
-                                    FieldNeeded = Not Main.IsCSOK(CS)
-                                    Call Main.CloseCS(CS)
+                                    FieldNeeded = Not Main.iscsok(CS)
+                                    Call Main.closeCs(CS)
                                     If FieldNeeded Then
                                         ReloadContentDefinitions = True
                                         'With .Fields(Ptr)
@@ -645,8 +645,8 @@ Dim FieldNeeded As Boolean
                                         '
                                         SQL = "select id from ccfields where name=" & KmaEncodeSQLText(.Fields(Ptr).Name) & " and contentid=" & DataContentID
                                         CS = Main.OpenCSSQL("default", SQL)
-                                        FieldNeeded = Not Main.IsCSOK(CS)
-                                        Call Main.CloseCS(CS)
+                                        FieldNeeded = Not Main.iscsok(CS)
+                                        Call Main.closeCs(CS)
                                         
                                         If FieldNeeded Then
                                             ProcessError = True
@@ -912,10 +912,10 @@ Dim cnt As Long
                     editorAddonId = 0
                     SQL = "select editorAddonId from ccfieldtypes where name='html'"
                     CS = Main.OpenCSSQL("default", SQL)
-                    If Main.IsCSOK(CS) Then
+                    If Main.iscsok(CS) Then
                         editorAddonId = Main.GetCSInteger(CS, "editorAddonId")
                     End If
-                    Call Main.CloseCS(CS)
+                    Call Main.closeCs(CS)
                     SQL = "update ccfieldtypes set editorAddonId=0 where name='html'"
                     Call Main.ExecuteSQL("", SQL)
                     editor = Main.GetFormInputHTML3(RequestNameHTMLBody, FormHTMLBody)
@@ -1027,7 +1027,7 @@ Dim cnt As Long
                 Description = "<B>Form result storage</B><BR><BR>Select where the data from this form will be stored. All fields that exactly match the database fields will be stored. If you select 'Create New Fields', your database will be expanded to include the fields from this form. In either case, all the data from the response to this this form will be sent to the Response system email, and saved in the 'User Form Response' data."
                 If Formset.FormCnt = 0 Then
                     FormNewContentName = ""
-                    FormContentID = 0
+                    formContentId = 0
                     FormHTMLBody = ""
                     ContentSelectID = 0
                     CreateContentFields = False
@@ -1152,7 +1152,7 @@ Dim cnt As Long
                 '
 Dim ReturnLink As String
 Dim EmailCID As Long
-                EmailCID = Main.GetContentID("System Email")
+                EmailCID = Main.getContentId("System Email")
                 ReturnLink = Main.ServerLink
                 ReturnLink = kmaModifyLinkQuery(ReturnLink, RequestNameSubForm, SubFormActions)
                 ReturnLink = kmaEncodeRequestVariable(ReturnLink)
@@ -1163,7 +1163,7 @@ Dim EmailCID As Long
                     & "<TR>" _
                     & "<TD width=100 align=right>Join&nbsp;Group&nbsp;<br><img src=/cclib/images/spacer.gif width=100 height=1></td>" _
                     & "<td width=99% align=left>" & Main.GetFormInputSelect(RequestNameJoinGroupID, Formset.JoinGroupID, "Groups") & "</td>" _
-                    & "<TD width=50 align=center><a href=""" & Main.SiteProperty_AdminURL & "?af=4&cid=" & Main.GetContentID("Groups") & "&EditReferer=" & ReturnLink & """><img src=""/cclib/images/IconContentAdd.gif"" border=0 width=18 height=22></a></td>" _
+                    & "<TD width=50 align=center><a href=""" & Main.SiteProperty_AdminURL & "?af=4&cid=" & Main.getContentId("Groups") & "&EditReferer=" & ReturnLink & """><img src=""/cclib/images/IconContentAdd.gif"" border=0 width=18 height=22></a></td>" _
                     & "</tr>" _
                     & "<TR>" _
                     & "<TD width=100 align=right>Response&nbsp;Email&nbsp;<br><img src=/cclib/images/spacer.gif width=100 height=1></td>" _
@@ -1243,12 +1243,12 @@ Private Function ProcessHTMLFormReturnError(Main As Object, Formset As FormSetTy
             '
             ' Update the member record
             '
-            DataContentID = Main.GetContentID("people")
+            DataContentID = Main.getContentId("people")
         ElseIf .UseAuthOrgContent Then
             '
             ' Update the organization record
             '
-            DataContentID = Main.GetContentID("Organizations")
+            DataContentID = Main.getContentId("Organizations")
         End If
         If InStr(1, .HTMLBody, "<") = 0 Then
             '
@@ -1388,14 +1388,14 @@ Private Function ProcessHTMLFormReturnError(Main As Object, Formset As FormSetTy
                                             '
                                             SQL = "select top 1 * from ccFields where ContentID=" & DataContentID & " and (name=" & KmaEncodeSQLText(.Name) & ") order by id"
                                             CSField = Main.OpenCSSQL("default", SQL, 1, 1)
-                                            If Main.IsCSOK(CSField) Then
+                                            If Main.iscsok(CSField) Then
                                                 '
                                                 ' field matches a content field, save associations
                                                 '
                                                 .ContentFieldID = Main.GetCSInteger(CSField, "ID")
                                                ' .Required = Main.GetCSBoolean(CSField, "required")
                                             End If
-                                            Call Main.CloseCS(CSField)
+                                            Call Main.closeCs(CSField)
                                         End With
                                     End If
                                 
@@ -1451,7 +1451,7 @@ Private Function GetFormSet(Main As Object, FormSetID As Long) As FormSetType
     Dim FieldPtr As Long
     '
     CSFormSet = Main.OpenCSContentRecord("Form Sets", FormSetID)
-    If Main.IsCSOK(CSFormSet) Then
+    If Main.iscsok(CSFormSet) Then
         GetFormSet.Id = FormSetID
         GetFormSet.Name = Main.GetCSText(CSFormSet, "name")
         GetFormSet.Active = Main.GetCSBoolean(CSFormSet, "active")
@@ -1460,15 +1460,15 @@ Private Function GetFormSet(Main As Object, FormSetID As Long) As FormSetType
         GetFormSet.ResponseEmailID = Main.GetCSInteger(CSFormSet, "ResponseEmailID")
         GetFormSet.ThankYouCopy = Main.GetCSText(CSFormSet, "ThankYouCopy")
     End If
-    Call Main.CloseCS(CSFormSet)
+    Call Main.closeCs(CSFormSet)
     '
     ' Load in the forms
     '
     If GetFormSet.Id <> 0 Then
-        CSForm = Main.OpenCSContent("Forms", "FormSetID=" & GetFormSet.Id, "SortOrder,ID")
+        CSForm = Main.openCsContent("Forms", "FormSetID=" & GetFormSet.Id, "SortOrder,ID")
         FormSize = 0
         FormPtr = 0
-        Do While Main.IsCSOK(CSForm)
+        Do While Main.iscsok(CSForm)
             If FormPtr >= FormSize Then
                 FormSize = FormSize + 5
                 ReDim Preserve GetFormSet.Forms(FormSize)
@@ -1495,10 +1495,10 @@ Private Function GetFormSet(Main As Object, FormSetID As Long) As FormSetType
                 '
                 ' Load in Form fields
                 '
-                CSField = Main.OpenCSContent("Form Fields", "FormID=" & .Id)
+                CSField = Main.openCsContent("Form Fields", "FormID=" & .Id)
                 FieldSize = 0
                 .FieldCnt = 0
-                Do While Main.IsCSOK(CSField)
+                Do While Main.iscsok(CSField)
                     If .FieldCnt >= FieldSize Then
                         FieldSize = FieldSize + 5
                         ReDim Preserve GetFormSet.Forms(FormPtr).Fields(FieldSize)
@@ -1516,13 +1516,13 @@ Private Function GetFormSet(Main As Object, FormSetID As Long) As FormSetType
                     .FieldCnt = .FieldCnt + 1
                     Main.NextCSRecord (CSField)
                 Loop
-                Call Main.CloseCS(CSField)
+                Call Main.closeCs(CSField)
             End With
             
             FormPtr = FormPtr + 1
             Main.NextCSRecord (CSForm)
         Loop
-        Call Main.CloseCS(CSForm)
+        Call Main.closeCs(CSForm)
         GetFormSet.FormCnt = FormPtr
     End If
     '
@@ -1556,7 +1556,7 @@ Private Sub SaveFormSet(Main As Object, Formset As FormSetType)
         'Formset.Active = 0
     End If
     CSFormSet = Main.OpenCSContentRecord("Form Sets", Formset.Id)
-    If Main.IsCSOK(CSFormSet) Then
+    If Main.iscsok(CSFormSet) Then
         Call Main.SetCS(CSFormSet, "name", Formset.Name)
         Call Main.SetCS(CSFormSet, "active", Formset.Active)
         Call Main.SetCS(CSFormSet, "JoinGroupID", Formset.JoinGroupID)
@@ -1579,7 +1579,7 @@ Dim FormID As Long
                     End If
                     FormID = .Id
                     CSForm = Main.OpenCSContentRecord("Forms", FormID)
-                    If Main.IsCSOK(CSForm) Then
+                    If Main.iscsok(CSForm) Then
                         Call Main.SetCS(CSForm, "name", .Name)
                         Call Main.SetCS(CSForm, "FormSetID", Formset.Id)
                         Call Main.SetCS(CSForm, "AddBackButton", .AddBackButton)
@@ -1607,17 +1607,17 @@ Dim FormID As Long
                             With .Fields(FieldPtr)
                                 If .Name <> "" And Not .Deleted Then
                                     If .Id = 0 Then
-                                        CSField = Main.OpenCSContent("Form Fields", "(formid=" & FormID & ")and(Name=" & KmaEncodeSQLText(.Name) & ")", , False)
-                                        If Main.IsCSOK(CSField) Then
+                                        CSField = Main.openCsContent("Form Fields", "(formid=" & FormID & ")and(Name=" & KmaEncodeSQLText(.Name) & ")", , False)
+                                        If Main.iscsok(CSField) Then
                                             .Id = Main.GetCSInteger(CSField, "ID")
                                         End If
-                                        Call Main.CloseCS(CSField)
+                                        Call Main.closeCs(CSField)
                                         If .Id = 0 Then
                                             .Id = Main.InsertContentRecordGetID("Form Fields")
                                         End If
                                     End If
                                     CSField = Main.OpenCSContentRecord("Form Fields", .Id)
-                                    If Main.IsCSOK(CSField) Then
+                                    If Main.iscsok(CSField) Then
                                         Call Main.SetCS(CSField, "Name", .Name)
                                         Call Main.SetCS(CSField, "Active", True)
                                         Call Main.SetCS(CSField, "Caption", .Caption)
@@ -1631,7 +1631,7 @@ Dim FormID As Long
                                     End If
                                 End If
                             End With
-                            Call Main.CloseCS(CSField)
+                            Call Main.closeCs(CSField)
                         Next
                         '
                         ' Delete inactive fields
@@ -1639,13 +1639,13 @@ Dim FormID As Long
                         SQL = "delete from ccFormFields where active<>1 and formid=" & FormID
                         Call Main.ExecuteSQL("default", SQL)
                     End If
-                    Call Main.CloseCS(CSForm)
+                    Call Main.closeCs(CSForm)
                 End If
             End With
         Next
         'Formset.FormCnt = FormPtr
     End If
-    Call Main.CloseCS(CSFormSet)
+    Call Main.closeCs(CSFormSet)
     '
     Exit Sub
 ErrorTrap:
@@ -1705,6 +1705,7 @@ Public Function GetDynamicForm(Main As Object, FormSetName As String) As String
     Dim ButtonCnt As Long
     Dim DataFieldName As String
     Dim DataContentName As String
+                            Dim formContentId As Integer
     Dim DataRecordID As Long
     Dim DataContentID As Long
     Dim ReplaceText As String
@@ -1757,7 +1758,7 @@ Hint = "1"
             '   if not authenticated and recognized, log out and log in as a real guest
             '
             Call Main.LogoutMember
-            Call Main.LoginMemberByID(Main.memberID)
+            Call Main.LoginMemberByID(Main.memberId)
         End If
 '        '
 '        ' if the current account has a username, you must be authenticated to access it
@@ -1852,7 +1853,7 @@ Hint = "2"
                                     DataRecordID = Main.GetStreamInteger(RequestNameDataRecordID)
                                     If DataRecordID = 0 Then
                                         CSData = Main.InsertCSRecord(DataContentName)
-                                        If Main.IsCSOK(CSData) Then
+                                        If Main.iscsok(CSData) Then
                                             DataRecordID = Main.GetCSInteger(CSData, "id")
                                             '
                                             '   Save the recordID to a visit property - that way outside add-ons can access the newly created data
@@ -1863,13 +1864,14 @@ Hint = "2"
                                         CSData = Main.OpenCSContentRecord(DataContentName, DataRecordID)
                                     End If
                                 End If
-                                If Not Main.IsCSOK(CSData) Then
+                                If Not Main.iscsok(CSData) Then
                                     Call Main.TestPoint("GetDynamicForm, form field mapping source, contentid [" & DataContentID & "] did not open correctly")
                                 End If
                             End If
                             '
                             ' Setup the Form Response storage for the form input
                             '
+                            formContentId = .ContentID
                             FormName = .Name
                             FieldCnt = .FieldCnt
                             With Formset.FormsetResponse
@@ -1889,56 +1891,82 @@ Hint = "2"
                                 .FormResponse(FormResponsePtr).FieldCnt = FieldCnt
                             End With
                             '
-                            ' save the response
+                            ' check if all fields are ok
                             '
+                            Dim csUser As Integer
+                            Dim peopleCid As Integer
+                            Dim UseAuthMemberContent As Boolean
+                            UseAuthMemberContent = .UseAuthMemberContent
+                            peopleCid = Main.getContentId("people")
                             For FieldPtr = 0 To FieldCnt - 1
                                 With .Fields(FieldPtr)
                                     FieldName = .Name
                                     FieldValue = Main.GetStreamText(.Name)
-                                    If .InputType = "FILE" Then
-                                        FieldName = FieldName
-                                        VirtualPath = GetRandomInteger()
-                                        VirtualPath = "Upload\FormWizard\" & String(12 - Len(VirtualPath), "0") & VirtualPath & "\"
-                                        FieldValue = Main.ProcessFormInputFile(FieldName, VirtualPath)
-                                    End If
-                                    If LCase(FieldName) = "firstname" Then
-                                        FirstName = FieldValue
-                                    ElseIf LCase(FieldName) = "lastname" Then
-                                        LastName = FieldValue
-                                    ElseIf LCase(FieldName) = "name" Then
-                                        Name = FieldValue
-                                    End If
-                                    If .Required And FieldValue = "" Then
+                                    If ((UseAuthMemberContent) Or (formContentId = peopleCid)) And (LCase(FieldName) = "username") Then
                                         '
-                                        ' Required field is missing
+                                        ' this is the username or a people record
                                         '
-                                        Call Main.AddUserError(FieldName & " is a required field.")
-                                        'ErrorMsg = ErrorMsg & "<div class=ccError>" & FieldName & " is a required field.</div>"
-                                    Else
-                                        '
-                                        ' Update the User Response Fiels
-                                        '
-                                        Formset.FormsetResponse.FormResponse(FormResponsePtr).Fields(FieldPtr).Name = FieldName
-                                        Formset.FormsetResponse.FormResponse(FormResponsePtr).Fields(FieldPtr).Value = FieldValue
-                                        '
-                                        ' Update the content
-                                        '
-                                        If Main.IsCSOK(CSData) And .ContentFieldID <> 0 Then
-                                            Call Main.SetCS(CSData, FieldName, FieldValue)
+                                        csUser = Main.openCsContent("people", "(username=" & KmaEncodeSQLText(FieldValue) & ")and(id<>" & Main.memberId & ")")
+                                        If Main.iscsok(csUser) Then
+                                            Call Main.AddUserError("The username you entered is in use. Please enter a different username. If this is your account, please login first.")
                                         End If
+                                        Call Main.closeCs(csUser)
                                     End If
                                 End With
                             Next
+                            If Not Main.IsUserError Then
+                                '
+                                ' save the response
+                                '
+                                For FieldPtr = 0 To FieldCnt - 1
+                                    With .Fields(FieldPtr)
+                                        FieldName = .Name
+                                        FieldValue = Main.GetStreamText(.Name)
+                                        If .InputType = "FILE" Then
+                                            FieldName = FieldName
+                                            VirtualPath = GetRandomInteger()
+                                            VirtualPath = "Upload\FormWizard\" & String(12 - Len(VirtualPath), "0") & VirtualPath & "\"
+                                            FieldValue = Main.ProcessFormInputFile(FieldName, VirtualPath)
+                                        End If
+                                        If LCase(FieldName) = "firstname" Then
+                                            FirstName = FieldValue
+                                        ElseIf LCase(FieldName) = "lastname" Then
+                                            LastName = FieldValue
+                                        ElseIf LCase(FieldName) = "name" Then
+                                            Name = FieldValue
+                                        End If
+                                        If .Required And FieldValue = "" Then
+                                            '
+                                            ' Required field is missing
+                                            '
+                                            Call Main.AddUserError(FieldName & " is a required field.")
+                                            'ErrorMsg = ErrorMsg & "<div class=ccError>" & FieldName & " is a required field.</div>"
+                                        Else
+                                            '
+                                            ' Update the User Response Fiels
+                                            '
+                                            Formset.FormsetResponse.FormResponse(FormResponsePtr).Fields(FieldPtr).Name = FieldName
+                                            Formset.FormsetResponse.FormResponse(FormResponsePtr).Fields(FieldPtr).Value = FieldValue
+                                            '
+                                            ' Update the content
+                                            '
+                                            If Main.iscsok(CSData) And .ContentFieldID <> 0 Then
+                                                Call Main.SetCS(CSData, FieldName, FieldValue)
+                                            End If
+                                        End If
+                                    End With
+                                Next
+                                '
+                                ' set name from firstname and lastname
+                                '
+                                If Main.iscsok(CSData) And (FirstName <> "") And (LastName <> "") And (Name = "") Then
+                                    Call Main.SetCS(CSData, "name", FirstName & " " & LastName)
+                                End If
+                            End If
                             '
                             ' REnder the HTML copy for the page so any Add-ons get a chance to post there errors, throw away result
                             '
                             RenderedHTMLBody = Main.EncodeContentForWeb(.HTMLBody, "Forms", .Id, "", kmaEncodeInteger(Main.GetSiteProperty("DefaultWrapperID", "0")))
-                            '
-                            ' set name from firstname and lastname
-                            '
-                            If Main.IsCSOK(CSData) And (FirstName <> "") And (LastName <> "") And (Name = "") Then
-                                Call Main.SetCS(CSData, "name", FirstName & " " & LastName)
-                            End If
                             '
                             RepeatFormForUserError = Main.IsUserError()
                             If Not RepeatFormForUserError Then
@@ -1949,7 +1977,7 @@ Hint = "2"
                                 Call SaveFormsetResponse(Main, Formset, CSData)
                                 Formset.FormPtr = Formset.FormPtr + 1
                             End If
-                            Call Main.CloseCS(CSData)
+                            Call Main.closeCs(CSData)
                     End Select
                 End With
             End If
@@ -1969,7 +1997,7 @@ Hint = "2"
                         EmailBody = EmailBody _
                             & "<BR>" _
                             & "<BR>The Formset [" & Formset.Name & "] was completed " & Now() _
-                            & "<BR>By " & Main.MemberName & " (member #" & Main.memberID & ")" _
+                            & "<BR>By " & Main.MemberName & " (member #" & Main.memberId & ")" _
                             & "<BR>" _
                             & "<BR>"
                         If ClientsWereSane Then
@@ -1977,13 +2005,13 @@ Hint = "2"
                             ' Send the response
                             '
                             CS = Main.OpenCSContentRecord("User Form Response", Formset.FormsetResponse.Id)
-                            If Main.IsCSOK(CS) Then
+                            If Main.iscsok(CS) Then
                                 Copy = Main.GetCS(CS, "copy")
                                 Copy = Replace(Copy, "\n", vbCrLf)
                                 Copy = Replace(Copy, vbCrLf, "<BR>")
                                 EmailBody = EmailBody & Copy
                             End If
-                            Call Main.CloseCS(CS)
+                            Call Main.closeCs(CS)
                         Else
                             Hint = "32"
                             '
@@ -2177,7 +2205,7 @@ Hint = "4"
                 If Formset.ResponseEmailID <> 0 Then
                     EmailName = Main.GetRecordName("System Email", Formset.ResponseEmailID)
                     If EmailName <> "" Then
-                        Call Main.SendSystemEmail(EmailName, , Main.memberID)
+                        Call Main.SendSystemEmail(EmailName, , Main.memberId)
                     End If
                 End If
                 '
@@ -2496,7 +2524,7 @@ Hint = "9"
     '    '
     '    '------------------------------------------------------------------------------------
                     End If
-                    Call Main.CloseCS(CSData)
+                    Call Main.closeCs(CSData)
                     '
                     ' Add the extra buttons
                     '
@@ -2560,7 +2588,7 @@ Private Function OpenCSData(Main As Object, DataContentID As Long, DataRecordID 
         DataContentName = Main.GetContentNameByID(DataContentID)
         OpenCSData = Main.OpenCSContentRecord(DataContentName, DataRecordID)
     ElseIf UseAuthMemberContent Then
-        OpenCSData = Main.OpenCSContentRecord("people", Main.memberID)
+        OpenCSData = Main.OpenCSContentRecord("people", Main.memberId)
     ElseIf UseAuthOrgContent Then
         OpenCSData = Main.OpenCSContentRecord("organizations", Main.MemberOrganizationID)
     End If
@@ -2593,14 +2621,14 @@ Private Function GetFormsetResponse(Main As Object, UserFormResponseID As Long) 
             '
             .Id = UserFormResponseID
             CS = Main.OpenCSContentRecord("user form response", .Id)
-            If Not Main.IsCSOK(CS) Then
-                Call Main.CloseCS(CS)
+            If Not Main.iscsok(CS) Then
+                Call Main.closeCs(CS)
                 CS = Main.InsertCSRecord("user form response")
                 Call Main.SetVisitProperty("FormWizard-UserResponseID", Main.GetCSInteger(CS, "ID"))
             Else
                 Copy = Main.GetCSText(CS, "copy")
             End If
-            Call Main.CloseCS(CS)
+            Call Main.closeCs(CS)
             '
             ' Parse it out into the fields
             '
@@ -2697,26 +2725,26 @@ Private Sub SaveFormsetResponse(Main As Object, Formset As FormSetType, CSData A
             ' save the copy
             '
             CS = Main.OpenCSContentRecord("user form response", .Id)
-            If Not Main.IsCSOK(CS) Then
-                Call Main.CloseCS(CS)
+            If Not Main.iscsok(CS) Then
+                Call Main.closeCs(CS)
                 CS = Main.InsertCSRecord("user Form REsponse")
                 .Id = Main.GetCSInteger(CS, "id")
                 Call Main.SetVisitProperty("FormWizard-UserResponseID", CStr(.Id))
             End If
-            If Main.IsCSOK(CS) Then
+            If Main.iscsok(CS) Then
                 Call Main.SetCS(CS, "name", "Form set '" & FormSetName & "' completed " & Now() & " by " & Main.MemberName)
                 Call Main.SetCS(CS, "copy", Copy)
                 If (Main.GetSiteProperty("BuildVersion", "0") > "3.4.221") Then
                     Call Main.SetCS(CS, "visitid", Main.VisitID)
                 End If
             End If
-            Call Main.CloseCS(CS)
+            Call Main.closeCs(CS)
             '
             ' Save the data into the current record
             '
 Dim fieldType As Long
 
-            If Main.IsCSOK(CSData) Then
+            If Main.iscsok(CSData) Then
                 For Ptr = 0 To .FormResponseCnt - 1
                     With .FormResponse(Ptr)
                         For FieldPtr = 0 To .FieldCnt - 1
@@ -2762,17 +2790,17 @@ Private Sub VerifyMenuEntry(Main As Object, MenuName As String, ParentMenuID As 
     '
     Dim CS As Long
     '
-    CS = Main.OpenCSContent("Menu Entries", "name=" & KmaEncodeSQLText(MenuName))
-    If Not Main.IsCSOK(CS) Then
-        Call Main.CloseCS(CS)
+    CS = Main.openCsContent("Menu Entries", "name=" & KmaEncodeSQLText(MenuName))
+    If Not Main.iscsok(CS) Then
+        Call Main.closeCs(CS)
         CS = Main.InsertCSContent("Menu Entries")
-        If Main.IsCSOK(CS) Then
+        If Main.iscsok(CS) Then
             Call Main.SetCS(CS, "Name", MenuName)
             Call Main.SetCS(CS, "ParentID", ParentMenuID)
             Call Main.SetCS(CS, "ContentID", ContentID)
         End If
     End If
-    Call Main.CloseCS(CS)
+    Call Main.closeCs(CS)
     '
     Exit Sub
 ErrorTrap:
