@@ -1749,17 +1749,17 @@ Hint = "1"
 '        For Ptr = 0 To Formset.FormCnt - 1
 '            usesAccountAccess = usesAccountAccess Or Formset.Forms(Ptr).UseAuthMemberContent Or Formset.Forms(Ptr).UseAuthOrgContent
 '        Next
-        isAuthenticated = Main.isAuthenticated
-        isRecognized = Main.isRecognized
-        If (Not isAuthenticated) And isRecognized Then
-        'If usesAccountAccess And (Not isAuthenticated) And isRecognized Then
-            '
-            ' if the formset uses AuthMemberContent, you must be either authenticated or not-recognized
-            '   if not authenticated and recognized, log out and log in as a real guest
-            '
-            Call Main.LogoutMember
-            Call Main.LoginMemberByID(Main.memberId)
-        End If
+'        isAuthenticated = Main.isAuthenticated
+'        isRecognized = Main.isRecognized
+'        If (Not isAuthenticated) And isRecognized Then
+'        'If usesAccountAccess And (Not isAuthenticated) And isRecognized Then
+'            '
+'            ' if the formset uses AuthMemberContent, you must be either authenticated or not-recognized
+'            '   if not authenticated and recognized, log out and log in as a real guest
+'            '
+'            Call Main.LogoutMember
+'            Call Main.LoginMemberByID(Main.memberId)
+'        End If
 '        '
 '        ' if the current account has a username, you must be authenticated to access it
 '        '
@@ -1771,19 +1771,20 @@ Hint = "1"
 '            Next
 '        End If
 Hint = "2"
-        If BlockForm Then
-            '
-            ' Security Issue
-            '
-            QS = Main.RefreshQueryString
-            If QS = "" Then
-                QS = "?"
-            Else
-                QS = "?" & QS & "&"
-            End If
-            GetDynamicForm = "<p>To complete this form using your current website account, you must first log-in. <a href=""" & QS & "method=login"">Click here to log-in</a>. If you do not have an account, <a href=""" & QS & "method=logout"">click here</a> to start over with a new account.</p>"
-            Call Main.TestPoint("GetDynamicForm failed because database needs to be upgraded")
-        Else
+        If True Then
+'        If BlockForm Then
+'            '
+'            ' Security Issue
+'            '
+'            QS = Main.RefreshQueryString
+'            If QS = "" Then
+'                QS = "?"
+'            Else
+'                QS = "?" & QS & "&"
+'            End If
+'            GetDynamicForm = "<p>To complete this form using your current website account, you must first log-in. <a href=""" & QS & "method=login"">Click here to log-in</a>. If you do not have an account, <a href=""" & QS & "method=logout"">click here</a> to start over with a new account.</p>"
+'            Call Main.TestPoint("GetDynamicForm failed because database needs to be upgraded")
+'        Else
             '
             ' ----- Process the incoming form
             '
@@ -1915,6 +1916,20 @@ Hint = "2"
                                 End With
                             Next
                             If Not Main.IsUserError Then
+                                '
+                                ' must be logged in or logged out (cannot be recognized)
+                                '
+                                isAuthenticated = Main.isAuthenticated
+                                isRecognized = Main.isRecognized
+                                If (Not isAuthenticated) And ((.UseAuthMemberContent) Or (.UseAuthOrgContent)) Then
+                                    '
+                                    ' you are not authenticated and not recognized, but it is going to update your people record
+                                    '
+                                    If isRecognized Then
+                                        Call Main.LogoutMember
+                                    End If
+                                    Call Main.LoginMemberByID(Main.memberId)
+                                End If
                                 '
                                 ' save the response
                                 '
