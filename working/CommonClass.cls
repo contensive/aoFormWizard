@@ -1834,6 +1834,14 @@ Hint = "2"
                             '
                             ' Process the form input and move on
                             '
+                            If Formset.FormsetResponse.Id = 0 Then
+                                CS = Main.InsertCSRecord("user form response")
+                                If Main.IsCSOK(CS) Then
+                                    Formset.FormsetResponse.Id = Main.GetCSInteger(CS, "ID")
+                                    Call Main.SetVisitProperty("FormWizard-UserResponseID", Formset.FormsetResponse.Id)
+                                End If
+                                Call Main.CloseCS(CS)
+                            End If
                             DataContentID = .ContentID
                             CSData = -1
                             If (DataContentID <> 0) Or .UseAuthMemberContent Or .UseAuthOrgContent Then
@@ -1849,15 +1857,20 @@ Hint = "2"
                                     '
                                     DataContentName = Main.GetContentNameByID(DataContentID)
                                     RequestNameDataRecordID = "C" & DataContentID & "ID"
-                                    DataRecordID = Main.GetStreamInteger(RequestNameDataRecordID)
+Dim vpFormSetFormContentRecordId As String
+                                    vpFormSetFormContentRecordId = "formsetResponse" & Formset.FormsetResponse.Id & "Content" & DataContentID
+                                    DataRecordID = kmaEncodeInteger(Main.GetVisitProperty(vpFormSetFormContentRecordId))
+                                    'DataRecordID = Main.GetStreamInteger(RequestNameDataRecordID)
                                     If DataRecordID = 0 Then
                                         CSData = Main.InsertCSRecord(DataContentName)
                                         If Main.IsCSOK(CSData) Then
+                                            Call Main.SetCS(CSData, "name", "Dynamic Form Response " & Formset.FormsetResponse.Id)
                                             DataRecordID = Main.GetCSInteger(CSData, "id")
                                             '
                                             '   Save the recordID to a visit property - that way outside add-ons can access the newly created data
                                             '
-                                            Call Main.SetVisitProperty("Dynamic Form Data Record ID", DataRecordID)
+                                            Call Main.SetVisitProperty(vpFormSetFormContentRecordId, DataRecordID)
+                                            'Call Main.SetVisitProperty("Dynamic Form Data Record ID", DataRecordID)
                                         End If
                                     Else
                                         CSData = Main.OpenCSContentRecord(DataContentName, DataRecordID)
