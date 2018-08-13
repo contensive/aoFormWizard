@@ -1,16 +1,19 @@
+
+
+Option Strict On
+Option Explicit On
+
 Imports System
 Imports System.Collections.Generic
 Imports System.Text
 Imports Contensive.BaseClasses
 
-Namespace addonCollectionName
+Namespace Contensive.Addon.AddonCollectionVb.Controllers
     '
-    ' Sample Vb2005 addon
-    '
-    Public Class HelloWorldClass
+    Public Class addonClass
         Inherits AddonBaseClass
         '
-        ' - update references to your installed version of cpBase
+        ' - use NuGet to add Contentive.clib reference
         ' - Verify project root name space is empty
         ' - Change the namespace to the collection name
         ' - Change this class name to the addon name
@@ -38,7 +41,7 @@ Namespace addonCollectionName
         '
         Private Sub errorReport(ByVal cp As CPBaseClass, ByVal ex As Exception, ByVal method As String)
             Try
-                CP.Site.ErrorReport(ex, "Unexpected error in sampleClass." & method)
+                cp.Site.ErrorReport(ex, "Unexpected error in sampleClass." & method)
             Catch exLost As Exception
                 '
                 ' stop anything thrown from cp errorReport
