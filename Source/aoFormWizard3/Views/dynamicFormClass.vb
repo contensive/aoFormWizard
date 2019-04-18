@@ -9,7 +9,7 @@ Imports Contensive.BaseClasses
 
 Namespace Views
     '
-    Public Class FormWizardClass
+    Public Class DynamicFormClass
         Inherits AddonBaseClass
         '
         '=====================================================================================
@@ -31,12 +31,27 @@ Namespace Views
                 Dim settings = FormSetModel.createOrAddSettings(CP, settingsGuid)
                 If (settings Is Nothing) Then Throw New ApplicationException("Could not create the design block settings record.")
                 '
-                ' -- translate the Db model to a view model and mustache it into the layout
-                Dim viewModel = FormWizardViewModel.create(CP, settings)
-                If (viewModel Is Nothing) Then Throw New ApplicationException("Could not create design block view model.")
                 '
-                ' -- translate view model into html
-                result = CP.Html.Form(Nustache.Core.Render.StringToString(My.Resources.FormWizard, viewModel))
+                ' -- process form request
+                Dim ptr As Integer = 0
+                Dim processSubmit As String = CP.Doc.GetText("button")
+                Dim request As New Request() With {
+                    .blockContactFormButton = CP.Doc.GetText("button")
+                }
+                If (FormWizardController.processRequest(CP, settings, request)) Then
+                    '
+                    ' -- say thank you
+                Else
+                    '
+                    ' -- display the form
+                    '
+                    ' -- translate the Db model to a view model and mustache it into the layout
+                    Dim viewModel = FormWizardViewModel.create(CP, settings)
+                    If (viewModel Is Nothing) Then Throw New ApplicationException("Could not create design block view model.")
+                    '
+                    ' -- translate view model into html
+                    result = CP.Html.Form(Nustache.Core.Render.StringToString(My.Resources.FormWizard, viewModel))
+                End If
                 '
                 ' -- if editing enabled, add the link and wrapperwrapper
                 Return genericController.addEditWrapper(CP, result, settings.id, settings.name, FormModel.contentName, designBlockName)
@@ -45,5 +60,13 @@ Namespace Views
                 Return "<!-- " & designBlockName & ", Unexpected Exception -->"
             End Try
         End Function
+        '
+        '
+        Public Class Request
+            Public blockContactFormButton As String
+
+        End Class
+        '
+        '
     End Class
 End Namespace

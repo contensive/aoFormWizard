@@ -35,7 +35,7 @@
     <DocumentationFile>aoFormWizard3.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
-    <IntermediateOutputPath>C:\Users\jay\AppData\Local\Temp\vsE906.tmp\Debug\</IntermediateOutputPath>
+    <IntermediateOutputPath>C:\Users\kmaadmin\AppData\Local\Temp\2\vs38C8.tmp\Debug\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -46,7 +46,7 @@
     <DocumentationFile>aoFormWizard3.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
-    <IntermediateOutputPath>C:\Users\jay\AppData\Local\Temp\vsE906.tmp\Release\</IntermediateOutputPath>
+    <IntermediateOutputPath>C:\Users\kmaadmin\AppData\Local\Temp\2\vs38C8.tmp\Release\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup>
     <OptionExplicit>On</OptionExplicit>
@@ -63,6 +63,7 @@
   <ItemGroup>
     <Reference Include="CPBase, Version=4.1.2.0, Culture=neutral, PublicKeyToken=10b3c53389b845fb, processorArchitecture=MSIL">
       <HintPath>..\packages\Contensive.CPBaseClass.5.0.6\lib\net461\CPBase.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Nustache.Core, Version=1.16.0.8, Culture=neutral, PublicKeyToken=efd6f3d8f76ecd9f, processorArchitecture=MSIL">
       <HintPath>..\packages\Nustache.1.16.0.8\lib\net20\Nustache.Core.dll</HintPath>
@@ -81,6 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="constants.vb" />
+    <Compile Include="Controllers\FormWizardController.vb" />
     <Compile Include="Controllers\InstanceIdController.vb" />
     <Compile Include="Models\Db\AddonModel.vb" />
     <Compile Include="Models\Db\baseModel.vb" />
@@ -103,7 +105,7 @@
     <Compile Include="Models\Db\_blankModel.vb" />
     <Compile Include="Models\View\FormWizardViewModel.vb" />
     <Compile Include="Models\View\ViewBaseModel.vb" />
-    <Compile Include="Views\dynamicFormClass.vb" />
+    <Compile Include="Views\DynamicFormClass.vb" />
     <Compile Include="Views\addonClass.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">

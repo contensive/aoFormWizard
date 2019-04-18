@@ -33,5 +33,9 @@ Namespace Contensive.Addon.AddonCollectionVb.Controllers
             End Try
             Return returnHtml
         End Function
+
+        Private Sub errorReport(cP As CPBaseClass, ex As Exception, v As String)
+            Throw New NotImplementedException()
+        End Sub
     End Class
 End Namespace

@@ -23,11 +23,15 @@ Namespace Models.Db
         ' -- instance properties
         Public Property buttonactionid As Integer
         Public Property caption As String
+        Public Property headline As String
+        Public Property description As String
         Public Property contentfieldid As Integer
         Public Property formid As Integer
         Public Property inputtype As String
         Public Property replacetext As String
         Public Property required As Boolean
+        Public Property ischeckbox As Boolean
+        Public Property isdefault As Boolean
         '
         '====================================================================================================
         Public Overloads Shared Function add(cp As CPBaseClass) As FormFieldModel

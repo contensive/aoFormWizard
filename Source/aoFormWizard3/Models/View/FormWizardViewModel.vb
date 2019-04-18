@@ -11,15 +11,24 @@ Namespace Models.View
         Public Property headerline As String
         Public Property description As String
         Public Property listOfFieldsClass As New List(Of fieldsClass)
+        Public Property listOfButtons As New List(Of buttonClass)
         Public Property previousButton As buttonClass
         Public Property cancelButton As buttonClass
         Public Property submitButton As buttonClass
+        Public Property continueButtonName As buttonClass
         '
         ' 
         Public Class fieldsClass
             Public Property inputtype As String
             Public Property caption As String
+            Public Property headline As String
+            Public Property fielddescription As String
             Public Property required As Boolean
+            Public Property name As String
+            Public Property isCheckbox As Boolean
+            Public Property isDefault As Boolean
+            Public Property id As Integer
+            Public Property fieldPtr As Integer
         End Class
         '
         Public Class buttonClass
@@ -51,12 +60,19 @@ Namespace Models.View
                         result.listOfFieldsClass.Add(New fieldsClass() With {
                             .caption = formsField.caption,
                             .inputtype = formsField.inputtype,
-                            .required = formsField.required
+                            .required = formsField.required,
+                            .name = formsField.name,
+                            .headline = formsField.headline,
+                            .fielddescription = formsField.description,
+                            .isCheckbox = formsField.ischeckbox,
+                            .isDefault = formsField.isdefault,
+                            .id = formsField.id,
+                            .fieldPtr = fieldPtr
                         })
                         fieldPtr += 1
                     Next
                 Next
-                Return result
+                    Return result
             Catch ex As Exception
                 cp.Site.ErrorReport(ex)
                 Return Nothing
