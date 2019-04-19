@@ -26,9 +26,15 @@ Namespace Models.View
             Public Property required As Boolean
             Public Property name As String
             Public Property isCheckbox As Boolean
+            Public Property isRadio As Boolean
             Public Property isDefault As Boolean
             Public Property id As Integer
-            Public Property fieldPtr As Integer
+            Public Property optionList As New List(Of OptionClass)
+        End Class
+        '
+        Public Class OptionClass
+            Public Property optionName As String
+            Public Property optionPtr As Integer
         End Class
         '
         Public Class buttonClass
@@ -57,22 +63,62 @@ Namespace Models.View
                     Dim formsFieldList As List(Of FormFieldModel) = FormFieldModel.createList(cp, "(formid=" & form.id & ")")
                     Dim fieldPtr As Integer = 0
                     For Each formsField In formsFieldList
-                        result.listOfFieldsClass.Add(New fieldsClass() With {
-                            .caption = formsField.caption,
-                            .inputtype = formsField.inputtype,
-                            .required = formsField.required,
-                            .name = formsField.name,
-                            .headline = formsField.headline,
-                            .fielddescription = formsField.description,
-                            .isCheckbox = formsField.ischeckbox,
-                            .isDefault = formsField.isdefault,
-                            .id = formsField.id,
-                            .fieldPtr = fieldPtr
-                        })
-                        fieldPtr += 1
+                        Dim optionList As New List(Of OptionClass)
+                        Dim optionPtr As Integer = 1
+                        For Each formfieldoption In formsField.optionList.Split(",")
+                            optionList.Add(New OptionClass() With {
+                                    .optionName = formfieldoption,
+                                    .optionPtr = optionPtr
+                            })
+                            optionPtr += 1
+                        Next
+                        Select Case formsField.inputtype.ToLower()
+                            Case "radio"
+                                result.listOfFieldsClass.Add(New fieldsClass() With {
+                                    .caption = formsField.caption,
+                                    .inputtype = formsField.inputtype,
+                                    .required = formsField.required,
+                                    .name = formsField.name,
+                                    .headline = formsField.headline,
+                                    .fielddescription = formsField.description,
+                                    .isCheckbox = False,
+                                    .isDefault = False,
+                                    .isRadio = True,
+                                    .id = formsField.id,
+                                    .optionList = optionList
+                                })
+                            Case "checkbox"
+                                result.listOfFieldsClass.Add(New fieldsClass() With {
+                                    .caption = formsField.caption,
+                                    .inputtype = formsField.inputtype,
+                                    .required = formsField.required,
+                                    .name = formsField.name,
+                                    .headline = formsField.headline,
+                                    .fielddescription = formsField.description,
+                                    .isCheckbox = True,
+                                    .isDefault = False,
+                                    .isRadio = False,
+                                    .id = formsField.id,
+                                    .optionList = optionList
+                                })
+                            Case Else
+                                result.listOfFieldsClass.Add(New fieldsClass() With {
+                                    .caption = formsField.caption,
+                                    .inputtype = formsField.inputtype,
+                                    .required = formsField.required,
+                                    .name = formsField.name,
+                                    .headline = formsField.headline,
+                                    .fielddescription = formsField.description,
+                                    .isCheckbox = False,
+                                    .isDefault = True,
+                                    .isRadio = False,
+                                    .id = formsField.id,
+                                    .optionList = optionList
+                                })
+                        End Select
                     Next
                 Next
-                    Return result
+                Return result
             Catch ex As Exception
                 cp.Site.ErrorReport(ex)
                 Return Nothing

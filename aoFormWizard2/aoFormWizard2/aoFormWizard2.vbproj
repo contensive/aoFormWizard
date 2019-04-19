@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{D5B16FA7-AEFB-4F83-88BB-16F4328A961B}</ProjectGuid>
+    <ProjectGuid>{C6554498-EBB9-4809-A750-92D8CC0B902D}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>Contensive.Addon.aoFormWizard3</RootNamespace>
-    <AssemblyName>aoFormWizard3</AssemblyName>
+    <RootNamespace>aoFormWizard2</RootNamespace>
+    <AssemblyName>aoFormWizard2</AssemblyName>
     <MyType>Windows</MyType>
     <SccProjectName>
     </SccProjectName>
@@ -18,7 +18,7 @@
     </SccAuxPath>
     <SccProvider>
     </SccProvider>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
@@ -32,10 +32,8 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>aoFormWizard3.xml</DocumentationFile>
+    <DocumentationFile>aoFormWizard2.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
-    <Prefer32Bit>false</Prefer32Bit>
-    <IntermediateOutputPath>C:\Users\kmaadmin\AppData\Local\Temp\2\vs38C8.tmp\Debug\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -43,10 +41,8 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>aoFormWizard3.xml</DocumentationFile>
+    <DocumentationFile>aoFormWizard2.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
-    <Prefer32Bit>false</Prefer32Bit>
-    <IntermediateOutputPath>C:\Users\kmaadmin\AppData\Local\Temp\2\vs38C8.tmp\Release\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup>
     <OptionExplicit>On</OptionExplicit>
@@ -62,11 +58,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CPBase, Version=4.1.2.0, Culture=neutral, PublicKeyToken=10b3c53389b845fb, processorArchitecture=MSIL">
-      <HintPath>..\packages\Contensive.CPBaseClass.5.0.6\lib\net461\CPBase.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Nustache.Core, Version=1.16.0.8, Culture=neutral, PublicKeyToken=efd6f3d8f76ecd9f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Nustache.1.16.0.8\lib\net20\Nustache.Core.dll</HintPath>
+      <HintPath>..\packages\contensive.clib.4.1.2\lib\net35\CPBase.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -82,32 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="constants.vb" />
-    <Compile Include="Controllers\FormWizardController.vb" />
-    <Compile Include="Controllers\InstanceIdController.vb" />
-    <Compile Include="Models\Db\AddonModel.vb" />
-    <Compile Include="Models\Db\baseModel.vb" />
-    <Compile Include="Models\Db\DbBaseModel.vb" />
-    <Compile Include="Models\Db\DbContactUsDataModel.vb" />
-    <Compile Include="Models\Db\DbContactUsModel.vb" />
-    <Compile Include="Models\Db\DBContactUsRulesModel.vb" />
-    <Compile Include="Models\Db\DesignBlockFontModel.vb" />
-    <Compile Include="Models\Db\DesignBlockThemeModel.vb" />
-    <Compile Include="Models\Db\EmailModel.vb" />
-    <Compile Include="Models\Db\GroupModel.vb" />
-    <Compile Include="Models\Db\layoutModel.vb" />
-    <Compile Include="Models\Db\MemberRuleModel.vb" />
-    <Compile Include="Models\Db\PageContentModel.vb" />
-    <Compile Include="Models\Db\PeopleModel.vb" />
-    <Compile Include="Models\Db\SystemEmailModel.vb" />
-    <Compile Include="Models\Db\FormModel.vb" />
-    <Compile Include="Models\Db\FormSetModel.vb" />
-    <Compile Include="Models\Db\FormFieldModel.vb" />
-    <Compile Include="Models\Db\UserFormResponseModel.vb" />
-    <Compile Include="Models\Db\_blankModel.vb" />
-    <Compile Include="Models\View\FormWizardViewModel.vb" />
-    <Compile Include="Models\View\ViewBaseModel.vb" />
-    <Compile Include="Views\DynamicFormClass.vb" />
-    <Compile Include="Views\addonClass.vb" />
+    <Compile Include="Class1.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -123,6 +91,11 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Views\addons\addonClass.vb" />
+    <Compile Include="Views\addons\common.vb" />
+    <Compile Include="Views\addons\PostESMFormRemote.vb" />
+    <Compile Include="Views\addons\renderClass.vb" />
+    <Compile Include="Views\addons\wizardClass.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -148,16 +121,15 @@
     <Compile Include="Controllers\genericController.vb" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\View\_blankModel.vb" />
+    <Compile Include="Models\_blankModel.vb" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\baseModel.vb" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Models\Db\modelData.txt" />
     <Content Include="Models\modelData.txt" />
-    <Content Include="Resources\FormWizard.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -167,7 +139,7 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>copy "$(TargetDir)*.dll" "C:\Program Files (x86)\kma\Contensive\Addons"
+</PostBuildEvent>
   </PropertyGroup>
 </Project>

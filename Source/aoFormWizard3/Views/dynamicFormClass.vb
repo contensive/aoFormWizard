@@ -33,14 +33,13 @@ Namespace Views
                 '
                 '
                 ' -- process form request
-                Dim ptr As Integer = 0
-                Dim processSubmit As String = CP.Doc.GetText("button")
                 Dim request As New Request() With {
                     .blockContactFormButton = CP.Doc.GetText("button")
                 }
                 If (FormWizardController.processRequest(CP, settings, request)) Then
                     '
-                    ' -- say thank you
+                    result = CP.Html.Form(CP.Content.GetCopy("thank you page"))
+                    Return result
                 Else
                     '
                     ' -- display the form
@@ -52,6 +51,7 @@ Namespace Views
                     ' -- translate view model into html
                     result = CP.Html.Form(Nustache.Core.Render.StringToString(My.Resources.FormWizard, viewModel))
                 End If
+
                 '
                 ' -- if editing enabled, add the link and wrapperwrapper
                 Return genericController.addEditWrapper(CP, result, settings.id, settings.name, FormModel.contentName, designBlockName)

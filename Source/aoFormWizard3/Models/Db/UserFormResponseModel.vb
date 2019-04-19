@@ -9,47 +9,40 @@ Imports System.Text
 Imports Contensive.BaseClasses
 
 Namespace Models.Db
-    Public Class FormFieldModel        '<------ set set model Name and everywhere that matches this string
+    Public Class UserFormResponseModel        '<------ set set model Name and everywhere that matches this string
         Inherits baseModel
         Implements ICloneable
         '
         '====================================================================================================
         '-- const
-        Public Const contentName As String = "Form Fields"      '<------ set content name
-        Public Const contentTableName As String = "ccFormFields"   '<------ set to tablename for the primary content (used for cache names)
+        Public Const contentName As String = "User Form Response"      '<------ set content name
+        Public Const contentTableName As String = "ccUserFormResponse"   '<------ set to tablename for the primary content (used for cache names)
         Private Shadows Const contentDataSource As String = "default"             '<------ set to datasource if not default
         '
         '====================================================================================================
         ' -- instance properties
-        Public Property buttonactionid As Integer
-        Public Property caption As String
-        Public Property headline As String
-        Public Property description As String
-        Public Property contentfieldid As Integer
-        Public Property formid As Integer
-        Public Property inputtype As String
-        Public Property replacetext As String
-        Public Property required As Boolean
-        Public Property optionList As String
+        'instancePropertiesGoHere
+        Public Property copy As String
+        Public Property visitid As Integer
         '
         '====================================================================================================
-        Public Overloads Shared Function add(cp As CPBaseClass) As FormFieldModel
-            Return add(Of FormFieldModel)(cp)
+        Public Overloads Shared Function add(cp As CPBaseClass) As UserFormResponseModel
+            Return add(Of UserFormResponseModel)(cp)
         End Function
         '
         '====================================================================================================
-        Public Overloads Shared Function create(cp As CPBaseClass, recordId As Integer) As FormFieldModel
-            Return create(Of FormFieldModel)(cp, recordId)
+        Public Overloads Shared Function create(cp As CPBaseClass, recordId As Integer) As UserFormResponseModel
+            Return create(Of UserFormResponseModel)(cp, recordId)
         End Function
         '
         '====================================================================================================
-        Public Overloads Shared Function create(cp As CPBaseClass, recordGuid As String) As FormFieldModel
-            Return create(Of FormFieldModel)(cp, recordGuid)
+        Public Overloads Shared Function create(cp As CPBaseClass, recordGuid As String) As UserFormResponseModel
+            Return create(Of UserFormResponseModel)(cp, recordGuid)
         End Function
         '
         '====================================================================================================
-        Public Overloads Shared Function createByName(cp As CPBaseClass, recordName As String) As FormFieldModel
-            Return createByName(Of FormFieldModel)(cp, recordName)
+        Public Overloads Shared Function createByName(cp As CPBaseClass, recordName As String) As UserFormResponseModel
+            Return createByName(Of UserFormResponseModel)(cp, recordName)
         End Function
         '
         '====================================================================================================
@@ -59,48 +52,48 @@ Namespace Models.Db
         '
         '====================================================================================================
         Public Overloads Shared Sub delete(cp As CPBaseClass, recordId As Integer)
-            delete(Of FormFieldModel)(cp, recordId)
+            delete(Of UserFormResponseModel)(cp, recordId)
         End Sub
         '
         '====================================================================================================
         Public Overloads Shared Sub delete(cp As CPBaseClass, ccGuid As String)
-            delete(Of FormFieldModel)(cp, ccGuid)
+            delete(Of UserFormResponseModel)(cp, ccGuid)
         End Sub
         '
         '====================================================================================================
-        Public Overloads Shared Function createList(cp As CPBaseClass, sqlCriteria As String, Optional sqlOrderBy As String = "id") As List(Of FormFieldModel)
-            Return createList(Of FormFieldModel)(cp, sqlCriteria, sqlOrderBy)
+        Public Overloads Shared Function createList(cp As CPBaseClass, sqlCriteria As String, Optional sqlOrderBy As String = "id") As List(Of UserFormResponseModel)
+            Return createList(Of UserFormResponseModel)(cp, sqlCriteria, sqlOrderBy)
         End Function
         '
         '====================================================================================================
         Public Overloads Shared Function getRecordName(cp As CPBaseClass, recordId As Integer) As String
-            Return baseModel.getRecordName(Of FormFieldModel)(cp, recordId)
+            Return baseModel.getRecordName(Of UserFormResponseModel)(cp, recordId)
         End Function
         '
         '====================================================================================================
         Public Overloads Shared Function getRecordName(cp As CPBaseClass, ccGuid As String) As String
-            Return baseModel.getRecordName(Of FormFieldModel)(cp, ccGuid)
+            Return baseModel.getRecordName(Of UserFormResponseModel)(cp, ccGuid)
         End Function
         '
         '====================================================================================================
         Public Overloads Shared Function getRecordId(cp As CPBaseClass, ccGuid As String) As Integer
-            Return baseModel.getRecordId(Of FormFieldModel)(cp, ccGuid)
+            Return baseModel.getRecordId(Of UserFormResponseModel)(cp, ccGuid)
         End Function
         '
         '====================================================================================================
         Public Overloads Shared Function getCount(cp As CPBaseClass, sqlCriteria As String) As Integer
-            Return baseModel.getCount(Of FormFieldModel)(cp, sqlCriteria)
+            Return baseModel.getCount(Of UserFormResponseModel)(cp, sqlCriteria)
         End Function
         '
         '====================================================================================================
         Public Overloads Function getUploadPath(fieldName As String) As String
-            Return MyBase.getUploadPath(Of FormFieldModel)(fieldName)
+            Return MyBase.getUploadPath(Of UserFormResponseModel)(fieldName)
         End Function
         '
         '====================================================================================================
         '
-        Public Function Clone(cp As CPBaseClass) As FormFieldModel
-            Dim result As FormFieldModel = DirectCast(Me.Clone(), FormFieldModel)
+        Public Function Clone(cp As CPBaseClass) As UserFormResponseModel
+            Dim result As UserFormResponseModel = DirectCast(Me.Clone(), UserFormResponseModel)
             result.id = cp.Content.AddRecord(contentName)
             result.ccguid = cp.Utils.CreateGuid()
             result.save(cp)

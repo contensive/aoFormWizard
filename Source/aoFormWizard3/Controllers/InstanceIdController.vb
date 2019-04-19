@@ -38,7 +38,10 @@ Namespace Controllers
                 End If
                 Return result
             End If
-            Throw New ApplicationException("Design Block [" & designBlockName & "] called without instanceId must be on a page or the admin site.")
+            If (String.IsNullOrWhiteSpace(result)) Then
+                Throw New ApplicationException("Design Block [" & designBlockName & "] called without instanceId must be on a page or the admin site.")
+            End If
+            Return result
         End Function
     End Class
 End Namespace
