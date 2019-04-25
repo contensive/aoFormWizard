@@ -1,13 +1,19 @@
 ﻿	
 	<div class="form-group ">
       <h2>{{headerline}}</h2>
-	  <p>{{description}}</p>
+	  <div>{{description}}</div>
      </div>
 	 {{#listOfFieldsClass}}	
+
      {{#isDefault}}
-     <div class="form-group">
+     <div class="form-group px-1">
+	
+	{{#headline}}
 	 <h4>{{headline}}</h4>
-	 <p>{{fielddescription}}</p>
+	 {{/headline}}
+	 {{#fielddescription}}
+	   <p class="pl-5">{{fielddescription}}</p>
+	 {{/fielddescription}}
       <label class="control-label" for="FormType_{{id}}">
 	  {{name}}
 	  {{#required}}
@@ -16,28 +22,43 @@
        </span>
 	   {{/required}}
 	  </label>
-      <input class="form-control" id="FormType_{{id}}" name="formField_{{id}}" type="{{inputtype}}"/>
+      <input class="form-control ml-5 mr-5" id="FormType_{{id}}" name="formField_{{id}}" type="{{inputtype}}"/>
      </div>
 	 {{/isDefault}}
+
 	 {{#isCheckbox}}
-	<div class="form-group">
-		 <h4>{{headline}}</h4>
-		 <p>{{fielddescription}}</p>
-         <div class="form-check">
-			  <input class="form-check-input" name="formField_{{id}}" type="checkbox" id="formType_{{id}}">
-			  <label class="form-check-label" for="formType_{{id}}">
-				{{name}}
+	<div class="form-group px-1">
+		{{#headline}}
+			<h4>{{headline}}</h4>
+		 {{/headline}}
+
+		 {{#fielddescription}}
+			 <p class="pl-1">{{fielddescription}}</p>
+	    {{/fielddescription}}
+
+		{{#optionList}}
+         <div class="form-check ml-5">
+			  <input class="form-check-input" name="formField_{{id}}" type="checkbox" id="formField_{{optionPtr}}" value="{{optionPtr}}">
+			  <label class="form-check-label" for="formType_{{optionPtr}}">
+				{{optionName}}
 			  </label>
 		 </div>
+		  {{/optionList}}
      </div>
 	 {{/isCheckbox}}
 
 	 {{#isRadio}}
-	<div class="form-group">
-		 <h4>{{headline}}</h4>
-		 <p>{{fielddescription}}</p>
+	<div class="form-group px-1">
+		{{#headline}}
+			<h4>{{headline}}</h4>
+		{{/headline}}
+
+		 {{#fielddescription}}
+	      <p class="pl-1">{{fielddescription}}</p>
+	    {{/fielddescription}}
+
 		 {{#optionList}}
-		<div class="form-check">
+		<div class="form-check ml-5">
 			<input class="form-check-input" type="radio" name="formField_{{id}}" id="formField_{{optionPtr}}" value="{{optionPtr}}">
 			<label class="form-check-label" for="formField_{{optionPtr}}">
 			{{optionName}}

@@ -60,7 +60,7 @@ Namespace Models.View
                 For Each form In formlist
                     result.headerline = form.name
                     result.description = form.description
-                    Dim formsFieldList As List(Of FormFieldModel) = FormFieldModel.createList(cp, "(formid=" & form.id & ")")
+                    Dim formsFieldList As List(Of FormFieldModel) = FormFieldModel.createList(cp, "(formid=" & form.id & ")", "sortorder, id")
                     Dim fieldPtr As Integer = 0
                     For Each formsField In formsFieldList
                         Dim optionList As New List(Of OptionClass)

@@ -6,7 +6,10 @@ Imports Contensive.BaseClasses
 
 Namespace Controllers
     Public Class FormWizardController
-
+        Public Class OptionClass
+            Public Property optionName As String
+            Public Property optionPtr As Integer
+        End Class
 
         ''' <summary>
         ''' Process submitted contact form. Returns true if the form has already been submitted, or successfully commits
@@ -22,15 +25,35 @@ Namespace Controllers
                 Dim Adddata As Models.Db.UserFormResponseModel = Models.Db.UserFormResponseModel.add(CP)
                 Dim formlist As List(Of FormModel) = FormModel.createList(CP, "(formsetid=" & settings.id & ")")
                 For Each form In formlist
-                    Dim formsFieldList As List(Of FormFieldModel) = FormFieldModel.createList(CP, "(formid=" & form.id & ")")
+                    Dim formsFieldList As List(Of FormFieldModel) = FormFieldModel.createList(CP, "(formid=" & form.id & ")", "sortOrder,id")
+                    Dim optionList As New List(Of OptionClass)
                     For Each formsField In formsFieldList
-                        Adddata.copy += vbCrLf & formsField.name & "=" & CP.Doc.GetText("formField_" & formsField.id)
+                        Dim question As String = formsField.name
+                        Dim answerList As New List(Of String)
+                        Select Case formsField.inputtype.ToLower()
+                            Case "checkbox", "radio"
+                                Dim answerNumberCommaList As String = CP.Doc.GetText("formField_" & formsField.id)
+                                Dim answerNumberList As List(Of String) = New List(Of String)(answerNumberCommaList.Split(","c))
+                                Dim optionPtr As Integer = 1
+                                For Each formfieldoption In formsField.optionList.Split(",")
+                                    If answerNumberList.Contains(optionPtr.ToString()) Then
+                                        answerList.Add(formfieldoption)
+                                    End If
+                                    optionPtr += 1
+                                Next
+                            Case Else
+                                answerList.Add(CP.Doc.GetText("formField_" & formsField.id))
+                        End Select
+                        Adddata.copy += vbCrLf & question
+                        For Each answer In answerList
+                            Adddata.copy += vbCrLf & vbTab & answer
+                        Next
                     Next
-                    CP.Email.sendSystem(settings.notificationemailid, Adddata.copy)
-                    CP.Group.AddUser(settings.joingroupid, CP.User.Id)
                 Next
+                CP.Email.sendSystem(settings.notificationemailid, Adddata.copy)
+                CP.Group.AddUser(settings.joingroupid, CP.User.Id)
+                CP.Utils.AppendLog("Add group User,groupuser=" & settings.joingroupid & "," & CP.User.Id)
                 Adddata.save(CP)
-
                 Return True
             Catch ex As Exception
                 CP.Site.ErrorReport(ex)
