@@ -1,0 +1,99 @@
+﻿<div class="container-fluid">
+  <div class="row">
+   <div class="col-md-6 col-sm-6 col-xs-12">
+    <form method="post">
+	{{#listOfFieldsClass}}
+     <div class="form-group ">
+      <label class="control-label " for="name">
+	  Name
+	   <span class="asteriskField">
+        *
+       </span>
+	  </label><br>
+      <input class="form-control" id="name" name="name" type="text"/>
+     </div>  
+     <div class="form-group ">
+      <label class="control-label requiredField" for="TattooPix">
+       TattooPix
+       <span class="asteriskField">
+        *
+       </span>
+      </label><br>
+      <input class="form-control" id="TattooPix" name="TattooPix" type="file"/>
+     </div>	 
+     <div class="form-group ">
+      <label class="control-label ">Check all that apply</label>
+      <div class=" ">
+       <div class="checkbox">
+        <label class="checkbox">
+		<input name="checkbox" type="checkbox" value="First Choice"/> 
+		First Choice
+		</label><br>
+       </div>
+       <div class="checkbox">
+        <label class="checkbox">
+         <input name="checkbox" type="checkbox" value="Second Choice"/>
+         Second Choice
+        </label><br>
+       </div>
+       <div class="checkbox">
+        <label class="checkbox">
+         <input name="checkbox" type="checkbox" value="Third Choice"/>
+         Third Choice
+        </label>
+       </div>
+      </div>
+     </div>
+     <div class="form-group ">
+      <label class="control-label ">
+       Select a Choice
+      </label>
+      <div class="">
+       <div class="radio">
+        <label class="radio">
+         <input name="radio" type="radio" value="First Choice"/>
+         First Choice
+        </label>
+       </div>
+       <div class="radio">
+        <label class="radio">
+         <input name="radio" type="radio" value="Second Choice"/>
+         Second Choice
+        </label>
+       </div>
+       <div class="radio">
+        <label class="radio">
+         <input name="radio" type="radio" value="Third Choice"/>
+         Third Choice
+        </label>
+       </div>
+      </div>
+     </div>
+     <div class="form-group ">
+      <label class="control-label " for="select">
+       Select a Choice
+      </label>
+      <select class="select form-control" id="select" name="select">
+       <option value="First Choice">
+        First Choice
+       </option>
+       <option value="Second Choice">
+        Second Choice
+       </option>
+       <option value="Third Choice">
+        Third Choice
+       </option>
+      </select>
+     </div>
+	 {{/listOfFieldsClass}}
+     <div class="form-group">
+      <div>
+       <button class="btn btn-primary " name="submit" type="submit">
+        Submit
+       </button>
+      </div>
+     </div>
+    </form>
+   </div>
+  </div>
+ </div>
