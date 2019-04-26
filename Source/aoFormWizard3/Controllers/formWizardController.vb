@@ -44,9 +44,9 @@ Namespace Controllers
                             Case Else
                                 answerList.Add(CP.Doc.GetText("formField_" & formsField.id))
                         End Select
-                        Adddata.copy += vbCrLf & question
+                        Adddata.copy += "<div style=""padding-top:10px;""> Question:" & vbCrLf & question & "</div>"
                         For Each answer In answerList
-                            Adddata.copy += vbCrLf & vbTab & answer
+                            Adddata.copy += "<div style=""padding-left:20px;"">" & vbCrLf & vbTab & answer & "</div>"
                         Next
                     Next
                 Next

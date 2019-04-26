@@ -1,4 +1,5 @@
-﻿	
+﻿	<div class="designBlockContainer blockText" style="{{styleHeight}}{{styleBackgroundImage}}">
+	<div class="{{contentContainerClass}}">
 	<div class="form-group ">
       <h2>{{headerline}}</h2>
 	  <div>{{description}}</div>
@@ -75,4 +76,6 @@
         Submit
        </button>
       </div>
+     </div>
+	 </div>
      </div>
