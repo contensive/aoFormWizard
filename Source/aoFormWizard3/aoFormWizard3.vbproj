@@ -103,6 +103,8 @@
     <Compile Include="Models\Db\FormSetModel.vb" />
     <Compile Include="Models\Db\FormFieldModel.vb" />
     <Compile Include="Models\Db\UserFormResponseModel.vb" />
+    <Compile Include="Models\Db\LibraryFileModel.vb" />
+    <Compile Include="Models\Db\LibraryFolderModel.vb" />
     <Compile Include="Models\Db\_blankModel.vb" />
     <Compile Include="Models\View\FormWizardViewModel.vb" />
     <Compile Include="Models\View\ViewBaseModel.vb" />

@@ -20,6 +20,7 @@ Namespace Controllers
         ''' <returns></returns>
         Public Shared Function processRequest(ByVal CP As CPBaseClass, settings As Models.Db.FormSetModel, request As Views.DynamicFormClass.Request) As Boolean
             Dim returnHtml As String = String.Empty
+            Dim cs As CPCSBaseClass = CP.CSNew
             Try
                 If (Not request.blockContactFormButton.Equals("Submit")) Then Return False
                 Dim Adddata As Models.Db.UserFormResponseModel = Models.Db.UserFormResponseModel.add(CP)
@@ -41,6 +42,19 @@ Namespace Controllers
                                     End If
                                     optionPtr += 1
                                 Next
+                            Case "file"
+                                Dim folder As LibraryFolderModel = LibraryFolderModel.createByName(CP, "Form Wizard Uploads")
+                                If (folder Is Nothing) Then
+                                    folder = LibraryFolderModel.add(CP)
+                                    folder.name = "Form Wizard Uploads"
+                                    folder.save(CP)
+                                End If
+                                cs.Insert("Library Files")
+                                cs.SetFormInput("filename", "formField_" & formsField.id)
+                                cs.SetField("folderid", folder.id)
+                                cs.Save()
+                                answerList.Add("<a href=""http://" & CP.Site.DomainPrimary & CP.Site.FilePath & cs.GetText("filename") & """>" & CP.Doc.GetText("formField_" & formsField.id) & "</a>")
+                                cs.Close()
                             Case Else
                                 answerList.Add(CP.Doc.GetText("formField_" & formsField.id))
                         End Select
@@ -50,6 +64,11 @@ Namespace Controllers
                         Next
                     Next
                 Next
+                'Dim imgfile As String = CP.Doc.GetText("formField_5")
+                'Dim saveImage As Models.Db.LibraryFileModel = Models.Db.LibraryFileModel.add(CP)
+                'saveImage.filename = imgfile
+                'saveImage.save(CP)
+
                 CP.Email.sendSystem(settings.notificationemailid, Adddata.copy)
                 CP.Group.AddUser(settings.joingroupid, CP.User.Id)
                 CP.Utils.AppendLog("Add group User,groupuser=" & settings.joingroupid & "," & CP.User.Id)
