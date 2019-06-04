@@ -72,6 +72,7 @@ Namespace Controllers
                 CP.Email.sendSystem(settings.notificationemailid, Adddata.copy)
                 CP.Group.AddUser(settings.joingroupid, CP.User.Id)
                 CP.Utils.AppendLog("Add group User,groupuser=" & settings.joingroupid & "," & CP.User.Id)
+                CP.Utils.AppendLog("Notification email=" & Adddata.copy)
                 Adddata.save(CP)
                 Return True
             Catch ex As Exception
