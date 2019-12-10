@@ -112,7 +112,6 @@
     <Compile Include="Models\View\ViewBaseModel.vb" />
     <Compile Include="Views\DynamicFormClass.vb" />
     <Compile Include="Views\addonClass.vb" />
-    <Compile Include="Class1.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -128,11 +127,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Views\addons\addonClass.vb" />
-    <Compile Include="Views\addons\common.vb" />
-    <Compile Include="Views\addons\PostESMFormRemote.vb" />
-    <Compile Include="Views\addons\renderClass.vb" />
-    <Compile Include="Views\addons\wizardClass.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -166,7 +160,6 @@
   <ItemGroup>
     <Content Include="Models\modelData.txt" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
