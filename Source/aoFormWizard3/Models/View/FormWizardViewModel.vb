@@ -1,4 +1,5 @@
-﻿Imports Contensive.Addon.aoFormWizard3
+﻿Imports aoFormWizard2.Models.Db
+Imports Contensive.Addon.aoFormWizard3
 Imports Contensive.Addon.aoFormWizard3.Models.Db
 Imports Contensive.BaseClasses
 

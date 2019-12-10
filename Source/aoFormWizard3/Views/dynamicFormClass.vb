@@ -6,6 +6,9 @@ Imports Contensive.Addon.aoFormWizard3.Controllers
 Imports Contensive.Addon.aoFormWizard3.Models.View
 Imports Contensive.Addon.aoFormWizard3.Models.Db
 Imports Contensive.BaseClasses
+Imports aoFormWizard2.Controllers
+Imports aoFormWizard2.Models.View
+Imports aoFormWizard2.Models.Db
 
 Namespace Views
     '
