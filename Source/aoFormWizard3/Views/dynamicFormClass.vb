@@ -57,7 +57,7 @@ Namespace Views
 
                 '
                 ' -- if editing enabled, add the link and wrapperwrapper
-                Return genericController.addEditWrapper(CP, result, settings.id, settings.name, FormModel.contentName, designBlockName)
+                Return genericController.addEditWrapper(CP, result, settings.id, settings.name, FormSetModel.contentName, designBlockName)
             Catch ex As Exception
                 CP.Site.ErrorReport(ex)
                 Return "<!-- " & designBlockName & ", Unexpected Exception -->"

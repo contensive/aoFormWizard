@@ -31,6 +31,8 @@ Namespace Models.View
             Public Property isDefault As Boolean
             Public Property id As Integer
             Public Property optionList As New List(Of OptionClass)
+            Public Property pageHeader As String
+            Public Property pageDescription As String
         End Class
         '
         Public Class OptionClass
@@ -57,7 +59,7 @@ Namespace Models.View
                 Dim result = ViewBaseModel.create(Of FormWizardViewModel)(cp, settings)
                 result.id = settings.id
                 ' 
-                Dim formlist As List(Of FormModel) = FormModel.createList(cp, "(formsetid=" & settings.id & ")")
+                Dim formlist As List(Of FormModel) = FormModel.createList(cp, "(formsetid=" & settings.id & ")", "sortorder")
                 For Each form In formlist
                     result.headerline = form.name
                     result.description = form.description
@@ -66,6 +68,12 @@ Namespace Models.View
                     For Each formsField In formsFieldList
                         Dim optionList As New List(Of OptionClass)
                         Dim optionPtr As Integer = 1
+                        Dim pageHeader As String = ""
+                        Dim pageDescription As String = ""
+                        If (fieldPtr = 0) Then
+                            pageHeader = form.name
+                            pageDescription = form.description
+                        End If
                         For Each formfieldoption In formsField.optionList.Split(",")
                             optionList.Add(New OptionClass() With {
                                     .optionName = formfieldoption,
@@ -75,8 +83,12 @@ Namespace Models.View
                         Next
                         Select Case formsField.inputtype.ToLower()
                             Case "radio"
+                                Dim caption = formsField.caption
+                                If (String.IsNullOrEmpty(caption)) Then
+                                    caption = formsField.name
+                                End If
                                 result.listOfFieldsClass.Add(New fieldsClass() With {
-                                    .caption = formsField.caption,
+                                    .caption = caption,
                                     .inputtype = formsField.inputtype,
                                     .required = formsField.required,
                                     .name = formsField.name,
@@ -86,11 +98,17 @@ Namespace Models.View
                                     .isDefault = False,
                                     .isRadio = True,
                                     .id = formsField.id,
-                                    .optionList = optionList
+                                    .optionList = optionList,
+                                    .pageHeader = pageHeader,
+                                    .pageDescription = pageDescription
                                 })
                             Case "checkbox"
+                                Dim caption = formsField.caption
+                                If (String.IsNullOrEmpty(caption)) Then
+                                    caption = formsField.name
+                                End If
                                 result.listOfFieldsClass.Add(New fieldsClass() With {
-                                    .caption = formsField.caption,
+                                    .caption = caption,
                                     .inputtype = formsField.inputtype,
                                     .required = formsField.required,
                                     .name = formsField.name,
@@ -100,11 +118,17 @@ Namespace Models.View
                                     .isDefault = False,
                                     .isRadio = False,
                                     .id = formsField.id,
-                                    .optionList = optionList
+                                    .optionList = optionList,
+                                     .pageHeader = pageHeader,
+                                    .pageDescription = pageDescription
                                 })
                             Case Else
+                                Dim caption = formsField.caption
+                                If (String.IsNullOrEmpty(caption)) Then
+                                    caption = formsField.name
+                                End If
                                 result.listOfFieldsClass.Add(New fieldsClass() With {
-                                    .caption = formsField.caption,
+                                    .caption = caption,
                                     .inputtype = formsField.inputtype,
                                     .required = formsField.required,
                                     .name = formsField.name,
@@ -114,9 +138,13 @@ Namespace Models.View
                                     .isDefault = True,
                                     .isRadio = False,
                                     .id = formsField.id,
-                                    .optionList = optionList
+                                    .optionList = optionList,
+                                     .pageHeader = pageHeader,
+                                    .pageDescription = pageDescription
                                 })
                         End Select
+
+                        fieldPtr += 1
                     Next
                 Next
                 Return result

@@ -24,7 +24,7 @@ Namespace Controllers
             Try
                 If (Not request.blockContactFormButton.Equals("Submit")) Then Return False
                 Dim Adddata As Models.Db.UserFormResponseModel = Models.Db.UserFormResponseModel.add(CP)
-                Dim formlist As List(Of FormModel) = FormModel.createList(CP, "(formsetid=" & settings.id & ")")
+                Dim formlist As List(Of FormModel) = FormModel.createList(CP, "(formsetid=" & settings.id & ")", "sortorder")
                 For Each form In formlist
                     Dim formsFieldList As List(Of FormFieldModel) = FormFieldModel.createList(CP, "(formid=" & form.id & ")", "sortOrder,id")
                     Dim optionList As New List(Of OptionClass)
@@ -70,7 +70,9 @@ Namespace Controllers
                 'saveImage.save(CP)
 
                 CP.Email.sendSystem(settings.notificationemailid, Adddata.copy)
-                CP.Group.AddUser(settings.joingroupid, CP.User.Id)
+                If (settings.joingroupid <> 0) Then
+                    CP.Group.AddUser(settings.joingroupid, CP.User.Id)
+                End If
                 CP.Utils.AppendLog("Add group User,groupuser=" & settings.joingroupid & "," & CP.User.Id)
                 CP.Utils.AppendLog("Notification email=" & Adddata.copy)
                 Adddata.save(CP)
