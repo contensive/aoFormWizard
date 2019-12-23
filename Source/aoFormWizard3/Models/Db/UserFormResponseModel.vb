@@ -24,6 +24,7 @@ Namespace Models.Db
         'instancePropertiesGoHere
         Public Property copy As String
         Public Property visitid As Integer
+        Public Property name As String
         '
         '====================================================================================================
         Public Overloads Shared Function add(cp As CPBaseClass) As UserFormResponseModel

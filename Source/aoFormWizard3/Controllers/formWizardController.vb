@@ -75,6 +75,7 @@ Namespace Controllers
                 End If
                 CP.Utils.AppendLog("Add group User,groupuser=" & settings.joingroupid & "," & CP.User.Id)
                 CP.Utils.AppendLog("Notification email=" & Adddata.copy)
+                Adddata.name = "Form Set " + settings.name + " completed on " + Date.Now.ToString("MM/dd/yyyy") + " by " + CP.User.Name
                 Adddata.save(CP)
                 Return True
             Catch ex As Exception
