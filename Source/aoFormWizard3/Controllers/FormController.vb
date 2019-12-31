@@ -3,6 +3,7 @@ Imports Contensive.Addon.aoFormWizard3.Controllers
 Imports Contensive.Addon.aoFormWizard3.Models.View
 Imports Contensive.Addon.aoFormWizard3.Models.Db
 Imports Contensive.BaseClasses
+Imports System.Text
 
 Namespace Controllers
     Public Class FormController
@@ -20,13 +21,14 @@ Namespace Controllers
         ''' <returns></returns>
         Public Shared Function processRequest(ByVal CP As CPBaseClass, settings As Models.Db.FormSetModel, request As Views.DynamicFormClass.Request) As Boolean
             Dim returnHtml As String = String.Empty
-            Dim cs As CPCSBaseClass = CP.CSNew
             Try
                 If (String.IsNullOrWhiteSpace(request.button) OrElse (request.button.Equals("cancel"))) Then Return False
-                Dim userFormResponse As UserFormResponseModel = UserFormResponseModel.add(CP)
+                Dim htmlVersion As New StringBuilder()
+                Dim textVersion As New StringBuilder()
                 For Each form In FormModel.createList(CP, "(formsetid=" & settings.id & ")", "sortorder")
                     For Each formsField In FormFieldModel.createList(CP, "(formid=" & form.id & ")", "sortOrder,id")
-                        Dim answerList As New List(Of String)
+                        textVersion.Append(vbCrLf & "Question: " & formsField.name)
+                        htmlVersion.Append("<div style=""padding-top:10px;""> Question:" & formsField.name & "</div>")
                         Select Case formsField.inputtype.ToLower()
                             Case "checkbox", "radio"
                                 Dim answerNumberCommaList As String = CP.Doc.GetText("formField_" & formsField.id)
@@ -34,38 +36,44 @@ Namespace Controllers
                                 Dim optionPtr As Integer = 1
                                 For Each formfieldoption In formsField.optionList.Split(",")
                                     If answerNumberList.Contains(optionPtr.ToString()) Then
-                                        answerList.Add(formfieldoption)
+                                        textVersion.Append(vbCrLf & vbTab & formfieldoption)
+                                        htmlVersion.Append("<div style=""padding-left:20px;"">" & formfieldoption & "</div>")
                                     End If
                                     optionPtr += 1
                                 Next
                             Case "file"
-                                Dim folder As LibraryFolderModel = LibraryFolderModel.createByName(CP, "Form Wizard Uploads")
-                                If (folder Is Nothing) Then
-                                    folder = LibraryFolderModel.add(CP)
-                                    folder.name = "Form Wizard Uploads"
-                                    folder.save(CP)
+                                Dim fieldName As String = "formField_" & formsField.id
+                                Dim uploadFilename As String = CP.Doc.GetText(fieldName)
+                                If (Not String.IsNullOrEmpty(uploadFilename)) Then
+                                    Dim folder As LibraryFolderModel = LibraryFolderModel.createByName(CP, "Form Wizard Uploads")
+                                    If (folder Is Nothing) Then
+                                        folder = LibraryFolderModel.add(CP)
+                                        folder.name = "Form Wizard Uploads"
+                                        folder.save(CP)
+                                    End If
+                                    Using cs As CPCSBaseClass = CP.CSNew
+                                        cs.Insert("Library Files")
+                                        cs.SetFormInput("filename", fieldName)
+                                        cs.SetField("folderid", folder.id)
+                                        cs.Save()
+                                        Dim pathFilename As String = cs.GetText("filename")
+                                        textVersion.Append(vbCrLf & vbTab & CP.Site.FilePath & pathFilename)
+                                        htmlVersion.Append("<div style=""padding-left:20px;""><a href=""" & CP.Site.FilePath & pathFilename & """>" & uploadFilename & "</a></div>")
+                                    End Using
                                 End If
-                                cs.Insert("Library Files")
-                                cs.SetFormInput("filename", "formField_" & formsField.id)
-                                cs.SetField("folderid", folder.id)
-                                cs.Save()
-                                answerList.Add("<a href=""" & CP.Site.FilePath & cs.GetText("filename") & """>" & CP.Doc.GetText("formField_" & formsField.id) & "</a>")
-                                cs.Close()
                             Case Else
-                                answerList.Add(CP.Doc.GetText("formField_" & formsField.id))
+                                textVersion.Append(vbCrLf & vbTab & CP.Doc.GetText("formField_" & formsField.id))
+                                htmlVersion.Append("<div style=""padding-left:20px;"">" & CP.Doc.GetText("formField_" & formsField.id) & "</div>")
                         End Select
-                        userFormResponse.copy += "<div style=""padding-top:10px;""> Question:" & vbCrLf & formsField.name & "</div>"
-                        For Each answer In answerList
-                            userFormResponse.copy += "<div style=""padding-left:20px;"">" & vbCrLf & vbTab & answer & "</div>"
-                        Next
                     Next
                 Next
-                CP.Email.sendSystem(settings.notificationemailid, userFormResponse.copy)
+                CP.Email.sendSystem(settings.notificationemailid, htmlVersion.ToString())
                 If (settings.joingroupid <> 0) Then
                     CP.Group.AddUser(settings.joingroupid, CP.User.Id)
                 End If
-                CP.Utils.AppendLog("Add group User,groupuser=" & settings.joingroupid & "," & CP.User.Id)
-                CP.Utils.AppendLog("Notification email=" & userFormResponse.copy)
+                Dim userFormResponse As UserFormResponseModel = UserFormResponseModel.add(CP)
+                userFormResponse.visitid = CP.Visit.Id
+                userFormResponse.copy = textVersion.ToString()
                 userFormResponse.name = "Form Set " + settings.name + " completed on " + Date.Now.ToString("MM/dd/yyyy") + " by " + CP.User.Name
                 userFormResponse.save(CP)
                 Return True
