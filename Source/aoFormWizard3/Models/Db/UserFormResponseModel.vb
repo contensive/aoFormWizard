@@ -9,22 +9,20 @@ Imports System.Text
 Imports Contensive.BaseClasses
 
 Namespace Models.Db
-    Public Class UserFormResponseModel        '<------ set set model Name and everywhere that matches this string
-        Inherits baseModel
-        Implements ICloneable
+    Public Class UserFormResponseModel
+        Inherits BaseModel
         '
         '====================================================================================================
         '-- const
-        Public Const contentName As String = "User Form Response"      '<------ set content name
-        Public Const contentTableName As String = "ccUserFormResponse"   '<------ set to tablename for the primary content (used for cache names)
-        Private Shadows Const contentDataSource As String = "default"             '<------ set to datasource if not default
+        Public Const contentName As String = "User Form Response"
+        Public Const contentTableName As String = "ccUserFormResponse"
+        Private Shadows Const contentDataSource As String = "default"
         '
         '====================================================================================================
         ' -- instance properties
         'instancePropertiesGoHere
         Public Property copy As String
         Public Property visitid As Integer
-        Public Property name As String
         '
         '====================================================================================================
         Public Overloads Shared Function add(cp As CPBaseClass) As UserFormResponseModel
@@ -68,43 +66,27 @@ Namespace Models.Db
         '
         '====================================================================================================
         Public Overloads Shared Function getRecordName(cp As CPBaseClass, recordId As Integer) As String
-            Return baseModel.getRecordName(Of UserFormResponseModel)(cp, recordId)
+            Return BaseModel.getRecordName(Of UserFormResponseModel)(cp, recordId)
         End Function
         '
         '====================================================================================================
         Public Overloads Shared Function getRecordName(cp As CPBaseClass, ccGuid As String) As String
-            Return baseModel.getRecordName(Of UserFormResponseModel)(cp, ccGuid)
+            Return BaseModel.getRecordName(Of UserFormResponseModel)(cp, ccGuid)
         End Function
         '
         '====================================================================================================
         Public Overloads Shared Function getRecordId(cp As CPBaseClass, ccGuid As String) As Integer
-            Return baseModel.getRecordId(Of UserFormResponseModel)(cp, ccGuid)
+            Return BaseModel.getRecordId(Of UserFormResponseModel)(cp, ccGuid)
         End Function
         '
         '====================================================================================================
         Public Overloads Shared Function getCount(cp As CPBaseClass, sqlCriteria As String) As Integer
-            Return baseModel.getCount(Of UserFormResponseModel)(cp, sqlCriteria)
+            Return BaseModel.getCount(Of UserFormResponseModel)(cp, sqlCriteria)
         End Function
         '
         '====================================================================================================
         Public Overloads Function getUploadPath(fieldName As String) As String
             Return MyBase.getUploadPath(Of UserFormResponseModel)(fieldName)
-        End Function
-        '
-        '====================================================================================================
-        '
-        Public Function Clone(cp As CPBaseClass) As UserFormResponseModel
-            Dim result As UserFormResponseModel = DirectCast(Me.Clone(), UserFormResponseModel)
-            result.id = cp.Content.AddRecord(contentName)
-            result.ccguid = cp.Utils.CreateGuid()
-            result.save(cp)
-            Return result
-        End Function
-        '
-        '====================================================================================================
-        '
-        Public Function Clone() As Object Implements ICloneable.Clone
-            Return Me.MemberwiseClone()
         End Function
 
     End Class

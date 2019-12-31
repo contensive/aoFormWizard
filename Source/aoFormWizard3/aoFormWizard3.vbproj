@@ -88,34 +88,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="constants.vb" />
-    <Compile Include="Controllers\FormWizardController.vb" />
+    <Compile Include="Controllers\FormController.vb" />
     <Compile Include="Controllers\InstanceIdController.vb" />
-    <Compile Include="Models\Db\AddonModel.vb" />
     <Compile Include="Models\Db\baseModel.vb" />
     <Compile Include="Models\Db\DbBaseModel.vb" />
-    <Compile Include="Models\Db\DbContactUsDataModel.vb" />
-    <Compile Include="Models\Db\DbContactUsModel.vb" />
-    <Compile Include="Models\Db\DBContactUsRulesModel.vb" />
     <Compile Include="Models\Db\DesignBlockFontModel.vb" />
     <Compile Include="Models\Db\DesignBlockThemeModel.vb" />
-    <Compile Include="Models\Db\EmailModel.vb" />
-    <Compile Include="Models\Db\GroupModel.vb" />
-    <Compile Include="Models\Db\layoutModel.vb" />
-    <Compile Include="Models\Db\MemberRuleModel.vb" />
-    <Compile Include="Models\Db\PageContentModel.vb" />
-    <Compile Include="Models\Db\PeopleModel.vb" />
-    <Compile Include="Models\Db\SystemEmailModel.vb" />
     <Compile Include="Models\Db\FormModel.vb" />
     <Compile Include="Models\Db\FormSetModel.vb" />
     <Compile Include="Models\Db\FormFieldModel.vb" />
     <Compile Include="Models\Db\UserFormResponseModel.vb" />
-    <Compile Include="Models\Db\LibraryFileModel.vb" />
     <Compile Include="Models\Db\LibraryFolderModel.vb" />
-    <Compile Include="Models\Db\_blankModel.vb" />
-    <Compile Include="Models\View\FormWizardViewModel.vb" />
+    <Compile Include="Models\View\FormSetViewModel.vb" />
     <Compile Include="Models\View\ViewBaseModel.vb" />
     <Compile Include="Views\DynamicFormClass.vb" />
-    <Compile Include="Views\addonClass.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -161,6 +147,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Models\modelData.txt" />
+    <Content Include="Resources\formwizard.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

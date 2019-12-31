@@ -44,60 +44,94 @@
 	</Addon>
 	<CDef Name="Form Fields" Active="1" AdminOnly="0" AllowAdd="1" AllowCalendarEvents="0" AllowContentChildTool="0" AllowContentTracking="0" AllowDelete="1" AllowMetaContent="" AllowTopicRules="0" AllowWorkflowAuthoring="0" AuthoringDataSourceName="Default" AuthoringTableName="ccFormFields" ContentDataSourceName="Default" ContentTableName="ccFormFields" DefaultSortMethod="By Name" DeveloperOnly="0" DropDownFieldList="NAME" EditorGroupName="" Parent="" IconLink="" IconHeight="0" IconWidth="0" IconSprites="0" isbasecontent="0" guid="{cbdcae91-04cb-4a93-975b-715337dde490}" >
 		<Field Name="name" active="True" AdminOnly="False" Authorable="True" Caption="Name" DeveloperOnly="False" EditSortPriority="110" FieldType="Text" HTMLContent="False" IndexColumn="0" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="0" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
-		<HelpDefault>
-				<![CDATA[The name of the field]]>
+			<HelpDefault>
+				<![CDATA[The name of the field. This name does not appear on the public form.]]>
 			</HelpDefault>
 		</Field>
-		<Field Name="active" active="True" AdminOnly="False" Authorable="True" Caption="Active" DeveloperOnly="False" EditSortPriority="200" FieldType="Boolean" HTMLContent="False" IndexColumn="0" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="0" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="1" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" ></Field>
+		<Field Name="active" active="True" AdminOnly="False" Authorable="True" Caption="Active" DeveloperOnly="False" EditSortPriority="200" FieldType="Boolean" HTMLContent="False" IndexColumn="0" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="0" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="1" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
+		</Field>
 		<Field Name="sortorder" active="True" AdminOnly="False" Authorable="False" Caption="Alpha Sort Order" DeveloperOnly="False" EditSortPriority="2000" FieldType="Text" HTMLContent="False" IndexColumn="0" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="0" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
-		<HelpDefault>
-				<![CDATA[Alpha Sort Order is the order that these fields should appear]]>
+			<HelpDefault>
+				<![CDATA[Determines the order of fields on the form. Use alpha numeric text.]]>
 			</HelpDefault>
 		</Field>
 		<Field Name="formid" active="True" AdminOnly="False" Authorable="True" Caption="Form" DeveloperOnly="False" EditSortPriority="1000" FieldType="Lookup" HTMLContent="False" IndexColumn="0" IndexSortDirection="" IndexSortOrder="99" IndexWidth="20" RedirectID="" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="Forms" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
-		<HelpDefault>
-				<![CDATA[The form on which this field will appear]]>
+			<HelpDefault>
+				<![CDATA[The form on which this field will appear.]]>
+			</HelpDefault>
+		</Field>
+		<Field Name="headline" active="True" AdminOnly="False" Authorable="True" Caption="Headline" DeveloperOnly="False" EditSortPriority="1010" FieldType="Text" HTMLContent="False" IndexColumn="-1" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
+			<HelpDefault>
+				<![CDATA[A large, bold caption that appears above a field. Use a headline to divide a form's fields in to sections where appropriate.]]>
 			</HelpDefault>
 		</Field>
 		<Field Name="caption" active="True" AdminOnly="False" Authorable="True" Caption="Caption" DeveloperOnly="False" EditSortPriority="1100" FieldType="Text" HTMLContent="False" IndexColumn="-1" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
-		<HelpDefault>
-				<![CDATA[The field caption]]>
-			</HelpDefault>
-		</Field>
-		<Field Name="headline" active="True" AdminOnly="False" Authorable="True" Caption="Headline" DeveloperOnly="False" EditSortPriority="1110" FieldType="Text" HTMLContent="False" IndexColumn="-1" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
-		<HelpDefault>
-				<![CDATA[A large, bold caption that appears above a field]]>
+			<HelpDefault>
+				<![CDATA[The field caption, appearing right above the field description and input.]]>
 			</HelpDefault>
 		</Field>
 		<Field Name="description" active="True" AdminOnly="False" Authorable="True" Caption="Description" DeveloperOnly="False" EditSortPriority="1115" FieldType="LongText" HTMLContent="False" IndexColumn="-1" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
-		<HelpDefault>
-				<![CDATA[Instructions for fields that offer an option list]]>
+			<HelpDefault>
+				<![CDATA[Instructions and description to help the user understand the input required.]]>
 			</HelpDefault>
 		</Field>
 		<Field Name="optionlist" active="True" AdminOnly="False" Authorable="True" Caption="Option List" DeveloperOnly="False" EditSortPriority="1120" FieldType="Text" HTMLContent="False" IndexColumn="-1" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
-		<HelpDefault>
-				<![CDATA[A list of choices separated by commas for radio or checkbox fields]]>
+			<HelpDefault>
+				<![CDATA[A list of choices separated by commas for radio or checkbox fields. For example to create a choice between red and blue, enter "red,blue" (without the quotes.)]]>
 			</HelpDefault>
 		</Field>
-		<Field Name="contentfieldid" active="True" AdminOnly="true" Authorable="false" Caption="Content Field" DeveloperOnly="False" EditSortPriority="1200" FieldType="Lookup" HTMLContent="False" IndexColumn="-1" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="Content Fields" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" ></Field>
-		<Field Name="replacetext" active="true" AdminOnly="true" Authorable="false" Caption="Replace Text" DeveloperOnly="False" EditSortPriority="1300" FieldType="Text" HTMLContent="False" IndexColumn="-1" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" ></Field>
+		<Field Name="contentfieldid" active="True" AdminOnly="true" Authorable="false" Caption="Content Field" DeveloperOnly="False" EditSortPriority="1200" FieldType="Lookup" HTMLContent="False" IndexColumn="-1" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="Content Fields" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
+			<HelpDefault>
+				<![CDATA[If this field maps to a table field, this is the field.]]>
+			</HelpDefault>
+		</Field>
 		<Field Name="required" active="True" AdminOnly="False" Authorable="True" Caption="Required" DeveloperOnly="False" EditSortPriority="1400" FieldType="Boolean" HTMLContent="False" IndexColumn="-1" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="0" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
-		<HelpDefault>
+			<HelpDefault>
 				<![CDATA[Check this box if the field is required for the form to be submitted]]>
 			</HelpDefault>
 		</Field>
 		<Field Name="inputtype" active="True" AdminOnly="False" Authorable="True" Caption="Input Type" DeveloperOnly="False" EditSortPriority="1500" FieldType="Text" HTMLContent="False" IndexColumn="-1" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
-		<HelpDefault><![CDATA[The type of field - Input (to enter text), Radio (to choose one of the listed options), Checkbox (to select multiple listed options) and File (to upload an image file)]]></HelpDefault>
+			<HelpDefault><![CDATA[The type of field - Input (to enter text), Radio (to choose one of the listed options), Checkbox (to select multiple listed options) and File (to upload an image file)]]></HelpDefault>
 		</Field>
-		<Field Name="buttonactionid" active="True" AdminOnly="False" Authorable="False" Caption="Button Action" DeveloperOnly="False" EditSortPriority="1510" FieldType="Lookup" HTMLContent="False" IndexColumn="0" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="0" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="Cancel,Back,Submit" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" ></Field>
+		<Field Name="buttonactionid" active="True" AdminOnly="False" Authorable="False" Caption="Button Action" DeveloperOnly="False" EditSortPriority="1510" FieldType="Lookup" HTMLContent="False" IndexColumn="0" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="0" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="Cancel,Back,Submit" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
+			<HelpDefault><![CDATA[]]></HelpDefault>
+		</Field>
+		<Field Name="replacetext" active="true" AdminOnly="true" Authorable="false" Caption="Replace Text" DeveloperOnly="False" EditSortPriority="1300" FieldType="Text" HTMLContent="False" IndexColumn="-1" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
+		</Field>
 	</CDef>
-	<CDef Name="Form Pages" guid="{CB01DCBA-F09C-4BF7-8D9A-C630ECC679FF}" ></CDef>
 	<CDef Name="Form Sets" Active="1" AdminOnly="0" AllowAdd="1" AllowCalendarEvents="0" AllowContentChildTool="0" AllowContentTracking="0" AllowDelete="1" AllowMetaContent="" AllowTopicRules="0" AllowWorkflowAuthoring="0" AuthoringDataSourceName="Default" AuthoringTableName="ccFormSets" ContentDataSourceName="Default" ContentTableName="ccFormSets" DefaultSortMethod="By Name" DeveloperOnly="0" DropDownFieldList="NAME" EditorGroupName="" Parent="" IconLink="" IconHeight="0" IconWidth="0" IconSprites="0" isbasecontent="0" guid="{63A9BD0B-393B-474F-BA04-F0538BDD38D3}" >
 		<Field Name="name" active="True" AdminOnly="False" Authorable="True" Caption="Name" DeveloperOnly="False" EditSortPriority="110" FieldType="Text" HTMLContent="False" IndexColumn="0" IndexSortDirection="" IndexSortOrder="99" IndexWidth="50" RedirectID="0" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
-		<HelpDefault>
-				<![CDATA[Optional. The Name of this form set It Does Not Appear as the website.]]>
+			<HelpDefault>
+				<![CDATA[Optional. The name of this form set It Does Not Appear as the website.]]>
 			</HelpDefault>
-			</Field>
+		</Field>
+		<Field Name="active" active="True" AdminOnly="False" Authorable="True" Caption="Active" DeveloperOnly="False" EditSortPriority="200" FieldType="Boolean" HTMLContent="False" IndexColumn="0" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="0" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="1" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
+		</Field>
+		<Field Name="sortorder" active="True" AdminOnly="False" Authorable="False" Caption="Alpha Sort Order" DeveloperOnly="False" EditSortPriority="2000" FieldType="Text" HTMLContent="False" IndexColumn="0" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="0" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
+			<HelpDefault>
+				<![CDATA[Alpha Sort Order is the order that these fields should appear]]>
+			</HelpDefault>
+		</Field>
+		<Field Name="joingroupid" active="True" AdminOnly="False" Authorable="True" Caption="Join Group on Completion" DeveloperOnly="False" EditSortPriority="1000" FieldType="Lookup" HTMLContent="False" IndexColumn="-1" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="0" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="Groups" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
+			<HelpDefault>
+				<![CDATA[Optional, The user Who fills out the form is added to this group. Please be aware that the user's record may not be updated by this form.]]>
+			</HelpDefault>
+		</Field>
+		<Field Name="notificationemailid" active="True" AdminOnly="False" Authorable="True" Caption="Notification System Email" DeveloperOnly="False" EditSortPriority="1100" FieldType="Lookup" HTMLContent="False" IndexColumn="-1" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="System Email" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
+			<HelpDefault>
+				<![CDATA[Optional, Select the System email to be sent to Site Managers when the form is submitted. The values entered in the form will be included.]]>
+			</HelpDefault>
+		</Field>
+		<Field Name="responseemailid" active="True" AdminOnly="False" Authorable="True" Caption="Response System Email" DeveloperOnly="False" EditSortPriority="1200" FieldType="Lookup" HTMLContent="False" IndexColumn="-1" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="System Email" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
+			<HelpDefault>
+				<![CDATA[Optional, Select the System email to be sent to User's when the form is submitted. ]]>
+			</HelpDefault>
+		</Field>
+		<Field Name="thankyoucopy" active="True" AdminOnly="False" Authorable="True" Caption="Thank You Page" DeveloperOnly="False" EditSortPriority="1300" FieldType="HTML" HTMLContent="false" IndexColumn="-1" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="&lt;p&gt;Thank you. Your information has been submitted successfully&lt;/p&gt;" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
+			<HelpDefault>
+				<![CDATA[This is the copy content, that comprises the thank you copy. ]]>
+			</HelpDefault>
+		</Field>
 		<!-- 
 		base common fields
 		-->
@@ -145,32 +179,7 @@
 			<HelpDefault>
 				<![CDATA[When not checked, this design block should be used within a container. When checked, the block is expected to span the full width of the screen and may create its own container.]]>
 			</HelpDefault>
-		</Field><Field Name="active" active="True" AdminOnly="False" Authorable="True" Caption="Active" DeveloperOnly="False" EditSortPriority="200" FieldType="Boolean" HTMLContent="False" IndexColumn="0" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="0" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="1" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" ></Field>
-		<Field Name="sortorder" active="True" AdminOnly="False" Authorable="False" Caption="Alpha Sort Order" DeveloperOnly="False" EditSortPriority="2000" FieldType="Text" HTMLContent="False" IndexColumn="0" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="0" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
-		<HelpDefault>
-				<![CDATA[Alpha Sort Order is the order that these fields should appear]]>
-			</HelpDefault>
 		</Field>
-		<Field Name="joingroupid" active="True" AdminOnly="False" Authorable="True" Caption="Join Group on Completion" DeveloperOnly="False" EditSortPriority="1000" FieldType="Lookup" HTMLContent="False" IndexColumn="-1" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="0" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="Groups" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
-		<HelpDefault>
-				<![CDATA[Optional, The user Who fills out the form is added to this group. Please be aware that the user's record may not be updated by this form.]]>
-			</HelpDefault>
-		</Field>
-		<Field Name="notificationemailid" active="True" AdminOnly="False" Authorable="True" Caption="Notification System Email" DeveloperOnly="False" EditSortPriority="1100" FieldType="Lookup" HTMLContent="False" IndexColumn="-1" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="System Email" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
-		<HelpDefault>
-				<![CDATA[Optional, Select the System email to be sent to Site Managers when the form is submitted. The values entered in the form will be included.]]>
-			</HelpDefault>
-		</Field>
-		<Field Name="responseemailid" active="True" AdminOnly="False" Authorable="True" Caption="Response System Email" DeveloperOnly="False" EditSortPriority="1200" FieldType="Lookup" HTMLContent="False" IndexColumn="-1" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="System Email" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
-		<HelpDefault>
-				<![CDATA[Optional, Select the System email to be sent to User's when the form is submitted. ]]>
-			</HelpDefault>
-		</Field>
-		<Field Name="thankyoucopy" active="True" AdminOnly="False" Authorable="True" Caption="Thank You Page" DeveloperOnly="False" EditSortPriority="1300" FieldType="HTML" HTMLContent="True" IndexColumn="-1" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
-		
-		<HelpDefault>
-				<![CDATA[This is the copy content, that comprises the thank you copy. ]]>
-			</HelpDefault></Field>
 	</CDef>
 	<CDef Name="Forms" Active="1" AdminOnly="0" AllowAdd="1" AllowCalendarEvents="0" AllowContentChildTool="0" AllowContentTracking="0" AllowDelete="1" AllowMetaContent="" AllowTopicRules="0" AllowWorkflowAuthoring="0" AuthoringDataSourceName="Default" AuthoringTableName="ccForms" ContentDataSourceName="Default" ContentTableName="ccForms" DefaultSortMethod="By Name" DeveloperOnly="0" DropDownFieldList="NAME" EditorGroupName="" Parent="" IconLink="" IconHeight="0" IconWidth="0" IconSprites="0" isbasecontent="0" guid="{272F2549-5409-4C9C-A766-4BF2E8CA0A8B}" >
 		<Field Name="name" active="True" AdminOnly="False" Authorable="True" Caption="Name" DeveloperOnly="False" EditSortPriority="110" FieldType="Text" HTMLContent="False" IndexColumn="0" IndexSortDirection="" IndexSortOrder="99" IndexWidth="40" RedirectID="0" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
@@ -231,10 +240,11 @@
 		<Field Name="useauthorgcontent" active="True" AdminOnly="true" Authorable="True" Caption="Use Auth Organization Content" DeveloperOnly="False" EditSortPriority="1430" FieldType="Boolean" HTMLContent="False" IndexColumn="0" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="0" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="1" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" ></Field>
 		<Field Name="nextformid" active="True" AdminOnly="False" Authorable="True" Caption="Next Form" DeveloperOnly="False" EditSortPriority="1500" FieldType="Lookup" HTMLContent="False" IndexColumn="-1" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="Forms" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
 				<HelpDefault>
-				<![CDATA[The name of the form used for the next form page]]>
+				<![CDATA[The name of the next form in the form set.]]>
 			</HelpDefault>
 		</Field>
 	</CDef>
+	<CDef Name="User Form Response" guid="{F72AD8B7-58A0-4AF9-9C7D-E3E67A4EFC53}"></CDef>
 	<Resource name="aoFormWizard3.dll" type="executable" path="" />
 	<Resource name="Nustache.Core.dll" type="executable" path="" />
 </Collection>

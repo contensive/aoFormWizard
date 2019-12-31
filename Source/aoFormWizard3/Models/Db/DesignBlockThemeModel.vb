@@ -9,7 +9,7 @@ Imports Contensive.BaseClasses
 
 Namespace Models.Db
     Public Class DesignBlockThemeModel        '<------ set set model Name and everywhere that matches this string
-        Inherits baseModel
+        Inherits BaseModel
         Implements ICloneable
         '
         '====================================================================================================
@@ -63,22 +63,22 @@ Namespace Models.Db
         '
         '====================================================================================================
         Public Overloads Shared Function getRecordName(cp As CPBaseClass, recordId As Integer) As String
-            Return baseModel.getRecordName(Of DesignBlockThemeModel)(cp, recordId)
+            Return BaseModel.getRecordName(Of DesignBlockThemeModel)(cp, recordId)
         End Function
         '
         '====================================================================================================
         Public Overloads Shared Function getRecordName(cp As CPBaseClass, ccGuid As String) As String
-            Return baseModel.getRecordName(Of DesignBlockThemeModel)(cp, ccGuid)
+            Return BaseModel.getRecordName(Of DesignBlockThemeModel)(cp, ccGuid)
         End Function
         '
         '====================================================================================================
         Public Overloads Shared Function getRecordId(cp As CPBaseClass, ccGuid As String) As Integer
-            Return baseModel.getRecordId(Of DesignBlockThemeModel)(cp, ccGuid)
+            Return BaseModel.getRecordId(Of DesignBlockThemeModel)(cp, ccGuid)
         End Function
         '
         '====================================================================================================
         Public Overloads Shared Function getCount(cp As CPBaseClass, sqlCriteria As String) As Integer
-            Return baseModel.getCount(Of DesignBlockThemeModel)(cp, sqlCriteria)
+            Return BaseModel.getCount(Of DesignBlockThemeModel)(cp, sqlCriteria)
         End Function
         '
         '====================================================================================================
@@ -88,7 +88,7 @@ Namespace Models.Db
         '
         '====================================================================================================
         '
-        Public Function Clone(cp As CPBaseClass) As DesignBlockThemeModel
+        Public Function clone(cp As CPBaseClass) As DesignBlockThemeModel
             Dim result As DesignBlockThemeModel = DirectCast(Me.Clone(), DesignBlockThemeModel)
             result.id = cp.Content.AddRecord(contentName)
             result.ccguid = cp.Utils.CreateGuid()

@@ -10,7 +10,7 @@ Imports Contensive.BaseClasses
 
 Namespace Models.Db
     Public Class FormFieldModel        '<------ set set model Name and everywhere that matches this string
-        Inherits baseModel
+        Inherits BaseModel
         Implements ICloneable
         '
         '====================================================================================================
@@ -27,9 +27,17 @@ Namespace Models.Db
         Public Property description As String
         Public Property contentfieldid As Integer
         Public Property formid As Integer
+        ''' <summary>
+        ''' Field type, string, can be "checkbox", "radio", "file", "text"
+        ''' </summary>
+        ''' <returns></returns>
         Public Property inputtype As String
         Public Property replacetext As String
         Public Property required As Boolean
+        ''' <summary>
+        ''' Comma delimited list of options
+        ''' </summary>
+        ''' <returns></returns>
         Public Property optionList As String
         '
         '====================================================================================================
@@ -74,22 +82,22 @@ Namespace Models.Db
         '
         '====================================================================================================
         Public Overloads Shared Function getRecordName(cp As CPBaseClass, recordId As Integer) As String
-            Return baseModel.getRecordName(Of FormFieldModel)(cp, recordId)
+            Return BaseModel.getRecordName(Of FormFieldModel)(cp, recordId)
         End Function
         '
         '====================================================================================================
         Public Overloads Shared Function getRecordName(cp As CPBaseClass, ccGuid As String) As String
-            Return baseModel.getRecordName(Of FormFieldModel)(cp, ccGuid)
+            Return BaseModel.getRecordName(Of FormFieldModel)(cp, ccGuid)
         End Function
         '
         '====================================================================================================
         Public Overloads Shared Function getRecordId(cp As CPBaseClass, ccGuid As String) As Integer
-            Return baseModel.getRecordId(Of FormFieldModel)(cp, ccGuid)
+            Return BaseModel.getRecordId(Of FormFieldModel)(cp, ccGuid)
         End Function
         '
         '====================================================================================================
         Public Overloads Shared Function getCount(cp As CPBaseClass, sqlCriteria As String) As Integer
-            Return baseModel.getCount(Of FormFieldModel)(cp, sqlCriteria)
+            Return BaseModel.getCount(Of FormFieldModel)(cp, sqlCriteria)
         End Function
         '
         '====================================================================================================
@@ -99,7 +107,7 @@ Namespace Models.Db
         '
         '====================================================================================================
         '
-        Public Function Clone(cp As CPBaseClass) As FormFieldModel
+        Public Function clone(cp As CPBaseClass) As FormFieldModel
             Dim result As FormFieldModel = DirectCast(Me.Clone(), FormFieldModel)
             result.id = cp.Content.AddRecord(contentName)
             result.ccguid = cp.Utils.CreateGuid()

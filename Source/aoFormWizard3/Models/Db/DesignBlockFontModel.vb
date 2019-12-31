@@ -9,7 +9,7 @@ Imports Contensive.BaseClasses
 
 Namespace Models.Db
     Public Class DesignBlockFontModel
-        Inherits baseModel
+        Inherits BaseModel
         Implements ICloneable
         '
         '====================================================================================================
@@ -63,22 +63,22 @@ Namespace Models.Db
         '
         '====================================================================================================
         Public Overloads Shared Function getRecordName(cp As CPBaseClass, recordId As Integer) As String
-            Return baseModel.getRecordName(Of DesignBlockFontModel)(cp, recordId)
+            Return BaseModel.getRecordName(Of DesignBlockFontModel)(cp, recordId)
         End Function
         '
         '====================================================================================================
         Public Overloads Shared Function getRecordName(cp As CPBaseClass, ccGuid As String) As String
-            Return baseModel.getRecordName(Of DesignBlockFontModel)(cp, ccGuid)
+            Return BaseModel.getRecordName(Of DesignBlockFontModel)(cp, ccGuid)
         End Function
         '
         '====================================================================================================
         Public Overloads Shared Function getRecordId(cp As CPBaseClass, ccGuid As String) As Integer
-            Return baseModel.getRecordId(Of DesignBlockFontModel)(cp, ccGuid)
+            Return BaseModel.getRecordId(Of DesignBlockFontModel)(cp, ccGuid)
         End Function
         '
         '====================================================================================================
         Public Overloads Shared Function getCount(cp As CPBaseClass, sqlCriteria As String) As Integer
-            Return baseModel.getCount(Of DesignBlockFontModel)(cp, sqlCriteria)
+            Return BaseModel.getCount(Of DesignBlockFontModel)(cp, sqlCriteria)
         End Function
         '
         '====================================================================================================
@@ -88,7 +88,7 @@ Namespace Models.Db
         '
         '====================================================================================================
         '
-        Public Function Clone(cp As CPBaseClass) As DesignBlockFontModel
+        Public Function clone(cp As CPBaseClass) As DesignBlockFontModel
             Dim result As DesignBlockFontModel = DirectCast(Me.Clone(), DesignBlockFontModel)
             result.id = cp.Content.AddRecord(contentName)
             result.ccguid = cp.Utils.CreateGuid()

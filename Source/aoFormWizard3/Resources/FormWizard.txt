@@ -1,83 +1,73 @@
-﻿	<div class="designBlockContainer blockText" style="{{styleHeight}}{{styleBackgroundImage}}">
+﻿<div class="designBlockContainer blockText" style="{{styleHeight}}{{styleBackgroundImage}}">
 	<div class="{{contentContainerClass}}">
-	<div class="form-group ">
- 
-     </div>
-	 {{#listOfFieldsClass}}	
-	   <h2>{{pageHeader}}</h2>
-	  <div>{{pageDescription}}</div>
-     {{#isDefault}}
-     <div class="form-group px-1">
-	
-	{{#headline}}
-	 <h4>{{headline}}</h4>
-	 {{/headline}}
-	 {{#fielddescription}}
-	   <p class="pl-5">{{fielddescription}}</p>
-	 {{/fielddescription}}
-      <label class="control-label" for="FormType_{{id}}">
-	  <h5>{{caption}}</h5>
-	  {{#required}}
-	   <span class="asteriskField">
-        *
-       </span>
-	   {{/required}}
-	  </label>
-      <input class="form-control ml-5 mr-5" id="FormType_{{id}}" name="formField_{{id}}" type="{{inputtype}}"/>
-     </div>
-	 {{/isDefault}}
-
-	 {{#isCheckbox}}
-	<div class="form-group px-1">
-		{{#headline}}
-			<h4>{{headline}}</h4>
-		 {{/headline}}
-
-		 {{#fielddescription}}
-			 <p class="pl-1">{{fielddescription}}</p>
-	    {{/fielddescription}}
-
-		<h5>{{caption}}</h5>
-
-		{{#optionList}}
-         <div class="form-check ml-5">
-			  <input class="form-check-input" name="formField_{{id}}" type="checkbox" id="formField_{{optionPtr}}" value="{{optionPtr}}">
-			  <label class="form-check-label" for="formType_{{optionPtr}}">
-				{{optionName}}
-			  </label>
-		 </div>
-		  {{/optionList}}
-     </div>
-	 {{/isCheckbox}}
-
-	 {{#isRadio}}
-	<div class="form-group px-1">
-		{{#headline}}
-			<h4>{{headline}}</h4>
-		{{/headline}}
-
-		 {{#fielddescription}}
-	      <p class="pl-1">{{fielddescription}}</p>
-	    {{/fielddescription}}
-		<h5>{{caption}}</h5>
-		 {{#optionList}}
-		<div class="form-check ml-5">
-			<input class="form-check-input" type="radio" name="formField_{{id}}" id="formField_{{optionPtr}}" value="{{optionPtr}}">
-			<label class="form-check-label" for="formField_{{optionPtr}}">
-			{{optionName}}
-			</label>
+		<div class="{{formEditWrapper}}">
+			{{{formdEditLink}}}
+			<h2>{{pageHeader}}</h2>
+			<div>{{pageDescription}}</div>
+			{{#listOfFieldsClass}}
+				{{#isDefault}}
+					<div class="{{fieldEditWrapper}}">
+						{{{fieldEditLink}}}
+						<div class="form-group">
+							{{#headline}}<h4 class="pt-4">{{headline}}</h4>{{/headline}}
+							<label class="control-label mb-0" for="FormType_{{id}}">
+								<h5 class="pt-4">{{caption}}{{#required}}<span class="asteriskField">*</span>{{/required}}</h5>
+							</label>
+							<div class="pl-5">
+								{{#fielddescription}}<p>{{fielddescription}}</p>{{/fielddescription}}
+								<input class="form-control" id="FormType_{{id}}" name="formField_{{id}}" type="{{inputtype}}" {{required}}>
+							</div>
+						</div>
+					</div>
+				{{/isDefault}}
+				{{#isCheckbox}}
+					<div class="{{fieldEditWrapper}}">
+						{{{fieldEditLink}}}
+						<div class="form-group">
+							{{#headline}}<h4 class="pt-4">{{headline}}</h4>{{/headline}}
+							<h5 class="pt-4">{{caption}}</h5>
+							<div class="pl-5">
+								{{#fielddescription}}<p>{{fielddescription}}</p>{{/fielddescription}}
+								{{#optionList}}
+									<div class="form-check">
+										<input class="form-check-input" name="formField_{{id}}" type="checkbox" id="formField_{{optionPtr}}" value="{{optionPtr}}">
+										<label class="form-check-label" for="formType_{{optionPtr}}">{{optionName}}</label>
+									</div>
+								{{/optionList}}
+							</div>
+						</div>
+					</div>
+				{{/isCheckbox}}
+				{{#isRadio}}
+					<div class="{{fieldEditWrapper}}">
+						{{{fieldEditLink}}}
+						<div class="form-group">
+							{{#headline}}<h4 class="pt-4">{{headline}}</h4>{{/headline}}
+							<h5 class="pt-4">{{caption}}</h5>
+							<div class="pl-5">
+								{{#fielddescription}}<p>{{fielddescription}}</p>{{/fielddescription}}
+								{{#optionList}}
+									<div class="form-check">
+									<input class="form-check-input" type="radio" name="formField_{{id}}" id="formField_{{optionPtr}}" value="{{optionPtr}}">
+									<label class="form-check-label" for="formField_{{optionPtr}}">{{optionName}}</label>
+									</div>
+								{{/optionList}}
+							</div>
+						</div>
+					</div>
+				{{/isRadio}}
+			{{/listOfFieldsClass}}
+			<div class="form-group">
+				{{#previousButton}}
+					<button class="btn btn-primary " name="button" type="submit" value="previous">{{previousButton}}</button>
+				{{/previousButton}}
+				{{#cancelButton}}
+					<button class="btn btn-primary " name="button" type="submit" value="cancel">{{cancelButton}}</button>
+				{{/cancelButton}}
+				{{#continueButton}}
+					<button class="btn btn-primary " name="button" type="submit" value="continue">{{continueButton}}</button>
+				{{/continueButton}}
+			</div>
 		</div>
-		 {{/optionList}}
-     </div>
-	 {{/isRadio}}
-
-	 {{/listOfFieldsClass}}
-     <div class="form-group">
-      <div>
-       <button class="btn btn-primary " name="button" type="submit" value="Submit">
-        Submit
-       </button>
-      </div>
-     </div>
-	 </div>
-     </div>
+	</div>
+</div>

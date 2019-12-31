@@ -10,8 +10,7 @@ Imports Contensive.BaseClasses
 
 Namespace Models.Db
     Public Class FormModel        '<------ set set model Name and everywhere that matches this string
-        Inherits baseModel
-        Implements ICloneable
+        Inherits BaseModel
         '
         '====================================================================================================
         '-- const
@@ -22,12 +21,12 @@ Namespace Models.Db
         '====================================================================================================
         ' -- instance properties
         Public Property addbackbutton As Boolean
-        Public Property addcancelbutton As Boolean
-        Public Property addcontinuebutton As Boolean
         Public Property backbuttonname As String
+        Public Property addcancelbutton As Boolean
         Public Property cancelbuttonname As String
-        Public Property contentid As Integer
+        Public Property addcontinuebutton As Boolean
         Public Property continuebuttonname As String
+        Public Property contentid As Integer
         Public Property formsetid As Integer
         Public Property htmlbody As String
         Public Property newcontentname As String
@@ -78,43 +77,27 @@ Namespace Models.Db
         '
         '====================================================================================================
         Public Overloads Shared Function getRecordName(cp As CPBaseClass, recordId As Integer) As String
-            Return baseModel.getRecordName(Of FormModel)(cp, recordId)
+            Return BaseModel.getRecordName(Of FormModel)(cp, recordId)
         End Function
         '
         '====================================================================================================
         Public Overloads Shared Function getRecordName(cp As CPBaseClass, ccGuid As String) As String
-            Return baseModel.getRecordName(Of FormModel)(cp, ccGuid)
+            Return BaseModel.getRecordName(Of FormModel)(cp, ccGuid)
         End Function
         '
         '====================================================================================================
         Public Overloads Shared Function getRecordId(cp As CPBaseClass, ccGuid As String) As Integer
-            Return baseModel.getRecordId(Of FormModel)(cp, ccGuid)
+            Return BaseModel.getRecordId(Of FormModel)(cp, ccGuid)
         End Function
         '
         '====================================================================================================
         Public Overloads Shared Function getCount(cp As CPBaseClass, sqlCriteria As String) As Integer
-            Return baseModel.getCount(Of FormModel)(cp, sqlCriteria)
+            Return BaseModel.getCount(Of FormModel)(cp, sqlCriteria)
         End Function
         '
         '====================================================================================================
         Public Overloads Function getUploadPath(fieldName As String) As String
             Return MyBase.getUploadPath(Of FormModel)(fieldName)
-        End Function
-        '
-        '====================================================================================================
-        '
-        Public Function Clone(cp As CPBaseClass) As FormModel
-            Dim result As FormModel = DirectCast(Me.Clone(), FormModel)
-            result.id = cp.Content.AddRecord(contentName)
-            result.ccguid = cp.Utils.CreateGuid()
-            result.save(cp)
-            Return result
-        End Function
-        '
-        '====================================================================================================
-        '
-        Public Function Clone() As Object Implements ICloneable.Clone
-            Return Me.MemberwiseClone()
         End Function
 
     End Class

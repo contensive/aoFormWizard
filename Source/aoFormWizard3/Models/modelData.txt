@@ -1600,16 +1600,6 @@ public property SQLQuery as String
 
 
 
----------------------------------------------
-FormPageModel
-
-public property Body as String
-public property ContentCategoryID as Integer
-public property Instructions as String
-
-
-
-
 
 ---------------------------------------------
 RemoteQuerieModel

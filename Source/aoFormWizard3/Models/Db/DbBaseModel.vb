@@ -13,7 +13,7 @@ Namespace Models.Db
     ''' This model provides the common fields for all Design Blocks.
     ''' </summary>
     Public Class DbBaseModel
-        Inherits baseModel
+        Inherits BaseModel
         '
         '====================================================================================================
         ' -- instance properties

@@ -3,12 +3,8 @@ Option Strict On
 Option Explicit On
 
 Imports Contensive.Addon.aoFormWizard3.Controllers
-Imports Contensive.Addon.aoFormWizard3.Models.View
 Imports Contensive.Addon.aoFormWizard3.Models.Db
 Imports Contensive.BaseClasses
-Imports aoFormWizard2.Controllers
-Imports aoFormWizard2.Models.View
-Imports aoFormWizard2.Models.Db
 
 Namespace Views
     '
@@ -37,18 +33,17 @@ Namespace Views
                 '
                 ' -- process form request
                 Dim request As New Request() With {
-                    .blockContactFormButton = CP.Doc.GetText("button")
+                    .button = CP.Doc.GetText("button")
                 }
-                If (FormWizardController.processRequest(CP, settings, request)) Then
+                If (FormController.processRequest(CP, settings, request)) Then
                     '
-                    result = CP.Html.Form(CP.Content.GetCopy("thank you page"))
-                    Return result
+                    Return CP.Html.div(settings.thankyoucopy)
                 Else
                     '
                     ' -- display the form
                     '
                     ' -- translate the Db model to a view model and mustache it into the layout
-                    Dim viewModel = FormWizardViewModel.create(CP, settings)
+                    Dim viewModel = Models.View.FormViewModel.create(CP, settings)
                     If (viewModel Is Nothing) Then Throw New ApplicationException("Could not create design block view model.")
                     '
                     ' -- translate view model into html
@@ -57,7 +52,7 @@ Namespace Views
 
                 '
                 ' -- if editing enabled, add the link and wrapperwrapper
-                Return genericController.addEditWrapper(CP, result, settings.id, settings.name, FormSetModel.contentName, designBlockName)
+                Return genericController.addEditWrapper(CP, result, settings.id, settings.name, FormSetModel.contentName)
             Catch ex As Exception
                 CP.Site.ErrorReport(ex)
                 Return "<!-- " & designBlockName & ", Unexpected Exception -->"
@@ -66,7 +61,7 @@ Namespace Views
         '
         '
         Public Class Request
-            Public blockContactFormButton As String
+            Public button As String
 
         End Class
         '

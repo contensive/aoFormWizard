@@ -5,7 +5,7 @@ Imports Contensive.Addon.aoFormWizard3.Models.Db
 Imports Contensive.BaseClasses
 
 Namespace Controllers
-    Public Class FormWizardController
+    Public Class FormController
         Public Class OptionClass
             Public Property optionName As String
             Public Property optionPtr As Integer
@@ -22,14 +22,10 @@ Namespace Controllers
             Dim returnHtml As String = String.Empty
             Dim cs As CPCSBaseClass = CP.CSNew
             Try
-                If (Not request.blockContactFormButton.Equals("Submit")) Then Return False
-                Dim Adddata As Models.Db.UserFormResponseModel = Models.Db.UserFormResponseModel.add(CP)
-                Dim formlist As List(Of FormModel) = FormModel.createList(CP, "(formsetid=" & settings.id & ")", "sortorder")
-                For Each form In formlist
-                    Dim formsFieldList As List(Of FormFieldModel) = FormFieldModel.createList(CP, "(formid=" & form.id & ")", "sortOrder,id")
-                    Dim optionList As New List(Of OptionClass)
-                    For Each formsField In formsFieldList
-                        Dim question As String = formsField.name
+                If (String.IsNullOrWhiteSpace(request.button) OrElse (request.button.Equals("cancel"))) Then Return False
+                Dim userFormResponse As UserFormResponseModel = UserFormResponseModel.add(CP)
+                For Each form In FormModel.createList(CP, "(formsetid=" & settings.id & ")", "sortorder")
+                    For Each formsField In FormFieldModel.createList(CP, "(formid=" & form.id & ")", "sortOrder,id")
                         Dim answerList As New List(Of String)
                         Select Case formsField.inputtype.ToLower()
                             Case "checkbox", "radio"
@@ -53,30 +49,25 @@ Namespace Controllers
                                 cs.SetFormInput("filename", "formField_" & formsField.id)
                                 cs.SetField("folderid", folder.id)
                                 cs.Save()
-                                answerList.Add("<a href=""http://" & CP.Site.DomainPrimary & CP.Site.FilePath & cs.GetText("filename") & """>" & CP.Doc.GetText("formField_" & formsField.id) & "</a>")
+                                answerList.Add("<a href=""" & CP.Site.FilePath & cs.GetText("filename") & """>" & CP.Doc.GetText("formField_" & formsField.id) & "</a>")
                                 cs.Close()
                             Case Else
                                 answerList.Add(CP.Doc.GetText("formField_" & formsField.id))
                         End Select
-                        Adddata.copy += "<div style=""padding-top:10px;""> Question:" & vbCrLf & question & "</div>"
+                        userFormResponse.copy += "<div style=""padding-top:10px;""> Question:" & vbCrLf & formsField.name & "</div>"
                         For Each answer In answerList
-                            Adddata.copy += "<div style=""padding-left:20px;"">" & vbCrLf & vbTab & answer & "</div>"
+                            userFormResponse.copy += "<div style=""padding-left:20px;"">" & vbCrLf & vbTab & answer & "</div>"
                         Next
                     Next
                 Next
-                'Dim imgfile As String = CP.Doc.GetText("formField_5")
-                'Dim saveImage As Models.Db.LibraryFileModel = Models.Db.LibraryFileModel.add(CP)
-                'saveImage.filename = imgfile
-                'saveImage.save(CP)
-
-                CP.Email.sendSystem(settings.notificationemailid, Adddata.copy)
+                CP.Email.sendSystem(settings.notificationemailid, userFormResponse.copy)
                 If (settings.joingroupid <> 0) Then
                     CP.Group.AddUser(settings.joingroupid, CP.User.Id)
                 End If
                 CP.Utils.AppendLog("Add group User,groupuser=" & settings.joingroupid & "," & CP.User.Id)
-                CP.Utils.AppendLog("Notification email=" & Adddata.copy)
-                Adddata.name = "Form Set " + settings.name + " completed on " + Date.Now.ToString("MM/dd/yyyy") + " by " + CP.User.Name
-                Adddata.save(CP)
+                CP.Utils.AppendLog("Notification email=" & userFormResponse.copy)
+                userFormResponse.name = "Form Set " + settings.name + " completed on " + Date.Now.ToString("MM/dd/yyyy") + " by " + CP.User.Name
+                userFormResponse.save(CP)
                 Return True
             Catch ex As Exception
                 CP.Site.ErrorReport(ex)
