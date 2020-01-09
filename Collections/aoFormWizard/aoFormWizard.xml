@@ -27,6 +27,7 @@
 		<Template>No</Template>
 		<Email>No</Email>
 		<Admin>Yes</Admin>
+		<Category>Applications.Advanced Forms</Category>
 		<OnPageEndEvent>No</OnPageEndEvent>
 		<OnPageStartEvent>No</OnPageStartEvent>
 		<OnBodyStart>No</OnBodyStart>
