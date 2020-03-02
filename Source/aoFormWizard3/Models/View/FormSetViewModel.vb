@@ -14,12 +14,14 @@ Namespace Models.View
         Public Property pageHeader As String
         Public Property pageDescription As String
         Public Property listOfFieldsClass As New List(Of FieldViewModel)
+        Public Property fieldAddLink As String
         Public Property previousButton As String
         Public Property cancelButton As String
         Public Property submitButton As String
         Public Property continueButton As String
         Public Property formEditWrapper As String
         Public Property formdEditLink As String
+        Public Property formAddLink As String
         ' 
         Public Class FieldViewModel
             Public Property inputtype As String
@@ -30,6 +32,7 @@ Namespace Models.View
             Public Property name As String
             Public Property isCheckbox As Boolean
             Public Property isRadio As Boolean
+            Public Property isTextArea As Boolean
             Public Property isDefault As Boolean
             Public Property id As Integer
             Public Property optionList As New List(Of OptionClass)
@@ -110,6 +113,7 @@ Namespace Models.View
                                         .fielddescription = formField.description,
                                         .isCheckbox = False,
                                         .isDefault = False,
+                                        .isTextArea = False,
                                         .isRadio = True,
                                         .id = formField.id,
                                         .optionList = optionList,
@@ -130,6 +134,28 @@ Namespace Models.View
                                         .fielddescription = formField.description,
                                         .isCheckbox = True,
                                         .isDefault = False,
+                                        .isTextArea = False,
+                                        .isRadio = False,
+                                        .id = formField.id,
+                                        .optionList = optionList,
+                                        .fieldEditLink = fieldEditLink.Replace("99999", formField.id),
+                                        .fieldEditWrapper = If(isEditing, "ccEditWrapper", "")
+                                    })
+                                Case "textarea"
+                                    Dim caption = formField.caption
+                                    If (String.IsNullOrEmpty(caption)) Then
+                                        caption = formField.name
+                                    End If
+                                    formViewData.listOfFieldsClass.Add(New FieldViewModel() With {
+                                        .caption = caption,
+                                        .inputtype = formField.inputtype,
+                                        .required = formField.required,
+                                        .name = formField.name,
+                                        .headline = formField.headline,
+                                        .fielddescription = formField.description,
+                                        .isCheckbox = False,
+                                        .isDefault = False,
+                                        .isTextArea = True,
                                         .isRadio = False,
                                         .id = formField.id,
                                         .optionList = optionList,
@@ -150,6 +176,7 @@ Namespace Models.View
                                         .fielddescription = formField.description,
                                         .isCheckbox = False,
                                         .isDefault = True,
+                                        .isTextArea = False,
                                         .isRadio = False,
                                         .id = formField.id,
                                         .optionList = optionList,
@@ -159,7 +186,9 @@ Namespace Models.View
                             End Select
                             fieldPtr += 1
                         Next
+                        formViewData.fieldAddLink = cp.Content.GetAddLink(FormFieldModel.contentName, "formid=" & form.id, False, isEditing)
                     Next
+                    formViewData.formAddLink = cp.Content.GetAddLink(FormModel.contentName, "formsetid=" & settings.id, False, isEditing)
                 End If
                 Return formViewData
             Catch ex As Exception
