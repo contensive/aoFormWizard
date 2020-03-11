@@ -62,6 +62,16 @@ Namespace Controllers
                                     End Using
                                 End If
                             Case Else
+                                'if the form is set to useauthmembercontent, then save the information from the form to their user record
+                                If (form.useauthmembercontent) Then
+                                    Using cs As CPCSBaseClass = CP.CSNew()
+                                        'make sure the form's field exists in the people table
+                                        If (cs.Open("People", "id=" & CP.User.Id) And cs.FieldOK(formsField.name)) Then
+                                            cs.SetField(formsField.name, CP.Doc.GetText("formField_" & formsField.id))
+                                            cs.Save()
+                                        End If
+                                    End Using
+                                End If
                                 textVersion.Append(vbCrLf & vbTab & CP.Doc.GetText("formField_" & formsField.id))
                                 htmlVersion.Append("<div style=""padding-left:20px;"">" & CP.Doc.GetText("formField_" & formsField.id) & "</div>")
                         End Select
