@@ -1710,6 +1710,7 @@ public property NewContentName as String
 public property NextFormID as Integer
 public property UseAuthMemberContent as Boolean
 public property UseAuthOrgContent as Boolean
+public property authcontent as integer
 
 
 

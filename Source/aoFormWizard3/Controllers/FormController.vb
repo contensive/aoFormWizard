@@ -25,6 +25,7 @@ Namespace Controllers
                 If (String.IsNullOrWhiteSpace(request.button) OrElse (request.button.Equals("cancel"))) Then Return False
                 Dim htmlVersion As New StringBuilder()
                 Dim textVersion As New StringBuilder()
+                Dim currentAuthContentRecordId As Integer = 0
                 For Each form In FormModel.createList(CP, "(formsetid=" & settings.id & ")", "sortorder")
                     For Each formsField In FormFieldModel.createList(CP, "(formid=" & form.id & ")", "sortOrder,id")
                         textVersion.Append(vbCrLf & "Question: " & formsField.name)
@@ -34,13 +35,38 @@ Namespace Controllers
                                 Dim answerNumberCommaList As String = CP.Doc.GetText("formField_" & formsField.id)
                                 Dim answerNumberList As List(Of String) = New List(Of String)(answerNumberCommaList.Split(","c))
                                 Dim optionPtr As Integer = 1
+                                Dim answerTextList As List(Of String) = New List(Of String)
                                 For Each formfieldoption In formsField.optionList.Split(",")
                                     If answerNumberList.Contains(optionPtr.ToString()) Then
                                         textVersion.Append(vbCrLf & vbTab & formfieldoption)
                                         htmlVersion.Append("<div style=""padding-left:20px;"">" & formfieldoption & "</div>")
+                                        If (form.authcontent <> 0) Then
+                                            answerTextList.Add(formfieldoption)
+                                        End If
                                     End If
                                     optionPtr += 1
                                 Next
+                                If (form.authcontent <> 0) Then
+                                    Using cs As CPCSBaseClass = CP.CSNew()
+                                        ''make sure the form's field exists in the people table
+                                        Dim contentName As String = ""
+                                        If (cs.Open("Content", "id=" & form.authcontent)) Then
+                                            contentName = cs.GetText("name")
+                                        End If
+                                        'make sure the content has this field
+                                        If CP.Content.IsField(contentName, formsField.name) Then
+                                            If currentAuthContentRecordId = 0 Then
+                                                cs.Insert(contentName)
+                                                currentAuthContentRecordId = cs.GetInteger("id")
+                                            End If
+                                            If cs.Open(contentName, "id=" & currentAuthContentRecordId) Then
+                                                'list inot a string with commas
+                                                Dim value As String = String.Join(",", answerTextList)
+                                                cs.SetField(formsField.name, value)
+                                            End If
+                                        End If
+                                    End Using
+                                End If
                             Case "file"
                                 Dim fieldName As String = "formField_" & formsField.id
                                 Dim uploadFilename As String = CP.Doc.GetText(fieldName)
@@ -57,20 +83,70 @@ Namespace Controllers
                                         cs.SetField("folderid", folder.id)
                                         cs.Save()
                                         Dim pathFilename As String = cs.GetText("filename")
+                                        If (form.useauthorgcontent) Then
+                                            If CP.Content.IsField("Organizations", formsField.name) Then
+                                                'make sure the form's field exists in the people table
+                                                If (cs.Open("Organizations", "id=" & CP.User.OrganizationID)) Then
+                                                    cs.SetField(formsField.name, pathFilename)
+                                                    cs.Save()
+                                                End If
+                                            End If
+                                        End If
+                                        If (form.authcontent <> 0) Then
+                                            Using csContent As CPCSBaseClass = CP.CSNew()
+                                                ''make sure the form's field exists in the people table
+                                                Dim contentName As String = ""
+                                                If (csContent.Open("Content", "id=" & form.authcontent)) Then
+                                                    contentName = csContent.GetText("name")
+                                                End If
+                                                'make sure the content has this field
+                                                If CP.Content.IsField(contentName, formsField.name) Then
+                                                    If currentAuthContentRecordId = 0 Then
+                                                        csContent.Insert(contentName)
+                                                        currentAuthContentRecordId = csContent.GetInteger("id")
+                                                    End If
+                                                    If csContent.Open(contentName, "id=" & currentAuthContentRecordId) Then
+                                                        csContent.SetField(formsField.name, pathFilename)
+                                                        csContent.Save()
+                                                    End If
+                                                End If
+                                            End Using
+                                        End If
                                         textVersion.Append(vbCrLf & vbTab & CP.Site.FilePath & pathFilename)
                                         htmlVersion.Append("<div style=""padding-left:20px;""><a href=""" & CP.Site.FilePath & pathFilename & """>" & uploadFilename & "</a></div>")
                                     End Using
                                 End If
                             Case Else
-                                'if the form is set to useauthmembercontent, then save the information from the form to their user record
-                                If (form.useauthmembercontent) Then
+                                'if the form is set to use authcontent, then save the information from the form into that table
+                                If (form.authcontent <> 0) Then
                                     Using cs As CPCSBaseClass = CP.CSNew()
                                         'make sure the form's field exists in the people table
-                                        If (cs.Open("People", "id=" & CP.User.Id) And cs.FieldOK(formsField.name)) Then
-                                            cs.SetField(formsField.name, CP.Doc.GetText("formField_" & formsField.id))
-                                            cs.Save()
+                                        Dim contentName As String = ""
+                                        If (cs.Open("Content", "id=" & form.authcontent)) Then
+                                            contentName = cs.GetText("name")
+                                        End If
+                                        'make sure the content has this field
+                                        If CP.Content.IsField(contentName, formsField.name) Then
+                                            If currentAuthContentRecordId = 0 Then
+                                                cs.Insert(contentName)
+                                                currentAuthContentRecordId = cs.GetInteger("id")
+                                            End If
+                                            If cs.Open(contentName, "id=" & currentAuthContentRecordId) Then
+                                                cs.SetField(formsField.name, CP.Doc.GetText("formField_" & formsField.id))
+                                            End If
                                         End If
                                     End Using
+                                    'if the form is set to useauthmembercontent, then save the information from the form to their user record
+                                ElseIf (form.useauthmembercontent) Then
+                                    If CP.Content.IsField("People", formsField.name) Then
+                                        Using cs As CPCSBaseClass = CP.CSNew()
+                                            'make sure the form's field exists in the people table
+                                            If (cs.Open("People", "id=" & CP.User.Id) And cs.FieldOK(formsField.name)) Then
+                                                cs.SetField(formsField.name, CP.Doc.GetText("formField_" & formsField.id))
+                                                cs.Save()
+                                            End If
+                                        End Using
+                                    End If
                                 End If
                                 textVersion.Append(vbCrLf & vbTab & CP.Doc.GetText("formField_" & formsField.id))
                                 htmlVersion.Append("<div style=""padding-left:20px;"">" & CP.Doc.GetText("formField_" & formsField.id) & "</div>")

@@ -37,6 +37,7 @@ Namespace Views
                 }
                 If (FormController.processRequest(CP, settings, request)) Then
                     '
+                    CP.Doc.SetProperty("formwizardcomplete", True)
                     Return CP.Html.div(settings.thankyoucopy)
                 Else
                     '
@@ -49,7 +50,6 @@ Namespace Views
                     ' -- translate view model into html
                     result = CP.Html.Form(Nustache.Core.Render.StringToString(My.Resources.FormWizard, viewModel))
                 End If
-
                 '
                 ' -- if editing enabled, add the link and wrapperwrapper
                 Return genericController.addEditWrapper(CP, result, settings.id, settings.name, FormSetModel.contentName)
@@ -62,7 +62,6 @@ Namespace Views
         '
         Public Class Request
             Public button As String
-
         End Class
         '
         '

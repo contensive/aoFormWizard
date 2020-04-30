@@ -34,6 +34,7 @@ Namespace Models.Db
         Public Property useauthmembercontent As Boolean
         Public Property useauthorgcontent As Boolean
         Public Property description As String
+        Public Property authcontent As Integer
         '
         '====================================================================================================
         Public Overloads Shared Function add(cp As CPBaseClass) As FormModel
@@ -99,6 +100,5 @@ Namespace Models.Db
         Public Overloads Function getUploadPath(fieldName As String) As String
             Return MyBase.getUploadPath(Of FormModel)(fieldName)
         End Function
-
     End Class
 End Namespace
