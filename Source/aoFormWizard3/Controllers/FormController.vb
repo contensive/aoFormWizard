@@ -154,6 +154,7 @@ Namespace Controllers
                     Next
                 Next
                 CP.Email.sendSystem(settings.notificationemailid, htmlVersion.ToString())
+                CP.Email.sendSystem(settings.responseemailid, "", CP.User.Id)
                 If (settings.joingroupid <> 0) Then
                     CP.Group.AddUser(settings.joingroupid, CP.User.Id)
                 End If
