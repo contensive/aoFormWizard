@@ -35,7 +35,7 @@
     <DocumentationFile>aoFormWizard3.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
-    <IntermediateOutputPath>C:\Users\kmaadmin\AppData\Local\Temp\2\vs38C8.tmp\Debug\</IntermediateOutputPath>
+    <IntermediateOutputPath>C:\Users\jay\AppData\Local\Temp\vsE42E.tmp\Debug\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -46,7 +46,7 @@
     <DocumentationFile>aoFormWizard3.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
-    <IntermediateOutputPath>C:\Users\kmaadmin\AppData\Local\Temp\2\vs38C8.tmp\Release\</IntermediateOutputPath>
+    <IntermediateOutputPath>C:\Users\jay\AppData\Local\Temp\vsE42E.tmp\Release\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup>
     <OptionExplicit>On</OptionExplicit>
@@ -68,7 +68,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CPBase, Version=4.1.2.0, Culture=neutral, PublicKeyToken=10b3c53389b845fb, processorArchitecture=MSIL">
-      <HintPath>..\packages\Contensive.CPBaseClass.5.2004.14.6\lib\net472\CPBase.dll</HintPath>
+      <HintPath>..\packages\Contensive.CPBaseClass.20.10.5.1\lib\net45\CPBase.dll</HintPath>
     </Reference>
     <Reference Include="Nustache.Core, Version=1.16.0.10, Culture=neutral, PublicKeyToken=efd6f3d8f76ecd9f, processorArchitecture=MSIL">
       <HintPath>..\packages\Nustache.1.16.0.10\lib\net20\Nustache.Core.dll</HintPath>
@@ -100,7 +100,7 @@
     <Compile Include="Models\Db\LibraryFolderModel.vb" />
     <Compile Include="Models\View\FormSetViewModel.vb" />
     <Compile Include="Models\View\ViewBaseModel.vb" />
-    <Compile Include="Views\DynamicFormClass.vb" />
+    <Compile Include="Addons\DynamicFormClass.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -147,6 +147,9 @@
   <ItemGroup>
     <Content Include="Models\modelData.txt" />
     <Content Include="Resources\formwizard.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
