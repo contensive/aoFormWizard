@@ -2,7 +2,8 @@
 <Collection name="Form Wizard" guid="{B5D1FE5B-71EC-403D-90E8-01AE7F8E18AD}" system="No" updatable="Yes" blockNavigatorNode="No">
 	<HelpLink></HelpLink>
 	<Help></Help>
-	<Addon name="Dynamic Form" guid="{8284FA0C-6C9D-43E1-9E57-8E9DD35D2DCC}" type="Add-on">
+	<Addon name="Form Wizard" guid="{8284FA0C-6C9D-43E1-9E57-8E9DD35D2DCC}" type="Add-on">
+    	<AliasList>Dynamic Form</AliasList>
 		<Copy></Copy>
 		<CopyText></CopyText>
 		<ActiveXProgramID></ActiveXProgramID>

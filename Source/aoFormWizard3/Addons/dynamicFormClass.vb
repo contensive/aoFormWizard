@@ -18,7 +18,7 @@ Namespace Views
         ''' <param name="CP"></param>
         ''' <returns></returns>
         Public Overrides Function Execute(ByVal CP As CPBaseClass) As Object
-            Const designBlockName As String = "Dynamic Form"
+            Const designBlockName As String = "Form Wizard"
             Try
                 '
                 ' -- read instanceId, guid created uniquely for this instance of the addon on a page
