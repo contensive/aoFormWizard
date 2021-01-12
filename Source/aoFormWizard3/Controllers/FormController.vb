@@ -4,6 +4,7 @@ Imports Contensive.Addon.aoFormWizard3.Models.View
 Imports Contensive.Addon.aoFormWizard3.Models.Db
 Imports Contensive.BaseClasses
 Imports System.Text
+Imports System.Configuration
 
 Namespace Controllers
     Public Class FormController
@@ -154,6 +155,9 @@ Namespace Controllers
                     Next
                 Next
                 CP.Email.sendSystem(settings.notificationemailid, htmlVersion.ToString())
+                If settings.responseemailid > 0 Then
+                    CP.Email.sendSystem(settings.responseemailid, "", CP.User.Id)
+                End If
                 If (settings.joingroupid <> 0) Then
                     CP.Group.AddUser(settings.joingroupid, CP.User.Id)
                 End If
