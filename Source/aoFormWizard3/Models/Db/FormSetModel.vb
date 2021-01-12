@@ -44,8 +44,9 @@ Namespace Models.Db
                 formOne.addcancelbutton = False
                 formOne.addcontinuebutton = True
                 formOne.continuebuttonname = "Complete"
-                formOne.description = "This form was automatically created by the dynamic form Design Block."
-                formOne.htmlbody = "<h4>Dynamic Form Page 1</h4><p>This is the form body for page 1 of the sample form.</p>"
+                formOne.description = "<h2>Form 1: Sample Form Wizard Form</h2>" _
+                        & "<p>This form was automatically created by the Form Wizard Design Block.</p>" _
+                        & "<p>A Dynamic Form is a list of Form Fields that you create and configure. Users complete the form and submit responses.</p>"
                 formOne.save(cp)
                 '
                 ' -- form 1 field A
@@ -53,7 +54,7 @@ Namespace Models.Db
                 formOneFieldA.formid = formOne.id
                 formOneFieldA.caption = "Text Field Caption"
                 formOneFieldA.description = "Text Field Description"
-                formOneFieldA.headline = "Text Field Headline"
+                formOneFieldA.headline = ""
                 formOneFieldA.inputtype = "text"
                 formOneFieldA.name = "Text Field Name"
                 formOneFieldA.optionList = "a,b,c,d,e,f,g"
@@ -67,7 +68,7 @@ Namespace Models.Db
                 formOneFieldB.formid = formOne.id
                 formOneFieldB.caption = "Checkbox Field Caption"
                 formOneFieldB.description = "Checkbox Field Description"
-                formOneFieldB.headline = "Checkbox Field Headline"
+                formOneFieldB.headline = ""
                 formOneFieldB.inputtype = "checkbox"
                 formOneFieldB.name = "Checkbox Field Name"
                 formOneFieldB.optionList = "a,b,c,d,e,f,g"
@@ -81,7 +82,7 @@ Namespace Models.Db
                 formOneFieldC.formid = formOne.id
                 formOneFieldC.caption = "Radio Field Caption"
                 formOneFieldC.description = "Radio Field Description"
-                formOneFieldC.headline = "Radio Field Headline"
+                formOneFieldC.headline = ""
                 formOneFieldC.inputtype = "radio"
                 formOneFieldC.name = "Radio Field Name"
                 formOneFieldC.optionList = "a,b,c,d,e,f,g"
@@ -95,7 +96,7 @@ Namespace Models.Db
                 formOneFieldD.formid = formOne.id
                 formOneFieldD.caption = "File Field Caption"
                 formOneFieldD.description = "File Field Description"
-                formOneFieldD.headline = "File Field Headline"
+                formOneFieldD.headline = ""
                 formOneFieldD.inputtype = "File"
                 formOneFieldD.name = "File Field Name"
                 formOneFieldD.optionList = "a,b,c,d,e,f,g"
@@ -112,8 +113,8 @@ Namespace Models.Db
                 formTwo.addcancelbutton = False
                 formTwo.addcontinuebutton = True
                 formTwo.continuebuttonname = "Complete"
-                formTwo.description = "This form was automatically created by the dynamic form Design Block."
-                formTwo.htmlbody = "<h4>Dynamic Form Page 1</h4><p>This is the form body for page 1 of the sample form.</p>"
+                formOne.description = "<h2>Form 2: Sample Form Wizard Form</h2>" _
+                        & "<p>This is the second form in the form wizard.</p>"
                 formTwo.save(cp)
                 '
                 ' -- form 2 field A
@@ -121,7 +122,7 @@ Namespace Models.Db
                 formTwoFieldA.formid = formTwo.id
                 formTwoFieldA.caption = "Text Field Caption"
                 formTwoFieldA.description = "Text Field Description"
-                formTwoFieldA.headline = "Text Field Headline"
+                formTwoFieldA.headline = ""
                 formTwoFieldA.inputtype = "text"
                 formTwoFieldA.name = "Text Field Name"
                 formTwoFieldA.optionList = "a,b,c,d,e,f,g"

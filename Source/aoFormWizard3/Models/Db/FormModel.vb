@@ -28,7 +28,7 @@ Namespace Models.Db
         Public Property continuebuttonname As String
         Public Property contentid As Integer
         Public Property formsetid As Integer
-        Public Property htmlbody As String
+        'Public Property htmlbody As String
         Public Property newcontentname As String
         Public Property nextformid As Integer
         Public Property useauthmembercontent As Boolean
