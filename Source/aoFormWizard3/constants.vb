@@ -1,19 +1,7 @@
-﻿Option Explicit On
-Option Strict On
-Imports System.Collections.Generic
-Imports System.Linq
-Imports System.Text
-Imports Contensive.Addon.aoFormWizard3.Controllers
-
-
-Public Module constants
+﻿
+Public Module Constants
     '
-    ' -- sample
-    Public Const Version As Integer = 1
-    Public Const buttonValueResubmit As String = "submit"
-
-    '
-    ' -- sample
-    Public Const rnInputValue As String = "inputValue"
+    ' -- version used to upgrade content
+    Public Const version As Integer = 2
 End Module
 

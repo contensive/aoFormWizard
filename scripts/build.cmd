@@ -12,7 +12,7 @@ rem
 
 rem all paths are relative to the git scripts folder
 
-set appName=app200509
+set appName=app210629
 set majorVersion=5
 set minorVersion=19
 set collectionName=aoFormWizard

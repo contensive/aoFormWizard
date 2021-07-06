@@ -75,7 +75,7 @@ Namespace Controllers
         ''' <param name="backgroundImage"></param>
         ''' <returns></returns>
         Public Shared Function encodeStyleBackgroundImage(cp As CPBaseClass, backgroundImage As String) As String
-            Return If(String.IsNullOrWhiteSpace(backgroundImage), String.Empty, "background-image: url(" & cp.Site.FilePath & backgroundImage & ");")
+            Return If(String.IsNullOrWhiteSpace(backgroundImage), String.Empty, "background-image: url(" & cp.Http.CdnFilePathPrefixAbsolute & backgroundImage & ");")
         End Function
         '
         '
@@ -85,14 +85,6 @@ Namespace Controllers
             Dim content As String = cp.Html.div(innerHtml, "", "")
             Return cp.Html.div(header + content, "", "ccEditWrapper")
         End Function
-        ''
-        'Public Shared Function addEditWrapper(ByVal cp As CPBaseClass, ByVal innerHtml As String, ByVal instanceId As Integer, ByVal instanceName As String, ByVal contentName As String, ByVal designBlockCaption As String) As String
-        '    If (Not cp.User.IsEditingAnything) Then Return innerHtml
-        '    Dim editLink As String = getEditLink(cp, contentName, instanceId, designBlockCaption)
-        '    Dim settingContent As String = cp.Html.div(innerHtml, "", "dbSettingWrapper")
-        '    Dim settingHeader As String = cp.Html.div(editLink, "", "dbSettingHeader")
-        '    Return cp.Html.div(settingHeader + settingContent)
-        'End Function
         '
         '
         Public Shared Function getEditLink(ByVal cp As CPBaseClass, ByVal contentName As String, ByVal recordId As Integer, Caption As String) As String

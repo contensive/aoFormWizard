@@ -1,7 +1,4 @@
 
-Option Strict On
-Option Explicit On
-
 Imports Contensive.Addon.aoFormWizard3.Controllers
 Imports Contensive.Addon.aoFormWizard3.Models.Db
 Imports Contensive.BaseClasses
@@ -32,16 +29,15 @@ Namespace Views
                 '
                 '
                 ' -- process form request
-                Dim request As New Request() With {
+                Dim request As New FormRequest() With {
                     .button = CP.Doc.GetText("button")
                 }
                 If (FormController.processRequest(CP, settings, request)) Then
                     '
+                    ' -- simple thank you content
                     CP.Doc.SetProperty("formwizardcomplete", True)
-                    Return CP.Html.div(settings.thankyoucopy)
+                    result = CP.Html.div(settings.thankyoucopy)
                 Else
-                    '
-                    ' -- display the form
                     '
                     ' -- translate the Db model to a view model and mustache it into the layout
                     Dim viewModel = Models.View.FormViewModel.create(CP, settings)
@@ -58,12 +54,13 @@ Namespace Views
                 Return "<!-- " & designBlockName & ", Unexpected Exception -->"
             End Try
         End Function
-        '
-        '
-        Public Class Request
-            Public button As String
-        End Class
-        '
-        '
+    End Class
+    '
+    '=====================================================================================
+    ''' <summary>
+    ''' Request object for main
+    ''' </summary>
+    Public Class FormRequest
+        Public button As String
     End Class
 End Namespace

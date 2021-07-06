@@ -35,7 +35,7 @@
     <DocumentationFile>aoFormWizard3.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
-    <IntermediateOutputPath>C:\Users\kmaadmin\AppData\Local\Temp\2\vs7DE7.tmp\Debug\</IntermediateOutputPath>
+    <IntermediateOutputPath>C:\Users\jay\AppData\Local\Temp\vs8293.tmp\Debug\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -46,7 +46,7 @@
     <DocumentationFile>aoFormWizard3.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
-    <IntermediateOutputPath>C:\Users\kmaadmin\AppData\Local\Temp\2\vs7DE7.tmp\Release\</IntermediateOutputPath>
+    <IntermediateOutputPath>C:\Users\jay\AppData\Local\Temp\vs8293.tmp\Release\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup>
     <OptionExplicit>On</OptionExplicit>
@@ -86,7 +86,8 @@
     <Import Include="System.Diagnostics" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="constants.vb" />
+    <Compile Include="Addons\OnInstallClass.vb" />
+    <Compile Include="Constants.vb" />
     <Compile Include="Controllers\FormController.vb" />
     <Compile Include="Controllers\InstanceIdController.vb" />
     <Compile Include="Models\Db\baseModel.vb" />

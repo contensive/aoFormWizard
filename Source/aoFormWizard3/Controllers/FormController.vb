@@ -1,18 +1,10 @@
 ﻿
-Imports Contensive.Addon.aoFormWizard3.Controllers
-Imports Contensive.Addon.aoFormWizard3.Models.View
+Imports System.Text
 Imports Contensive.Addon.aoFormWizard3.Models.Db
 Imports Contensive.BaseClasses
-Imports System.Text
-Imports System.Configuration
 
 Namespace Controllers
-    Public Class FormController
-        Public Class OptionClass
-            Public Property optionName As String
-            Public Property optionPtr As Integer
-        End Class
-
+    Public NotInheritable Class FormController
         ''' <summary>
         ''' Process submitted contact form. Returns true if the form has already been submitted, or successfully commits
         ''' </summary>
@@ -20,7 +12,7 @@ Namespace Controllers
         ''' <param name="settings"></param>
         ''' <param name="request"></param>
         ''' <returns></returns>
-        Public Shared Function processRequest(ByVal CP As CPBaseClass, settings As Models.Db.FormSetModel, request As Views.DynamicFormClass.Request) As Boolean
+        Public Shared Function processRequest(ByVal CP As CPBaseClass, settings As Models.Db.FormSetModel, request As Views.FormRequest) As Boolean
             Dim returnHtml As String = String.Empty
             Try
                 If (String.IsNullOrWhiteSpace(request.button) OrElse (request.button.Equals("cancel"))) Then Return False
@@ -41,19 +33,16 @@ Namespace Controllers
                                     If answerNumberList.Contains(optionPtr.ToString()) Then
                                         textVersion.Append(vbCrLf & vbTab & formfieldoption)
                                         htmlVersion.Append("<div style=""padding-left:20px;"">" & formfieldoption & "</div>")
-                                        If (form.authcontent <> 0) Then
+                                        If (Not String.IsNullOrWhiteSpace(form.saveCustomContent)) Then
                                             answerTextList.Add(formfieldoption)
                                         End If
                                     End If
                                     optionPtr += 1
                                 Next
-                                If (form.authcontent <> 0) Then
+                                If (Not String.IsNullOrWhiteSpace(form.saveCustomContent)) Then
                                     Using cs As CPCSBaseClass = CP.CSNew()
                                         ''make sure the form's field exists in the people table
-                                        Dim contentName As String = ""
-                                        If (cs.Open("Content", "id=" & form.authcontent)) Then
-                                            contentName = cs.GetText("name")
-                                        End If
+                                        Dim contentName As String = form.saveCustomContent
                                         'make sure the content has this field
                                         If CP.Content.IsField(contentName, formsField.name) Then
                                             If currentAuthContentRecordId = 0 Then
@@ -93,13 +82,10 @@ Namespace Controllers
                                                 End If
                                             End If
                                         End If
-                                        If (form.authcontent <> 0) Then
+                                        If (Not String.IsNullOrWhiteSpace(form.saveCustomContent)) Then
                                             Using csContent As CPCSBaseClass = CP.CSNew()
                                                 ''make sure the form's field exists in the people table
-                                                Dim contentName As String = ""
-                                                If (csContent.Open("Content", "id=" & form.authcontent)) Then
-                                                    contentName = csContent.GetText("name")
-                                                End If
+                                                Dim contentName As String = form.saveCustomContent
                                                 'make sure the content has this field
                                                 If CP.Content.IsField(contentName, formsField.name) Then
                                                     If currentAuthContentRecordId = 0 Then
@@ -113,19 +99,17 @@ Namespace Controllers
                                                 End If
                                             End Using
                                         End If
-                                        textVersion.Append(vbCrLf & vbTab & CP.Site.FilePath & pathFilename)
-                                        htmlVersion.Append("<div style=""padding-left:20px;""><a href=""" & CP.Site.FilePath & pathFilename & """>" & uploadFilename & "</a></div>")
+                                        textVersion.Append(vbCrLf & vbTab & CP.Http.CdnFilePathPrefixAbsolute & pathFilename)
+                                        htmlVersion.Append("<div style=""padding-left:20px;""><a href=""" & CP.Http.CdnFilePathPrefixAbsolute & pathFilename & """>" & uploadFilename & "</a></div>")
                                     End Using
                                 End If
                             Case Else
-                                'if the form is set to use authcontent, then save the information from the form into that table
-                                If (form.authcontent <> 0) Then
+                                If (form.saveTypeId.Equals(4)) Then
+                                    '
+                                    'if the form is set to use authcontent, then save the information from the form into that table
                                     Using cs As CPCSBaseClass = CP.CSNew()
                                         'make sure the form's field exists in the people table
-                                        Dim contentName As String = ""
-                                        If (cs.Open("Content", "id=" & form.authcontent)) Then
-                                            contentName = cs.GetText("name")
-                                        End If
+                                        Dim contentName As String = form.saveCustomContent
                                         'make sure the content has this field
                                         If CP.Content.IsField(contentName, formsField.name) Then
                                             If currentAuthContentRecordId = 0 Then
@@ -137,8 +121,21 @@ Namespace Controllers
                                             End If
                                         End If
                                     End Using
-                                    'if the form is set to useauthmembercontent, then save the information from the form to their user record
-                                ElseIf (form.useauthmembercontent) Then
+                                ElseIf (form.saveTypeId.Equals(3)) Then
+                                    '
+                                    ' save to organization
+                                    If CP.Content.IsField("organizations", formsField.name) Then
+                                        Using cs As CPCSBaseClass = CP.CSNew()
+                                            'make sure the form's field exists in the people table
+                                            If (cs.Open("organizations", "id=" & CP.User.OrganizationID) And cs.FieldOK(formsField.name)) Then
+                                                cs.SetField(formsField.name, CP.Doc.GetText("formField_" & formsField.id))
+                                                cs.Save()
+                                            End If
+                                        End Using
+                                    End If
+                                ElseIf (form.saveTypeId.Equals(2)) Then
+                                    '
+                                    ' -- save to people table
                                     If CP.Content.IsField("People", formsField.name) Then
                                         Using cs As CPCSBaseClass = CP.CSNew()
                                             'make sure the form's field exists in the people table
@@ -172,5 +169,9 @@ Namespace Controllers
                 Return False
             End Try
         End Function
+    End Class
+    Public Class FormControllerOptionClass
+        Public Property optionName As String
+        Public Property optionPtr As Integer
     End Class
 End Namespace

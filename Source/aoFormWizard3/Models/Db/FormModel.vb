@@ -9,14 +9,14 @@ Imports System.Text
 Imports Contensive.BaseClasses
 
 Namespace Models.Db
-    Public Class FormModel        '<------ set set model Name and everywhere that matches this string
+    Public Class FormModel
         Inherits BaseModel
         '
         '====================================================================================================
         '-- const
-        Public Const contentName As String = "Forms"      '<------ set content name
-        Public Const contentTableName As String = "ccForms"   '<------ set to tablename for the primary content (used for cache names)
-        Private Shadows Const contentDataSource As String = "default"             '<------ set to datasource if not default
+        Public Const contentName As String = "Forms"
+        Public Const contentTableName As String = "ccForms"
+        Private Shadows Const contentDataSource As String = "default"
         '
         '====================================================================================================
         ' -- instance properties
@@ -31,10 +31,33 @@ Namespace Models.Db
         'Public Property htmlbody As String
         Public Property newcontentname As String
         Public Property nextformid As Integer
-        Public Property useauthmembercontent As Boolean
-        Public Property useauthorgcontent As Boolean
         Public Property description As String
+        ''' <summary>
+        ''' lookup (1=no-save, 2=people-save, 3=org-save, 4=custom-content-save)
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property saveTypeId As Integer
+        ''' <summary>
+        ''' text field to enter a custom content where data for this form should be saved
+        ''' tablename for this content should be 'formWizard' + normalize(saveContent). normalize should validate the allowed characters for sql server tables.
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property saveCustomContent As String
+        ''' <summary>
+        ''' deprecated, see saveTypeId
+        ''' </summary>
+        ''' <returns></returns>
         Public Property authcontent As Integer
+        ''' <summary>
+        ''' deprecated, see saveTypeId
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property useauthmembercontent As Boolean
+        ''' <summary>
+        ''' deprecated, see saveTypeId
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property useauthorgcontent As Boolean
         '
         '====================================================================================================
         Public Overloads Shared Function add(cp As CPBaseClass) As FormModel
