@@ -1,5 +1,6 @@
 ﻿
 Imports System.Text
+Imports System.Text.RegularExpressions
 Imports Contensive.Addon.aoFormWizard3.Models.Db
 Imports Contensive.BaseClasses
 
@@ -19,8 +20,22 @@ Namespace Controllers
                 Dim htmlVersion As New StringBuilder()
                 Dim textVersion As New StringBuilder()
                 Dim currentAuthContentRecordId As Integer = 0
+
                 For Each form In FormModel.createList(CP, "(formsetid=" & settings.id & ")", "sortorder")
+                    Dim customContentName As String = form.saveCustomContent
+                    'replace custom content name with no nonalphanumeric characters
+                    'includes spaces since this is content
+                    customContentName = Regex.Replace(customContentName, "[^A-Za-z0-9 ]+", "")
+
+
+
                     For Each formsField In FormFieldModel.createList(CP, "(formid=" & form.id & ")", "sortOrder,id")
+                        Dim customFieldName As String = formsField.name
+                        customFieldName = Regex.Replace(customFieldName, "[^A-Za-z0-9]+", "")
+
+
+
+
                         textVersion.Append(vbCrLf & "Question: " & formsField.name)
                         htmlVersion.Append("<div style=""padding-top:10px;""> Question:" & formsField.name & "</div>")
                         Select Case formsField.inputtype.ToLower()
@@ -33,30 +48,58 @@ Namespace Controllers
                                     If answerNumberList.Contains(optionPtr.ToString()) Then
                                         textVersion.Append(vbCrLf & vbTab & formfieldoption)
                                         htmlVersion.Append("<div style=""padding-left:20px;"">" & formfieldoption & "</div>")
-                                        If (Not String.IsNullOrWhiteSpace(form.saveCustomContent)) Then
+                                        If (Not String.IsNullOrWhiteSpace(customContentName)) Then
                                             answerTextList.Add(formfieldoption)
                                         End If
                                     End If
                                     optionPtr += 1
                                 Next
-                                If (Not String.IsNullOrWhiteSpace(form.saveCustomContent)) Then
-                                    Using cs As CPCSBaseClass = CP.CSNew()
-                                        ''make sure the form's field exists in the people table
-                                        Dim contentName As String = form.saveCustomContent
-                                        'make sure the content has this field
-                                        If CP.Content.IsField(contentName, formsField.name) Then
-                                            If currentAuthContentRecordId = 0 Then
-                                                cs.Insert(contentName)
-                                                currentAuthContentRecordId = cs.GetInteger("id")
+
+
+
+
+
+
+
+
+
+                                'custom content
+                                If (form.saveTypeId.Equals(4)) And (Not String.IsNullOrWhiteSpace(customContentName)) Then
+                                    Dim verifiedContent As Boolean = CustomContentController.verifyCustomContent(CP, customContentName)
+                                    If verifiedContent Then
+                                        Using cs As CPCSBaseClass = CP.CSNew()
+                                            'make sure the content has this field
+                                            If Not CP.Content.IsField(customContentName, customFieldName) Then
+                                                CustomContentController.createCustomContentField(CP, customContentName, customFieldName)
                                             End If
-                                            If cs.Open(contentName, "id=" & currentAuthContentRecordId) Then
-                                                'list inot a string with commas
-                                                Dim value As String = String.Join(",", answerTextList)
-                                                cs.SetField(formsField.name, value)
+
+                                            'after the field should have been created, check again
+                                            If CP.Content.IsField(customContentName, customFieldName) Then
+                                                If currentAuthContentRecordId = 0 Then
+                                                    cs.Insert(customContentName)
+                                                    currentAuthContentRecordId = cs.GetInteger("id")
+                                                End If
+                                                If cs.Open(customContentName, "id=" & currentAuthContentRecordId) Then
+                                                    'list inot a string with commas
+                                                    Dim value As String = String.Join(",", answerTextList)
+                                                    cs.SetField(customFieldName, value)
+                                                End If
                                             End If
-                                        End If
-                                    End Using
+                                        End Using
+                                    End If
                                 End If
+
+
+
+
+
+
+
+
+
+
+
+
                             Case "file"
                                 Dim fieldName As String = "formField_" & formsField.id
                                 Dim uploadFilename As String = CP.Doc.GetText(fieldName)
@@ -82,45 +125,142 @@ Namespace Controllers
                                                 End If
                                             End If
                                         End If
-                                        If (Not String.IsNullOrWhiteSpace(form.saveCustomContent)) Then
+                                        If (form.saveTypeId.Equals(4)) And (Not String.IsNullOrWhiteSpace(customContentName)) Then
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                                             Using csContent As CPCSBaseClass = CP.CSNew()
-                                                ''make sure the form's field exists in the people table
-                                                Dim contentName As String = form.saveCustomContent
                                                 'make sure the content has this field
-                                                If CP.Content.IsField(contentName, formsField.name) Then
+                                                If CP.Content.IsField(customContentName, customFieldName) Then
                                                     If currentAuthContentRecordId = 0 Then
-                                                        csContent.Insert(contentName)
+                                                        csContent.Insert(customContentName)
                                                         currentAuthContentRecordId = csContent.GetInteger("id")
                                                     End If
-                                                    If csContent.Open(contentName, "id=" & currentAuthContentRecordId) Then
-                                                        csContent.SetField(formsField.name, pathFilename)
+                                                    If csContent.Open(customContentName, "id=" & currentAuthContentRecordId) Then
+                                                        csContent.SetField(customFieldName, pathFilename)
                                                         csContent.Save()
                                                     End If
                                                 End If
                                             End Using
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                                         End If
                                         textVersion.Append(vbCrLf & vbTab & CP.Http.CdnFilePathPrefixAbsolute & pathFilename)
                                         htmlVersion.Append("<div style=""padding-left:20px;""><a href=""" & CP.Http.CdnFilePathPrefixAbsolute & pathFilename & """>" & uploadFilename & "</a></div>")
                                     End Using
                                 End If
                             Case Else
-                                If (form.saveTypeId.Equals(4)) Then
+                                If (form.saveTypeId.Equals(4)) And (Not String.IsNullOrWhiteSpace(customContentName)) Then
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                                     '
                                     'if the form is set to use authcontent, then save the information from the form into that table
                                     Using cs As CPCSBaseClass = CP.CSNew()
-                                        'make sure the form's field exists in the people table
-                                        Dim contentName As String = form.saveCustomContent
                                         'make sure the content has this field
-                                        If CP.Content.IsField(contentName, formsField.name) Then
+                                        If CP.Content.IsField(customContentName, customFieldName) Then
                                             If currentAuthContentRecordId = 0 Then
-                                                cs.Insert(contentName)
+                                                cs.Insert(customContentName)
                                                 currentAuthContentRecordId = cs.GetInteger("id")
                                             End If
-                                            If cs.Open(contentName, "id=" & currentAuthContentRecordId) Then
-                                                cs.SetField(formsField.name, CP.Doc.GetText("formField_" & formsField.id))
+                                            If cs.Open(customContentName, "id=" & currentAuthContentRecordId) Then
+                                                cs.SetField(customFieldName, CP.Doc.GetText("formField_" & formsField.id))
                                             End If
                                         End If
                                     End Using
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                                 ElseIf (form.saveTypeId.Equals(3)) Then
                                     '
                                     ' save to organization
