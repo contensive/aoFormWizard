@@ -32,7 +32,7 @@ Namespace Models.Db
                 '
                 ' -- create default formset
                 formSet = DbBaseModel.add(Of FormSetModel)(cp)
-                formSet.name = "Dynamic Form " & formSet.id
+                formSet.name = "Dynamic Form " & formSet.id & " added to page " & cp.Doc.PageId & ", " & cp.Doc.PageName
                 formSet.ccguid = settingsGuid
                 formSet.save(cp)
                 '
@@ -47,6 +47,7 @@ Namespace Models.Db
                 formOne.description = "<h2>Form 1: Sample Form Wizard Form</h2>" _
                         & "<p>This form was automatically created by the Form Wizard Design Block.</p>" _
                         & "<p>A Dynamic Form is a list of Form Fields that you create and configure. Users complete the form and submit responses.</p>"
+                formOne.sortOrder = "1"
                 formOne.save(cp)
                 '
                 ' -- form 1 field A
@@ -115,6 +116,7 @@ Namespace Models.Db
                 formTwo.continuebuttonname = "Complete"
                 formOne.description = "<h2>Form 2: Sample Form Wizard Form</h2>" _
                         & "<p>This is the second form in the form wizard.</p>"
+                formOne.sortOrder = "2"
                 formTwo.save(cp)
                 '
                 ' -- form 2 field A
@@ -131,6 +133,7 @@ Namespace Models.Db
                 formTwoFieldA.sortOrder = "01"
                 formTwoFieldA.save(cp)
                 '
+                formOne.nextformid = formTwo.id
                 formOne.save(cp)
                 '
                 ' -- create custom content
