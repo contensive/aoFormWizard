@@ -28,7 +28,7 @@ Namespace Models.Db
         Public Property contentfieldid As Integer
         Public Property formid As Integer
         ''' <summary>
-        ''' Field type, string, can be "checkbox", "radio", "file", "text"
+        ''' Field type, string, can be "checkbox", "radio", "file", "text","textarea","select"
         ''' </summary>
         ''' <returns></returns>
         Public Property inputtype As String

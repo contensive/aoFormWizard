@@ -10,12 +10,15 @@ Namespace Controllers
                 Using cs As CPCSBaseClass = cp.CSNew()
                     If (Not cs.Open("Content", "name=" + cp.Db.EncodeSQLText(customContentName))) Then
                         createTable = True
+                    Else
+                        'this table exists
+                        status = True
                     End If
                 End Using
 
                 If createTable Then
                     Dim tableName As String = ""
-                    'remove any spaces since this is for sql table
+                    'remove any spaces since this is for sql table "[^A-Za-z0-9]+"
                     Dim sqlContentName = Regex.Replace(customContentName, "[^A-Za-z0-9]+", "")
                     tableName = "formwizard" & sqlContentName
                     Dim tableid As Integer = cp.Content.AddContent(customContentName, tableName)
@@ -39,7 +42,7 @@ Namespace Controllers
                 Dim status As Boolean = False
                 Dim tableExists As Boolean = False
                 Using cs As CPCSBaseClass = cp.CSNew()
-                    If (Not cs.Open("Content", "name=" + cp.Db.EncodeSQLText(customContentName))) Then
+                    If (cs.Open("Content", "name=" + cp.Db.EncodeSQLText(customContentName))) Then
                         tableExists = True
                     End If
                 End Using
@@ -61,8 +64,5 @@ Namespace Controllers
                 Return False
             End Try
         End Function
-
-
-
     End Class
 End Namespace

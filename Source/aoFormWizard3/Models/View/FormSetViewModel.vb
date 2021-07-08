@@ -32,6 +32,7 @@ Namespace Models.View
             Public Property name As String
             Public Property isCheckbox As Boolean
             Public Property isRadio As Boolean
+            Public Property isSelect As Boolean
             Public Property isTextArea As Boolean
             Public Property isDefault As Boolean
             Public Property id As Integer
@@ -115,6 +116,29 @@ Namespace Models.View
                                         .isDefault = False,
                                         .isTextArea = False,
                                         .isRadio = True,
+                                        .isSelect = False,
+                                        .id = formField.id,
+                                        .optionList = optionList,
+                                        .fieldEditLink = fieldEditLink.Replace("99999", formField.id),
+                                        .fieldEditWrapper = If(isEditing, "ccEditWrapper", "")
+                                    })
+                                Case "select"
+                                    Dim caption = formField.caption
+                                    If (String.IsNullOrEmpty(caption)) Then
+                                        caption = formField.name
+                                    End If
+                                    formViewData.listOfFieldsClass.Add(New FieldViewModel() With {
+                                        .caption = caption,
+                                        .inputtype = formField.inputtype,
+                                        .required = formField.required,
+                                        .name = formField.name,
+                                        .headline = formField.headline,
+                                        .fielddescription = formField.description,
+                                        .isCheckbox = False,
+                                        .isDefault = False,
+                                        .isTextArea = False,
+                                        .isRadio = False,
+                                        .isSelect = True,
                                         .id = formField.id,
                                         .optionList = optionList,
                                         .fieldEditLink = fieldEditLink.Replace("99999", formField.id),
@@ -136,6 +160,7 @@ Namespace Models.View
                                         .isDefault = False,
                                         .isTextArea = False,
                                         .isRadio = False,
+                                        .isSelect = False,
                                         .id = formField.id,
                                         .optionList = optionList,
                                         .fieldEditLink = fieldEditLink.Replace("99999", formField.id),
@@ -157,6 +182,7 @@ Namespace Models.View
                                         .isDefault = False,
                                         .isTextArea = True,
                                         .isRadio = False,
+                                        .isSelect = False,
                                         .id = formField.id,
                                         .optionList = optionList,
                                         .fieldEditLink = fieldEditLink.Replace("99999", formField.id),
@@ -178,6 +204,7 @@ Namespace Models.View
                                         .isDefault = True,
                                         .isTextArea = False,
                                         .isRadio = False,
+                                        .isSelect = False,
                                         .id = formField.id,
                                         .optionList = optionList,
                                         .fieldEditLink = fieldEditLink.Replace("99999", formField.id),

@@ -23,6 +23,7 @@ Namespace Views
                         form.saveTypeId = If(form.useauthmembercontent, 2, If(form.useauthorgcontent, 3, If(Not String.IsNullOrWhiteSpace(form.saveCustomContent), 4, 1)))
                         form.save(CP)
                     Next
+                    CP.Site.SetProperty("Form Wizard Version", Constants.version)
                 End If
                 Return String.Empty
             Catch ex As Exception
