@@ -44,7 +44,7 @@ Namespace Views
                     If (viewModel Is Nothing) Then Throw New ApplicationException("Could not create design block view model.")
                     '
                     ' -- translate view model into html
-                    result = CP.Html.Form(Nustache.Core.Render.StringToString(My.Resources.FormWizard, viewModel))
+                    result = CP.Html.Form(CP.Mustache.Render(My.Resources.FormWizard, viewModel))
                 End If
                 '
                 ' -- if editing enabled, add the link and wrapperwrapper

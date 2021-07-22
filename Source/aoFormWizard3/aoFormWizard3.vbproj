@@ -35,7 +35,7 @@
     <DocumentationFile>aoFormWizard3.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
-    <IntermediateOutputPath>C:\Users\kmaadmin\AppData\Local\Temp\2\vs5453.tmp\Debug\</IntermediateOutputPath>
+    <IntermediateOutputPath>C:\Users\jay\AppData\Local\Temp\vsC9.tmp\Debug\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -46,7 +46,7 @@
     <DocumentationFile>aoFormWizard3.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
-    <IntermediateOutputPath>C:\Users\kmaadmin\AppData\Local\Temp\2\vs5453.tmp\Release\</IntermediateOutputPath>
+    <IntermediateOutputPath>C:\Users\jay\AppData\Local\Temp\vsC9.tmp\Release\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup>
     <OptionExplicit>On</OptionExplicit>
@@ -68,10 +68,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CPBase, Version=4.1.2.0, Culture=neutral, PublicKeyToken=10b3c53389b845fb, processorArchitecture=MSIL">
-      <HintPath>..\packages\Contensive.CPBaseClass.21.3.8.1\lib\net45\CPBase.dll</HintPath>
-    </Reference>
-    <Reference Include="Nustache.Core, Version=1.16.0.10, Culture=neutral, PublicKeyToken=efd6f3d8f76ecd9f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Nustache.1.16.0.10\lib\net20\Nustache.Core.dll</HintPath>
+      <HintPath>..\packages\Contensive.CPBaseClass.21.5.6.1\lib\net45\CPBase.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
