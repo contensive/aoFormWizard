@@ -9,9 +9,9 @@
 					<div class="{{fieldEditWrapper}}">
 						{{{fieldEditLink}}}
 						<div class="form-group">
-							{{#headline}}<h4 class="pt-4">{{headline}}</h4>{{/headline}}
+							{{#headline}}<h2 class="pt-4">{{headline}}</h2>{{/headline}}
 							<label class="control-label mb-0" for="FormType_{{id}}">
-								<h5 class="pt-4">{{caption}}{{#required}}<span class="asteriskField">*</span>{{/required}}</h5>
+								<h3 class="pt-4">{{caption}}{{#required}}<span class="asteriskField">*</span>{{/required}}</h3>
 							</label>
 							<div class="pl-5">
 								{{{fielddescription}}}
@@ -24,9 +24,9 @@
 					<div class="{{fieldEditWrapper}}">
 						{{{fieldEditLink}}}
 						<div class="form-group">
-							{{#headline}}<h4 class="pt-4">{{headline}}</h4>{{/headline}}
+							{{#headline}}<h2 class="pt-4">{{headline}}</h2>{{/headline}}
 							<label class="control-label mb-0" for="FormType_{{id}}">
-								<h5 class="pt-4">{{caption}}{{#required}}<span class="asteriskField">*</span>{{/required}}</h5>
+								<h3 class="pt-4">{{caption}}{{#required}}<span class="asteriskField">*</span>{{/required}}</h3>
 							</label>
 							<div class="pl-5">
 								{{{fielddescription}}}
@@ -39,8 +39,8 @@
 					<div class="{{fieldEditWrapper}}">
 						{{{fieldEditLink}}}
 						<div class="form-group">
-							{{#headline}}<h4 class="pt-4">{{headline}}</h4>{{/headline}}
-							<h5 class="pt-4">{{caption}}</h5>
+							{{#headline}}<h2 class="pt-4">{{headline}}</h2>{{/headline}}
+							<h3 class="pt-4">{{caption}}</h3>
 							<div class="pl-5">
 								{{{fielddescription}}}
 								{{#optionList}}
@@ -57,8 +57,8 @@
 					<div class="{{fieldEditWrapper}}">
 						{{{fieldEditLink}}}
 						<div class="form-group">
-							{{#headline}}<h4 class="pt-4">{{headline}}</h4>{{/headline}}
-							<h5 class="pt-4">{{caption}} {{#required}}<span class="asteriskField">*</span>{{/required}}</h5>
+							{{#headline}}<h2 class="pt-4">{{headline}}</h2>{{/headline}}
+							<h3 class="pt-4">{{caption}} {{#required}}<span class="asteriskField">*</span>{{/required}}</h3>
 							<div class="pl-5">
 								{{{fielddescription}}}
 								{{#optionList}}
@@ -75,8 +75,8 @@
 					<div class="{{fieldEditWrapper}}">
 						{{{fieldEditLink}}}
 						<div class="form-group">
-							{{#headline}}<h4 class="pt-4">{{headline}}</h4>{{/headline}}
-							<h5 class="pt-4">{{caption}} {{#required}}<span class="asteriskField">*</span>{{/required}}</h5>
+							{{#headline}}<h2 class="pt-4">{{headline}}</h2>{{/headline}}
+							<h3 class="pt-4">{{caption}} {{#required}}<span class="asteriskField">*</span>{{/required}}</h3>
 							<div class="pl-5">
 								{{{fielddescription}}}
 								    <div class="form-check">
