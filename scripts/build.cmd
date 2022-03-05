@@ -12,7 +12,7 @@ rem
 
 rem all paths are relative to the git scripts folder
 
-set appName=app210629
+
 set majorVersion=5
 set minorVersion=19
 set collectionName=aoFormWizard
@@ -84,3 +84,4 @@ del "%collectionName%.zip" /Q
 xcopy "%collectionName%.zip" "%deploymentFolderRoot%%versionNumber%" /Y
 cd ..\..\scripts
 
+pause

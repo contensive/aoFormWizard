@@ -6,6 +6,7 @@
 		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Views.OnInstallClass]]></DotNetClass>
 	</Addon>
 	<Addon name="Form Wizard" guid="{8284FA0C-6C9D-43E1-9E57-8E9DD35D2DCC}" type="Add-on">
+		<htmldocument>Yes</htmldocument>
     	<AliasList>Dynamic Form</AliasList>
 		<Copy></Copy>
 		<CopyText></CopyText>
