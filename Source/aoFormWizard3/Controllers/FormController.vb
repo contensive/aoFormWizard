@@ -95,61 +95,72 @@ Namespace Controllers
                                 If (Not String.IsNullOrEmpty(uploadFilename)) Then
                                     hint = 21
                                     Dim folder As LibraryFolderModel = LibraryFolderModel.createByName(CP, "Form Wizard Uploads")
-                                    If (folder Is Nothing) Then
+                                    If folder Is Nothing Then
                                         hint = 22
                                         folder = LibraryFolderModel.add(CP)
                                         folder.name = "Form Wizard Uploads"
                                         folder.save(CP)
                                     End If
+                                    Dim pathFilename As String = ""
                                     Using cs As CPCSBaseClass = CP.CSNew
                                         hint = 23
                                         cs.Insert("Library Files")
                                         cs.SetFormInput("filename", fieldName)
                                         cs.SetField("folderid", folder.id)
+                                        cs.SetField("description", "Form wizard upload by " & CP.User.Name)
                                         cs.Save()
-                                        Dim pathFilename As String = cs.GetText("filename")
-                                        If (form.useauthorgcontent) Then
-                                            hint = 24
-                                            If CP.Content.IsField("Organizations", formsField.name) Then
-                                                'make sure the form's field exists in the people table
-                                                If (cs.Open("Organizations", "id=" & CP.User.OrganizationID)) Then
-                                                    hint = 25
-                                                    cs.SetField(formsField.name, pathFilename)
-                                                    cs.Save()
-                                                End If
-                                            End If
-                                        End If
-                                        'custom content
-                                        If (form.saveTypeId.Equals(4)) And (Not String.IsNullOrWhiteSpace(customContentName)) Then
-                                            hint = 30
-                                            Dim verifiedContent As Boolean = CustomContentController.verifyCustomContent(CP, customContentName)
-                                            If verifiedContent Then
-                                                'make sure the content has this field
-                                                If Not CP.Content.IsField(customContentName, customFieldName) Then
-                                                    hint = 31
-                                                    'create file field
-                                                    CustomContentController.createCustomContentField(CP, customContentName, customFieldName, Constants.FieldTypeIdEnum.File)
-                                                End If
-                                                Using csContent As CPCSBaseClass = CP.CSNew()
-                                                    'after the field should have been created, check again
-                                                    If CP.Content.IsField(customContentName, customFieldName) Then
-                                                        hint = 32
-                                                        If currentAuthContentRecordId = 0 Then
-                                                            hint = 33
-                                                            csContent.Insert(customContentName)
-                                                            currentAuthContentRecordId = csContent.GetInteger("id")
-                                                        End If
-                                                        If csContent.Open(customContentName, "id=" & currentAuthContentRecordId) Then
-                                                            csContent.SetField(customFieldName, pathFilename)
-                                                            csContent.Save()
-                                                        End If
-                                                    End If
-                                                End Using
-                                            End If
-                                        End If
-                                        textVersion.Append(vbCrLf & vbTab & CP.Http.CdnFilePathPrefixAbsolute & pathFilename)
-                                        htmlVersion.Append("<div style=""padding-left:20px;""><a href=""" & CP.Http.CdnFilePathPrefixAbsolute & pathFilename & """>" & uploadFilename & "</a></div>")
+                                        '
+                                        pathFilename = cs.GetText("filename")
+                                        Dim fileDetails As CPFileSystemBaseClass.FileDetail = CP.CdnFiles.FileDetails(pathFilename)
+                                        cs.SetField("name", fileDetails.Name)
+                                        cs.SetField("filesize", fileDetails.Size)
+                                        cs.Save()
                                     End Using
+                                    '
+                                    If form.useauthorgcontent Then
+                                        hint = 24
+                                        If CP.Content.IsField("Organizations", formsField.name) Then
+                                            'make sure the form's field exists in the people table
+                                            Using cs2 As CPCSBaseClass = CP.CSNew
+                                                If (cs2.Open("Organizations", "id=" & CP.User.OrganizationID)) Then
+                                                    hint = 25
+                                                    cs2.SetField(formsField.name, pathFilename)
+                                                    cs2.Save()
+                                                End If
+                                            End Using
+                                        End If
+                                    End If
+                                    'custom content
+                                    If form.saveTypeId.Equals(4) And (Not String.IsNullOrWhiteSpace(customContentName)) Then
+                                        hint = 30
+                                        Dim verifiedContent As Boolean = CustomContentController.verifyCustomContent(CP, customContentName)
+                                        If verifiedContent Then
+                                            'make sure the content has this field
+                                            If Not CP.Content.IsField(customContentName, customFieldName) Then
+                                                hint = 31
+                                                'create file field
+                                                CustomContentController.createCustomContentField(CP, customContentName, customFieldName, Constants.FieldTypeIdEnum.File)
+                                            End If
+                                            Using csContent As CPCSBaseClass = CP.CSNew()
+                                                'after the field should have been created, check again
+                                                If CP.Content.IsField(customContentName, customFieldName) Then
+                                                    hint = 32
+                                                    If currentAuthContentRecordId = 0 Then
+                                                        hint = 33
+                                                        csContent.Insert(customContentName)
+                                                        currentAuthContentRecordId = csContent.GetInteger("id")
+                                                    End If
+                                                    If csContent.Open(customContentName, "id=" & currentAuthContentRecordId) Then
+                                                        csContent.SetField(customFieldName, pathFilename)
+                                                        csContent.Save()
+                                                    End If
+                                                End If
+                                            End Using
+                                        End If
+                                    End If
+                                    textVersion.Append(vbCrLf & vbTab & CP.Http.CdnFilePathPrefixAbsolute & pathFilename)
+                                    htmlVersion.Append("<div style=""padding-left:20px;""><a href=""" & CP.Http.CdnFilePathPrefixAbsolute & pathFilename & """>" & uploadFilename & "</a></div>")
+
                                 End If
                             Case Else
                                 If (form.saveTypeId.Equals(4)) And (Not String.IsNullOrWhiteSpace(customContentName)) Then
