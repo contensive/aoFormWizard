@@ -11,7 +11,7 @@
 		<Copy></Copy>
 		<CopyText></CopyText>
 		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Views.DynamicFormClass]]></DotNetClass>
-		<ArgumentList><![CDATA[FormSet=[List(Form Sets)]]]></ArgumentList>
+		<ArgumentList><![CDATA[ ]]></ArgumentList>
 		<AsAjax>No</AsAjax>
 		<Filter>No</Filter>
 		<Help></Help>
