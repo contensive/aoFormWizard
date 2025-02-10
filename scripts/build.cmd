@@ -1,5 +1,5 @@
 
-@echo off
+rem @echo off
 
 rem 
 rem Must be run from the projects git\project\scripts folder - everything is relative
@@ -19,7 +19,7 @@ set collectionName=aoFormWizard
 set collectionPath=..\collections\aoFormWizard\
 set solutionName=aoFormWizard.sln
 set binPath=..\source\aoFormWizard3\bin\debug\
-set msbuildLocation=C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin\
+set msbuildLocation=C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\
 set deploymentFolderRoot=C:\Deployments\aoFormWizard\Dev\
 
 rem Setup deployment folder
@@ -48,6 +48,20 @@ goto tryagain
 :makefolder
 md "%deploymentFolderRoot%%versionNumber%"
 
+rem ==============================================================
+rem
+rem copy UI files
+rem
+
+rem new install, as zip files
+rem layouts are developed in a folder with a subfolder for assets, named catalogassets, etc.
+rem when deployed, they are saved in the root folder so the asset subfolder is off the root, to make the html src consistent
+
+cd ..\ui
+"c:\program files\7-zip\7z.exe" a "..\collections\aoFormWizard\uiFormWizard.zip" 
+cd ..\scripts
+
+pause
 
 rem ==============================================================
 rem
@@ -84,4 +98,23 @@ del "%collectionName%.zip" /Q
 xcopy "%collectionName%.zip" "%deploymentFolderRoot%%versionNumber%" /Y
 cd ..\..\scripts
 
-pause
+rem pause
+
+rem ==============================================================
+rem
+echo clear collection folder
+rem
+
+cd %collectionPath%
+
+del *.dll
+del *.dll.config
+
+del "*.html"
+del "*.css"
+del "*.js"
+del "*.jpg"
+del "*.png"
+del "*.svg"
+
+cd ..\..\scripts

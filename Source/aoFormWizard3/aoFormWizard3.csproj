@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{C6554498-EBB9-4809-A750-92D8CC0B902D}</ProjectGuid>
+    <ProjectGuid>{7471C5F3-27E1-07F8-2508-58A6AE9CA48D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>Contensive.Addon.aoFormWizard3</RootNamespace>
     <AssemblyName>aoFormWizard3</AssemblyName>
@@ -25,28 +25,28 @@
     </UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>
     <TargetFrameworkProfile />
+    <DefaultItemExcludes>$(DefaultItemExcludes);$(ProjectDir)**\*.vb</DefaultItemExcludes>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <DefineDebug>true</DefineDebug>
-    <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>aoFormWizard3.xml</DocumentationFile>
-    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
+    <DocumentationFile>bin\Debug\aoFormWizard3.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355,CS1591</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
     <IntermediateOutputPath>C:\Users\jay\AppData\Local\Temp\vsC9.tmp\Debug\</IntermediateOutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
-    <DefineDebug>false</DefineDebug>
-    <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>aoFormWizard3.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\aoFormWizard3.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
     <IntermediateOutputPath>C:\Users\jay\AppData\Local\Temp\vsC9.tmp\Release\</IntermediateOutputPath>
+    <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
     <OptionExplicit>On</OptionExplicit>
@@ -68,14 +68,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ContensiveDbModels, Version=20.0.0.0, Culture=neutral, PublicKeyToken=c014b235a9c6bb22, processorArchitecture=MSIL">
-      <HintPath>..\packages\Contensive.DbModels.25.2.3.3\lib\net472\ContensiveDbModels.dll</HintPath>
+      <HintPath>..\packages\Contensive.DbModels.25.2.9.1\lib\net472\ContensiveDbModels.dll</HintPath>
     </Reference>
     <Reference Include="CPBase, Version=4.1.2.0, Culture=neutral, PublicKeyToken=10b3c53389b845fb, processorArchitecture=MSIL">
-      <HintPath>..\packages\Contensive.CPBaseClass.25.2.3.3\lib\net472\CPBase.dll</HintPath>
+      <HintPath>..\packages\Contensive.CPBaseClass.25.2.9.1\lib\net472\CPBase.dll</HintPath>
     </Reference>
-    <Reference Include="DesignBlockBase, Version=25.1.30.1, Culture=neutral, PublicKeyToken=81704b61c3d18a5b, processorArchitecture=MSIL">
-      <HintPath>..\packages\Contensive.DesignBlockBase.25.1.30.1\lib\net472\DesignBlockBase.dll</HintPath>
+    <Reference Include="DesignBlockBase, Version=25.2.5.2, Culture=neutral, PublicKeyToken=81704b61c3d18a5b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Contensive.DesignBlockBase.25.2.5.2\lib\net472\DesignBlockBase.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=9.0.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.9.0.1\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
@@ -101,44 +102,44 @@
     <Import Include="System.Diagnostics" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Addons\OnInstallClass.vb" />
-    <Compile Include="Constants.vb" />
-    <Compile Include="Controllers\CustomContentController.vb" />
-    <Compile Include="Controllers\FormController.vb" />
-    <Compile Include="Controllers\InstanceIdController.vb" />
-    <Compile Include="Models\Db\baseModel.vb" />
-    <Compile Include="Models\Db\DbBaseModel.vb" />
-    <Compile Include="Models\Db\DesignBlockFontModel.vb" />
-    <Compile Include="Models\Db\DesignBlockThemeModel.vb" />
-    <Compile Include="Models\Db\FormModel.vb" />
-    <Compile Include="Models\Db\FormSetModel.vb" />
-    <Compile Include="Models\Db\FormFieldModel.vb" />
-    <Compile Include="Models\Db\UserFormResponseModel.vb" />
-    <Compile Include="Models\Db\LibraryFolderModel.vb" />
-    <Compile Include="Models\View\FormSetViewModel.vb" />
-    <Compile Include="Models\View\ViewBaseModel.vb" />
-    <Compile Include="Addons\DynamicFormClass.vb" />
-    <Compile Include="My Project\AssemblyInfo.vb" />
-    <Compile Include="My Project\Application.Designer.vb">
+    <Compile Include="My Project\MyNamespace.Static.1.Designer.cs" />
+    <Compile Include="My Project\MyNamespace.Static.2.Designer.cs" />
+    <Compile Include="My Project\MyNamespace.Static.3.Designer.cs" />
+    <Compile Include="Addons\OnInstallClass.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\CustomContentController.cs" />
+    <Compile Include="Controllers\FormController.cs" />
+    <Compile Include="Controllers\InstanceIdController.cs" />
+    <Compile Include="Models\Db\DesignBlockFontModel.cs" />
+    <Compile Include="Models\Db\DesignBlockThemeModel.cs" />
+    <Compile Include="Models\Db\FormModel.cs" />
+    <Compile Include="Models\Db\FormSetModel.cs" />
+    <Compile Include="Models\Db\FormFieldModel.cs" />
+    <Compile Include="Models\Db\UserFormResponseModel.cs" />
+    <Compile Include="Models\Db\LibraryFolderModel.cs" />
+    <Compile Include="Models\View\FormSetViewModel.cs" />
+    <Compile Include="Addons\DynamicFormClass.cs" />
+    <Compile Include="My Project\AssemblyInfo.cs" />
+    <Compile Include="My Project\Application.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Application.myapp</DependentUpon>
     </Compile>
-    <Compile Include="My Project\Resources.Designer.vb">
+    <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="My Project\Settings.Designer.vb">
+    <Compile Include="My Project\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="My Project\Resources.resx">
-      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
-      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+    <EmbeddedResource Include="Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Contensive.Addon.aoFormWizard3.My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
@@ -147,20 +148,20 @@
     <None Include="asdf.snk" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
-      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+      <LastGenOutput>Application.Designer.cs</LastGenOutput>
     </None>
     <None Include="My Project\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
-      <CustomToolNamespace>My</CustomToolNamespace>
-      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>Contensive.Addon.aoFormWizard3.My</CustomToolNamespace>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\genericController.vb" />
+    <Compile Include="Controllers\genericController.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\baseModel.vb" />
+    <Compile Include="Models\baseModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Models\modelData.txt" />
@@ -169,7 +170,7 @@
   <ItemGroup>
     <Folder Include="Views\" />
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

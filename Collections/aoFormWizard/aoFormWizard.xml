@@ -47,6 +47,12 @@
 		<styleslinkhref></styleslinkhref>
 		<Scripting Language="VBScript" EntryPoint="" Timeout="0"/>
 		<instanceSettingPrimaryContentId><![CDATA[Form Sets]]></instanceSettingPrimaryContentId>
+		<IncludeAddon name="JQuery" guid="{9C882078-0DAC-48E3-AD4B-CF2AA230DF80}"/>
+		<IncludeAddon name="jQuery BlockUI" guid="{F6087787-E01E-4E09-AC02-502D0387E048}"/>
+	</Addon>
+	<Addon name="FormWidgetSubmit" guid="{CD4427D8-11DD-4E65-ACF9-1C2928B281F0}" type="Add-on">
+		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Views.DynamicFormClass]]></DotNetClass>
+		<RemoteMethod>yes</RemoteMethod>
 	</Addon>
 	<CDef Name="Form Fields" Active="1" AdminOnly="0" AllowAdd="1" AllowCalendarEvents="0" AllowContentChildTool="0" AllowContentTracking="0" AllowDelete="1" AllowMetaContent="" AllowTopicRules="0" AllowWorkflowAuthoring="0" AuthoringDataSourceName="Default" AuthoringTableName="ccFormFields" ContentDataSourceName="Default" ContentTableName="ccFormFields" DefaultSortMethod="By Name" DeveloperOnly="0" DropDownFieldList="NAME" EditorGroupName="" Parent="" IconLink="" IconHeight="0" IconWidth="0" IconSprites="0" isbasecontent="0" guid="{cbdcae91-04cb-4a93-975b-715337dde490}" >
 		<Field Name="name" active="True" AdminOnly="False" Authorable="True" Caption="Name" DeveloperOnly="False" EditSortPriority="110" FieldType="Text" HTMLContent="False" IndexColumn="0" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="0" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
@@ -130,6 +136,11 @@
 		<Field Name="thankyoucopy" active="True" AdminOnly="False" Authorable="True" Caption="Thank You Page" DeveloperOnly="False" EditSortPriority="1300" FieldType="HTML" HTMLContent="false" IndexColumn="-1" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="&lt;p&gt;Thank you. Your information has been submitted successfully.&lt;/p&gt;" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
 			<HelpDefault>
 				<![CDATA[When the user completes the form set, they will be shown this copy.]]>
+			</HelpDefault>
+		</Field>
+		<Field Name="allowRecaptcha" active="True" AdminOnly="False" Authorable="True" Caption="Include Bot Detect" DeveloperOnly="False" EditSortPriority="1400" FieldType="Boolean" HTMLContent="False" IndexColumn="0" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="0" RSSTitle="False" RSSDescription="False" MemberSelectGroupID="0" EditTab="Styles" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
+			<HelpDefault>
+				<![CDATA[Include a recaptcha bot blocker (ask if the user is a human) on the first page of the form.]]>
 			</HelpDefault>
 		</Field>
 		<!-- 
@@ -262,7 +273,6 @@
 	</CDef>
 	<CDef Name="User Form Response"  guid="{F72AD8B7-58A0-4AF9-9C7D-E3E67A4EFC53}" >
 	</CDef>
-
-	<Resource name="aoFormWizard3.dll" type="executable" path="" />
-	<Resource name="Nustache.Core.dll" type="executable" path="" />
+	<ImportCollection name="JQuery">{A435BF70-041B-43D1-8A8D-5D9D59A7FCD0}</ImportCollection>
+	<Resource name="uiFormWizard.zip" type="files" path="formwizard" />
 </Collection>
