@@ -4,8 +4,8 @@ using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
 
 namespace Contensive.Addon.aoFormWizard3.Controllers {
-    public sealed class genericController {
-        private genericController() {
+    public sealed class GenericController {
+        private GenericController() {
         }
         // 
         // ====================================================================================================
@@ -70,6 +70,7 @@ namespace Contensive.Addon.aoFormWizard3.Controllers {
         /// <summary>
         /// convert string into a style "background-image: url(backgroundImage)
         /// </summary>
+        /// <param name="cp"></param>
         /// <param name="backgroundImage"></param>
         /// <returns></returns>
         public static string encodeStyleBackgroundImage(CPBaseClass cp, string backgroundImage) {
@@ -78,7 +79,7 @@ namespace Contensive.Addon.aoFormWizard3.Controllers {
         // 
         // 
         public static string addEditWrapper(CPBaseClass cp, string innerHtml, int recordId, string recordName, string contentName) {
-            if (!cp.User.IsEditingAnything)
+            if (!cp.User.IsEditing())
                 return innerHtml;
             string header = cp.Content.GetEditLink(contentName, recordId.ToString(), false, recordName, true);
             string content = cp.Html.div(innerHtml, "", "");

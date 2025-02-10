@@ -158,7 +158,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\genericController.cs" />
+    <Compile Include="Controllers\GenericController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\baseModel.cs" />

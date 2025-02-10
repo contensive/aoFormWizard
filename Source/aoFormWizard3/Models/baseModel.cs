@@ -359,6 +359,7 @@ namespace Contensive.Addon.aoFormWizard3.Contensive.Addon.AddonCollectionVb.Cont
         /// </summary>
         /// <param name="cp"></param>
         /// <param name="sqlCriteria"></param>
+        /// <param name="sqlOrderBy"></param>
         /// <returns></returns>
         protected static List<T> createList<T>(CPBaseClass cp, string sqlCriteria, string sqlOrderBy) where T : baseModel {
             var result = new List<T>();

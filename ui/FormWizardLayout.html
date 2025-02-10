@@ -114,77 +114,83 @@
 					{{/continueButton}}
 				</div>
 			</div>
+			<input type=hidden name=instanceid value="{{instanceid}}">
 		</form>
 	</div>
 </div>
 <script>
 	//
 	// -- bind to form
-	document.addEventListener('DOMContentLoaded', function(event) {
-		console.log("form widget submit");
-		jQuery("body").on("submit","#{{formHtmlId}}",function(event) {
-			event.preventDefault();
+	(function() {
+		document.addEventListener('DOMContentLoaded', function(event) {
 			console.log("form widget submit");
-			{{^allowRecaptcha}}
-				//
-				// -- submit form
-				console.log("form widget submit action, no recaptcha");
-				submitFormWidget();
-			{{/allowRecaptcha}}
-			{{#allowRecaptcha}}
-				//
-				// -- submit form with Recaptcha
-				var response = grecaptcha.getResponse();
-				console.log("form widget submit action, recaptcha");
-				if(response != '0' && response != ''){
-					console.log('recaptcha completed');
+			jQuery("body").on("submit","#{{formHtmlId}}",function(event) {
+				event.preventDefault();
+				console.log("form widget submit");
+				{{^allowRecaptcha}}
+					//
+					// -- submit form
+					console.log("form widget submit action, no recaptcha");
 					submitFormWidget();
-				}else{
-					//recaptcha has not been completed or failed
-					event.preventDefault();
-					alert("Please complete the recptcha");
-					return false;
+				{{/allowRecaptcha}}
+				{{#allowRecaptcha}}
+					//
+					// -- submit form with Recaptcha
+					var response = grecaptcha.getResponse();
+					console.log("form widget submit action, recaptcha");
+					if(response != '0' && response != ''){
+						console.log('recaptcha completed');
+						submitFormWidget();
+					}else{
+						//recaptcha has not been completed or failed
+						event.preventDefault();
+						alert("Please complete the recptcha");
+						return false;
+					}
+				{{/allowRecaptcha}}
+				return false;
+			});
+		});
+		// -- submit form
+		function submitFormWidget() {
+			console.log("submitFormWidget");
+			// -- populate hidden div, then copy grid and pagination to visible areas
+			let workingDiv = 'workArea-{{formHtmlId}}'
+			addHiddenDiv(workingDiv);
+			$('#{{formHtmlId}}').block();
+			let baseAjaxUrl = '/FormWidgetSubmit?'+$("#{{formHtmlId}}").serialize();
+			console.log("submitFormWidget, baseAjaxUrl ["+baseAjaxUrl+"]");
+			$.ajax({
+				url: baseAjaxUrl, 
+				success: function(result){
+					$("#"+workingDiv).html(result);
+					$('#{{formHtmlId}}').html($('#'+workingDiv+' form').html());
+					deleteDiv(workingDiv);
+					$('#{{formHtmlId}}').unblock();
+				},
+				error: function(result){
+					console.log(`LayoutBuilder Base, ajax error`);
+					deleteDiv(workingDiv);
+					$('#{{formHtmlId}}').unblock();
 				}
-			{{/allowRecaptcha}}
-			return false;
-		});
-	});
-	// -- submit form
-	function submitFormWidget() {
-		console.log("submitFormWidget");
-		// -- populate hidden div, then copy grid and pagination to visible areas
-		let workingDiv = 'js-formWidgetWorkArea'
-		addHiddenDiv(workingDiv);
-		$('#{{formHtmlId}}').block();
-		let baseAjaxUrl = '/FormWidgetSubmit?'+$("#{{formHtmlId}}").serialize();
-		$.ajax({
-			url: baseAjaxUrl, 
-			success: function(result){
-				$("#"+workingDiv).html(result);
-				$('#{{formHtmlId}}').html($('#'+workingDiv+' form').html());
-				deleteDiv(workingDiv);
-				$('#{{formHtmlId}}').unblock();
-			},
-			error: function(result){
-				console.log(`LayoutBuilder Base, ajax error`);
-				deleteDiv(workingDiv);
-				$('#{{formHtmlId}}').unblock();
+			});
+		}
+		function addHiddenDiv(divId) {
+			console.log("addHiddenDiv-{{formHtmlId}}, divId ["+divId+"]");
+			// Create the div element
+			const div = document.createElement('div');
+			div.id = divId;
+			div.style.display = 'none';
+			// Append the div to the end of the body
+			document.body.appendChild(div);
+		}
+		function deleteDiv(divId) {
+			console.log("deleteDiv-{{formHtmlId}}, divId ["+divId+"]");
+			// Remove the div element
+			const div = document.getElementById(divId);
+			if (div) {
+				document.body.removeChild(div);
 			}
-		});
-	}
-	function addHiddenDiv(divId) {
-  		// Create the div element
-  		const div = document.createElement('div');
-  		div.id = divId;
-  		div.style.display = 'none';
-  		// Append the div to the end of the body
-  		document.body.appendChild(div);
-	}
-	function deleteDiv(divId) {
-  		// Remove the div element
-  		const div = document.getElementById(divId);
-  		if (div) {
-			document.body.removeChild(div);
-  		}
-	}
+		}	})();
+
 </script>
