@@ -3,6 +3,7 @@ using Contensive.Addon.aoFormWizard3.Models.Db;
 using Contensive.BaseClasses;
 using Contensive.DesignBlockBase.Models.View;
 using Contensive.Models.Db;
+using Microsoft.SqlServer.Server;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -79,11 +80,13 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 // 
                 // 
                 // -- process form request
-                if (processRequest(cp, settings)) {
+                UserFormResponseModel userFormResponse = DbBaseModel.createFirstOfList<UserFormResponseModel>(cp, $"visitid={cp.Visit.Id}", "id desc");
+                //
+                if (processRequest(cp, settings, userFormResponse)) {
                     // 
                     // -- simple thank you content
                     cp.Doc.SetProperty("formwizardcomplete", true);
-                } 
+                }
                 // 
                 // -- base fields
                 string requestFormHtmlId = cp.Doc.GetText("formHtmlId");
@@ -96,9 +99,12 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 formViewData.recaptchaHTML = settings.allowRecaptcha ? cp.Addon.Execute(Constants.guidAddonRecaptchav2) : "";
 
                 // 
-                var formlist = DbBaseModel.createList<FormModel>(cp, "(formsetid=" + settings.id + ")", "sortorder");
-                if (formlist.Count > 0) {
-                    var firstForm = formlist.First();
+                var pageList = DbBaseModel.createList<FormModel>(cp, "(formsetid=" + settings.id + ")", "sortorder");
+                if (pageList.Count > 0) {
+                    var firstForm = pageList.First();
+                    FormResponseDataModel savedAnswers = string.IsNullOrEmpty(  userFormResponse.formResponseData ) ? new() : cp.JSON.Deserialize<FormResponseDataModel>(userFormResponse.formResponseData );
+                    savedAnswers.pageDict ??= [];
+                    savedAnswers.activity ??= [];  
                     // 
                     // -- output one page with page one header
                     formViewData.isEditing = cp.User.IsEditing();
@@ -114,65 +120,72 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                         formViewData.formdEditLink = cp.Content.GetEditLink(FormModel.tableMetadata.contentName, firstForm.id.ToString(), false, "", formViewData.isEditing);
                     }
                     //
-                    foreach (var form in formlist) {
-                        var formFieldList = DbBaseModel.createList<FormFieldModel>(cp, "(formid=" + form.id + ")", "sortorder, id");
+                    foreach (FormModel page in pageList) {
+                        FormResponseDataPageModel savedAnswers_Page = savedAnswers.pageDict.TryGetValue(page.id, out var savedAnswers_Page_Result) ? savedAnswers_Page_Result : new FormResponseDataPageModel();
+                        savedAnswers_Page.questionDict ??= [];
+
+
+
+                        var questionList = DbBaseModel.createList<FormFieldModel>(cp, "(formid=" + page.id + ")", "sortorder, id");
                         int fieldPtr = 0;
-                        foreach (var formField in formFieldList) {
+                        foreach (var question in questionList) {
+                            FormResponseDataPageQuestionModel savedAnswers_Page_Question = savedAnswers_Page.questionDict.TryGetValue(question.id, out var savedAnswers_Page_Question_Result) ? savedAnswers_Page_Question_Result : new FormResponseDataPageQuestionModel();
+                            //
                             var optionList = new List<OptionClass>();
                             int optionPtr = 1;
-                            foreach (var formfieldoption in formField.optionList.Split(',')) {
+                            foreach (var formfieldoption in question.optionList.Split(',')) {
                                 optionList.Add(new OptionClass() {
                                     optionName = formfieldoption,
                                     optionPtr = optionPtr
                                 });
                                 optionPtr += 1;
                             }
-                            string fieldEditLink = cp.Content.GetEditLink(FormFieldModel.tableMetadata.contentName, formField.id.ToString(), false, "Edit Question", formViewData.isEditing);
-                            switch (formField.inputtype.ToLower() ?? "") {
+                            string fieldEditLink = cp.Content.GetEditLink(FormFieldModel.tableMetadata.contentName, question.id.ToString(), false, "Edit Question", formViewData.isEditing);
+                            switch (question.inputtype.ToLower() ?? "") {
                                 case "radio": {
-                                        string caption = formField.caption;
+                                        string caption = question.caption;
                                         if (string.IsNullOrEmpty(caption)) {
-                                            caption = formField.name;
+                                            caption = question.name;
                                         }
                                         formViewData.listOfFieldsClass.Add(new FieldViewModel() {
                                             caption = caption,
-                                            name = formField.name,
+                                            name = question.name,
                                             currentValue = "",
-                                            inputtype = formField.inputtype,
-                                            @required = formField.@required,
-                                            headline = formField.headline,
-                                            fielddescription = formField.description,
+                                            inputtype = question.inputtype,
+                                            @required = question.@required,
+                                            headline = question.headline,
+                                            fielddescription = question.description,
                                             isCheckbox = false,
                                             isDefault = false,
                                             isTextArea = false,
                                             isRadio = true,
                                             isSelect = false,
-                                            id = formField.id,
+                                            id = question.id,
                                             optionList = optionList,
-                                            fieldEditLink  = fieldEditLink,
+                                            fieldEditLink = fieldEditLink,
                                             fieldEditWrapper = formViewData.isEditing ? "ccEditWrapper" : ""
                                         });
                                         break;
                                     }
                                 case "select": {
-                                        string caption = formField.caption;
+                                        string caption = question.caption;
                                         if (string.IsNullOrEmpty(caption)) {
-                                            caption = formField.name;
+                                            caption = question.name;
                                         }
                                         formViewData.listOfFieldsClass.Add(new FieldViewModel() {
                                             caption = caption,
-                                            name = formField.name,
+                                            name = question.name,
                                             currentValue = "",
-                                            inputtype = formField.inputtype,
-                                            @required = formField.@required,
-                                            headline = formField.headline,
-                                            fielddescription = formField.description,
+                                            inputtype = question.inputtype,
+                                            @required = question.@required,
+                                            headline = question.headline,
+                                            fielddescription = question.description,
                                             isCheckbox = false,
                                             isDefault = false,
                                             isTextArea = false,
                                             isRadio = false,
                                             isSelect = true,
-                                            id = formField.id,
+                                            id = question.id,
                                             optionList = optionList,
                                             fieldEditLink = fieldEditLink,
                                             fieldEditWrapper = formViewData.isEditing ? "ccEditWrapper" : ""
@@ -180,24 +193,24 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                         break;
                                     }
                                 case "checkbox": {
-                                        string caption = formField.caption;
+                                        string caption = question.caption;
                                         if (string.IsNullOrEmpty(caption)) {
-                                            caption = formField.name;
+                                            caption = question.name;
                                         }
                                         formViewData.listOfFieldsClass.Add(new FieldViewModel() {
                                             caption = caption,
-                                            name = formField.name,
+                                            name = question.name,
                                             currentValue = "",
-                                            inputtype = formField.inputtype,
-                                            @required = formField.@required,
-                                            headline = formField.headline,
-                                            fielddescription = formField.description,
+                                            inputtype = question.inputtype,
+                                            @required = question.@required,
+                                            headline = question.headline,
+                                            fielddescription = question.description,
                                             isCheckbox = true,
                                             isDefault = false,
                                             isTextArea = false,
                                             isRadio = false,
                                             isSelect = false,
-                                            id = formField.id,
+                                            id = question.id,
                                             optionList = optionList,
                                             fieldEditLink = fieldEditLink,
                                             fieldEditWrapper = formViewData.isEditing ? "ccEditWrapper" : ""
@@ -205,24 +218,24 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                         break;
                                     }
                                 case "textarea": {
-                                        string caption = formField.caption;
+                                        string caption = question.caption;
                                         if (string.IsNullOrEmpty(caption)) {
-                                            caption = formField.name;
+                                            caption = question.name;
                                         }
                                         formViewData.listOfFieldsClass.Add(new FieldViewModel() {
                                             caption = caption,
-                                            name = formField.name,
+                                            name = question.name,
                                             currentValue = "",
-                                            inputtype = formField.inputtype,
-                                            @required = formField.@required,
-                                            headline = formField.headline,
-                                            fielddescription = formField.description,
+                                            inputtype = question.inputtype,
+                                            @required = question.@required,
+                                            headline = question.headline,
+                                            fielddescription = question.description,
                                             isCheckbox = false,
                                             isDefault = false,
                                             isTextArea = true,
                                             isRadio = false,
                                             isSelect = false,
-                                            id = formField.id,
+                                            id = question.id,
                                             optionList = optionList,
                                             fieldEditLink = fieldEditLink,
                                             fieldEditWrapper = formViewData.isEditing ? "ccEditWrapper" : ""
@@ -231,24 +244,24 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                     }
 
                                 default: {
-                                        string caption = formField.caption;
+                                        string caption = question.caption;
                                         if (string.IsNullOrEmpty(caption)) {
-                                            caption = formField.name;
+                                            caption = question.name;
                                         }
                                         formViewData.listOfFieldsClass.Add(new FieldViewModel() {
                                             caption = caption,
-                                            name = formField.name,
-                                            currentValue = "",
-                                            inputtype = formField.inputtype,
-                                            @required = formField.@required,
-                                            headline = formField.headline,
-                                            fielddescription = formField.description,
+                                            name = question.name,
+                                            currentValue = savedAnswers_Page_Question.textAnswer,
+                                            inputtype = question.inputtype,
+                                            @required = question.@required,
+                                            headline = question.headline,
+                                            fielddescription = question.description,
                                             isCheckbox = false,
                                             isDefault = true,
                                             isTextArea = false,
                                             isRadio = false,
                                             isSelect = false,
-                                            id = formField.id,
+                                            id = question.id,
                                             optionList = optionList,
                                             fieldEditLink = fieldEditLink,
                                             fieldEditWrapper = formViewData.isEditing ? "ccEditWrapper" : ""
@@ -258,7 +271,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                             }
                             fieldPtr += 1;
                         }
-                        formViewData.fieldAddLink = cp.Content.GetAddLink(FormFieldModel.tableMetadata.contentName, "formid=" + form.id, false, formViewData.isEditing);
+                        formViewData.fieldAddLink = cp.Content.GetAddLink(FormFieldModel.tableMetadata.contentName, "formid=" + page.id, false, formViewData.isEditing);
                     }
                     formViewData.formAddLink = cp.Content.GetAddLink(FormModel.tableMetadata.contentName, "formsetid=" + settings.id, false, formViewData.isEditing);
                 }
@@ -274,15 +287,16 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
         /// </summary>
         /// <param name="CP"></param>
         /// <param name="formSet"></param>
+        /// <param name="userFormResponse"></param>
         /// <returns></returns>
-        public static bool processRequest(CPBaseClass CP, FormSetModel formSet) {
+        public static bool processRequest(CPBaseClass CP, FormSetModel formSet, UserFormResponseModel userFormResponse) {
             string returnHtml = string.Empty;
             int hint = 0;
             try {
                 string button = CP.Doc.GetText("button");
-                if (string.IsNullOrWhiteSpace(button) || button.Equals("cancel"))
-                    return false;
-                UserFormResponseModel userFormResponse = DbBaseModel.createFirstOfList<UserFormResponseModel>(CP, $"visitid={CP.Visit.Id}", "id desc");
+                if (string.IsNullOrWhiteSpace(button) || button.Equals("cancel")) { return false; }
+                //
+                // -- button pressed, verify the users response
                 if (userFormResponse is null) {
                     userFormResponse = DbBaseModel.addDefault<UserFormResponseModel>(CP);
                     userFormResponse.name = "Form Set " + formSet.name + " started " + DateTime.Now.ToString("MM/dd/yyyy") + " by " + CP.User.Name;
@@ -294,19 +308,19 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 var textVersion = new StringBuilder();
                 //int currentAuthContentRecordId = 0;
 
-                FormResponseDataModel savedAnswersForm = null;
-                if (!string.IsNullOrEmpty(userFormResponse.formResponseData)) { savedAnswersForm = CP.JSON.Deserialize<FormResponseDataModel>(userFormResponse.formResponseData); }
-                if (savedAnswersForm is null) { savedAnswersForm = new FormResponseDataModel(); }
-                if (savedAnswersForm.pageDict is null) { savedAnswersForm.pageDict = []; }
-                if (savedAnswersForm.activity is null) { savedAnswersForm.activity = []; }
+                FormResponseDataModel savedAnswers = null;
+                if (!string.IsNullOrEmpty(userFormResponse.formResponseData)) { savedAnswers = CP.JSON.Deserialize<FormResponseDataModel>(userFormResponse.formResponseData); }
+                if (savedAnswers is null) { savedAnswers = new FormResponseDataModel(); }
+                if (savedAnswers.pageDict is null) { savedAnswers.pageDict = []; }
+                if (savedAnswers.activity is null) { savedAnswers.activity = []; }
                 //
                 foreach (var formPage in DbBaseModel.createList<FormModel>(CP, "(formsetid=" + formSet.id + ")", "sortorder")) {
-                    if (!savedAnswersForm.pageDict.TryGetValue(formPage.id, out FormResponseDataPageModel savedAnswersForm_Page)) {
+                    if (!savedAnswers.pageDict.TryGetValue(formPage.id, out FormResponseDataPageModel savedAnswersForm_Page)) {
                         savedAnswersForm_Page = new FormResponseDataPageModel {
                             questionDict = [],
                             answer = ""
                         };
-                        savedAnswersForm.pageDict.Add(formPage.id, savedAnswersForm_Page);
+                        savedAnswers.pageDict.Add(formPage.id, savedAnswersForm_Page);
                     }
 
 
@@ -477,6 +491,8 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                 }
 
                             default: {
+                                    savedAnswersForm_Page_Question.textAnswer = requestAnswer_Text;
+                                    //
                                     //if (form.saveTypeId.Equals(4) & !string.IsNullOrWhiteSpace(customContentName)) {
                                     //    hint = 50;
                                     //    hint = 10;
@@ -556,7 +572,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 if (formSet.joingroupid != 0) {
                     CP.Group.AddUser(formSet.joingroupid, CP.User.Id);
                 }
-                userFormResponse.formResponseData = CP.JSON.Serialize(savedAnswersForm);
+                userFormResponse.formResponseData = CP.JSON.Serialize(savedAnswers);
                 userFormResponse.copy = textVersion.ToString();
                 userFormResponse.save(CP);
                 return true;
