@@ -15,7 +15,7 @@
 								</label>
 								<div class="pl-5">
 									{{{fielddescription}}}
-									<input class="form-control" id="FormType_{{id}}" name="formField_{{id}}" type="{{inputtype}}" {{#required}}required{{/required}}>
+									<input class="form-control" id="FormType_{{id}}" name="formField_{{id}}" type="{{inputtype}}" value="{{currentValue}}" {{#required}}required{{/required}}>
 								</div>
 							</div>
 						</div>
@@ -30,7 +30,7 @@
 								</label>
 								<div class="pl-5">
 									{{{fielddescription}}}
-									<textarea rows="5" class="form-control" id="FormType_{{id}}" name="formField_{{id}}" type="{{inputtype}}" {{#required}}required{{/required}}></textarea>
+									<textarea rows="5" class="form-control" id="FormType_{{id}}" name="formField_{{id}}" type="{{inputtype}}" {{#required}}required{{/required}}>{{currentValue}}</textarea>
 								</div>
 							</div>
 						</div>
@@ -45,7 +45,7 @@
 									{{{fielddescription}}}
 									{{#optionList}}
 										<div class="form-check">
-											<input class="form-check-input" name="formField_{{id}}" type="checkbox" id="formField_{{optionPtr}}" value="{{optionPtr}}">
+											<input class="form-check-input" name="formField_{{id}}" type="checkbox" id="formField_{{optionPtr}}" value="{{optionPtr}}" {{#isSelected}}checked{{/isSelected}}>
 											<label class="form-check-label" for="formType_{{optionPtr}}">{{optionName}}</label>
 										</div>
 									{{/optionList}}
@@ -63,7 +63,7 @@
 									{{{fielddescription}}}
 									{{#optionList}}
 										<div class="form-check">
-										<input class="form-check-input" type="radio" name="formField_{{id}}" id="formField_{{optionPtr}}" value="{{optionPtr}}" {{#required}}required{{/required}}>
+										<input class="form-check-input" type="radio" name="formField_{{id}}" id="formField_{{optionPtr}}" value="{{optionPtr}}"  {{#isSelected}}checked{{/isSelected}}>
 										<label class="form-check-label" for="formField_{{optionPtr}}">{{optionName}}</label>
 										</div>
 									{{/optionList}}
@@ -116,19 +116,23 @@
 					{{/isEditing}}
 					{{^isEditing}}
 						{{#previousButton}}
-							<button class="btn btn-primary js-formWidgetButton" name="button" type="submit" value="previous">{{previousButton}}</button>
+							<button class="btn btn-primary js-formWidgetButton" name="button" type="submit" value="{{previousButton}}">{{previousButton}}</button>
 						{{/previousButton}}
 						{{#cancelButton}}
-							<button class="btn btn-primary js-formWidgetButton" name="button" type="submit" value="cancel">{{cancelButton}}</button>
+							<button class="btn btn-primary js-formWidgetButton" name="button" type="submit" value="{{cancelButton}}">{{cancelButton}}</button>
 						{{/cancelButton}}
 						{{#continueButton}}
-							<button class="btn btn-primary js-formWidgetButton" name="button" type="submit" value="continue">{{continueButton}}</button>
+							<button class="btn btn-primary js-formWidgetButton" name="button" type="submit" value="{{continueButton}}">{{continueButton}}</button>
 						{{/continueButton}}
+						{{#submitButton}}
+							<button class="btn btn-primary js-formWidgetButton" name="button" type="submit" value="{{submitButton}}">{{submitButton}}</button>
+						{{/submitButton}}
 					{{/isEditing}}
 				</div>
 			</div>
 			<input type=hidden name=instanceid value="{{instanceid}}">
 			<input type=hidden name=formHtmlId value="{{formHtmlId}}">
+			<input type=hidden name=srcPageId value="{{srcPageId}}">
 		</form>
 	</div>
 </div>

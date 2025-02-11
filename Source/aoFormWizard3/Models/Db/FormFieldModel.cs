@@ -1,4 +1,6 @@
-﻿using Contensive.Models.Db;
+﻿using Contensive.BaseClasses;
+using Contensive.Models.Db;
+using System.Collections.Generic;
 
 namespace Contensive.Addon.aoFormWizard3.Models.Db {
     public class FormFieldModel : DbBaseModel {
@@ -24,6 +26,18 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
         /// </summary>
         /// <returns></returns>
         public string optionList { get; set; }
+        //
+        // ====================================================================================================
+        //
+        /// <summary>
+        /// return the question list in the correct order
+        /// </summary>
+        /// <param name="cp"></param>
+        /// <param name="pageId"></param>
+        /// <returns></returns>
+        public static List<FormFieldModel> getQuestionList(CPBaseClass cp, int pageId) {
+            return DbBaseModel.createList<FormFieldModel>(cp, $"(formid={pageId})", "sortorder,id");
+        }
 
     }
 }

@@ -39,6 +39,17 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
         /// key is the form id
         /// </summary>
         public Dictionary<int, FormResponseDataPageModel> pageDict { get; set; }
+        //
+        /// <summary>
+        /// the id of the form-page the current user is working on. 
+        /// Set when they hit continue.
+        /// </summary>
+        public int currentPageid { get; set; }
+        //
+        /// <summary>
+        /// if true, the user has completed the form and submitted it. Display the form's thank you message
+        /// </summary>
+        public bool isComplete { get; set; }
     }
     //
     /// <summary>
@@ -46,9 +57,16 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
     /// key is the formField id
     /// </summary>
     public class FormResponseDataPageModel {
-
+        /// <summary>
+        /// true if this page was submnitted by the user. This can be ussed like "intentially left blank" when displaying answers.
+        /// </summary>
+        public bool isStarted { get; set; }
+        /// <summary>
+        /// set true when the user completes this page. The final submit cannot be completed until all pages are completed.
+        /// when entering the form, go to the first non-complete page.
+        /// </summary>
+        public bool isCompleted { get; set; }
         public Dictionary<int, FormResponseDataPageQuestionModel> questionDict { get; set; }
-        public string answer { get; set; }
     }
     //
     /// <summary>
@@ -63,6 +81,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
         //
         /// <summary>
         /// a list of the choices and true or false if it was selected. For radio and checkboxes
+        /// the key is the choice in the question
         /// </summary>
         public Dictionary<string,bool> choiceAnswerDict { get; set; }
     }
