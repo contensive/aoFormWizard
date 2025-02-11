@@ -108,7 +108,6 @@
     <Compile Include="Addons\OnInstallClass.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\CustomContentController.cs" />
-    <Compile Include="Controllers\FormController.cs" />
     <Compile Include="Controllers\InstanceIdController.cs" />
     <Compile Include="Models\Db\DesignBlockFontModel.cs" />
     <Compile Include="Models\Db\DesignBlockThemeModel.cs" />
@@ -116,9 +115,8 @@
     <Compile Include="Models\Db\FormSetModel.cs" />
     <Compile Include="Models\Db\FormFieldModel.cs" />
     <Compile Include="Models\Db\UserFormResponseModel.cs" />
-    <Compile Include="Models\Db\LibraryFolderModel.cs" />
     <Compile Include="Models\View\FormSetViewModel.cs" />
-    <Compile Include="Addons\DynamicFormClass.cs" />
+    <Compile Include="Addons\FormWidget.cs" />
     <Compile Include="My Project\AssemblyInfo.cs" />
     <Compile Include="My Project\Application.Designer.cs">
       <AutoGen>True</AutoGen>

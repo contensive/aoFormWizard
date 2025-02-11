@@ -103,18 +103,32 @@
 					</div>
 				{{/allowRecaptcha}}
 				<div class="form-group" style="text-align:center;">
-					{{#previousButton}}
-						<button class="btn btn-primary " name="button" type="submit" value="previous">{{previousButton}}</button>
-					{{/previousButton}}
-					{{#cancelButton}}
-						<button class="btn btn-primary " name="button" type="submit" value="cancel">{{cancelButton}}</button>
-					{{/cancelButton}}
-					{{#continueButton}}
-						<button class="btn btn-primary " name="button" type="submit" value="continue">{{continueButton}}</button>
-					{{/continueButton}}
+					{{#isEditing}}
+						{{#previousButton}}
+						<button class="btn btn-primary" type="button" disabled>{{previousButton}}</button>
+						{{/previousButton}}
+						{{#cancelButton}}
+							<button class="btn btn-primary" type="button" disabled>{{cancelButton}}</button>
+						{{/cancelButton}}
+						{{#continueButton}}
+							<button class="btn btn-primary" type="button" disabled>{{continueButton}}</button>
+						{{/continueButton}}
+					{{/isEditing}}
+					{{^isEditing}}
+						{{#previousButton}}
+							<button class="btn btn-primary js-formWidgetButton" name="button" type="submit" value="previous">{{previousButton}}</button>
+						{{/previousButton}}
+						{{#cancelButton}}
+							<button class="btn btn-primary js-formWidgetButton" name="button" type="submit" value="cancel">{{cancelButton}}</button>
+						{{/cancelButton}}
+						{{#continueButton}}
+							<button class="btn btn-primary js-formWidgetButton" name="button" type="submit" value="continue">{{continueButton}}</button>
+						{{/continueButton}}
+					{{/isEditing}}
 				</div>
 			</div>
 			<input type=hidden name=instanceid value="{{instanceid}}">
+			<input type=hidden name=formHtmlId value="{{formHtmlId}}">
 		</form>
 	</div>
 </div>
@@ -124,14 +138,16 @@
 	(function() {
 		document.addEventListener('DOMContentLoaded', function(event) {
 			console.log("form widget submit");
-			jQuery("body").on("submit","#{{formHtmlId}}",function(event) {
+			jQuery("body").on("click",".js-formWidgetButton",function(event) {
 				event.preventDefault();
+				var post = $(this).attr("name") + "=" + $(this).val();
+    			var formData = $('#{{formHtmlId}}').serialize() + "&" + $(this).attr("name") + "=" + $(this).val();
 				console.log("form widget submit");
 				{{^allowRecaptcha}}
 					//
 					// -- submit form
 					console.log("form widget submit action, no recaptcha");
-					submitFormWidget();
+					submitFormWidget(formData);
 				{{/allowRecaptcha}}
 				{{#allowRecaptcha}}
 					//
@@ -140,7 +156,7 @@
 					console.log("form widget submit action, recaptcha");
 					if(response != '0' && response != ''){
 						console.log('recaptcha completed');
-						submitFormWidget();
+						submitFormWidget(formData);
 					}else{
 						//recaptcha has not been completed or failed
 						event.preventDefault();
@@ -152,13 +168,13 @@
 			});
 		});
 		// -- submit form
-		function submitFormWidget() {
+		function submitFormWidget(formData) {
 			console.log("submitFormWidget");
 			// -- populate hidden div, then copy grid and pagination to visible areas
 			let workingDiv = 'workArea-{{formHtmlId}}'
 			addHiddenDiv(workingDiv);
 			$('#{{formHtmlId}}').block();
-			let baseAjaxUrl = '/FormWidgetSubmit?'+$("#{{formHtmlId}}").serialize();
+			let baseAjaxUrl = '/FormWidgetSubmit?'+formData;
 			console.log("submitFormWidget, baseAjaxUrl ["+baseAjaxUrl+"]");
 			$.ajax({
 				url: baseAjaxUrl, 

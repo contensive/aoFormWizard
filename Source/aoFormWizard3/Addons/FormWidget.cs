@@ -7,7 +7,7 @@ using Contensive.DesignBlockBase.Controllers;
 
 namespace Contensive.Addon.aoFormWizard3.Views {
     // 
-    public class DynamicFormClass : AddonBaseClass {
+    public class FormWidget : AddonBaseClass {
         // 
         // =====================================================================================
         /// <summary>
@@ -68,12 +68,12 @@ namespace Contensive.Addon.aoFormWizard3.Views {
             //}
         }
     }
-    // 
-    // =====================================================================================
-    /// <summary>
-    /// Request object for main
-    /// </summary>
-    public class FormRequest {
-        public string button;
-    }
+    //// 
+    //// =====================================================================================
+    ///// <summary>
+    ///// Request object for main
+    ///// </summary>
+    //public class FormRequest {
+    //    public string button;
+    //}
 }

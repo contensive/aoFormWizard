@@ -61,7 +61,7 @@ cd ..\ui
 "c:\program files\7-zip\7z.exe" a "..\collections\aoFormWizard\uiFormWizard.zip" 
 cd ..\scripts
 
-pause
+rem pause
 
 rem ==============================================================
 rem
