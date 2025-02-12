@@ -8,14 +8,14 @@
 					{{#isDefault}}
 						{{{fieldEditLink}}}
 						<div class="{{fieldEditWrapper}}">
+							{{#headline}}<h2 class="mt-5">{{headline}}</h2>{{/headline}}
 							<div class="form-group">
-								{{#headline}}<h2 class="pt-4">{{headline}}</h2>{{/headline}}
 								<label class="control-label mb-0" for="FormType_{{id}}">
-									<h3 class="pt-4">{{caption}}{{#required}}<span class="asteriskField">*</span>{{/required}}</h3>
+									<h5 class="mt-4">{{caption}}{{#required}}<span class="asteriskField">*</span>{{/required}}</h5>
 								</label>
-								<div class="pl-5">
+								<div class="ms-5 mt-2">
 									{{{fielddescription}}}
-									<input class="form-control" id="FormType_{{id}}" name="formField_{{id}}" type="{{inputtype}}" value="{{currentValue}}" {{#required}}required{{/required}}>
+									<input class="mt-2 form-control" id="FormType_{{id}}" name="formField_{{id}}" type="{{inputtype}}" value="{{currentValue}}" {{#required}}required{{/required}}>
 								</div>
 							</div>
 						</div>
@@ -23,14 +23,14 @@
 					{{#isTextArea}}
 						{{{fieldEditLink}}}
 						<div class="{{fieldEditWrapper}}">
+							{{#headline}}<h2 class="mt-5">{{headline}}</h2>{{/headline}}
 							<div class="form-group">
-								{{#headline}}<h2 class="pt-4">{{headline}}</h2>{{/headline}}
 								<label class="control-label mb-0" for="FormType_{{id}}">
-									<h3 class="pt-4">{{caption}}{{#required}}<span class="asteriskField">*</span>{{/required}}</h3>
+									<h5 class="mt-4">{{caption}}{{#required}}<span class="asteriskField">*</span>{{/required}}</h5>
 								</label>
-								<div class="pl-5">
+								<div class="ms-5 mt-2">
 									{{{fielddescription}}}
-									<textarea rows="5" class="form-control" id="FormType_{{id}}" name="formField_{{id}}" type="{{inputtype}}" {{#required}}required{{/required}}>{{currentValue}}</textarea>
+									<textarea rows="5" class="mt-2 form-control" id="FormType_{{id}}" name="formField_{{id}}" type="{{inputtype}}" {{#required}}required{{/required}}>{{currentValue}}</textarea>
 								</div>
 							</div>
 						</div>
@@ -38,15 +38,15 @@
 					{{#isCheckbox}}
 						{{{fieldEditLink}}}
 						<div class="{{fieldEditWrapper}}">
+							{{#headline}}<h2 class="mt-5">{{headline}}</h2>{{/headline}}
 							<div class="form-group">
-								{{#headline}}<h2 class="pt-4">{{headline}}</h2>{{/headline}}
-								<h3 class="pt-4">{{caption}}</h3>
-								<div class="pl-5">
+								<h5 class="mt-4">{{caption}}</h5>
+								<div class="ms-5 mt-2">
 									{{{fielddescription}}}
 									{{#optionList}}
-										<div class="form-check">
-											<input class="form-check-input" name="formField_{{id}}" type="checkbox" id="formField_{{optionPtr}}" value="{{optionPtr}}" {{#isSelected}}checked{{/isSelected}}>
-											<label class="form-check-label" for="formType_{{optionPtr}}">{{optionName}}</label>
+										<div class="mt-2 form-check">
+											<input class="form-check-input" name="formField_{{id}}" type="checkbox" id="formField_{{id}}_{{optionPtr}}" value="{{optionPtr}}" {{#isSelected}}checked{{/isSelected}}>
+											<label class="form-check-label" for="formField_{{id}}_{{optionPtr}}">{{optionName}}</label>
 										</div>
 									{{/optionList}}
 								</div>
@@ -56,15 +56,15 @@
 					{{#isRadio}}
 						{{{fieldEditLink}}}
 						<div class="{{fieldEditWrapper}}">
+							{{#headline}}<h2 class="mt-5">{{headline}}</h2>{{/headline}}
 							<div class="form-group">
-								{{#headline}}<h2 class="pt-4">{{headline}}</h2>{{/headline}}
-								<h3 class="pt-4">{{caption}} {{#required}}<span class="asteriskField">*</span>{{/required}}</h3>
-								<div class="pl-5">
+								<h5 class="mt-4">{{caption}} {{#required}}<span class="asteriskField">*</span>{{/required}}</h5>
+								<div class="ms-5 mt-2">
 									{{{fielddescription}}}
 									{{#optionList}}
-										<div class="form-check">
-										<input class="form-check-input" type="radio" name="formField_{{id}}" id="formField_{{optionPtr}}" value="{{optionPtr}}"  {{#isSelected}}checked{{/isSelected}}>
-										<label class="form-check-label" for="formField_{{optionPtr}}">{{optionName}}</label>
+										<div class="mt-2 form-check">
+										<input class="form-check-input" type="radio" name="formField_{{id}}" id="formField_{{id}}_{{optionPtr}}" value="{{optionPtr}}"  {{#isSelected}}checked{{/isSelected}}>
+										<label class="form-check-label" for="formField_{{id}}_{{optionPtr}}">{{optionName}}</label>
 										</div>
 									{{/optionList}}
 								</div>
@@ -74,14 +74,14 @@
 					{{#isSelect}}
 						{{{fieldEditLink}}}
 						<div class="{{fieldEditWrapper}}">
+							{{#headline}}<h2 class="mt-5">{{headline}}</h2>{{/headline}}
 							<div class="form-group">
-								{{#headline}}<h2 class="pt-4">{{headline}}</h2>{{/headline}}
-								<h3 class="pt-4">{{caption}} {{#required}}<span class="asteriskField">*</span>{{/required}}</h3>
-								<div class="pl-5">
+								<h5 class="mt-4">{{caption}} {{#required}}<span class="asteriskField">*</span>{{/required}}</h5>
+								<div class="ms-5 mt-2">
 									{{{fielddescription}}}
 										<div class="form-check">
-											<select class="form-control" name="formField_{{id}}" id="formField_{{id}}" {{#required}}required{{/required}}>
-											<option value="" selected>Choose...</option>
+											<select class="mt-2 form-control" name="formField_{{id}}" id="formField_{{id}}" {{#required}}required{{/required}}>
+												<option value="" selected>Choose...</option>
 												{{#optionList}}
 													<option id="formField_{{optionPtr}}" value="{{optionPtr}}">{{optionName}}</option>
 												{{/optionList}}
@@ -102,14 +102,14 @@
 						</label>
 					</div>
 				{{/allowRecaptcha}}
-				<div class="form-group" style="text-align:center;">
+				<div class="my-4 form-group" style="text-align:center;">
 					{{#isEditing}}
 						{{#previousButton}}
 						<button class="btn btn-primary" type="button" disabled>{{previousButton}}</button>
 						{{/previousButton}}
-						{{#cancelButton}}
-							<button class="btn btn-primary" type="button" disabled>{{cancelButton}}</button>
-						{{/cancelButton}}
+						{{#resetButton}}
+							<button class="btn btn-primary" type="button" disabled>{{resetButton}}</button>
+						{{/resetButton}}
 						{{#continueButton}}
 							<button class="btn btn-primary" type="button" disabled>{{continueButton}}</button>
 						{{/continueButton}}
@@ -118,9 +118,9 @@
 						{{#previousButton}}
 							<button class="btn btn-primary js-formWidgetButton" name="button" type="submit" value="{{previousButton}}">{{previousButton}}</button>
 						{{/previousButton}}
-						{{#cancelButton}}
-							<button class="btn btn-primary js-formWidgetButton" name="button" type="submit" value="{{cancelButton}}">{{cancelButton}}</button>
-						{{/cancelButton}}
+						{{#resetButton}}
+							<button class="btn btn-primary js-formWidgetButton" name="button" type="submit" value="{{resetButton}}">{{resetButton}}</button>
+						{{/resetButton}}
 						{{#continueButton}}
 							<button class="btn btn-primary js-formWidgetButton" name="button" type="submit" value="{{continueButton}}">{{continueButton}}</button>
 						{{/continueButton}}

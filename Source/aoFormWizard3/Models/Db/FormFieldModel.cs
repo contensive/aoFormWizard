@@ -14,11 +14,22 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
         public string description { get; set; }
         public int contentfieldid { get; set; }
         public int formid { get; set; }
+        ///// <summary>
+        ///// Field type, string, can be "checkbox", "radio", "file", "text","textarea","select"
+        ///// </summary>
+        ///// <returns></returns>
+        //public string inputtype { get; set; }
+        //
         /// <summary>
-        /// Field type, string, can be "checkbox", "radio", "file", "text","textarea","select"
+        /// see inputTypeEnum
+        /// 1 = Short Text Answer
+        /// 2 = Long Text Answer
+        /// 3 = Check Boxes choose one
+        /// 4 = Radio Boxes choose many
+        /// 5 = Upload File
+        /// 6 = Select List choose one
         /// </summary>
-        /// <returns></returns>
-        public string inputtype { get; set; }
+        public int inputTypeId { get; set; }
         public string replacetext { get; set; }
         public bool @required { get; set; }
         /// <summary>
@@ -26,6 +37,25 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
         /// </summary>
         /// <returns></returns>
         public string optionList { get; set; }
+        //
+        public enum inputTypeEnum {
+            text = 1,
+            textarea = 2,
+            checkbox = 3,
+            radio = 4,
+            file = 5,
+            select = 6
+        }
+        public static string getInputTypeName(int inputTypeId) {
+            return inputTypeId switch {
+                2 => "TEXTAREA",
+                3 => "CHECKBOX",
+                4 => "RADIO",
+                5 => "FILE",
+                6 => "SELECT",
+                _ => "TEXT"
+            };
+        }
         //
         // ====================================================================================================
         //

@@ -9,9 +9,7 @@ namespace Contensive.Addon.aoFormWizard3 {
         public const string pathFilenameLayoutFormWizard = "formwizard/FormWizardLayout.html";
         //
         public const string guidAddonRecaptchav2 = "{500A1F57-86A2-4D47-B747-4EF4D30A83E2}";
-        // 
-        // -- version used to upgrade content
-        public const int version = 2;
+        //
         // Field types. This enum is taken from contensive 5 code
         public enum FieldTypeIdEnum {
             IntegerType = 1,

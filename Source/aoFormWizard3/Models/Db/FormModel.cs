@@ -11,11 +11,11 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
         //
         // -- instance properties
         //public bool addbackbutton { get; set; }
-        public string backbuttonname { get; set; }
-        public bool addcancelbutton { get; set; }
-        public string cancelbuttonname { get; set; }
-        public string continuebuttonname { get; set; }
-        public string submitbuttonname { get; set; }
+        //public string backbuttonname { get; set; }
+        //public bool addcancelbutton { get; set; }
+        //public string cancelbuttonname { get; set; }
+        //public string continuebuttonname { get; set; }
+        //public string submitbuttonname { get; set; }
         public int contentid { get; set; }
         public int formsetid { get; set; }
         // Public Property htmlbody As String
@@ -27,12 +27,12 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
         /// </summary>
         /// <returns></returns>
         public int saveTypeId { get; set; }
-        /// <summary>
-        /// text field to enter a custom content where data for this form should be saved
-        /// tablename for this content should be 'formWizard' + normalize(saveContent). normalize should validate the allowed characters for sql server tables.
-        /// </summary>
-        /// <returns></returns>
-        public string saveCustomContent { get; set; }
+        ///// <summary>
+        ///// text field to enter a custom content where data for this form should be saved
+        ///// tablename for this content should be 'formWizard' + normalize(saveContent). normalize should validate the allowed characters for sql server tables.
+        ///// </summary>
+        ///// <returns></returns>
+        //public string saveCustomContent { get; set; }
         /// <summary>
         /// deprecated, see saveTypeId
         /// </summary>

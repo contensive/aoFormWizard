@@ -162,10 +162,7 @@
     <Compile Include="Models\baseModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Models\modelData.txt" />
-    <Content Include="Resources\formwizard.txt" />
-  </ItemGroup>
-  <ItemGroup>
+    <Folder Include="Resources\" />
     <Folder Include="Views\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

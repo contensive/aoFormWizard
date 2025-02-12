@@ -35,7 +35,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
         public List<FieldViewModel> listOfFieldsClass { get; set; } = new List<FieldViewModel>();
         public string fieldAddLink { get; set; }
         public string previousButton { get; set; }
-        public string cancelButton { get; set; }
+        public string resetButton { get; set; }
         public string submitButton { get; set; }
         public string continueButton { get; set; }
         public string formEditWrapper { get; set; }
@@ -90,7 +90,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 UserFormResponseModel userFormResponse = DbBaseModel.createFirstOfList<UserFormResponseModel>(cp, $"visitid={cp.Visit.Id}", "id desc");
                 //
                 // -- process the request
-                processRequest(cp, settings, userFormResponse);
+                processRequest(cp, settings, ref userFormResponse);
                 //
                 // -- validate the savedAnswers object
                 FormResponseDataModel savedAnswers = string.IsNullOrEmpty(userFormResponse?.formResponseData) ? new() : cp.JSON.Deserialize<FormResponseDataModel>(userFormResponse.formResponseData);
@@ -135,10 +135,10 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                         //
                         //formViewData.pageHeader = page.name;
                         formViewData.pageDescription = page.description;
-                        formViewData.previousButton = page == pageList.First() ? "" : string.IsNullOrEmpty( page.backbuttonname ) ? "Previous" : page.backbuttonname;
-                        formViewData.cancelButton = !page.addcancelbutton ? "" : string.IsNullOrEmpty(page.cancelbuttonname) ? "Cancel" : page.cancelbuttonname;
-                        formViewData.submitButton = page != pageList.Last() ? "" : string.IsNullOrEmpty(page.continuebuttonname) ? "Submit" : page.continuebuttonname;
-                        formViewData.continueButton = page == pageList.Last() ? "" : string.IsNullOrEmpty(page.continuebuttonname) ? "Continue" : page.continuebuttonname;
+                        formViewData.previousButton = page == pageList.First() ? "" : string.IsNullOrEmpty(settings.backButtonName ) ? "Previous" : settings.backButtonName;
+                        formViewData.resetButton = !settings.addResetButton ? "" : string.IsNullOrEmpty(settings.resetButtonName) ? "Reset" : settings.resetButtonName;
+                        formViewData.submitButton = page != pageList.Last() ? "" : string.IsNullOrEmpty(settings.submitButtonName) ? "Submit" : settings.submitButtonName;
+                        formViewData.continueButton = page == pageList.Last() ? "" : string.IsNullOrEmpty(settings.continueButtonName) ? "Continue" : settings.continueButtonName;
                         if (formViewData.isEditing) {
                             formViewData.formEditWrapper = "ccEditWrapper";
                             formViewData.formdEditLink = cp.Content.GetEditLink(FormModel.tableMetadata.contentName, page.id.ToString(), false, "", formViewData.isEditing);
@@ -164,8 +164,8 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                 optionPtr += 1;
                             }
                             string fieldEditLink = cp.Content.GetEditLink(FormFieldModel.tableMetadata.contentName, question.id.ToString(), false, "Edit Question", formViewData.isEditing);
-                            switch (question.inputtype.ToLower() ?? "") {
-                                case "radio": {
+                            switch (question.inputTypeId) {
+                                case (int)FormFieldModel.inputTypeEnum.radio: {
                                         string caption = question.caption;
                                         if (string.IsNullOrEmpty(caption)) {
                                             caption = question.name;
@@ -174,7 +174,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                             caption = caption,
                                             name = question.name,
                                             currentValue = "",
-                                            inputtype = question.inputtype,
+                                            inputtype = FormFieldModel.getInputTypeName(question.inputTypeId),
                                             @required = question.@required,
                                             headline = question.headline,
                                             fielddescription = question.description,
@@ -190,7 +190,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                         });
                                         break;
                                     }
-                                case "select": {
+                                case (int)FormFieldModel.inputTypeEnum.select: {
                                         string caption = question.caption;
                                         if (string.IsNullOrEmpty(caption)) {
                                             caption = question.name;
@@ -199,7 +199,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                             caption = caption,
                                             name = question.name,
                                             currentValue = "",
-                                            inputtype = question.inputtype,
+                                            inputtype = FormFieldModel.getInputTypeName(question.inputTypeId),
                                             @required = question.@required,
                                             headline = question.headline,
                                             fielddescription = question.description,
@@ -215,7 +215,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                         });
                                         break;
                                     }
-                                case "checkbox": {
+                                case (int)FormFieldModel.inputTypeEnum.checkbox: {
                                         string caption = question.caption;
                                         if (string.IsNullOrEmpty(caption)) {
                                             caption = question.name;
@@ -224,7 +224,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                             caption = caption,
                                             name = question.name,
                                             currentValue = "",
-                                            inputtype = question.inputtype,
+                                            inputtype = FormFieldModel.getInputTypeName(question.inputTypeId),
                                             @required = question.@required,
                                             headline = question.headline,
                                             fielddescription = question.description,
@@ -240,7 +240,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                         });
                                         break;
                                     }
-                                case "textarea": {
+                                case (int)FormFieldModel.inputTypeEnum.textarea: {
                                         string caption = question.caption;
                                         if (string.IsNullOrEmpty(caption)) {
                                             caption = question.name;
@@ -249,7 +249,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                             caption = caption,
                                             name = question.name,
                                             currentValue = "",
-                                            inputtype = question.inputtype,
+                                            inputtype = FormFieldModel.getInputTypeName(question.inputTypeId),
                                             @required = question.@required,
                                             headline = question.headline,
                                             fielddescription = question.description,
@@ -275,7 +275,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                             caption = caption,
                                             name = question.name,
                                             currentValue = savedAnswers_Page_Question.textAnswer,
-                                            inputtype = question.inputtype,
+                                            inputtype = FormFieldModel.getInputTypeName(question.inputTypeId),
                                             @required = question.@required,
                                             headline = question.headline,
                                             fielddescription = question.description,
@@ -317,15 +317,23 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
         /// <param name="formSet"></param>
         /// <param name="userFormResponse"></param>
         /// <returns></returns>
-        public static bool processRequest(CPBaseClass cp, FormSetModel formSet, UserFormResponseModel userFormResponse) {
+        public static bool processRequest(CPBaseClass cp, FormSetModel formSet, ref UserFormResponseModel userFormResponse) {
             string returnHtml = string.Empty;
             int hint = 0;
             try {
                 string button = cp.Doc.GetText("button");
                 int srcPageId = cp.Doc.GetInteger("srcPageId");
                 //
-                // -- handle no button and cancel button
-                if (string.IsNullOrWhiteSpace(button) || button.Equals("cancel") || srcPageId.Equals(0)) { return false; }
+                // -- handle no button
+                if (string.IsNullOrWhiteSpace(button) || srcPageId.Equals(0)) { return false; }
+                //
+                // -- handle reset button
+                string resetButton = string.IsNullOrEmpty(formSet.resetButtonName) ? "Reset" : formSet.resetButtonName;
+                if (userFormResponse != null && formSet.addResetButton && !string.IsNullOrEmpty(resetButton) &&  button.Equals(resetButton)) {
+                    DbBaseModel.delete<UserFormResponseModel>(cp, userFormResponse.ccguid);
+                    userFormResponse = null;
+                    return false; 
+                }
                 //
                 // -- verify the users response
                 if (userFormResponse is null) {
@@ -358,7 +366,8 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 }
                 //
                 // -- handle previous button
-                if (button == currentPage.backbuttonname) { 
+                string backButton = string.IsNullOrEmpty(formSet.backButtonName) ? "Previous" : formSet.backButtonName;
+                if (button == backButton) { 
                     if (currentPage==pageList.First()) { return false; }
                     var previousPage=pageList.First();
                     foreach (var page in pageList) {
@@ -406,10 +415,10 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                     textVersion.Append($"{Environment.NewLine}Question: " + formPage_Question.name);
                     htmlVersion.Append("<div style=\"padding-top:10px;\"> Question:" + formPage_Question.name + "</div>");
                     //
-                    switch (formPage_Question.inputtype.ToLower() ?? "") {
-                        case "checkbox":
-                        case "radio":
-                        case "select": {
+                    switch ( formPage_Question.inputTypeId ) {
+                        case (int)FormFieldModel.inputTypeEnum.checkbox:
+                        case (int)FormFieldModel.inputTypeEnum.radio:
+                        case (int)FormFieldModel.inputTypeEnum.select: {
                                 hint = 3;
                                 var requestAnswer_OptionsSelectedList = new List<string>(requestAnswer_Text.Split(','));
                                 int optionPtr = 1;
@@ -469,7 +478,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
 
                                 break;
                             }
-                        case "file": {
+                        case (int)FormFieldModel.inputTypeEnum.file: {
                                 hint = 20;
                                 string fieldName = "formField_" + formPage_Question.id;
                                 string uploadFilename = cp.Doc.GetText(fieldName);
@@ -625,7 +634,9 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 // -- continue to next page
                 //
                 // -- if last question done processing, mark this form-page complete
-                if (!string.IsNullOrEmpty(button) && (button == currentPage.continuebuttonname || button == currentPage.submitbuttonname)) {
+                string continueButton = string.IsNullOrEmpty(formSet.continueButtonName) ? "Continue" : formSet.continueButtonName;
+                string submitButton = string.IsNullOrEmpty(formSet.submitButtonName) ? "Submit" : formSet.submitButtonName;
+                if (!string.IsNullOrEmpty(button) && (button == continueButton || button == submitButton)) {
                     //
                     // -- mark this page complete
                     savedAnswersForm_Page.isCompleted = true;
@@ -649,7 +660,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                         }
                     }
                 }
-                if (currentPage == pageList.Last() && (button == currentPage.submitbuttonname)) {
+                if (currentPage == pageList.Last() && (button == submitButton)) {
                     //
                     // -- the entire form is complete
                     //
