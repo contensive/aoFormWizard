@@ -6,6 +6,7 @@ using Contensive.Models.Db;
 using Microsoft.SqlServer.Server;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -51,10 +52,12 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
             public bool @required { get; set; }
             public string name { get; set; }
             public string currentValue { get; set; }
+            public string currentFileUrl { get; set; }
             public bool isCheckbox { get; set; }
             public bool isRadio { get; set; }
             public bool isSelect { get; set; }
             public bool isTextArea { get; set; }
+            public bool isFile { get; set; }
             public bool isDefault { get; set; }
             public int id { get; set; }
             public List<OptionClass> optionList { get; set; } = new List<OptionClass>();
@@ -183,6 +186,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                             isTextArea = false,
                                             isRadio = true,
                                             isSelect = false,
+                                            isFile = false,
                                             id = question.id,
                                             optionList = optionList,
                                             fieldEditLink = fieldEditLink,
@@ -208,6 +212,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                             isTextArea = false,
                                             isRadio = false,
                                             isSelect = true,
+                                            isFile = false,
                                             id = question.id,
                                             optionList = optionList,
                                             fieldEditLink = fieldEditLink,
@@ -233,6 +238,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                             isTextArea = false,
                                             isRadio = false,
                                             isSelect = false,
+                                            isFile = false,
                                             id = question.id,
                                             optionList = optionList,
                                             fieldEditLink = fieldEditLink,
@@ -258,6 +264,35 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                             isTextArea = true,
                                             isRadio = false,
                                             isSelect = false,
+                                            isFile = false,
+                                            id = question.id,
+                                            optionList = optionList,
+                                            fieldEditLink = fieldEditLink,
+                                            fieldEditWrapper = formViewData.isEditing ? "ccEditWrapper" : ""
+                                        });
+                                        break;
+                                    }
+
+                                case (int)FormFieldModel.inputTypeEnum.file: {
+                                        string caption = question.caption;
+                                        if (string.IsNullOrEmpty(caption)) {
+                                            caption = question.name;
+                                        }
+                                        formViewData.listOfFieldsClass.Add(new FieldViewModel() {
+                                            caption = caption,
+                                            name = question.name,
+                                            currentFileUrl = string.IsNullOrEmpty(savedAnswers_Page_Question.textAnswer) ? "" : cp.Http.CdnFilePathPrefixAbsolute + savedAnswers_Page_Question.textAnswer,
+                                            currentValue = Path.GetFileName(savedAnswers_Page_Question.textAnswer),
+                                            inputtype = FormFieldModel.getInputTypeName(question.inputTypeId),
+                                            @required = question.@required,
+                                            headline = question.headline,
+                                            fielddescription = question.description,
+                                            isCheckbox = false,
+                                            isDefault = false,
+                                            isTextArea = false,
+                                            isRadio = false,
+                                            isSelect = false,
+                                            isFile = true,
                                             id = question.id,
                                             optionList = optionList,
                                             fieldEditLink = fieldEditLink,
@@ -506,6 +541,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                         cs.SetField("filesize", fileDetails.Size);
                                         cs.Save();
                                     }
+                                    savedAnswersForm_Page_Question.textAnswer = pathFilename;
                                     // 
                                     //if (formPage.useauthorgcontent) {
                                     //    hint = 24;

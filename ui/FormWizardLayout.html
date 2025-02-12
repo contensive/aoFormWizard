@@ -20,6 +20,26 @@
 							</div>
 						</div>
 					{{/isDefault}}
+					{{#isFile}}
+						{{{fieldEditLink}}}
+						<div class="{{fieldEditWrapper}}">
+							{{#headline}}<h2 class="mt-5">{{headline}}</h2>{{/headline}}
+							<div class="form-group">
+								<label class="control-label mb-0" for="FormType_{{id}}">
+									<h5 class="mt-4">{{caption}}{{#required}}<span class="asteriskField">*</span>{{/required}}</h5>
+								</label>
+								<div class="ms-5 mt-2">
+									{{{fielddescription}}}
+									{{#currentValue}}
+										<div class="mt-2">
+											<a href="{{currentFileUrl}}" target="_blank">{{currentValue}}</a>
+										</div>
+									{{/currentValue}}
+									<input class="mt-2 form-control" id="FormType_{{id}}" name="formField_{{id}}" type="{{inputtype}}" value="{{currentValue}}" {{#required}}required{{/required}}>
+								</div>
+							</div>
+						</div>
+					{{/isFile}}
 					{{#isTextArea}}
 						{{{fieldEditLink}}}
 						<div class="{{fieldEditWrapper}}">
@@ -144,9 +164,8 @@
 			console.log("form widget submit");
 			jQuery("body").on("click",".js-formWidgetButton",function(event) {
 				event.preventDefault();
-				var post = $(this).attr("name") + "=" + $(this).val();
-    			var formData = $('#{{formHtmlId}}').serialize() + "&" + $(this).attr("name") + "=" + $(this).val();
-				console.log("form widget submit");
+				var formData = new FormData( document.getElementById('{{formHtmlId}}'));
+				formData.append( 'button', $(this).val());
 				{{^allowRecaptcha}}
 					//
 					// -- submit form
@@ -178,10 +197,14 @@
 			let workingDiv = 'workArea-{{formHtmlId}}'
 			addHiddenDiv(workingDiv);
 			$('#{{formHtmlId}}').block();
-			let baseAjaxUrl = '/FormWidgetSubmit?'+formData;
+			let baseAjaxUrl = '/FormWidgetSubmit';
 			console.log("submitFormWidget, baseAjaxUrl ["+baseAjaxUrl+"]");
 			$.ajax({
-				url: baseAjaxUrl, 
+				type: 'POST',
+      			url: '/FormWidgetSubmit', 
+      			data: formData,
+            	processData: false,
+                contentType: false,
 				success: function(result){
 					$("#"+workingDiv).html(result);
 					$('#{{formHtmlId}}').html($('#'+workingDiv+' form').html());
