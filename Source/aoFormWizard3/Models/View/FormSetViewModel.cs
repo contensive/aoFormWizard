@@ -167,6 +167,9 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                 optionPtr += 1;
                             }
                             string fieldEditLink = cp.Content.GetEditLink(FormFieldModel.tableMetadata.contentName, question.id.ToString(), false, "Edit Question", formViewData.isEditing);
+                            //
+                            cp.Utils.AppendLog($"form-widget, FormViewModel.create, page [{page.id}], question [{question.id}], fieldEditLink [{fieldEditLink}]");
+                            //
                             switch (question.inputTypeId) {
                                 case (int)FormFieldModel.inputTypeEnum.radio: {
                                         string caption = question.caption;
