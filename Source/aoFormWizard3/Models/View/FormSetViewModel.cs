@@ -43,6 +43,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
         public string formdEditLink { get; set; }
         public string formAddLink { get; set; }
         public bool isEditing { get; set; }
+        public bool isThankYouPage { get; set; }
         // 
         public class FieldViewModel {
             public string inputtype { get; set; }
@@ -103,7 +104,8 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 // -- form completee, show thank you and exit
                 if (savedAnswers.isComplete) {
                     return new FormViewModel() {
-                        pageDescription = settings.thankyoucopy
+                        pageDescription = settings.thankyoucopy,
+                        isThankYouPage = true
                     };
                 }
                 //
