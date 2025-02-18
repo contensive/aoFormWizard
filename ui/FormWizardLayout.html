@@ -4,13 +4,16 @@
 			{{{formdEditLink}}}
 			<form id="{{formHtmlId}}" >
 				<div class="card rounded-3 {{formEditWrapper}}">
+					{{^isThankYouPage}}
 						{{#pageDescription}}
 							<div class="card-header text-center p-4">{{{pageDescription}}}</div>
 						{{/pageDescription}}
 						{{^pageDescription}}
 						{{/pageDescription}}
+						
 
 						<div class="card-body px-5">
+							
 						{{#listOfFieldsClass}}
 							{{#isDefault}}
 								{{{fieldEditLink}}}
@@ -163,7 +166,16 @@
 							{{/submitButton}}
 						{{/isEditing}}
 					</div>
+					{{/isThankYouPage}}
+					{{#isThankYouPage}}
+						<div class="card card-body px-5">
+							{{{pageDescription}}}
+						</div>			
+					{{/isThankYouPage}}
 				</div>
+
+				
+
 				<input type=hidden name=instanceid value="{{instanceid}}">
 				<input type=hidden name=formHtmlId value="{{formHtmlId}}">
 				<input type=hidden name=srcPageId value="{{srcPageId}}">
