@@ -35,7 +35,7 @@
     <DocumentationFile>bin\Debug\aoFormWizard3.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355,CS1591</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
-    <IntermediateOutputPath>C:\Users\jay\AppData\Local\Temp\vsC9.tmp\Debug\</IntermediateOutputPath>
+    <IntermediateOutputPath>C:\Users\kmaadmin\AppData\Local\Temp\2\vsB68.tmp\Debug\</IntermediateOutputPath>
     <DefineConstants>TRACE;DEBUG</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -45,7 +45,7 @@
     <DocumentationFile>bin\Release\aoFormWizard3.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
-    <IntermediateOutputPath>C:\Users\jay\AppData\Local\Temp\vsC9.tmp\Release\</IntermediateOutputPath>
+    <IntermediateOutputPath>C:\Users\kmaadmin\AppData\Local\Temp\2\vsB68.tmp\Release\</IntermediateOutputPath>
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
@@ -68,10 +68,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ContensiveDbModels, Version=20.0.0.0, Culture=neutral, PublicKeyToken=c014b235a9c6bb22, processorArchitecture=MSIL">
-      <HintPath>..\packages\Contensive.DbModels.25.2.9.1\lib\net472\ContensiveDbModels.dll</HintPath>
+      <HintPath>..\packages\Contensive.DbModels.25.2.12.7\lib\net472\ContensiveDbModels.dll</HintPath>
     </Reference>
     <Reference Include="CPBase, Version=4.1.2.0, Culture=neutral, PublicKeyToken=10b3c53389b845fb, processorArchitecture=MSIL">
-      <HintPath>..\packages\Contensive.CPBaseClass.25.2.9.1\lib\net472\CPBase.dll</HintPath>
+      <HintPath>..\packages\Contensive.CPBaseClass.25.2.12.7\lib\net472\CPBase.dll</HintPath>
     </Reference>
     <Reference Include="DesignBlockBase, Version=25.2.5.2, Culture=neutral, PublicKeyToken=81704b61c3d18a5b, processorArchitecture=MSIL">
       <HintPath>..\packages\Contensive.DesignBlockBase.25.2.5.2\lib\net472\DesignBlockBase.dll</HintPath>

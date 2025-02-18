@@ -128,6 +128,8 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                     // -- output one page with page one header
                     formViewData.isEditing = cp.User.IsEditing();
                     //
+                    formViewData.recaptchaHTML = cp.Addon.Execute("{500A1F57-86A2-4D47-B747-4EF4D30A83E2}");
+
                     foreach (FormModel page in pageList) {
                         //
                         //-- skip to the current page
