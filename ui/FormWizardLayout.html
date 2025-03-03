@@ -156,6 +156,9 @@
 							{{#continueButton}}
 								<button class="btn btn-primary" type="button" disabled>{{continueButton}}</button>
 							{{/continueButton}}
+							{{#saveButton}}
+								<button class="btn btn-primary js-formWidgetButton" name="button" type="submit" value="{{saveButton}}">{{saveButton}}</button>
+							{{/saveButton}}
 						{{/isEditing}}
 						{{^isEditing}}
 							{{#previousButton}}
@@ -167,6 +170,9 @@
 							{{#continueButton}}
 								<button class="btn btn-primary js-formWidgetButton" name="button" type="submit" value="{{continueButton}}">{{continueButton}}</button>
 							{{/continueButton}}
+							{{#saveButton}}
+								<button class="btn btn-primary js-formWidgetButton" name="button" type="submit" value="{{saveButton}}">{{saveButton}}</button>
+							{{/saveButton}}
 							{{#submitButton}}
 								<button class="btn btn-primary js-formWidgetButton" name="button" type="submit" value="{{submitButton}}">{{submitButton}}</button>
 							{{/submitButton}}

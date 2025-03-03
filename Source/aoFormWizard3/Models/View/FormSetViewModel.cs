@@ -37,6 +37,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
         public string previousButton { get; set; }
         public string resetButton { get; set; }
         public string submitButton { get; set; }
+        public string saveButton { get; set; }
         public string continueButton { get; set; }
         public string formEditWrapper { get; set; }
         public string formdEditLink { get; set; }
@@ -92,7 +93,9 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 // -- process form request
                 // -- the request includes the srcPageId that needs to be processed
                 //
-                UserFormResponseModel userFormResponse = DbBaseModel.createFirstOfList<UserFormResponseModel>(cp, $"visitid={cp.Visit.Id}", "id desc");
+                string userFormResponseSql = settings.useUserProperty ? $"memberid = {cp.User.Id}" : $"visitid={cp.Visit.Id}";
+                
+                UserFormResponseModel userFormResponse = DbBaseModel.createFirstOfList<UserFormResponseModel>(cp, userFormResponseSql, "id desc");
                 //
                 // -- process the request
                 processRequest(cp, settings, ref userFormResponse);
@@ -158,6 +161,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                     formViewData.resetButton = !settings.addResetButton ? "" : string.IsNullOrEmpty(settings.resetButtonName) ? "Reset" : settings.resetButtonName;
                     formViewData.submitButton = page != pageList.Last() ? "" : string.IsNullOrEmpty(settings.submitButtonName) ? "Submit" : settings.submitButtonName;
                     formViewData.continueButton = page == pageList.Last() ? "" : string.IsNullOrEmpty(settings.continueButtonName) ? "Continue" : settings.continueButtonName;
+                    formViewData.saveButton = !settings.useUserProperty ? "" : string.IsNullOrEmpty(settings.saveButtonName) ? "Save" : settings.saveButtonName;
                     if (formViewData.isEditing) {
                         formViewData.formEditWrapper = "ccEditWrapper";
                         formViewData.formdEditLink = cp.Content.GetEditLink(FormModel.tableMetadata.contentName, page.id.ToString(), false, "", formViewData.isEditing);
@@ -706,6 +710,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 //
                 // -- if last question done processing, mark this form-page complete
                 string continueButton = string.IsNullOrEmpty(formSet.continueButtonName) ? "Continue" : formSet.continueButtonName;
+                string saveButton = string.IsNullOrEmpty(formSet.saveButtonName) ? "Save" : formSet.saveButtonName;
                 string submitButton = string.IsNullOrEmpty(formSet.submitButtonName) ? "Submit" : formSet.submitButtonName;
                 if (!string.IsNullOrEmpty(button) && (button == continueButton || button == submitButton)) {
                     //

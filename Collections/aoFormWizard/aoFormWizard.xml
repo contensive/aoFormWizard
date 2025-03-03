@@ -146,6 +146,11 @@
 				<![CDATA[The text that appears on the submit button on the last page of the form.]]>
 			</HelpDefault>
 		</Field>
+		<Field Name="saveButtonName" EditGroup="Button" active="True" AdminOnly="False" Authorable="True" Caption="Save Button Text" DeveloperOnly="False" EditSortPriority="1310" FieldType="Text" HTMLContent="False" IndexColumn="-1" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="Continue" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
+			<HelpDefault>
+				<![CDATA[The text that appears on the save button]]>
+			</HelpDefault>
+		</Field>
 		<Field Name="notificationemailid" active="True" AdminOnly="False" Authorable="True" Caption="Notification System Email" DeveloperOnly="False" EditSortPriority="1100" FieldType="Lookup" HTMLContent="False" IndexColumn="-1" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="System Email" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
 			<HelpDefault>
 				<![CDATA[Optional. When the user completes this form set, this system email will be sent to Site Managers with all the values entered from all forms in the form set.]]>
@@ -164,6 +169,11 @@
 		<Field Name="allowRecaptcha" active="True" AdminOnly="False" Authorable="True" Caption="Include Bot Detect" DeveloperOnly="False" EditSortPriority="1400" FieldType="Boolean" HTMLContent="False" IndexColumn="0" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="0" RSSTitle="False" RSSDescription="False" MemberSelectGroupID="0" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
 			<HelpDefault>
 				<![CDATA[Include a recaptcha bot blocker (ask if the user is a human) on the first page of the form.]]>
+			</HelpDefault>
+		</Field>
+		<Field Name="useUserProperty" active="True" AdminOnly="False" Authorable="True" Caption="Use User Properties" DeveloperOnly="False" EditSortPriority="1010" FieldType="Boolean" HTMLContent="False" IndexColumn="0" IndexSortDirection="" IndexSortOrder="99" IndexWidth="40" RedirectID="0" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
+			<HelpDefault>
+				<![CDATA[When checked user properties will be used]]>
 			</HelpDefault>
 		</Field>
 		<!-- 
@@ -237,6 +247,7 @@
 				<![CDATA[Select the FormSet. A FormSet is an online form placed on a page. It can have one or more pages (forms).]]>
 			</HelpDefault>
 		</Field>
+		
 		<!--
 			deprecated
 		-->

@@ -27,6 +27,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
         /// </summary>
         /// <returns></returns>
         public int saveTypeId { get; set; }
+        
         ///// <summary>
         ///// text field to enter a custom content where data for this form should be saved
         ///// tablename for this content should be 'formWizard' + normalize(saveContent). normalize should validate the allowed characters for sql server tables.
@@ -48,7 +49,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
         /// </summary>
         /// <returns></returns>
         public bool useauthorgcontent { get; set; }
-        //
+        //        
         // ====================================================================================================
         //
         /// <summary>

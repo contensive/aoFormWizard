@@ -35,7 +35,7 @@
     <DocumentationFile>bin\Debug\aoFormWizard3.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355,CS1591</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
-    <IntermediateOutputPath>C:\Users\jay\AppData\Local\Temp\vs83F7.tmp\Debug\</IntermediateOutputPath>
+    <IntermediateOutputPath>C:\Users\kmaadmin\AppData\Local\Temp\2\vs2F7C.tmp\Debug\</IntermediateOutputPath>
     <DefineConstants>TRACE;DEBUG</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -45,7 +45,7 @@
     <DocumentationFile>bin\Release\aoFormWizard3.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
-    <IntermediateOutputPath>C:\Users\jay\AppData\Local\Temp\vs83F7.tmp\Release\</IntermediateOutputPath>
+    <IntermediateOutputPath>C:\Users\kmaadmin\AppData\Local\Temp\2\vs2F7C.tmp\Release\</IntermediateOutputPath>
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
