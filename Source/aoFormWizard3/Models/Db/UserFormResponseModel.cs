@@ -50,6 +50,10 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
         /// if true, the user has completed the form and submitted it. Display the form's thank you message
         /// </summary>
         public bool isComplete { get; set; }
+        /// <summary>
+        /// if true, the user has successfully completed the recaptcha
+        /// </summary>
+        public bool recaptchaSuccess { get; set; }
     }
     //
     /// <summary>
@@ -84,6 +88,11 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
         /// the key is the choice in the question
         /// </summary>
         public Dictionary<string,bool> choiceAnswerDict { get; set; }
+        //
+        /// <summary>
+        /// if a form is started, any answer marked invalid answer should display with the invalid answer messaage
+        /// </summary>
+        public bool invalidAnswer { get; set; }
     }
     public class FormResponseDataActivityModel {
         public string activityDate { get; set; }

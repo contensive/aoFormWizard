@@ -25,7 +25,8 @@
 										</label>
 										<div>
 											{{{fielddescription}}}
-											<input class="form-control" placeholder="{{^required}}(optional){{/required}} {{#required}}{{/required}}" id="FormType_{{id}}" name="formField_{{id}}" type="{{inputtype}}" value="{{currentValue}}" {{#required}}required{{/required}}>
+											<input class="form-control {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" placeholder="{{^required}}(optional){{/required}} {{#required}}{{/required}}" id="FormType_{{id}}" name="formField_{{id}}" type="{{inputtype}}" value="{{currentValue}}" {{#required}}required{{/required}}>
+											{{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
 										</div>
 									</div>
 								</div>
@@ -46,7 +47,8 @@
 													<a href="{{currentFileUrl}}" target="_blank">{{currentValue}}</a>
 												</div>
 											{{/currentValue}}
-											<input class="form-control" placeholder="{{^required}}optional{{/required}} {{#required}}{{/required}}" id="FormType_{{id}}" name="formField_{{id}}" type="{{inputtype}}" value="{{currentValue}}" {{#required}}required{{/required}}>
+											<input class="form-control {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" placeholder="{{^required}}optional{{/required}} {{#required}}{{/required}}" id="FormType_{{id}}" name="formField_{{id}}" type="{{inputtype}}" value="{{currentValue}}" {{#required}}required{{/required}}>
+											{{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
 										</div>
 									</div>
 								</div>
@@ -62,7 +64,8 @@
 										</label>
 										<div>
 											{{{fielddescription}}}
-											<textarea rows="5" class="form-control" placeholder="{{^required}}(optional){{/required}} {{#required}}{{/required}}" id="FormType_{{id}}" name="formField_{{id}}" type="{{inputtype}}" {{#required}}required{{/required}}>{{currentValue}}</textarea>
+											<textarea rows="5" class="form-control {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" placeholder="{{^required}}(optional){{/required}} {{#required}}{{/required}}" id="FormType_{{id}}" name="formField_{{id}}" type="{{inputtype}}" {{#required}}required{{/required}}>{{currentValue}}</textarea>
+											{{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
 										</div>
 									</div>
 								</div>
@@ -78,11 +81,12 @@
 											{{{fielddescription}}}
 											{{#optionList}}
 												<div class="form-check">
-													<input class="form-check-input" name="formField_{{id}}" type="checkbox" id="formField_{{id}}_{{optionPtr}}" value="{{optionPtr}}" {{#isSelected}}checked{{/isSelected}}>
+													<input class="form-check-input {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" name="formField_{{id}}" type="checkbox" id="formField_{{id}}_{{optionPtr}}" value="{{optionPtr}}" {{#isSelected}}checked{{/isSelected}}>
 													<label class="form-check-label" for="formField_{{id}}_{{optionPtr}}">{{optionName}}</label>
 												</div>
 											{{/optionList}}
 										</div>
+										{{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
 									</div>
 								</div>
 							{{/isCheckbox}}
@@ -97,11 +101,12 @@
 											{{{fielddescription}}}
 											{{#optionList}}
 												<div class="form-check">
-												<input class="form-check-input" type="radio" name="formField_{{id}}" id="formField_{{id}}_{{optionPtr}}" value="{{optionPtr}}"  {{#isSelected}}checked{{/isSelected}}>
+												<input class="form-check-input {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" type="radio" name="formField_{{id}}" id="formField_{{id}}_{{optionPtr}}" value="{{optionPtr}}"  {{#isSelected}}checked{{/isSelected}}>
 												<label class="form-check-label" for="formField_{{id}}_{{optionPtr}}">{{optionName}}</label>
 												</div>
 											{{/optionList}}
 										</div>
+										{{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
 									</div>
 								</div>
 							{{/isRadio}}
@@ -114,7 +119,7 @@
 										<div>
 											{{{fielddescription}}}
 												<div class="form-check">
-													<select class="mt-2 form-control" name="formField_{{id}}" id="formField_{{id}}" {{#required}}required{{/required}}>
+													<select class="mt-2 form-control {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" name="formField_{{id}}" id="formField_{{id}}" {{#required}}required{{/required}}>
 														<option value="" selected>Choose...</option>
 														{{#optionList}}
 															<option id="formField_{{optionPtr}}" value="{{optionPtr}}">{{optionName}}</option>
@@ -123,6 +128,7 @@
 													<label class="form-check-label" for="formField_{{optionPtr}}">{{optionName}}</label>
 												</div>
 										</div>
+										{{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
 									</div>
 								</div>
 							{{/isSelect}}
@@ -196,22 +202,29 @@
 				{{^allowRecaptcha}}
 					//
 					// -- submit form
-					console.log("form widget submit action, no recaptcha");
+					console.log("form widget submit action, recaptcha disabled");
 					submitFormWidget(formData);
 				{{/allowRecaptcha}}
 				{{#allowRecaptcha}}
 					//
 					// -- submit form with Recaptcha
-					var response = grecaptcha.getResponse();
-					console.log("form widget submit action, recaptcha");
-					if(response != '0' && response != ''){
-						console.log('recaptcha completed');
-						submitFormWidget(formData);
+					if(typeof grecaptcha !== 'undefined'){
+						var response = grecaptcha.getResponse();
+						console.log("form widget submit action, recaptcha");
+						if(response != '0' && response != ''){
+							console.log('recaptcha completed');
+							submitFormWidget(formData);
+						}else{
+							//recaptcha has not been completed or failed
+							event.preventDefault();
+							alert("Please complete the recptcha");
+							return false;
+						}
 					}else{
-						//recaptcha has not been completed or failed
-						event.preventDefault();
-						alert("Please complete the recptcha");
-						return false;
+					//
+					// -- google recapcha not valid, just submit
+					console.log("form widget submit action, recaptcha failed");
+					submitFormWidget(formData);
 					}
 				{{/allowRecaptcha}}
 				return false;
