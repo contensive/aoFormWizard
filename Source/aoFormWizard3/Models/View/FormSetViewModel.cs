@@ -280,7 +280,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                     formViewData.listOfFieldsClass.Add(new FieldViewModel() {
                                         caption = caption,
                                         name = question.name,
-                                        currentValue = "",
+                                        currentValue = savedAnswers_Page_Question.textAnswer,
                                         inputtype = FormFieldModel.getInputTypeName(question.inputTypeId),
                                         @required = question.@required,
                                         headline = question.headline,
