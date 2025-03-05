@@ -111,6 +111,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
             formOneFieldD.save(cp);
             // 
             // -- add form two
+            /*
             var formTwo = DbBaseModel.addDefault<FormModel>(cp);
             formTwo.name = "Form #2 of " + result.name;
             formTwo.formsetid = result.id;
@@ -132,6 +133,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
             formTwoFieldA.sortOrder = "01";
             formTwoFieldA.save(cp);
             // 
+            */
             formOne.save(cp);
             // 
             // -- create custom content
