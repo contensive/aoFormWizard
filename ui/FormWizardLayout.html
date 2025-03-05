@@ -205,6 +205,17 @@
 				event.preventDefault();
 				var formData = new FormData( document.getElementById('{{formHtmlId}}'));
 				formData.append( 'button', $(this).val());
+				var requiredFields = $('#{{formHtmlId}}').find("[required]");
+				console.log("required fields: " + requiredFields + " count: " + requiredFields.length);
+				if($(this).val() == 'Save') {	
+					console.log('in save button braanch');	
+					requiredFields.each( function(index) {
+						// do something with `item` (or `this` is also `item` if you like)
+						console.log('index: ' + index + ' item: ' + $(this).attr('id'));
+						$(this).removeAttr("required");
+					});			
+					//requiredFields.removeAttr("required");
+				}
 				{{^allowRecaptcha}}
 					//
 					// -- submit form
@@ -233,11 +244,20 @@
 					submitFormWidget(formData);
 					}
 				{{/allowRecaptcha}}
+				/*
+				if($(this).val() == 'Save') {
+					setTimeout(function() {
+						requiredFields.attr("required", "required");
+					}, 0);
+					
+				}
+					*/
 				return false;
 			});
 		});
 		// -- submit form
 		function submitFormWidget(formData) {
+
 			console.log("submitFormWidget");
 			// -- populate hidden div, then copy grid and pagination to visible areas
 			let workingDiv = 'workArea-{{formHtmlId}}'
