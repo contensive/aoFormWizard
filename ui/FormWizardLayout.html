@@ -207,11 +207,11 @@
 				formData.append( 'button', $(this).val());
 				var requiredFields = $('#{{formHtmlId}}').find("[required]");
 				console.log("required fields: " + requiredFields + " count: " + requiredFields.length);
+				var isSaveButton = false;
 				if($(this).val() == 'Save') {	
-					console.log('in save button braanch');	
+					isSaveButton = true;	
 					requiredFields.each( function(index) {
 						// do something with `item` (or `this` is also `item` if you like)
-						console.log('index: ' + index + ' item: ' + $(this).attr('id'));
 						$(this).removeAttr("required");
 					});			
 					//requiredFields.removeAttr("required");
@@ -220,7 +220,7 @@
 					//
 					// -- submit form
 					console.log("form widget submit action, recaptcha disabled");
-					submitFormWidget(formData);
+					submitFormWidget(formData, isSaveButton);
 				{{/allowRecaptcha}}
 				{{#allowRecaptcha}}
 					//
@@ -230,7 +230,7 @@
 						console.log("form widget submit action, recaptcha");
 						if(response != '0' && response != ''){
 							console.log('recaptcha completed');
-							submitFormWidget(formData);
+							submitFormWidget(formData, isSaveButton);
 						}else{
 							//recaptcha has not been completed or failed
 							event.preventDefault();
@@ -241,7 +241,7 @@
 					//
 					// -- google recapcha not valid, just submit
 					console.log("form widget submit action, recaptcha failed");
-					submitFormWidget(formData);
+					submitFormWidget(formData, isSaveButton);
 					}
 				{{/allowRecaptcha}}
 				/*
@@ -256,7 +256,7 @@
 			});
 		});
 		// -- submit form
-		function submitFormWidget(formData) {
+		function submitFormWidget(formData, isSaveButton) {
 
 			console.log("submitFormWidget");
 			// -- populate hidden div, then copy grid and pagination to visible areas
@@ -271,11 +271,14 @@
       			data: formData,
             	processData: false,
                 contentType: false,
-				success: function(result){
+				success: function(result){					
 					$("#"+workingDiv).html(result);
 					$('#{{formHtmlId}}').html($('#'+workingDiv+' form').html());
 					deleteDiv(workingDiv);
 					$('#{{formHtmlId}}').unblock();
+					if(isSaveButton) {
+						alert("you have successfully saved your progress");
+					}
 				},
 				error: function(result){
 					console.log(`LayoutBuilder Base, ajax error`);
