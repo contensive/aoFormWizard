@@ -44,6 +44,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
         public string formAddLink { get; set; }
         public bool isEditing { get; set; }
         public bool isThankYouPage { get; set; }
+        public List<FormPagesModel> pageList {get; set;}
         // 
         public class FieldViewModel {
             public string inputtype { get; set; }
@@ -85,7 +86,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
         /// <param name="cp"></param>
         /// <param name="settings"></param>
         /// <returns></returns>
-        public static FormViewModel create(CPBaseClass cp, FormSetModel settings) {
+        public static FormViewModel create(CPBaseClass cp, FormWidgetsModel settings) {
             try {
                 //
                 cp.Log.Debug($"aoFormWizard.FormSetViewModel.create() start");
@@ -95,7 +96,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 //
                 string userFormResponseSql = settings.useUserProperty ? $"memberid = {cp.User.Id}" : $"visitid={cp.Visit.Id}";
                 
-                UserFormResponseModel userFormResponse = DbBaseModel.createFirstOfList<UserFormResponseModel>(cp, userFormResponseSql, "id desc");
+                FormResponseModel userFormResponse = DbBaseModel.createFirstOfList<FormResponseModel>(cp, userFormResponseSql, "id desc");
                 //
                 // -- process the request
                 processRequest(cp, settings, ref userFormResponse);
@@ -114,7 +115,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 }
                 //
                 // -- validate the current page
-                var pageList = FormModel.getPageList(cp, settings.id);
+                var pageList = FormPagesModel.getPageList(cp, settings.id);                
                 var currentpage = pageList.Find((x) => x.id == savedAnswers.currentPageid);
                 if (currentpage is null) {
                     savedAnswers.currentPageid = pageList.First().id;
@@ -129,10 +130,11 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 formViewData.allowRecaptcha = false;
                 formViewData.recaptchaHTML = "";
                 formViewData.isEditing = cp.User.IsEditing();
+                formViewData.pageList = pageList;
                 if (pageList.Count <= 0) { return formViewData; }
                 // 
                 // -- output one page with page one header
-                foreach (FormModel page in pageList) {
+                foreach (FormPagesModel page in pageList) {
                     //
                     //-- skip to the current page
                     if (page.id != savedAnswers.currentPageid) { continue; }
@@ -164,12 +166,12 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                     formViewData.saveButton = !settings.useUserProperty ? "" : string.IsNullOrEmpty(settings.saveButtonName) ? "Save" : settings.saveButtonName;
                     if (formViewData.isEditing) {
                         formViewData.formEditWrapper = "ccEditWrapper";
-                        formViewData.formdEditLink = cp.Content.GetEditLink(FormModel.tableMetadata.contentName, page.id.ToString(), false, "", formViewData.isEditing);
+                        formViewData.formdEditLink = cp.Content.GetEditLink(FormPagesModel.tableMetadata.contentName, page.id.ToString(), false, "", formViewData.isEditing);
                     }
                     //
 
                     int questionPtr = 0;
-                    var questionList = FormFieldModel.getQuestionList(cp, page.id);
+                    var questionList = FormQuestionsModel.getQuestionList(cp, page.id);
                     foreach (var question in questionList) {
                         FormResponseDataPageQuestionModel savedAnswers_Page_Question = savedAnswers_Page.questionDict.TryGetValue(question.id, out var savedAnswers_Page_Question_Result) ? savedAnswers_Page_Question_Result : new FormResponseDataPageQuestionModel();
                         savedAnswers_Page_Question.choiceAnswerDict ??= [];
@@ -186,12 +188,12 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                             });
                             optionPtr += 1;
                         }
-                        string fieldEditLink = cp.Content.GetEditLink(FormFieldModel.tableMetadata.contentName, question.id.ToString(), false, "Edit Question", formViewData.isEditing);
+                        string fieldEditLink = cp.Content.GetEditLink(FormQuestionsModel.tableMetadata.contentName, question.id.ToString(), false, "Edit Question", formViewData.isEditing);
                         //
                         cp.Utils.AppendLog($"form-widget, FormViewModel.create, page [{page.id}], question [{question.id}], fieldEditLink [{fieldEditLink}]");
                         //
                         switch (question.inputTypeId) {
-                            case (int)FormFieldModel.inputTypeEnum.radio: {
+                            case (int)FormQuestionsModel.inputTypeEnum.radio: {
                                     string caption = question.caption;
                                     if (string.IsNullOrEmpty(caption)) {
                                         caption = question.name;
@@ -200,7 +202,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                         caption = caption,
                                         name = question.name,
                                         currentValue = "",
-                                        inputtype = FormFieldModel.getInputTypeName(question.inputTypeId),
+                                        inputtype = FormQuestionsModel.getInputTypeName(question.inputTypeId),
                                         @required = question.@required,
                                         headline = question.headline,
                                         fielddescription = question.description,
@@ -218,7 +220,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                     });
                                     break;
                                 }
-                            case (int)FormFieldModel.inputTypeEnum.select: {
+                            case (int)FormQuestionsModel.inputTypeEnum.select: {
                                     string caption = question.caption;
                                     if (string.IsNullOrEmpty(caption)) {
                                         caption = question.name;
@@ -227,7 +229,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                         caption = caption,
                                         name = question.name,
                                         currentValue = "",
-                                        inputtype = FormFieldModel.getInputTypeName(question.inputTypeId),
+                                        inputtype = FormQuestionsModel.getInputTypeName(question.inputTypeId),
                                         @required = question.@required,
                                         headline = question.headline,
                                         fielddescription = question.description,
@@ -245,7 +247,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                     });
                                     break;
                                 }
-                            case (int)FormFieldModel.inputTypeEnum.checkbox: {
+                            case (int)FormQuestionsModel.inputTypeEnum.checkbox: {
                                     string caption = question.caption;
                                     if (string.IsNullOrEmpty(caption)) {
                                         caption = question.name;
@@ -254,7 +256,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                         caption = caption,
                                         name = question.name,
                                         currentValue = "",
-                                        inputtype = FormFieldModel.getInputTypeName(question.inputTypeId),
+                                        inputtype = FormQuestionsModel.getInputTypeName(question.inputTypeId),
                                         @required = question.@required,
                                         headline = question.headline,
                                         fielddescription = question.description,
@@ -272,7 +274,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                     });
                                     break;
                                 }
-                            case (int)FormFieldModel.inputTypeEnum.textarea: {
+                            case (int)FormQuestionsModel.inputTypeEnum.textarea: {
                                     string caption = question.caption;
                                     if (string.IsNullOrEmpty(caption)) {
                                         caption = question.name;
@@ -281,7 +283,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                         caption = caption,
                                         name = question.name,
                                         currentValue = savedAnswers_Page_Question.textAnswer,
-                                        inputtype = FormFieldModel.getInputTypeName(question.inputTypeId),
+                                        inputtype = FormQuestionsModel.getInputTypeName(question.inputTypeId),
                                         @required = question.@required,
                                         headline = question.headline,
                                         fielddescription = question.description,
@@ -300,7 +302,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                     break;
                                 }
 
-                            case (int)FormFieldModel.inputTypeEnum.file: {
+                            case (int)FormQuestionsModel.inputTypeEnum.file: {
                                     string caption = question.caption;
                                     if (string.IsNullOrEmpty(caption)) {
                                         caption = question.name;
@@ -310,7 +312,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                         name = question.name,
                                         currentFileUrl = string.IsNullOrEmpty(savedAnswers_Page_Question.textAnswer) ? "" : cp.Http.CdnFilePathPrefixAbsolute + savedAnswers_Page_Question.textAnswer,
                                         currentValue = Path.GetFileName(savedAnswers_Page_Question.textAnswer),
-                                        inputtype = FormFieldModel.getInputTypeName(question.inputTypeId),
+                                        inputtype = FormQuestionsModel.getInputTypeName(question.inputTypeId),
                                         @required = question.@required,
                                         headline = question.headline,
                                         fielddescription = question.description,
@@ -338,7 +340,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                         caption = caption,
                                         name = question.name,
                                         currentValue = savedAnswers_Page_Question.textAnswer,
-                                        inputtype = FormFieldModel.getInputTypeName(question.inputTypeId),
+                                        inputtype = FormQuestionsModel.getInputTypeName(question.inputTypeId),
                                         @required = question.@required,
                                         headline = question.headline,
                                         fielddescription = question.description,
@@ -358,12 +360,12 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                         }
                         questionPtr += 1;
                     }
-                    formViewData.fieldAddLink = cp.Content.GetAddLink(FormFieldModel.tableMetadata.contentName, "formid=" + page.id, false, formViewData.isEditing);
+                    formViewData.fieldAddLink = cp.Content.GetAddLink(FormQuestionsModel.tableMetadata.contentName, "formid=" + page.id, false, formViewData.isEditing);
                     //
                     // -- the rendering of this form page is complete. If not editing, exit with just one page
                     break;
                 }
-                formViewData.formAddLink = cp.Content.GetAddLink(FormModel.tableMetadata.contentName, "formsetid=" + settings.id, false, formViewData.isEditing);
+                formViewData.formAddLink = cp.Content.GetAddLink(FormPagesModel.tableMetadata.contentName, "formsetid=" + settings.id, false, formViewData.isEditing);
                 return formViewData;
             } catch (Exception ex) {
                 cp.Site.ErrorReport(ex);
@@ -381,7 +383,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
         /// <param name="formSet"></param>
         /// <param name="userFormResponse"></param>
         /// <returns></returns>
-        public static bool processRequest(CPBaseClass cp, FormSetModel formSet, ref UserFormResponseModel userFormResponse) {
+        public static bool processRequest(CPBaseClass cp, FormWidgetsModel formSet, ref FormResponseModel userFormResponse) {
             string returnHtml = string.Empty;
             int hint = 0;
             try {
@@ -394,21 +396,21 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 // -- handle reset button
                 string resetButton = string.IsNullOrEmpty(formSet.resetButtonName) ? "Reset" : formSet.resetButtonName;
                 if (userFormResponse != null && formSet.addResetButton && !string.IsNullOrEmpty(resetButton) && button.Equals(resetButton)) {
-                    DbBaseModel.delete<UserFormResponseModel>(cp, userFormResponse.ccguid);
+                    DbBaseModel.delete<FormResponseModel>(cp, userFormResponse.ccguid);
                     userFormResponse = null;
                     return false;
                 }
                 //
                 // -- verify the users response
                 if (userFormResponse is null) {
-                    userFormResponse = DbBaseModel.addDefault<UserFormResponseModel>(cp);
+                    userFormResponse = DbBaseModel.addDefault<FormResponseModel>(cp);
                     userFormResponse.name = "Form Set " + formSet.name + " started " + DateTime.Now.ToString("MM/dd/yyyy") + " by " + cp.User.Name;
                 }
                 userFormResponse.visitid = cp.Visit.Id;
                 userFormResponse.memberId = cp.User.Id;
                 //
                 // -- determine the page to process
-                List<FormModel> pageList = FormModel.getPageList(cp, formSet.id);
+                List<FormPagesModel> pageList = FormPagesModel.getPageList(cp, formSet.id);
                 var currentPage = pageList.Find((x) => x.id == srcPageId);
                 if (currentPage is null) {
                     //
@@ -464,7 +466,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 //customContentName = Regex.Replace(customContentName, "[^A-Za-z0-9 ]+", "");
                 //
                 bool returnInvalidAnswer = false;
-                foreach (var formPage_Question in FormFieldModel.getQuestionList(cp, currentPage.id)) {
+                foreach (var formPage_Question in FormQuestionsModel.getQuestionList(cp, currentPage.id)) {
                     if (!savedAnswersForm_Page.questionDict.TryGetValue(formPage_Question.id, out FormResponseDataPageQuestionModel savedAnswersForm_Page_Question)) {
                         savedAnswersForm_Page_Question = new FormResponseDataPageQuestionModel {
                             question = formPage_Question.name,
@@ -490,9 +492,9 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                     htmlVersion.Append("<div style=\"padding-top:10px;\"> Question:" + formPage_Question.name + "</div>");
                     //
                     switch (formPage_Question.inputTypeId) {
-                        case (int)FormFieldModel.inputTypeEnum.checkbox:
-                        case (int)FormFieldModel.inputTypeEnum.radio:
-                        case (int)FormFieldModel.inputTypeEnum.select: {
+                        case (int)FormQuestionsModel.inputTypeEnum.checkbox:
+                        case (int)FormQuestionsModel.inputTypeEnum.radio:
+                        case (int)FormQuestionsModel.inputTypeEnum.select: {
                                 hint = 3;
                                 if (formPage_Question.required && string.IsNullOrEmpty(requestAnswer_Text)) {
                                     //
@@ -526,7 +528,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                 }
                                 break;
                             }
-                        case (int)FormFieldModel.inputTypeEnum.file: {
+                        case (int)FormQuestionsModel.inputTypeEnum.file: {
                                 hint = 20;
                                 string fieldName = "formField_" + formPage_Question.id;
                                 string uploadFilename = cp.Doc.GetText(fieldName);

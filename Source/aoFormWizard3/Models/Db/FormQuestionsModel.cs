@@ -3,8 +3,8 @@ using Contensive.Models.Db;
 using System.Collections.Generic;
 
 namespace Contensive.Addon.aoFormWizard3.Models.Db {
-    public class FormFieldModel : DbBaseModel {
-        public static DbBaseTableMetadataModel tableMetadata { get; private set; } = new DbBaseTableMetadataModel("Form Fields", "ccFormFields", "default", false);
+    public class FormQuestionsModel : DbBaseModel {
+        public static DbBaseTableMetadataModel tableMetadata { get; private set; } = new DbBaseTableMetadataModel("Form Questions", "ccFormQuestions", "default", false);
         // 
         // ====================================================================================================
         // -- instance properties
@@ -65,8 +65,8 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
         /// <param name="cp"></param>
         /// <param name="pageId"></param>
         /// <returns></returns>
-        public static List<FormFieldModel> getQuestionList(CPBaseClass cp, int pageId) {
-            return DbBaseModel.createList<FormFieldModel>(cp, $"(formid={pageId})", "sortorder,id");
+        public static List<FormQuestionsModel> getQuestionList(CPBaseClass cp, int pageId) {
+            return DbBaseModel.createList<FormQuestionsModel>(cp, $"(formid={pageId})", "sortorder,id");
         }
 
     }

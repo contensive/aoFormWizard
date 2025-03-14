@@ -112,10 +112,10 @@
     <Compile Include="Controllers\InstanceIdController.cs" />
     <Compile Include="Models\Db\DesignBlockFontModel.cs" />
     <Compile Include="Models\Db\DesignBlockThemeModel.cs" />
-    <Compile Include="Models\Db\FormModel.cs" />
-    <Compile Include="Models\Db\FormSetModel.cs" />
-    <Compile Include="Models\Db\FormFieldModel.cs" />
-    <Compile Include="Models\Db\UserFormResponseModel.cs" />
+    <Compile Include="Models\Db\FormPagesModel.cs" />
+    <Compile Include="Models\Db\FormWidgetsModel.cs" />
+    <Compile Include="Models\Db\FormQuestionsModel.cs" />
+    <Compile Include="Models\Db\FormResponseModel.cs" />
     <Compile Include="Models\View\FormSetViewModel.cs" />
     <Compile Include="Addons\FormWidget.cs" />
     <Compile Include="My Project\AssemblyInfo.cs" />

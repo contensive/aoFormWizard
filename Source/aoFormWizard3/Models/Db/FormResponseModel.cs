@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 
 namespace Contensive.Addon.aoFormWizard3.Models.Db {
-    public class UserFormResponseModel : DbBaseModel {
+    public class FormResponseModel : DbBaseModel {
         //
-        public static DbBaseTableMetadataModel tableMetadata { get; private set; } = new DbBaseTableMetadataModel("User Form Response", "ccUserFormResponse", "default", false);
+        public static DbBaseTableMetadataModel tableMetadata { get; private set; } = new DbBaseTableMetadataModel("Form Response", "ccFormResponse", "default", false);
         // 
         // ====================================================================================================
         // -- instance properties

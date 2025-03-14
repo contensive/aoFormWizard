@@ -5,9 +5,9 @@ using Contensive.Models.Db;
 using Microsoft.SqlServer.Server;
 
 namespace Contensive.Addon.aoFormWizard3.Models.Db {
-    public class FormModel : DbBaseModel {
+    public class FormPagesModel : DbBaseModel {
         //
-        public static DbBaseTableMetadataModel tableMetadata { get; private set; } = new DbBaseTableMetadataModel("Forms", "ccForms", "default", false);
+        public static DbBaseTableMetadataModel tableMetadata { get; private set; } = new DbBaseTableMetadataModel("Form Pages", "ccFormPages", "default", false);
         //
         // -- instance properties
         //public bool addbackbutton { get; set; }
@@ -58,8 +58,8 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
         /// <param name="cp"></param>
         /// <param name="formSetId"></param>
         /// <returns></returns>
-        public static List<FormModel> getPageList(CPBaseClass cp, int formSetId) {
-            return DbBaseModel.createList<FormModel>(cp, $"(formsetid={formSetId})", "sortorder,id");
+        public static List<FormPagesModel> getPageList(CPBaseClass cp, int formSetId) {
+            return DbBaseModel.createList<FormPagesModel>(cp, $"(formsetid={formSetId})", "sortorder,id");
         }
     }
 }
