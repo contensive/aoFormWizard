@@ -4,8 +4,9 @@
 			{{{formdEditLink}}}
 			<form id="{{formHtmlId}}" >
 				<div class="card rounded-3 {{formEditWrapper}}">
-					{{^isEditing}}
+					
 					{{^isThankYouPage}}
+					{{^isEditing}}
 						{{#pageDescription}}
 							<div class="card-header text-center p-4">{{{pageDescription}}}</div>
 						{{/pageDescription}}
@@ -150,9 +151,11 @@
 
 					{{/isEditing}}
 						
+						
+						{{^isThankYouPage}}
 						{{#isEditing}}
-							{{#pageList}}
-							{{^isThankYouPage}}
+							{{#pageListEditingData}}
+							
 							{{#pageDescription}}
 								<div class="card-header text-center p-4">{{{pageDescription}}}</div>
 							{{/pageDescription}}
@@ -295,7 +298,7 @@
 							
 						</div>
 	
-							{{/pageList}}
+							{{/pageListEditingData}}
 					{{/isEditing}}
 					<div class="card-footer px-5 py-3">
 						{{#isEditing}}

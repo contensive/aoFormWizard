@@ -45,6 +45,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
         public bool isEditing { get; set; }
         public bool isThankYouPage { get; set; }
         public List<FormPagesModel> pageList {get; set;}
+        public List<EditingPageData> pageListEditingData {get; set;}
         // 
         public class FieldViewModel {
             public string inputtype { get; set; }
@@ -78,6 +79,23 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
             public string buttonCaption { get; set; }
             public bool isVisible { get; set; }
         }
+
+        public class EditingPageData {
+            public string pageDescription { get; set; }
+            public List<FieldViewModel> listOfFieldsClass { get; set; } = new List<FieldViewModel>();
+            public string fieldAddLink { get; set; }
+            public string previousButton { get; set; }
+            public string resetButton { get; set; }
+            public string submitButton { get; set; }
+            public string saveButton { get; set; }
+            public string continueButton { get; set; }
+            public string formEditWrapper { get; set; }
+            public string formdEditLink { get; set; }
+            public string formAddLink { get; set; }
+            public bool isEditing { get; set; }
+            public bool isThankYouPage { get; set; }
+        }
+
         // 
         // ====================================================================================================
         /// <summary>
@@ -131,6 +149,8 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 formViewData.recaptchaHTML = "";
                 formViewData.isEditing = cp.User.IsEditing();
                 formViewData.pageList = pageList;
+                formViewData.pageListEditingData = new List<EditingPageData>();
+                
                 if (pageList.Count <= 0) { return formViewData; }
                 // 
                 // -- output one page with page one header
@@ -363,7 +383,19 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                     formViewData.fieldAddLink = cp.Content.GetAddLink(FormQuestionsModel.tableMetadata.contentName, "formid=" + page.id, false, formViewData.isEditing);
                     //
                     // -- the rendering of this form page is complete. If not editing, exit with just one page
-                    break;
+                    if (!formViewData.isEditing) {
+                        break;
+                    }
+                    else {
+                        var currentEditingPage = new EditingPageData();
+                        currentEditingPage.pageDescription = page.description;
+                        currentEditingPage.listOfFieldsClass = formViewData.listOfFieldsClass;
+                        currentEditingPage.formEditWrapper = formViewData.formEditWrapper;
+                        currentEditingPage.formdEditLink = formViewData.formdEditLink;
+                        currentEditingPage.fieldAddLink = formViewData.fieldAddLink;
+                        currentEditingPage.formAddLink = cp.Content.GetAddLink(FormPagesModel.tableMetadata.contentName, "formsetid=" + settings.id, false, formViewData.isEditing);
+                        formViewData.pageListEditingData.Add(currentEditingPage);
+                    }
                 }
                 formViewData.formAddLink = cp.Content.GetAddLink(FormPagesModel.tableMetadata.contentName, "formsetid=" + settings.id, false, formViewData.isEditing);
                 return formViewData;

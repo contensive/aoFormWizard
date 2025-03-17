@@ -62,6 +62,7 @@ namespace Contensive.Addon.aoFormWizard3.Views {
                                                 " begin " +
                                                 " DROP TABLE ccFormWidgets " +
                                                 " end");
+                        CP.Db.ExecuteNonQuery("delete from cctables where name = 'ccFormWidgets'");
                     }
 
                     string ccFormPagesCountSQL = "select count(id) as 'count' from cctables where name = 'ccFormPages'";
@@ -80,24 +81,49 @@ namespace Contensive.Addon.aoFormWizard3.Views {
                         " begin " +
                         " DROP TABLE ccFormPages " +
                         " end");
+
+                        CP.Db.ExecuteNonQuery("delete from cctables where name = 'ccFormPages'");
                     }
-                    
-                    CP.Db.ExecuteNonQuery(" IF EXISTS (select id from ccFormQuestions)" +
+
+                    string ccFormQuestionsCountSQL = "select count(id) as 'count' from cctables where name = 'ccFormQuestions'";
+                    int ccFormQuestionsCount = 0;
+                    using (var cs = CP.CSNew()) {
+                        if (cs.OpenSQL(ccFormQuestionsCountSQL)) {
+                            ccFormQuestionsCount = cs.GetInteger("count");
+                        }
+                    }
+                    if (ccFormQuestionsCount > 0) {
+                        CP.Db.ExecuteNonQuery(" IF EXISTS (select id from ccFormQuestions)" +
                         " begin " +
-                        " return" +                        
+                        " return" +
                         " end" +
                         " else if not exists (select id from ccFormQuestions) " +
                         " begin " +
                         " DROP TABLE ccFormQuestions " +
                         " end");
-                    CP.Db.ExecuteNonQuery(" IF EXISTS (select id from ccFormResponse)" +
+
+                        CP.Db.ExecuteNonQuery("delete from cctables where name = 'ccFormQuestions'");
+                    }
+
+                    string ccFormResponseCountSQL = "select count(id) as 'count' from cctables where name = 'ccFormResponse'";
+                    int ccFormResponseCount = 0;
+                    using (var cs = CP.CSNew()) {
+                        if (cs.OpenSQL(ccFormResponseCountSQL)) {
+                            ccFormResponseCount = cs.GetInteger("count");
+                        }
+                    }
+                    if (ccFormResponseCount > 0) {
+                        CP.Db.ExecuteNonQuery(" IF EXISTS (select id from ccFormResponse)" +
                         " begin " +
-                        " return" +                        
+                        " return" +
                         " end" +
                         " else if not exists (select id from ccFormResponse) " +
                         " begin " +
                         " DROP TABLE ccFormResponse " +
                         " end");
+
+                        CP.Db.ExecuteNonQuery("delete from cctables where name = 'ccFormResponse'");
+                    }
                     // -- update table names
                     string ccFormSetsCountSQL = "select count(id) as 'count' from cctables where name = 'ccFormSets'";
                     int ccFormsetsCount = 0;
@@ -121,7 +147,7 @@ namespace Contensive.Addon.aoFormWizard3.Views {
                         CP.Db.ExecuteNonQuery("exec sp_rename 'ccForms', 'ccFormPages';");
                     }
 
-                    string ccUserFormResponseCountSQL = "select count(id) as 'count' from cctables where 'ccUserFormResponse'";
+                    string ccUserFormResponseCountSQL = "select count(id) as 'count' from cctables where name = 'ccUserFormResponse'";
                     int ccUserFormResponseCount = 0;
                     using (var cs = CP.CSNew()) {
                         if (cs.OpenSQL(ccUserFormResponseCountSQL)) {
@@ -132,7 +158,7 @@ namespace Contensive.Addon.aoFormWizard3.Views {
                         CP.Db.ExecuteNonQuery("exec sp_rename 'ccUserFormResponse', 'ccFormResponse';");
                     }
 
-                    string ccFormFieldsCountSQL = "select count(id) as 'count' from cctables where 'ccFormFields'";
+                    string ccFormFieldsCountSQL = "select count(id) as 'count' from cctables where name = 'ccFormFields'";
                     int ccFormFieldsCount = 0;
                     using (var cs = CP.CSNew()) {
                         if (cs.OpenSQL(ccFormFieldsCountSQL)) {
