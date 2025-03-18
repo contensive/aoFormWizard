@@ -157,7 +157,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 foreach (FormPagesModel page in pageList) {
                     //
                     //-- skip to the current page
-                    if (page.id != savedAnswers.currentPageid) { continue; }
+                    if (page.id != savedAnswers.currentPageid && !formViewData.isEditing) { continue; }
                     //
                     // -- recapcha
                     if (page == pageList.First() && settings.allowRecaptcha && !savedAnswers.recaptchaSuccess) {
@@ -387,6 +387,8 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                         break;
                     }
                     else {
+                        cp.Log.Error("In EditingPageData creation length: " + pageList.Count);
+                        cp.Log.Error("page description: " + page.description);
                         var currentEditingPage = new EditingPageData();
                         currentEditingPage.pageDescription = page.description;
                         currentEditingPage.listOfFieldsClass = formViewData.listOfFieldsClass;
@@ -397,6 +399,8 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                         formViewData.pageListEditingData.Add(currentEditingPage);
                     }
                 }
+                formViewData.pageListEditingData.Reverse();
+                cp.Log.Error("formViewData.pageListEditingData count: " + formViewData.pageListEditingData.Count);
                 formViewData.formAddLink = cp.Content.GetAddLink(FormPagesModel.tableMetadata.contentName, "formsetid=" + settings.id, false, formViewData.isEditing);
                 return formViewData;
             } catch (Exception ex) {
