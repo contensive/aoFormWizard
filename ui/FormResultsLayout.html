@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Form Wizard Results Layout</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  </head>
+  <body>
+    <style>
+        .vwResults-js:hover {
+            cursor: pointer;
+        }
+    </style>
+    <div class="designBlockContainer blockText" style="{{styleHeight}}{{styleBackgroundImage}}">
+        <div class="{{contentContainerClass}}">
+            <div class="col-lg-10 mx-auto">
+                <div class="card rounded-3">
+                    {{#submittedApplications}}
+                        <div class="card-body px-5">
+                            <h2 class="border-bottom pb-3 pt-5 mb-4">Submitted 2025 Scholarship Applications </h2>
+                            <div class=" table-responsive">
+                                <table class="table table-bordered table-hover">
+                                    <thead class="table-secondary">
+                                    <tr>
+                                        <th scope="col">First Name</th>
+                                        <th scope="col">MI</th>
+                                        <th scope="col">Last Name</th>
+                                        <th scope="col">Email</th>
+                                        <th scope="col">Date Submitted</th>
+                                        <th scope="col">Score</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr class="vwResults-js" data-href="{{url}}">
+                                        <td scope="row">{{firstName}}</td>
+                                        <td>{{MI}}</td>
+                                        <td>{{lastName}}</td>
+                                        <td>{{email}}</td>
+                                        <td>{{dateSubmitted}}</td>
+                                        <td>{{score}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">Jimmy</td>
+                                        <td>K</td>
+                                        <td>Dean</td>
+                                        <td>jimmydean@gmail.com</td>
+                                        <td>3/1/2025</td>
+                                        <td>C+</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    {{/submittedApplications}}
+                    {{#submittedApplicationsResults}}
+                        <div class="card-body px-5 mb-4">
+                            <div>
+                                <h2 class="border-bottom pb-3 pt-5 mb-4">Student's Information</h2>
+                                <ul class="list-unstyled">
+                                    <li><p><span class="fw-bold">Applicant's First name:</span> {{firstName}} </p></li>
+                                    <li><p><span class="fw-bold">Applicant's Middle Initial:</span> {{middleInitial}}</p></li>
+                                    <li><p><span class="fw-bold">Applicant's Last name:</span> {{lastName}} </p></li>
+                                    <li><p><span class="fw-bold">Legal Resident of The US:</span> {{resident}} </p></li>
+                                    <li><p><span class="fw-bold">Legal Resident of The US (If 'no'):</span>{{residentResponse}}</p></li>
+                                    <li><p><span class="fw-bold">Date of Birth:</span> {{DOB}}</p></li>
+                                    <li><p><span class="fw-bold">Address:</span> {{address}}</p></li>
+                                    <li><p><span class="fw-bold">City:</span> {{city}}</p></li>
+                                    <li><p><span class="fw-bold">State:</span> {{state}}</p></li>
+                                    <li><p><span class="fw-bold">Zip Code:</span> {{zipCode}}</p></li>
+                                    <li><p><span class="fw-bold">Accepted by (list colleges, universities, trade schools):</span> {{listedSchools}}</p></li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h2 class="border-bottom pb-3 pt-5 mb-4">Employee working/volunteering within Dulles Airport perimeter</h2>
+                                <ul class="list-unstyled">
+                                    <li><p><span class="fw-bold">Who is the employer/volunteer:</span> {{selfOther}}</p></li>
+                                    <li><p><span class="fw-bold">Name:</span> {{otherName}}</p></li>
+                                    <li><p><span class="fw-bold">Relationship to the applicant:</span> {{otherRlshp}}</p></li>
+                                    <li><p><span class="fw-bold">Employer:</span> {{empoyer}}</p></li>
+                                    <li><p><span class="fw-bold">Position:</span> {{position}}</p></li>
+                                    <li><p><span class="fw-bold">Telephone:</span> {{number}}</p></li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h2 class="border-bottom pb-3 pt-5 mb-4">Applicant Questionnaire</h2>
+                                <ul class="list-unstyled">
+                                    <li><p><span class="fw-bold">Scholastic Honors and Scholarships:</span><br> {{}}</p></li>
+                                    <li><p><span class="fw-bold">Extra-curricular Activities and/or employment history (include number of years and offices held):</span><br> {{}}</p></li>
+                                    <li><p><span class="fw-bold">Community Activities (include number of years and offices held, if any):</span><br> {{}}</p></li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h2 class="border-bottom pb-3 pt-5 mb-4">Essay Questions</h2>
+                                <ul class="list-unstyled">
+                                    <li><p><span class="fw-bold">Question 1. Briefly describe your planned course of studies and educational goals:</span> <br> {{}}</p></li>
+                                    <li><p><span class="fw-bold">Question 2. Describe how you have demonstrated leadership and/or community service:</span> <br> {{}}</p></li>
+                                    <li><p><span class="fw-bold">Question 3. Explain how this scholarship would benefit you and how you will be paying for college or trade school:</span><br> {{}}</p></li>
+                                    <li><p><span class="fw-bold">Please upload a PDF of your transcripts, available from your school counseling office:</span> <br> {{}}</p></li>
+                                    <li><p><span class="fw-bold">Please upload a PDF of a recommendation letter from a teacher or school administrator:</span> <br> {{}}</p></li>
+                                </ul>
+                            </div>
+                            <hr class="border-secondary my-4">
+                            <div class="row">
+                            
+                                <div class="col-md-6">
+                                    <h6 class="fw-bold">Scoring</h6>
+                                    <p>Scorers to use the following letter under “Overall Grade”. The corresponding numeric value will calculate all the scores for each candidate:</p>
+                                    <div>
+                                        <table class="table table-bordered">
+                                            <thead class="table-light">
+                                            <tr>
+                                                <th scope="col">Overall Grade </th>
+                                                <th scope="col">Points Awarded</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <th scope="row">A</th>
+                                                <td>50</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">{{grade}}</th>
+                                                <td>{{points}}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="fw-bold mb-1" for="">Overall Grade</label>
+                                    <select class="form-select" aria-label="">
+                                        <option selected disabled>Select...</option>
+                                        <option value="1"></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    {{/submittedApplicationsResults}}
+                    <div class="card-footer px-5 py-3"> 
+                       <button class="btn btn-outline-primary">Save</button> 
+                          <button class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+  </body>
+</html>

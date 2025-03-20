@@ -387,8 +387,6 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                         break;
                     }
                     else {
-                        cp.Log.Error("In EditingPageData creation length: " + pageList.Count);
-                        cp.Log.Error("page description: " + page.description);
                         var currentEditingPage = new EditingPageData();
                         currentEditingPage.pageDescription = page.description;
                         currentEditingPage.listOfFieldsClass = formViewData.listOfFieldsClass;
@@ -400,7 +398,6 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                     }
                 }
                 formViewData.pageListEditingData.Reverse();
-                cp.Log.Error("formViewData.pageListEditingData count: " + formViewData.pageListEditingData.Count);
                 formViewData.formAddLink = cp.Content.GetAddLink(FormPagesModel.tableMetadata.contentName, "formsetid=" + settings.id, false, formViewData.isEditing);
                 return formViewData;
             } catch (Exception ex) {
