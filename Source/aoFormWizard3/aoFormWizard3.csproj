@@ -76,6 +76,9 @@
     <Reference Include="DesignBlockBase, Version=25.2.5.2, Culture=neutral, PublicKeyToken=81704b61c3d18a5b, processorArchitecture=MSIL">
       <HintPath>..\packages\Contensive.DesignBlockBase.25.2.5.2\lib\net472\DesignBlockBase.dll</HintPath>
     </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.12.0.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.12.0\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=9.0.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.9.0.1\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
@@ -105,8 +108,10 @@
     <Compile Include="Addons\ApplicationScoresWidget.cs" />
     <Compile Include="Addons\ApplicationScoringWidgetSubmit.cs" />
     <Compile Include="Addons\FormWidgetLegacyUpgrade.cs" />
+    <Compile Include="Addons\GetApplicationInfo.cs" />
     <Compile Include="Models\Db\ApplicationScoresModel.cs" />
     <Compile Include="Models\Db\ApplicationScoreWidgetsModel.cs" />
+    <Compile Include="Models\Db\ApplicationViewsModel.cs" />
     <Compile Include="Models\View\ApplicationScoresViewModel.cs" />
     <Compile Include="My Project\MyNamespace.Static.1.Designer.cs" />
     <Compile Include="My Project\MyNamespace.Static.2.Designer.cs" />

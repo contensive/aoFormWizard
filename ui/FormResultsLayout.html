@@ -15,10 +15,11 @@
     <div class="designBlockContainer blockText" style="{{styleHeight}}{{styleBackgroundImage}}">
         <div class="{{contentContainerClass}}">
             <div class="col-lg-10 mx-auto">
-                <div class="card rounded-3">
+                <div class="card rounded-3" id="sectionReplace">
                         <div class="card-body px-5">
                             <h2 class="border-bottom pb-3 pt-5 mb-4">Submitted 2025 Scholarship Applications </h2>
                             <div class=" table-responsive">
+                                <input type="hidden" value="{{scoreWidgetId}}" id="scoreWidgetId">                                
                                 <table class="table table-bordered table-hover">
                                     <thead class="table-secondary">
                                     <tr>
@@ -34,15 +35,15 @@
                                     </thead>
                                     <tbody>
                                         {{#submittedApplications}}
-                                    <tr class="vwResults-js {{#hasViewed}} table-primary {{/hasViewed}}" data-href="{{url}}">
-                                        <td scope="row">{{scorerFirstName}}</td>
-                                        <td>{{scorerMiddleInitial}}</td>
-                                        <td>{{scorerLastName}}</td>
-                                        <td>{{scorerEmail}}</td>
-                                        <td>{{dateSubmitted}}</td>
-                                        <td>{{score}}</td>
-                                        <td>{{cumulativeScore}}</td>
-                                        <td align="center"><button class="btn btn-sm btn-outline-primary w-50"  type="button" data-bs-toggle="modal" data-bs-target="#scorerModal{{id}}">View: {{numberOfScoresSubmitted}}</button></td>
+                                    <tr class="vwResults-js {{#hasViewed}} table-primary {{/hasViewed}}" data-submissionId="{{submissionId}}" data-href="{{url}}">
+                                        <td onclick="scoreTableRowOnClick('{{submissionId}}')" scope="row">{{scorerFirstName}}</td>
+                                        <td onclick="scoreTableRowOnClick('{{submissionId}}')">{{scorerMiddleInitial}}</td>
+                                        <td onclick="scoreTableRowOnClick('{{submissionId}}')">{{scorerLastName}}</td>
+                                        <td onclick="scoreTableRowOnClick('{{submissionId}}')">{{scorerEmail}}</td>
+                                        <td onclick="scoreTableRowOnClick('{{submissionId}}')">{{dateSubmitted}}</td>
+                                        <td onclick="scoreTableRowOnClick('{{submissionId}}')">{{score}}</td>
+                                        <td onclick="scoreTableRowOnClick('{{submissionId}}')">{{cumulativeScore}}</td>
+                                        <td align="center"><button class="btn btn-sm btn-outline-primary w-50"  type="button" data-bs-toggle="modal" data-bs-target="#scorerModal{{id}}">View: {{responseViews}}</button></td>
                                         
                                     </tr>
                                     {{/submittedApplications}}
@@ -71,6 +72,8 @@
                                 </table>
                             </div>
                         </div>
+
+                        
                     {{#applicationViewModel}}
 
                     {{#pageListEditingData}}
@@ -93,7 +96,7 @@
 											</label>
 											<div>
 												{{{fielddescription}}}
-												<input readonly disabled class="form-control {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" placeholder="{{^required}}(optional){{/required}} {{#required}}{{/required}}" id="FormType_{{id}}" name="formField_{{id}}" type="{{inputtype}}" value="{{currentValue}}" {{#required}}required{{/required}}>
+												<input readonly disabled class="form-control {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" placeholder="{{^required}}(optional){{/required}} {{#required}}{{/required}}" id="FormType_{{id}}" name="formField_{{id}}" type="{{inputtype}}" value="{{currentValue}}">
 												{{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
 											</div>
 										</div>
@@ -112,7 +115,7 @@
 														<a href="{{currentFileUrl}}" target="_blank">{{currentValue}}</a>
 													</div>
 												{{/currentValue}}
-												<input readonly disabled class="form-control {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" placeholder="{{^required}}optional{{/required}} {{#required}}{{/required}}" id="FormType_{{id}}" name="formField_{{id}}" type="{{inputtype}}" value="{{currentValue}}" {{#required}}required{{/required}}>
+												<input readonly disabled class="form-control {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" placeholder="{{^required}}optional{{/required}} {{#required}}{{/required}}" id="FormType_{{id}}" name="formField_{{id}}" type="{{inputtype}}" value="{{currentValue}}" >
 												{{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
 											</div>
 									</div>
@@ -126,7 +129,7 @@
 											</label>
 											<div>
 												{{{fielddescription}}}
-												<textarea readonly disabled rows="5" class="form-control {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" placeholder="{{^required}}(optional){{/required}} {{#required}}{{/required}}" id="FormType_{{id}}" name="formField_{{id}}" type="{{inputtype}}" {{#required}}required{{/required}}>{{currentValue}}</textarea>
+												<textarea readonly disabled rows="5" class="form-control {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" placeholder="{{^required}}(optional){{/required}} {{#required}}{{/required}}" id="FormType_{{id}}" name="formField_{{id}}" type="{{inputtype}}" >{{currentValue}}</textarea>
 												{{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
 											</div>
 										</div>
@@ -140,7 +143,7 @@
 												{{{fielddescription}}}
 												{{#optionList}}
 													<div class="form-check">
-														<input readonly disabled class="form-check-input {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" name="formField_{{id}}" type="checkbox" id="formField_{{id}}_{{optionPtr}}" value="{{optionPtr}}" {{#isSelected}}checked{{/isSelected}}>
+														<input readonly disabled class="form-check-input {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" name="formField_{{id}}" type="checkbox" id="formField_{{id}}_{{optionPtr}}" value="{{optionPtr}}">
 														<label class="form-check-label" for="formField_{{id}}_{{optionPtr}}">{{optionName}}</label>
 													</div>
 												{{/optionList}}
@@ -157,7 +160,7 @@
 												{{{fielddescription}}}
 												{{#optionList}}
 													<div class="form-check">
-													<input readonly disabled class="form-check-input {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" type="radio" name="formField_{{id}}" id="formField_{{id}}_{{optionPtr}}" value="{{optionPtr}}"  {{#isSelected}}checked{{/isSelected}}>
+													<input readonly disabled class="form-check-input {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" type="radio" name="formField_{{id}}" id="formField_{{id}}_{{optionPtr}}" value="{{optionPtr}}">
 													<label class="form-check-label" for="formField_{{id}}_{{optionPtr}}">{{optionName}}</label>
 													</div>
 												{{/optionList}}
@@ -172,7 +175,7 @@
 											<div>
 												{{{fielddescription}}}
 													<div class="form-check">
-														<select class="mt-2 form-control {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" name="formField_{{id}}" id="formField_{{id}}" disabled readonly {{#required}}required{{/required}}>
+														<select class="mt-2 form-control {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" name="formField_{{id}}" id="formField_{{id}}" disabled readonly>
 															<option value="" selected>Choose...</option>
 															{{#optionList}}
 																<option id="formField_{{optionPtr}}" value="{{optionPtr}}">{{optionName}}</option>
@@ -272,6 +275,43 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous" data-delete></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer" data-delete></script>
     <script>
+
+        function scoreTableRowOnClick(submissionId) {
+                var scoreWidgetId = document.getElementById("scoreWidgetId").value;
+                console.log("submissionId: " + submissionId + " scoreWidgetId: " + scoreWidgetId);
+                var formData = new FormData();
+                formData.append('submissionId', submissionId);
+                formData.append('scoreWidgetId', scoreWidgetId);
+
+                $.ajax({
+                    url: "/GetApplicationInfo",
+                    type: "POST",
+                    data: formData,
+                    contentType: false,
+                    processData: false
+                }).done(function(response) {
+                    var obj = JSON.parse(response);
+                    console.log(obj);
+                    if (obj.success) {           
+                    //alert(obj.successMessage);
+                    document.getElementById("sectionReplace").innerHTML = obj.html;
+                    //location.reload();
+                    }else{
+                    alert(obj.errorMessage);
+                    //return false;
+                    }
+                }).fail(function(data) {
+                    alert("Error. The server couldn't be reached");
+                });
+                    
+        }
+
+        /*
+        jQuery(document).ready(function($) {
+            $(".vwResults-js").click(function() {
+                
+        });
+*/
         function submitApplicationScore() {            
           var score = document.getElementById('score').value;
           var applicationId = document.getElementById('applicationId').value;
@@ -291,8 +331,8 @@
             var obj = JSON.parse(response);
             console.log(obj);
             if (obj.success) {           
-              //alert(obj.successMessage);
-              location.reload();
+              alert(obj.successMessage);
+              //location.reload();
             }else{
               alert(obj.errorMessage);
               //return false;

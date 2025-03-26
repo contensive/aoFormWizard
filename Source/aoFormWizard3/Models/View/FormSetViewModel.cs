@@ -749,8 +749,10 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 // -- verify the users response
                 if (userFormResponse is null) {
                     userFormResponse = DbBaseModel.addDefault<FormResponseModel>(cp);
+                    userFormResponse.formWidget = formSet.id;
                     userFormResponse.name = "Form Set " + formSet.name + " started " + DateTime.Now.ToString("MM/dd/yyyy") + " by " + cp.User.Name;
                 }
+                userFormResponse.formWidget = formSet.id;
                 userFormResponse.visitid = cp.Visit.Id;
                 userFormResponse.memberId = cp.User.Id;
                 //

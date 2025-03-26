@@ -14,7 +14,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
         // 
         // ====================================================================================================
         // -- instance properties
-        public int submissionid { get; set; }
+        public int formid { get; set; }
         public int groupAllowedToScore { get; set; }
 
         public new static ApplicationScoreWidgetsModel createOrAddSettings(CPBaseClass cp, string settingsGuid, string recordNameOrSuffix) {
@@ -28,7 +28,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
             result = addDefault<ApplicationScoreWidgetsModel>(cp);
             result.name = "Application Scoring Widget " + result.id;            
             result.ccguid = settingsGuid;
-            result.submissionid = FormWidgetsModel.createFirstOfList<FormWidgetsModel>(cp, "", "dateadded desc").id;
+            result.formid = FormWidgetsModel.createFirstOfList<FormWidgetsModel>(cp, "", "dateadded desc").id;
             result.save(cp);
             return result;
         }
