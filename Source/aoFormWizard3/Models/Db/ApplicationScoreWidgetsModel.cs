@@ -14,7 +14,23 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
         // 
         // ====================================================================================================
         // -- instance properties
-        public int formid { get; set; }
+        public int submissionid { get; set; }
         public int groupAllowedToScore { get; set; }
+
+        public new static ApplicationScoreWidgetsModel createOrAddSettings(CPBaseClass cp, string settingsGuid, string recordNameOrSuffix) {
+            // -- create object from existing record
+            var result = create<ApplicationScoreWidgetsModel>(cp, settingsGuid);
+            if (result is not null) {
+                return result;
+            }
+            // 
+            // -- create default formset
+            result = addDefault<ApplicationScoreWidgetsModel>(cp);
+            result.name = "Application Scoring Widget " + result.id;            
+            result.ccguid = settingsGuid;
+            result.submissionid = FormWidgetsModel.createFirstOfList<FormWidgetsModel>(cp, "", "dateadded desc").id;
+            result.save(cp);
+            return result;
+        }
     }
 }

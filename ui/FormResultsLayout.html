@@ -16,7 +16,6 @@
         <div class="{{contentContainerClass}}">
             <div class="col-lg-10 mx-auto">
                 <div class="card rounded-3">
-                    {{#submittedApplications}}
                         <div class="card-body px-5">
                             <h2 class="border-bottom pb-3 pt-5 mb-4">Submitted 2025 Scholarship Applications </h2>
                             <div class=" table-responsive">
@@ -29,77 +28,168 @@
                                         <th scope="col">Email</th>
                                         <th scope="col">Date Submitted</th>
                                         <th scope="col">Score</th>
+                                        <th scope="col">Cumulative Score</th>
+                                        <th scope="col"># of scores submitted</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr class="vwResults-js" data-href="{{url}}">
-                                        <td scope="row">{{firstName}}</td>
-                                        <td>{{MI}}</td>
-                                        <td>{{lastName}}</td>
-                                        <td>{{email}}</td>
+                                        {{#submittedApplications}}
+                                    <tr class="vwResults-js {{#hasViewed}} table-primary {{/hasViewed}}" data-href="{{url}}">
+                                        <td scope="row">{{scorerFirstName}}</td>
+                                        <td>{{scorerMiddleInitial}}</td>
+                                        <td>{{scorerLastName}}</td>
+                                        <td>{{scorerEmail}}</td>
                                         <td>{{dateSubmitted}}</td>
                                         <td>{{score}}</td>
+                                        <td>{{cumulativeScore}}</td>
+                                        <td align="center"><button class="btn btn-sm btn-outline-primary w-50"  type="button" data-bs-toggle="modal" data-bs-target="#scorerModal{{id}}">View: {{numberOfScoresSubmitted}}</button></td>
+                                        
                                     </tr>
-                                    <tr>
+                                    {{/submittedApplications}}
+
+                                    <tr data-delete>
                                         <td scope="row">Jimmy</td>
                                         <td>K</td>
                                         <td>Dean</td>
                                         <td>jimmydean@gmail.com</td>
                                         <td>3/1/2025</td>
                                         <td>C+</td>
+                                        <td>B-</td>
+                                        <td align="center"><button class="btn btn-sm btn-outline-primary w-50">View: 3</button></td>
+                                    </tr>
+                                    <tr data-delete>
+                                        <td scope="row">Dean</td>
+                                        <td>K</td>
+                                        <td>Winchester</td>
+                                        <td>dwinchester@gmail.com</td>
+                                        <td>3/21/2025</td>
+                                        <td>A+</td>
+                                        <td>B</td>
+                                        <td align="center"><button class="btn btn-sm btn-outline-primary w-50">View: 3</button></td>
                                     </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-                    {{/submittedApplications}}
-                    {{#submittedApplicationsResults}}
-                        <div class="card-body px-5 mb-4">
-                            <div>
-                                <h2 class="border-bottom pb-3 pt-5 mb-4">Student's Information</h2>
-                                <ul class="list-unstyled">
-                                    <li><p><span class="fw-bold">Applicant's First name:</span> {{firstName}} </p></li>
-                                    <li><p><span class="fw-bold">Applicant's Middle Initial:</span> {{middleInitial}}</p></li>
-                                    <li><p><span class="fw-bold">Applicant's Last name:</span> {{lastName}} </p></li>
-                                    <li><p><span class="fw-bold">Legal Resident of The US:</span> {{resident}} </p></li>
-                                    <li><p><span class="fw-bold">Legal Resident of The US (If 'no'):</span>{{residentResponse}}</p></li>
-                                    <li><p><span class="fw-bold">Date of Birth:</span> {{DOB}}</p></li>
-                                    <li><p><span class="fw-bold">Address:</span> {{address}}</p></li>
-                                    <li><p><span class="fw-bold">City:</span> {{city}}</p></li>
-                                    <li><p><span class="fw-bold">State:</span> {{state}}</p></li>
-                                    <li><p><span class="fw-bold">Zip Code:</span> {{zipCode}}</p></li>
-                                    <li><p><span class="fw-bold">Accepted by (list colleges, universities, trade schools):</span> {{listedSchools}}</p></li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h2 class="border-bottom pb-3 pt-5 mb-4">Employee working/volunteering within Dulles Airport perimeter</h2>
-                                <ul class="list-unstyled">
-                                    <li><p><span class="fw-bold">Who is the employer/volunteer:</span> {{selfOther}}</p></li>
-                                    <li><p><span class="fw-bold">Name:</span> {{otherName}}</p></li>
-                                    <li><p><span class="fw-bold">Relationship to the applicant:</span> {{otherRlshp}}</p></li>
-                                    <li><p><span class="fw-bold">Employer:</span> {{empoyer}}</p></li>
-                                    <li><p><span class="fw-bold">Position:</span> {{position}}</p></li>
-                                    <li><p><span class="fw-bold">Telephone:</span> {{number}}</p></li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h2 class="border-bottom pb-3 pt-5 mb-4">Applicant Questionnaire</h2>
-                                <ul class="list-unstyled">
-                                    <li><p><span class="fw-bold">Scholastic Honors and Scholarships:</span><br> {{}}</p></li>
-                                    <li><p><span class="fw-bold">Extra-curricular Activities and/or employment history (include number of years and offices held):</span><br> {{}}</p></li>
-                                    <li><p><span class="fw-bold">Community Activities (include number of years and offices held, if any):</span><br> {{}}</p></li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h2 class="border-bottom pb-3 pt-5 mb-4">Essay Questions</h2>
-                                <ul class="list-unstyled">
-                                    <li><p><span class="fw-bold">Question 1. Briefly describe your planned course of studies and educational goals:</span> <br> {{}}</p></li>
-                                    <li><p><span class="fw-bold">Question 2. Describe how you have demonstrated leadership and/or community service:</span> <br> {{}}</p></li>
-                                    <li><p><span class="fw-bold">Question 3. Explain how this scholarship would benefit you and how you will be paying for college or trade school:</span><br> {{}}</p></li>
-                                    <li><p><span class="fw-bold">Please upload a PDF of your transcripts, available from your school counseling office:</span> <br> {{}}</p></li>
-                                    <li><p><span class="fw-bold">Please upload a PDF of a recommendation letter from a teacher or school administrator:</span> <br> {{}}</p></li>
-                                </ul>
-                            </div>
+                    {{#applicationViewModel}}
+
+                    {{#pageListEditingData}}
+							
+							{{#pageDescription}}
+								<div class="card-header text-center p-4">{{{pageDescription}}}</div>
+							{{/pageDescription}}
+							{{^pageDescription}}
+							{{/pageDescription}}
+							
+	
+							<div class="card-body px-5">
+								
+							{{#listOfFieldsClass}}
+								{{#isDefault}}
+										{{#headline}}<h2 class="border-bottom pb-3 pt-5 mb-4">{{headline}}</h2>{{/headline}}
+										<div class="mb-4">
+											<label class="control-label mb-0" for="FormType_{{id}}">
+												<h6 class="fw-bold">{{caption}}</h6>
+											</label>
+											<div>
+												{{{fielddescription}}}
+												<input readonly disabled class="form-control {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" placeholder="{{^required}}(optional){{/required}} {{#required}}{{/required}}" id="FormType_{{id}}" name="formField_{{id}}" type="{{inputtype}}" value="{{currentValue}}" {{#required}}required{{/required}}>
+												{{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
+											</div>
+										</div>
+								{{/isDefault}}
+								
+								{{#isFile}}
+										{{#headline}}<h2 class="border-bottom pb-3 pt-5 mb-4">{{headline}}</h2>{{/headline}}
+										<div class="mb-4">
+											<label class="control-label mb-0" for="FormType_{{id}}">
+												<h6 class="fw-bold">{{caption}}</h6>
+											</label>
+											<div>
+												{{{fielddescription}}}
+												{{#currentValue}}
+													<div class="mt-2">
+														<a href="{{currentFileUrl}}" target="_blank">{{currentValue}}</a>
+													</div>
+												{{/currentValue}}
+												<input readonly disabled class="form-control {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" placeholder="{{^required}}optional{{/required}} {{#required}}{{/required}}" id="FormType_{{id}}" name="formField_{{id}}" type="{{inputtype}}" value="{{currentValue}}" {{#required}}required{{/required}}>
+												{{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
+											</div>
+									</div>
+								{{/isFile}}
+	
+								{{#isTextArea}}
+										{{#headline}}<h2 class="border-bottom pb-3 pt-5 mb-4">{{headline}}</h2>{{/headline}}
+										<div class="mb-4">
+											<label class="control-label" for="FormType_{{id}}">
+												<h6 class="fw-bold">{{caption}}</h6>
+											</label>
+											<div>
+												{{{fielddescription}}}
+												<textarea readonly disabled rows="5" class="form-control {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" placeholder="{{^required}}(optional){{/required}} {{#required}}{{/required}}" id="FormType_{{id}}" name="formField_{{id}}" type="{{inputtype}}" {{#required}}required{{/required}}>{{currentValue}}</textarea>
+												{{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
+											</div>
+										</div>
+								{{/isTextArea}}
+	
+								{{#isCheckbox}}
+										{{#headline}}<h2 class="border-bottom pb-3 pt-5 mb-4">{{headline}}</h2>{{/headline}}
+										<div class="mb-4">
+											<h6 class="fw-bold">{{caption}} {{^required}}<span class="text-muted fw-light">(optional)</span>{{/required}}</h6>
+											<div>
+												{{{fielddescription}}}
+												{{#optionList}}
+													<div class="form-check">
+														<input readonly disabled class="form-check-input {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" name="formField_{{id}}" type="checkbox" id="formField_{{id}}_{{optionPtr}}" value="{{optionPtr}}" {{#isSelected}}checked{{/isSelected}}>
+														<label class="form-check-label" for="formField_{{id}}_{{optionPtr}}">{{optionName}}</label>
+													</div>
+												{{/optionList}}
+											</div>
+											{{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
+										</div>
+								{{/isCheckbox}}
+	
+								{{#isRadio}}
+										{{#headline}}<h2 class="border-bottom pb-3 pt-5 mb-4">{{headline}}</h2>{{/headline}}
+										<div class="mb-4">
+											<h6 class="fw-bold">{{caption}} {{^required}}<span class="text-muted fw-light">(optional)</span>{{/required}}</h6>
+											<div>
+												{{{fielddescription}}}
+												{{#optionList}}
+													<div class="form-check">
+													<input readonly disabled class="form-check-input {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" type="radio" name="formField_{{id}}" id="formField_{{id}}_{{optionPtr}}" value="{{optionPtr}}"  {{#isSelected}}checked{{/isSelected}}>
+													<label class="form-check-label" for="formField_{{id}}_{{optionPtr}}">{{optionName}}</label>
+													</div>
+												{{/optionList}}
+											</div>
+											{{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
+										</div>
+								{{/isRadio}}
+								{{#isSelect}}
+										{{#headline}}<h2 class="border-bottom pb-3 pt-5 mb-4">{{headline}}</h2>{{/headline}}
+										<div class="mb-4">
+											<h6 class="fw-bold">{{caption}} {{^required}}<span class="text-muted fw-light">(optional)</span>{{/required}}</h6>
+											<div>
+												{{{fielddescription}}}
+													<div class="form-check">
+														<select class="mt-2 form-control {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" name="formField_{{id}}" id="formField_{{id}}" disabled readonly {{#required}}required{{/required}}>
+															<option value="" selected>Choose...</option>
+															{{#optionList}}
+																<option id="formField_{{optionPtr}}" value="{{optionPtr}}">{{optionName}}</option>
+															{{/optionList}}
+														</select>
+														<label class="form-check-label" for="formField_{{optionPtr}}">{{optionName}}</label>
+													</div>
+											</div>
+											{{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
+										</div>
+								{{/isSelect}}
+							{{/listOfFieldsClass}}												
+							
+						</div>
+	
+							{{/pageListEditingData}}
+
                             <hr class="border-secondary my-4">
                             <div class="row">
                             
@@ -114,39 +204,104 @@
                                                 <th scope="col">Points Awarded</th>
                                             </tr>
                                             </thead>
-                                            <tbody>
-                                            <tr>
-                                                <th scope="row">A</th>
-                                                <td>50</td>
-                                            </tr>
-                                            <tr>
+                                            <tbody>     
+                                                {{#gradeTableValues}}                                       
+                                            <tr>                                                
                                                 <th scope="row">{{grade}}</th>
                                                 <td>{{points}}</td>
                                             </tr>
+                                            {{/gradeTableValues}}
                                             </tbody>
                                         </table>
                                     </div>
                                 
                                 </div>
                                 <div class="col-md-6">
+                                    <input type="hidden" disabled id="responseId" value="{{responseId}}">
+                                    <input type="hidden" disabled id="applicationId" value="{{id}}">
                                     <label class="fw-bold mb-1" for="">Overall Grade</label>
-                                    <select class="form-select" aria-label="">
+                                    <select id="score" class="form-select" aria-label="">
                                         <option selected disabled>Select...</option>
-                                        <option value="1"></option>
+                                        {{#scoresDropDownOptions}}
+                                        <option value="{{.}}">{{.}}</option>
+                                        {{/scoresDropDownOptions}}
                                     </select>
                                 </div>
                             </div>
                         </div>
-                    {{/submittedApplicationsResults}}
+                            {{/applicationViewModel}}
                     <div class="card-footer px-5 py-3"> 
                        <button class="btn btn-outline-primary">Save</button> 
-                          <button class="btn btn-primary">Submit</button>
+                          <button onclick="submitApplicationScore()" class="btn btn-primary">Submit</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
+      <!-- Modal -->
+       {{#submittedApplications}}
+      <div class="modal fade" id="scorerModal{{id}}" tabindex="-1" aria-labelledby="scorerModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg rounded-0">
+            <div class="modal-content rounded-0">
+                <div class="modal-body p-5">
+                    <table class="table table-bordered mb-0">
+                        <thead class="table-secondary">
+                        <tr>
+                            <th scope="col">Scorer</th>
+                            <th scope="col">Date Scored</th>
+                            <th scope="col">Score</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {{#submittedApplicationsDetailsRows}}
+                            <tr>
+                                <td scope="row">{{scorerName}}</td>
+                                <td scope="row">{{dateScored}}</td>
+                                <td scope="row">{{scoreGraded}}</td>
+                            </tr>
+                            {{/submittedApplicationsDetailsRows}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{/submittedApplications}}
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous" data-delete></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous" data-delete></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer" data-delete></script>
+    <script>
+        function submitApplicationScore() {            
+          var score = document.getElementById('score').value;
+          var applicationId = document.getElementById('applicationId').value;
+          var responseId = document.getElementById('responseId').value;
+
+          var formData = new FormData();
+          formData.append('score', score);
+          formData.append('applicationId', applicationId);
+          formData.append('responseId', responseId);
+          $.ajax({
+            url: "/ApplicationScoringWidgetSubmit",
+            type: "POST",
+            data: formData,
+            contentType: false,
+            processData: false
+          }).done(function(response) {
+            var obj = JSON.parse(response);
+            console.log(obj);
+            if (obj.success) {           
+              //alert(obj.successMessage);
+              location.reload();
+            }else{
+              alert(obj.errorMessage);
+              //return false;
+            }
+          }).fail(function(data) {
+            alert("Error. The server couldn't be reached");
+        });
+        }
+    </script>
 
   </body>
 </html>

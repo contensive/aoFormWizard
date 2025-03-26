@@ -102,7 +102,12 @@
     <Import Include="System.Diagnostics" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Addons\ApplicationScoresWidget.cs" />
+    <Compile Include="Addons\ApplicationScoringWidgetSubmit.cs" />
     <Compile Include="Addons\FormWidgetLegacyUpgrade.cs" />
+    <Compile Include="Models\Db\ApplicationScoresModel.cs" />
+    <Compile Include="Models\Db\ApplicationScoreWidgetsModel.cs" />
+    <Compile Include="Models\View\ApplicationScoresViewModel.cs" />
     <Compile Include="My Project\MyNamespace.Static.1.Designer.cs" />
     <Compile Include="My Project\MyNamespace.Static.2.Designer.cs" />
     <Compile Include="My Project\MyNamespace.Static.3.Designer.cs" />

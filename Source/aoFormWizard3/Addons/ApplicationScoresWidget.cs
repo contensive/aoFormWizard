@@ -12,15 +12,16 @@ namespace Contensive.Addon.aoFormWizard3.Addons {
     public class ApplicationScoresWidget : AddonBaseClass {
         public override object Execute(CPBaseClass cp) {
             try {
-                return DesignBlockController.renderWidget<FormWidgetsModel, FormViewModel>(cp,
-                    widgetName: "Form Widget",
-                    layoutGuid: Constants.guidLayoutFormWizard,
-                    layoutName: Constants.nameLayoutFormWizard,
-                    layoutPathFilename: Constants.pathFilenameLayoutFormWizard,
-                    layoutBS5PathFilename: Constants.pathFilenameLayoutFormWizard);
+                return DesignBlockController.renderWidget<ApplicationScoreWidgetsModel, ApplicationScoresViewModel>(cp,
+                    widgetName: "Application Scoring Widget",
+                    layoutGuid: Constants.guidLayoutApplicationScore,
+                    layoutName: Constants.nameLayoutApplicationScore,
+                    layoutPathFilename: Constants.pathFilenameLayoutApplicationScore,
+                    layoutBS5PathFilename: Constants.pathFilenameLayoutApplicationScore);
             }
-            catch (Exception ex) { 
-            
+            catch (Exception ex) {
+                cp.Site.ErrorReport(ex);
+                throw;
             }
         }
     }
