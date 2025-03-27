@@ -15,8 +15,8 @@
     </style>
     <div class="designBlockContainer blockText" style="{{styleHeight}}{{styleBackgroundImage}}">
         <div class="{{contentContainerClass}}">
-            <div class="col-lg-10 mx-auto">
-                <div class="card rounded-3" id="sectionReplace">
+            <div class="col-lg-10 mx-auto" id="sectionReplace">
+                <div class="card rounded-3">
                         <div class="card-body px-5">
                             <div>
                                 <h2 class="border-bottom pb-3 pt-5 mb-4">Submitted 2025 Scholarship Applications </h2>
@@ -45,7 +45,7 @@
                                             <td onclick="scoreTableRowOnClick('{{submissionId}}')">{{dateSubmitted}}</td>
                                             <td onclick="scoreTableRowOnClick('{{submissionId}}')">{{score}}</td>
                                             <td onclick="scoreTableRowOnClick('{{submissionId}}')">{{cumulativeScore}}</td>
-                                            <td align="center"><button class="btn btn-sm btn-outline-primary w-50"  type="button" data-bs-toggle="modal" data-bs-target="#scorerModal{{id}}">{{responseViews}}</button></td>
+                                            <td align="center"><button class="btn btn-sm btn-outline-primary w-50"  type="button" data-bs-toggle="modal" data-bs-target="#scorerModal{{id}}">{{numberOfScoresSubmitted}}</button></td>
                                             
                                         </tr>
                                         {{/submittedApplications}}
@@ -77,7 +77,6 @@
                             <div class="mt-4">
                                 {{#applicationViewModel}}
 
-                                {{#pageListEditingData}}
                                     
                                     {{#pageDescription}}
                                         <div class="text-center p-2">{{{pageDescription}}}</div>
@@ -144,7 +143,13 @@
                                                         {{{fielddescription}}}
                                                         {{#optionList}}
                                                             <div class="form-check">
-                                                                <input readonly disabled class="form-check-input {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" name="formField_{{id}}" type="checkbox" id="formField_{{id}}_{{optionPtr}}" value="{{optionPtr}}">
+                                                                {{#isSelected}}
+                                                                <input onclick="return false;" class="form-check-input {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" name="formField_{{id}}" type="checkbox" id="formField_{{id}}_{{optionPtr}}" value="{{optionPtr}}" checked>
+                                                                {{/isSelected}}
+
+                                                                {{^isSelected}}
+                                                                <input onclick="return false;" class="form-check-input {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" name="formField_{{id}}" type="checkbox" id="formField_{{id}}_{{optionPtr}}" value="{{optionPtr}}">
+                                                                {{/isSelected}}
                                                                 <label class="form-check-label" for="formField_{{id}}_{{optionPtr}}">{{optionName}}</label>
                                                             </div>
                                                         {{/optionList}}
@@ -161,7 +166,12 @@
                                                         {{{fielddescription}}}
                                                         {{#optionList}}
                                                             <div class="form-check">
-                                                            <input readonly disabled class="form-check-input {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" type="radio" name="formField_{{id}}" id="formField_{{id}}_{{optionPtr}}" value="{{optionPtr}}">
+                                                                {{#isSelected}}
+                                                                <input onclick="return false;" class="form-check-input {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" type="radio" name="formField_{{id}}" id="formField_{{id}}_{{optionPtr}}" value="{{optionPtr}}" checked>
+                                                                {{/isSelected}}
+                                                                {{^isSelected}}
+                                                                <input onclick="return false;" class="form-check-input {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" type="radio" name="formField_{{id}}" id="formField_{{id}}_{{optionPtr}}" value="{{optionPtr}}">
+                                                                {{/isSelected}}
                                                             <label class="form-check-label" for="formField_{{id}}_{{optionPtr}}">{{optionName}}</label>
                                                             </div>
                                                         {{/optionList}}
@@ -191,33 +201,13 @@
                                     {{/listOfFieldsClass}}												
                                     
                                 </div>
-        
-                                {{/pageListEditingData}}
 
                                 <hr class="border-secondary my-4">
 
                                 <div class="row">
                                 
                                     <div class="col-md-6">
-                                        <h6 class="fw-bold">Scoring</h6>
-                                        <p>Scorers to use the following letter under “Overall Grade”. The corresponding numeric value will calculate all the scores for each candidate:</p>
-                                        <div>
-                                            <table class="table table-bordered">
-                                                <thead class="table-light">
-                                                <tr>
-                                                    <th scope="col">Overall Grade </th>
-                                                    <th scope="col">Points Awarded</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>     
-                                                    {{#gradeTableValues}}                                       
-                                                <tr>                                                
-                                                    <th scope="row">{{grade}}</th>
-                                                    <td>{{points}}</td>
-                                                </tr>
-                                                {{/gradeTableValues}}
-                                                </tbody>
-                                            </table>
+                                        {{{scoringInstructions}}}
                                         </div>
                                     
                                     </div>
@@ -226,7 +216,7 @@
                                         <input type="hidden" disabled id="applicationId" value="{{id}}">
                                         <label class="fw-bold mb-1" for="">Overall Grade</label>
                                         <select id="score" class="form-select" aria-label="">
-                                            <option selected disabled>Select...</option>
+                                            <option selected disabled value="">Select...</option>
                                             {{#scoresDropDownOptions}}
                                             <option value="{{.}}">{{.}}</option>
                                             {{/scoresDropDownOptions}}
@@ -237,45 +227,48 @@
                             </div>
                         </div>
                        
-                        
+                        {{#applicationViewModel}}
                     <div class="card-footer px-5 py-3 d-flex justify-content-end">
-                        <div class="me-3"><button class="btn btn-outline-danger">Cancel</button></div>
+                        <div class="me-3"><button onclick="scoreTableRowOnClick('0')"class="btn btn-outline-danger">Cancel</button></div>
                         <div><button onclick="submitApplicationScore()" class="btn btn-primary px-5">Submit</button></div>
                     </div>
+                    {{/applicationViewModel}}
+
+                     <!-- Modal -->
+       {{#submittedApplications}}
+       <div class="modal fade" id="scorerModal{{id}}" tabindex="-1" aria-labelledby="scorerModalLabel" aria-hidden="true">
+         <div class="modal-dialog modal-dialog-centered modal-lg rounded-0">
+             <div class="modal-content rounded-0">
+                 <div class="modal-body p-5">
+                     <table class="table table-bordered mb-0">
+                         <thead class="table-secondary">
+                         <tr>
+                             <th scope="col">Scorer</th>
+                             <th scope="col">Date Scored</th>
+                             <th scope="col">Score</th>
+                         </tr>
+                         </thead>
+                         <tbody>
+                             {{#submittedApplicationsDetailsRows}}
+                             <tr>
+                                 <td scope="row">{{scorerName}}</td>
+                                 <td scope="row">{{dateScored}}</td>
+                                 <td scope="row">{{scoreGraded}}</td>
+                             </tr>
+                             {{/submittedApplicationsDetailsRows}}
+                         </tbody>
+                     </table>
+                 </div>
+             </div>
+         </div>
+     </div>
+     {{/submittedApplications}}
                 </div>
             </div>
         </div>
     </div>
 
-      <!-- Modal -->
-       {{#submittedApplications}}
-      <div class="modal fade" id="scorerModal{{id}}" tabindex="-1" aria-labelledby="scorerModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg rounded-0">
-            <div class="modal-content rounded-0">
-                <div class="modal-body p-5">
-                    <table class="table table-bordered mb-0">
-                        <thead class="table-secondary">
-                        <tr>
-                            <th scope="col">Scorer</th>
-                            <th scope="col">Date Scored</th>
-                            <th scope="col">Score</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                            {{#submittedApplicationsDetailsRows}}
-                            <tr>
-                                <td scope="row">{{scorerName}}</td>
-                                <td scope="row">{{dateScored}}</td>
-                                <td scope="row">{{scoreGraded}}</td>
-                            </tr>
-                            {{/submittedApplicationsDetailsRows}}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-    {{/submittedApplications}}
+     
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous" data-delete></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous" data-delete></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer" data-delete></script>
@@ -319,8 +312,13 @@
 */
         function submitApplicationScore() {            
           var score = document.getElementById('score').value;
-          var applicationId = document.getElementById('applicationId').value;
+          var applicationId = document.getElementById('scoreWidgetId').value;
           var responseId = document.getElementById('responseId').value;
+            console.log("score: " + score);
+          if(score == '') {
+            alert("please select a grade before submitting");
+            return false;
+          }
 
           var formData = new FormData();
           formData.append('score', score);
@@ -335,7 +333,8 @@
           }).done(function(response) {
             var obj = JSON.parse(response);
             console.log(obj);
-            if (obj.success) {           
+            if (obj.success) {     
+                document.getElementById("sectionReplace").innerHTML = obj.html;      
               alert(obj.successMessage);
               //location.reload();
             }else{

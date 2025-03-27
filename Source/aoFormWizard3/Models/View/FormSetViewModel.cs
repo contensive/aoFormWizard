@@ -73,6 +73,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
             public string optionName { get; set; }
             public int optionPtr { get; set; }
             public bool isSelected { get; set; }
+            public bool isChecked { get; set; }
         }
         // 
         public class ButtonClass {
@@ -204,7 +205,8 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                             optionList.Add(new OptionClass() {
                                 optionName = questionOptionName,
                                 optionPtr = optionPtr,
-                                isSelected = savedAnswers_Page_Question.choiceAnswerDict.ContainsKey(questionOptionName) ? savedAnswers_Page_Question.choiceAnswerDict[questionOptionName] : false
+                                isSelected = savedAnswers_Page_Question.choiceAnswerDict.ContainsKey(questionOptionName) ? savedAnswers_Page_Question.choiceAnswerDict[questionOptionName] : false,
+                                isChecked = savedAnswers_Page_Question.choiceAnswerDict.ContainsKey(questionOptionName) ? savedAnswers_Page_Question.choiceAnswerDict[questionOptionName] : false
                             });
                             optionPtr += 1;
                         }
