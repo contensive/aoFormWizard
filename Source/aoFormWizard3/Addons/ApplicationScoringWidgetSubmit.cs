@@ -58,7 +58,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons {
                 }
                     ApplicationScoresViewModel viewModel = null;
                 if (applicationScoreWidget != null) {
-                    viewModel = ApplicationScoresViewModel.getApplicationScoreWidgetUpdate(cp, applicationScoreWidget, responseId);
+                    viewModel = ApplicationScoresViewModel.getApplicationScoreWidgetUpdate(cp, applicationScoreWidget, 0);
                 }
 
                 string layout = cp.Layout.GetLayout(Constants.guidLayoutApplicationScore, Constants.nameLayoutApplicationScore, Constants.pathFilenameLayoutApplicationScore);

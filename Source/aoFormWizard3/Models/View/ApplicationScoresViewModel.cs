@@ -20,6 +20,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
         public int responseId { get; set; }
         public int scoreWidgetId { get; set; }
         public string scoringInstructions { get; set; }
+        public string scoringInstructionsTopOfApplication { get; set; }
 
         public class ApplicationScoresTableRow {
             public List<ModalDataRow> submittedApplicationsDetailsRows { get; set; }
@@ -91,7 +92,8 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 viewModel.id = settings.id;
                 viewModel.scoreWidgetId = settings.id;
                 viewModel.scoringInstructions = settings.scoringInstructions;
-                cp.Log.Error("scoring instructions: " + viewModel.scoringInstructions);
+                viewModel.scoringInstructionsTopOfApplication = settings.scoringInstructionsTopOfApplication;
+
                 var applicationFormModel = DbBaseModel.createFirstOfList<FormWidgetsModel>(cp, "", "dateadded desc");
                 /*
                 if (applicationFormModel != null) {
@@ -187,6 +189,8 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 viewModel.id = settings.id;
                 viewModel.scoreWidgetId = settings.id;
                 viewModel.scoringInstructions = settings.scoringInstructions;
+                viewModel.scoringInstructionsTopOfApplication = settings.scoringInstructionsTopOfApplication;
+
                 var applicationFormModel = DbBaseModel.createFirstOfList<FormWidgetsModel>(cp, "", "dateadded desc");
                 if (applicationFormModel != null) {
                     var currentResponse = FormResponseModel.create<FormResponseModel>(cp, submissionId);

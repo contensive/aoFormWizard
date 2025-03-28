@@ -430,6 +430,11 @@
 				<![CDATA[Instructions that appear at the bottom of the Application Score Widget]]>
 			</HelpDefault>
 		</Field>
+		<Field Name="scoringInstructionsTopOfApplication" active="True" AdminOnly="False" Authorable="True" Caption="Scoring Instructions Top of Application" DeveloperOnly="False" EditSortPriority="110" FieldType="Html" HTMLContent="False" IndexColumn="0" IndexSortDirection="" IndexSortOrder="99" IndexWidth="50" RedirectID="0" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
+			<HelpDefault>
+				<![CDATA[Instructions that appear at the top of the Application]]>
+			</HelpDefault>
+		</Field>
 		<!-- 
 			feature
 		-->
