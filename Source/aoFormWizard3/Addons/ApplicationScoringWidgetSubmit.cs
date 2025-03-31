@@ -20,10 +20,10 @@ namespace Contensive.Addon.aoFormWizard3.Addons {
                 var applicationScoreWidget = ApplicationScoreWidgetsModel.create<ApplicationScoreWidgetsModel>(cp, applicationId);
                 if (applicationScoreWidget != null) {
                     int groupId = applicationScoreWidget.groupAllowedToScore;
-                    string groupCheckSQL = $"select id as 'id' from ccMemberRules where memberid = {cp.User.Id} and groupid = {groupId}";
+                    string groupCheckSQL = $"select count(id) as 'count' from ccMemberRules where memberid = {cp.User.Id} and groupid = {groupId}";
                     using (var cs = cp.CSNew()) {
                         if (cs.OpenSQL(groupCheckSQL)) {
-                            if(cs.GetInteger("id") > 0) {
+                            if (cs.GetInteger("count") > 0) {
                                 userIsInGroup = true;
                             }
                         }
@@ -31,10 +31,15 @@ namespace Contensive.Addon.aoFormWizard3.Addons {
                 }
 
                 if (userIsInGroup) {
-                    var newScore = ApplicationScoresModel.create<ApplicationScoresModel>(cp, $"scorer = {cp.User.Id} and applicationscored = {applicationId}");
-                    if (newScore == null) {
+                    ApplicationScoresModel newScore = null;
+                    var newScoreCount = ApplicationScoresModel.getCount<ApplicationScoresModel>(cp, $"scorer = {cp.User.Id} and applicationSubmittedScored = {responseId}");
+                    if (newScoreCount <= 0) {
                         newScore = ApplicationScoresModel.addDefault<ApplicationScoresModel>(cp);
                     }
+                    else {
+                        newScore = ApplicationScoresModel.createFirstOfList<ApplicationScoresModel>(cp, $"scorer = {cp.User.Id} and applicationSubmittedScored = {responseId}", "id desc");
+                    }
+
                     string userNameSQL = $"select name as 'name' from ccmembers where id = {cp.User.Id}";
                     string userName = "";
                     using (var cs = cp.CSNew()) {
@@ -43,7 +48,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons {
                         }
                     }
 
-                    newScore.name = $"score submitted by {userName}, on form {applicationId}";
+                    newScore.name = $"score submitted by {userName}, on form {responseId}";
                     newScore.score = score;
                     newScore.scorer = cp.User.Id;
                     newScore.applicationFormScored = applicationId;
@@ -56,7 +61,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons {
                     returnObj.success = false;
                     returnObj.errorMessage = "You are not in the group allowed to submit scores";
                 }
-                    ApplicationScoresViewModel viewModel = null;
+                ApplicationScoresViewModel viewModel = null;
                 if (applicationScoreWidget != null) {
                     viewModel = ApplicationScoresViewModel.getApplicationScoreWidgetUpdate(cp, applicationScoreWidget, 0);
                 }
@@ -67,13 +72,13 @@ namespace Contensive.Addon.aoFormWizard3.Addons {
                 string newClientAssignmentTable = ApplicationScoreDoc.GetElementbyId("sectionReplace").InnerHtml;
                 string newClientAssignmentFinalHTML = cp.Mustache.Render(newClientAssignmentTable, viewModel);
                 returnObj.html = newClientAssignmentFinalHTML;
-                
+
                 return returnObj;
             }
             catch (Exception ex) {
                 cp.Site.ErrorReport(ex);
                 returnObj.success = false;
-                returnObj.successMessage = "Unable to save score";
+                returnObj.errorMessage = "Unable to save score";
                 return returnObj;
 
             }

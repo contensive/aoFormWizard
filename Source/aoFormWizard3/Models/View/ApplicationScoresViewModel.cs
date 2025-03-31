@@ -156,7 +156,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                 newRow.dateSubmitted = application.dateAdded.Value.ToString("MM/dd/yyyy");
                                 newRow.score = score != null ? score.score.ToString() : "";
                                 var scoresByGrader = applicationScoresData.Where(x => x.applicationSubmittedScored == application.id && x.score > 0).ToList();
-                                newRow.cumulativeScore = scoresByGrader.Count() > 0 ? (scoresByGrader.Sum(x => x.score) / scoresByGrader.Count()).ToString() : "";
+                                newRow.cumulativeScore = scoresByGrader.Count() > 0 ? string.Format("{0:0.##}", ((double)scoresByGrader.Sum(x => x.score) / (double)scoresByGrader.Count())) : "";
                                 newRow.numberOfScoresSubmitted = applicationScoresData.Count(x => x.score > 0 && x.applicationSubmittedScored == application.id);
                                 hint = 9;
                                 newRow.responseViews = ApplicationViewsModel.getCount<ApplicationViewsModel>(cp, $"responseViewed = {application.id}");
@@ -251,7 +251,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                 newRow.dateSubmitted = application.dateAdded.Value.ToString("MM/dd/yyyy");
                                 newRow.score = score != null ? score.score.ToString() : "";
                                 var scoresByGrader = applicationScoresData.Where(x => x.applicationSubmittedScored == application.id && x.score > 0).ToList();
-                                newRow.cumulativeScore = scoresByGrader.Count() > 0 ? (scoresByGrader.Sum(x => x.score) / scoresByGrader.Count()).ToString() : "";
+                                newRow.cumulativeScore = scoresByGrader.Count() > 0 ? string.Format("{0:0.##}", ((double)scoresByGrader.Sum(x => x.score) / (double)scoresByGrader.Count())) : "";
                                 newRow.numberOfScoresSubmitted = applicationScoresData.Count(x => x.score > 0 && x.applicationSubmittedScored == application.id);
                                 newRow.responseViews = ApplicationViewsModel.getCount<ApplicationViewsModel>(cp, $"responseViewed = {application.id}");
                                 newRow.hasViewed = ApplicationViewsModel.getCount<ApplicationViewsModel>(cp, $"responseViewed = {application.id} and viewer = {cp.User.Id}") > 0;
