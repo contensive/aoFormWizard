@@ -46,7 +46,7 @@
 		<Styles></Styles>
 		<styleslinkhref></styleslinkhref>
 		<Scripting Language="VBScript" EntryPoint="" Timeout="0"/>
-		<instanceSettingPrimaryContentId><![CDATA[Form Sets]]></instanceSettingPrimaryContentId>
+		<instanceSettingPrimaryContentId><![CDATA[Form Widgets]]></instanceSettingPrimaryContentId>
 		<IncludeAddon name="JQuery" guid="{9C882078-0DAC-48E3-AD4B-CF2AA230DF80}"/>
 		<IncludeAddon name="jQuery BlockUI" guid="{F6087787-E01E-4E09-AC02-502D0387E048}"/>
 	</Addon>
