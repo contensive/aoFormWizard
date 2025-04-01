@@ -1,7 +1,7 @@
 
 rem all paths are relative to the git scripts folder
 
-set appName=lydiakidwell
+set appName=veronica
 
 call build.cmd
 
