@@ -170,6 +170,9 @@
 							{{#submitButton}}
 								<button class="btn btn-primary js-formWidgetButton" name="button" type="submit" value="{{submitButton}}">{{submitButton}}</button>
 							{{/submitButton}}
+							<input type=hidden name=instanceid value="{{instanceid}}">
+				<input type=hidden name=formHtmlId value="{{formHtmlId}}">
+				<input type=hidden name=srcPageId value="{{srcPageId}}">
 						{{/isEditing}}
 					</div>
 					{{/isThankYouPage}}
@@ -351,13 +354,12 @@
 
 				
 
-				<input type=hidden name=instanceid value="{{instanceid}}">
-				<input type=hidden name=formHtmlId value="{{formHtmlId}}">
-				<input type=hidden name=srcPageId value="{{srcPageId}}">
+				
 			</form>
 		</div>
 		{{/isEditing}}
 	</div>
+	
 </div>
 <script>
 	//

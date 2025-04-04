@@ -115,7 +115,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 //
                 string userFormResponseSql = settings.useUserProperty ? $"memberid = {cp.User.Id}" : $"visitid={cp.Visit.Id}";
 
-                FormResponseModel userFormResponse = DbBaseModel.createFirstOfList<FormResponseModel>(cp, userFormResponseSql, "id desc");
+                FormResponseModel userFormResponse = DbBaseModel.createFirstOfList<FormResponseModel>(cp, $"formwidget = {settings.id} and {userFormResponseSql}", "id desc");
                 //
                 // -- process the request
                 processRequest(cp, settings, ref userFormResponse);
@@ -1068,10 +1068,12 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 string continueButton = string.IsNullOrEmpty(formSet.continueButtonName) ? "Continue" : formSet.continueButtonName;
                 string saveButton = string.IsNullOrEmpty(formSet.saveButtonName) ? "Save" : formSet.saveButtonName;
                 string submitButton = string.IsNullOrEmpty(formSet.submitButtonName) ? "Submit" : formSet.submitButtonName;
-                if (!string.IsNullOrEmpty(button) && (button == continueButton || button == submitButton)) {
+                if (!string.IsNullOrEmpty(button) && (button == continueButton || button == submitButton || button == saveButton)) {
                     //
                     // -- mark this page complete
-                    savedAnswersForm_Page.isCompleted = true;
+                    if (button != saveButton) {
+                        savedAnswersForm_Page.isCompleted = true;
+                    }
                     if (currentPage == pageList.Last()) {
                         //
                         // -- this was the last page, go to thankyou page
