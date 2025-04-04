@@ -83,7 +83,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
 
         public class EditingPageData {
             public string pageDescription { get; set; }
-            public List<FieldViewModel> listOfFieldsClass { get; set; } = new List<FieldViewModel>();
+            public List<FieldViewModel> listOfEditingFieldsClass { get; set; } = new List<FieldViewModel>();
             public string fieldAddLink { get; set; }
             public string previousButton { get; set; }
             public string resetButton { get; set; }
@@ -156,6 +156,9 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 // 
                 // -- output one page with page one header
                 foreach (FormPagesModel page in pageList) {
+                    if (formViewData.isEditing) {
+                        formViewData.listOfFieldsClass = new List<FieldViewModel>();
+                    }
                     //
                     //-- skip to the current page
                     if (page.id != savedAnswers.currentPageid && !formViewData.isEditing) { continue; }
@@ -391,7 +394,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                     else {
                         var currentEditingPage = new EditingPageData();
                         currentEditingPage.pageDescription = page.description;
-                        currentEditingPage.listOfFieldsClass = formViewData.listOfFieldsClass;
+                        currentEditingPage.listOfEditingFieldsClass = formViewData.listOfFieldsClass;
                         currentEditingPage.formEditWrapper = formViewData.formEditWrapper;
                         currentEditingPage.formdEditLink = formViewData.formdEditLink;
                         currentEditingPage.fieldAddLink = formViewData.fieldAddLink;
@@ -702,7 +705,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                     else {
                         var currentEditingPage = new EditingPageData();
                         currentEditingPage.pageDescription = page.description;
-                        currentEditingPage.listOfFieldsClass = formViewData.listOfFieldsClass;
+                        currentEditingPage.listOfEditingFieldsClass = formViewData.listOfFieldsClass;
                         currentEditingPage.formEditWrapper = formViewData.formEditWrapper;
                         currentEditingPage.formdEditLink = formViewData.formdEditLink;
                         currentEditingPage.fieldAddLink = formViewData.fieldAddLink;

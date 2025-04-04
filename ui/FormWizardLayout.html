@@ -1,12 +1,14 @@
+{{^isEditing}}
 <div class="designBlockContainer blockText" style="{{styleHeight}}{{styleBackgroundImage}}">
 	<div class="{{contentContainerClass}}">
+		
 		<div class="col-lg-10 mx-auto">
 			{{{formdEditLink}}}
 			<form id="{{formHtmlId}}" >
 				<div class="card rounded-3 {{formEditWrapper}}">
 					
 					{{^isThankYouPage}}
-					{{^isEditing}}
+					
 						{{#pageDescription}}
 							<div class="card-header text-center p-4">{{{pageDescription}}}</div>
 						{{/pageDescription}}
@@ -148,14 +150,55 @@
 						{{/allowRecaptcha}}
 						
 					</div>
+					<div class="card-footer px-5 py-3">
+						{{#isEditing}}
+							
+						{{/isEditing}}
+						{{^isEditing}}
+							{{#previousButton}}
+								<button class="btn btn-outline-primary js-formWidgetButton" name="button" type="submit" value="{{previousButton}}">{{previousButton}}</button>
+							{{/previousButton}}
+							{{#resetButton}}
+								<button class="btn btn-danger js-formWidgetButton" name="button" type="submit" value="{{resetButton}}">{{resetButton}}</button>
+							{{/resetButton}}
+							{{#continueButton}}
+								<button class="btn btn-primary js-formWidgetButton" name="button" type="submit" value="{{continueButton}}">{{continueButton}}</button>
+							{{/continueButton}}
+							{{#saveButton}}
+								<button class="btn btn-primary js-formWidgetButton" name="button" type="submit" value="{{saveButton}}">{{saveButton}}</button>
+							{{/saveButton}}
+							{{#submitButton}}
+								<button class="btn btn-primary js-formWidgetButton" name="button" type="submit" value="{{submitButton}}">{{submitButton}}</button>
+							{{/submitButton}}
+						{{/isEditing}}
+					</div>
+					{{/isThankYouPage}}
 
-					{{/isEditing}}
-						
+					{{#isThankYouPage}}
+						<div class="card card-body px-5">
+							<div class="my-5 pt-2">
+								{{{pageDescription}}}
+							</div>
+						</div>			
+					{{/isThankYouPage}}
+						</div>
+						</form>
+						</div>
+					</div>
+				</div>
+						{{/isEditing}}
+
+						{{#isEditing}}
 						
 						{{^isThankYouPage}}
-						{{#isEditing}}
-							{{#pageListEditingData}}
-							
+						{{#pageListEditingData}}
+
+						<div class="designBlockContainer blockText" style="{{styleHeight}}{{styleBackgroundImage}}">
+							<div class="{{contentContainerClass}}">
+							<div class="col-lg-10 mx-auto">
+								{{{formdEditLink}}}
+								<form id="{{formHtmlId}}" >
+									<div class="card rounded-3 {{formEditWrapper}}">
 							{{#pageDescription}}
 								<div class="card-header text-center p-4">{{{pageDescription}}}</div>
 							{{/pageDescription}}
@@ -165,7 +208,7 @@
 	
 							<div class="card-body px-5">
 								
-							{{#listOfFieldsClass}}
+							{{#listOfEditingFieldsClass}}
 								{{#isDefault}}
 									{{{fieldEditLink}}}
 									<div class="{{fieldEditWrapper}}">
@@ -283,7 +326,7 @@
 										</div>
 									</div>
 								{{/isSelect}}
-							{{/listOfFieldsClass}}
+							{{/listOfEditingFieldsClass}}
 	
 							{{{fieldAddLink}}}
 							{{{formAddLink}}}
@@ -297,39 +340,12 @@
 							{{/allowRecaptcha}}
 							
 						</div>
-	
+	</div>
+	</form>
+	</div>
 							{{/pageListEditingData}}
-					{{/isEditing}}
-					<div class="card-footer px-5 py-3">
-						{{#isEditing}}
-							
-						{{/isEditing}}
-						{{^isEditing}}
-							{{#previousButton}}
-								<button class="btn btn-outline-primary js-formWidgetButton" name="button" type="submit" value="{{previousButton}}">{{previousButton}}</button>
-							{{/previousButton}}
-							{{#resetButton}}
-								<button class="btn btn-danger js-formWidgetButton" name="button" type="submit" value="{{resetButton}}">{{resetButton}}</button>
-							{{/resetButton}}
-							{{#continueButton}}
-								<button class="btn btn-primary js-formWidgetButton" name="button" type="submit" value="{{continueButton}}">{{continueButton}}</button>
-							{{/continueButton}}
-							{{#saveButton}}
-								<button class="btn btn-primary js-formWidgetButton" name="button" type="submit" value="{{saveButton}}">{{saveButton}}</button>
-							{{/saveButton}}
-							{{#submitButton}}
-								<button class="btn btn-primary js-formWidgetButton" name="button" type="submit" value="{{submitButton}}">{{submitButton}}</button>
-							{{/submitButton}}
-						{{/isEditing}}
-					</div>
-					{{/isThankYouPage}}
-
-					{{#isThankYouPage}}
-						<div class="card card-body px-5">
-							<div class="my-5 pt-2">
-								{{{pageDescription}}}
-							</div>
-						</div>			
+					
+					
 					{{/isThankYouPage}}
 				</div>
 
@@ -340,6 +356,7 @@
 				<input type=hidden name=srcPageId value="{{srcPageId}}">
 			</form>
 		</div>
+		{{/isEditing}}
 	</div>
 </div>
 <script>
