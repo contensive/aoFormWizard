@@ -38,7 +38,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
             result.name = "Dynamic Form " + result.id + " added to page " + cp.Doc.PageId + ", " + cp.Doc.PageName;
             result.addResetButton = false;
             result.resetButtonName = "Reset";
-            result.backButtonName = "Continue";
+            result.backButtonName = "Previous";
             result.continueButtonName = "Continue";
             result.submitButtonName = "Complete";
             result.saveButtonName = "Save";
