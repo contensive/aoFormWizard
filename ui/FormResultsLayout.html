@@ -210,23 +210,24 @@
 
                                 <hr class="border-secondary my-4">
 
+                                
+                                <div> {{{scoringInstructions}}}</div>
                                 <div class="row">
                                 
                                     <div class="col-md-6">
-                                        {{{scoringInstructions}}}
-                                        </div>
-                                    
-                                    </div>
-                                    <div class="col-md-6">
                                         <input type="hidden" disabled id="responseId" value="{{responseId}}">
                                         <input type="hidden" disabled id="applicationId" value="{{id}}">
-                                        <label class="fw-bold mb-1" for="">Overall Grade</label>
+                                        <label class="fw-bold mb-1 form-label" for="">Overall Grade</label>
                                         <select id="score" class="form-select" aria-label="">
                                             <option selected disabled value="">Select...</option>
                                             {{#scoresDropDownOptions}}
                                             <option value="{{.}}">{{.}}</option>
                                             {{/scoresDropDownOptions}}
                                         </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="" class="fw-bold mb-1 form-label">Comment</label>
+                                        <textarea name="" id="" class="form-control" maxlength="200" placeholder=""></textarea>
                                     </div>
                                 </div>
                                 {{/applicationViewModel}}
@@ -240,6 +241,8 @@
                     </div>
                     {{/applicationViewModel}}
 
+                </div>
+
                      <!-- Modal -->
        {{#submittedApplications}}
        <div class="modal fade" id="scorerModal{{id}}" tabindex="-1" aria-labelledby="scorerModalLabel" aria-hidden="true">
@@ -252,6 +255,7 @@
                              <th scope="col">Scorer</th>
                              <th scope="col">Date Scored</th>
                              <th scope="col">Score</th>
+                             <th scope="col">Comments</th>
                          </tr>
                          </thead>
                          <tbody>
@@ -260,6 +264,7 @@
                                  <td scope="row">{{scorerName}}</td>
                                  <td scope="row">{{dateScored}}</td>
                                  <td scope="row">{{scoreGraded}}</td>
+                                 <td scope="row"><div class="small">{{scorerComment}}</div></td>
                              </tr>
                              {{/submittedApplicationsDetailsRows}}
                          </tbody>
