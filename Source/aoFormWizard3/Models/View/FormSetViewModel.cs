@@ -188,6 +188,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                     formViewData.submitButton = page != pageList.Last() ? "" : string.IsNullOrEmpty(settings.submitButtonName) ? "Submit" : settings.submitButtonName;
                     formViewData.continueButton = page == pageList.Last() ? "" : string.IsNullOrEmpty(settings.continueButtonName) ? "Continue" : settings.continueButtonName;
                     formViewData.saveButton = !settings.useUserProperty ? "" : string.IsNullOrEmpty(settings.saveButtonName) ? "Save" : settings.saveButtonName;
+
                     if (formViewData.isEditing) {
                         formViewData.formEditWrapper = "ccEditWrapper";
                         formViewData.formdEditLink = cp.Content.GetEditLink(FormPagesModel.tableMetadata.contentName, page.id.ToString(), false, "", formViewData.isEditing);
@@ -402,7 +403,6 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                         formViewData.pageListEditingData.Add(currentEditingPage);
                     }
                 }
-                formViewData.pageListEditingData.Reverse();
                 formViewData.formAddLink = cp.Content.GetAddLink(FormPagesModel.tableMetadata.contentName, "formsetid=" + settings.id, false, formViewData.isEditing);
                 return formViewData;
             }
@@ -713,7 +713,6 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                         formViewData.pageListEditingData.Add(currentEditingPage);
                     }
                 }
-                formViewData.pageListEditingData.Reverse();
                 formViewData.formAddLink = cp.Content.GetAddLink(FormPagesModel.tableMetadata.contentName, "formsetid=" + settings.id, false, formViewData.isEditing);
                 return formViewData;
             }
@@ -1081,7 +1080,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                         savedAnswers.isComplete = true;
                         savedAnswers.currentPageid = 0;
                     }
-                    else {
+                    else if(button != saveButton) {
                         //
                         // -- go to the next page
                         bool setNext = false;
