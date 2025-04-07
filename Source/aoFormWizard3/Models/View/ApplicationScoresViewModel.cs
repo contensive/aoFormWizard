@@ -47,6 +47,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
             public string scorerName { get; set; }
             public string dateScored { get; set; }
             public string scoreGraded { get; set; }
+            public string comment {  get; set; }
         }
 
         public class ApplicationData {
@@ -300,6 +301,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                         row.dateScored = scoreInfo.dateAdded.Value.ToString("MM/dd/yyyy");
                         row.scoreGraded = scoreInfo.score.ToString();
                         row.scorerName = groupMember.name;
+                        row.comment = scoreInfo.comment;
                         rows.Add(row);
                     }
                     else {

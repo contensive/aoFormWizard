@@ -12,5 +12,6 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
         public int score { get; set; }
         public int applicationFormScored { get; set; }
         public int applicationSubmittedScored { get; set; }
+        public string comment { get; set; }
     }
 }

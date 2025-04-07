@@ -504,6 +504,11 @@
 				<![CDATA[The application submission that was scored]]>
 			</HelpDefault>
 		</Field>
+		<Field Name="comment" active="True" AdminOnly="False" Authorable="True" Caption="Comment" DeveloperOnly="False" EditSortPriority="1000" FieldType="LongText" HTMLContent="False" IndexColumn="0" IndexSortDirection="" IndexSortOrder="99" IndexWidth="20" RedirectID="" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
+			<HelpDefault>
+				<![CDATA[Score comment]]>
+			</HelpDefault>
+		</Field>
 	</CDef>
 	
 	<CDef Name="People" guid="{C1985DC4-C985-4406-9934-61A911543454}">

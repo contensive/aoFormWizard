@@ -16,6 +16,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons {
                 int applicationId = cp.Doc.GetInteger("applicationId");
                 int score = cp.Doc.GetInteger("score");
                 int responseId = cp.Doc.GetInteger("responseId");
+                string comment = cp.Doc.GetText("comment");
                 bool userIsInGroup = false;
                 var applicationScoreWidget = ApplicationScoreWidgetsModel.create<ApplicationScoreWidgetsModel>(cp, applicationId);
                 if (applicationScoreWidget != null) {
@@ -53,6 +54,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons {
                     newScore.scorer = cp.User.Id;
                     newScore.applicationFormScored = applicationId;
                     newScore.applicationSubmittedScored = responseId;
+                    newScore.comment = comment;
                     newScore.save(cp);
                     returnObj.success = true;
                     returnObj.successMessage = "Score saved";

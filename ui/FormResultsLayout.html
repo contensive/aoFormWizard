@@ -227,7 +227,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <label for="" class="fw-bold mb-1 form-label">Comment</label>
-                                        <textarea name="" id="" class="form-control" maxlength="200" placeholder=""></textarea>
+                                        <textarea name="comment" id="scoreComment" class="form-control" maxlength="200" placeholder=""></textarea>
                                     </div>
                                 </div>
                                 {{/applicationViewModel}}
@@ -264,7 +264,7 @@
                                  <td scope="row">{{scorerName}}</td>
                                  <td scope="row">{{dateScored}}</td>
                                  <td scope="row">{{scoreGraded}}</td>
-                                 <td scope="row"><div class="small">{{scorerComment}}</div></td>
+                                 <td scope="row"><div class="small">{{comment}}</div></td>
                              </tr>
                              {{/submittedApplicationsDetailsRows}}
                          </tbody>
@@ -325,6 +325,9 @@
           var score = document.getElementById('score').value;
           var applicationId = document.getElementById('scoreWidgetId').value;
           var responseId = document.getElementById('responseId').value;
+          var comment = document.getElementById('scoreComment').value;
+
+          scoreComment
             console.log("score: " + score);
           if(score == '') {
             alert("please select a grade before submitting");
@@ -335,6 +338,7 @@
           formData.append('score', score);
           formData.append('applicationId', applicationId);
           formData.append('responseId', responseId);
+          formData.append('comment', comment);
           $.ajax({
             url: "/ApplicationScoringWidgetSubmit",
             type: "POST",
