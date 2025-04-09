@@ -202,7 +202,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 }
 
                 
-                List<FormResponseModel> applications = DbBaseModel.createList<FormResponseModel>(cp, $"formWidget = {settings.formid}");
+                List<FormResponseModel> applications = DbBaseModel.createList<FormResponseModel>(cp, $"formWidget = {settings.formid} and datesubmitted is not null");
                 if (applications != null) {
                     hint = 2;
                     foreach (var application in applications) {
