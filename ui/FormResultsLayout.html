@@ -12,6 +12,10 @@
         .vwResults-js:hover {
             cursor: pointer;
         }
+
+        .scorerBtn {
+            max-height: 31px !important;
+        }
     </style>
     <div class="designBlockContainer blockText" style="{{styleHeight}}{{styleBackgroundImage}}">
         <div class="{{contentContainerClass}}">
@@ -45,7 +49,7 @@
                                             <td onclick="scoreTableRowOnClick('{{submissionId}}')">{{dateSubmitted}}</td>
                                             <td onclick="scoreTableRowOnClick('{{submissionId}}')">{{score}}</td>
                                             <td onclick="scoreTableRowOnClick('{{submissionId}}')">{{cumulativeScore}}</td>
-                                            <td align="center"><button class="btn btn-sm btn-outline-primary w-50"  type="button" data-bs-toggle="modal" data-bs-target="#scorerModal{{id}}">{{numberOfScoresSubmitted}}</button></td>
+                                            <td align="center"><button class="btn btn-sm btn-outline-primary w-50 scorerBtn"  type="button" data-bs-toggle="modal" data-bs-target="#scorerModal{{id}}">{{numberOfScoresSubmitted}}</button></td>
                                             
                                         </tr>
                                         {{/submittedApplications}}
@@ -79,11 +83,8 @@
                                 {{{ScoringInstructionsTopofApplication}}}
                             </div>
 
-                            <div class="mt-4 border p-3 rounded-3">
-                                
-                                {{#applicationViewModel}}
-
-                                
+                            {{#applicationViewModel}}
+                                <div class="mt-4 border p-3 rounded-3">
                                     {{#pageDescription}}
                                         <div class="text-center p-2 border-bottom mb-4">{{{pageDescription}}}</div>
                                     {{/pageDescription}}
@@ -206,32 +207,32 @@
                                         {{/isSelect}}
                                     {{/listOfFieldsClass}}												
                                     
-                                </div>
-
-                                <hr class="border-secondary my-4">
-
-                                
-                                <div> {{{scoringInstructions}}}</div>
-                                <div class="row">
-                                
-                                    <div class="col-md-6">
-                                        <input type="hidden" disabled id="responseId" value="{{responseId}}">
-                                        <input type="hidden" disabled id="applicationId" value="{{id}}">
-                                        <label class="fw-bold mb-1 form-label" for="">Overall Grade</label>
-                                        <select id="score" class="form-select" aria-label="">
-                                            <option selected disabled value="">Select...</option>
-                                            {{#scoresDropDownOptions}}
-                                            <option value="{{.}}">{{.}}</option>
-                                            {{/scoresDropDownOptions}}
-                                        </select>
                                     </div>
-                                    <div class="col-md-6">
-                                        <label for="" class="fw-bold mb-1 form-label">Comment</label>
-                                        <textarea name="comment" id="scoreComment" class="form-control" maxlength="200" placeholder=""></textarea>
+
+                                    <hr class="border-secondary my-4">
+
+                                    
+                                    <div> {{{scoringInstructions}}}</div>
+                                    <div class="row">
+                                    
+                                        <div class="col-md-6">
+                                            <input type="hidden" disabled id="responseId" value="{{responseId}}">
+                                            <input type="hidden" disabled id="applicationId" value="{{id}}">
+                                            <label class="fw-bold mb-1 form-label" for="">Overall Grade</label>
+                                            <select id="score" class="form-select" aria-label="">
+                                                <option selected disabled value="">Select...</option>
+                                                {{#scoresDropDownOptions}}
+                                                <option value="{{.}}">{{.}}</option>
+                                                {{/scoresDropDownOptions}}
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="" class="fw-bold mb-1 form-label">Comment</label>
+                                            <textarea name="comment" id="scoreComment" class="form-control" maxlength="200" placeholder=""></textarea>
+                                        </div>
                                     </div>
                                 </div>
-                                {{/applicationViewModel}}
-                            </div>
+                            {{/applicationViewModel}}
                         </div>
                        
                         {{#applicationViewModel}}
