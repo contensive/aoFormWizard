@@ -49,7 +49,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
             var formOne = addDefault<FormPagesModel>(cp);
             formOne.name = "Form #1 of " + result.name;
             formOne.formsetid = result.id;
-            formOne.description = "<h2>Form 1: Sample Form Wizard Form</h2>" + "<p>This form was automatically created by the Form Wizard Design Block.</p>" + "<p>A Dynamic Form is a list of Form Fields that you create and configure. Users complete the form and submit responses.</p>";
+            formOne.description = "<h2>Form 1: Sample Form Content</h2>" + "<p>This form was automatically created by the Form Design Block.</p>" + "<p>A Dynamic Form is a list of Form Fields that you create and configure. Users complete the form and submit responses.</p>";
 
             formOne.sortOrder = "1";
             formOne.save(cp);
@@ -115,7 +115,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
             var formTwo = DbBaseModel.addDefault<FormModel>(cp);
             formTwo.name = "Form #2 of " + result.name;
             formTwo.formsetid = result.id;
-            formOne.description = "<h2>Form 2: Sample Form Wizard Form</h2>" + "<p>This is the second form in the form wizard.</p>";
+            formOne.description = "<h2>Form 2: Sample Form Content Form</h2>" + "<p>This is the second form in the form wizard.</p>";
             formOne.sortOrder = "2";
             formTwo.save(cp);
             // 
