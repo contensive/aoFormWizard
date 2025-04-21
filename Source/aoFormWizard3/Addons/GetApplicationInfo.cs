@@ -15,6 +15,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons {
             try {
                 int submissionId = cp.Doc.GetInteger("submissionId");
                 int scoreWidgetId = cp.Doc.GetInteger("scoreWidgetId");
+                int sortBy = cp.Doc.GetInteger("sortBy");
                 //check if there is a view for this user
                 var responseViews = ApplicationViewsModel.getCount<ApplicationViewsModel>(cp, $"viewer = {cp.User.Id} and responseViewed = {submissionId}");
                 if(responseViews <= 0) {
@@ -27,7 +28,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons {
                 var applicationScoreWidget = ApplicationScoreWidgetsModel.create<ApplicationScoreWidgetsModel>(cp, scoreWidgetId);
                 ApplicationScoresViewModel viewModel = null;
                 if (applicationScoreWidget != null) { 
-                    viewModel = ApplicationScoresViewModel.getApplicationScoreWidgetUpdate(cp, applicationScoreWidget, submissionId);
+                    viewModel = ApplicationScoresViewModel.getApplicationScoreWidgetUpdate(cp, applicationScoreWidget, submissionId, sortBy);
                 }
                 //get layout
                 string layout = cp.Layout.GetLayout(Constants.guidLayoutApplicationScore, Constants.nameLayoutApplicationScore, Constants.pathFilenameLayoutApplicationScore);
@@ -38,6 +39,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons {
                 returnObj.html = newClientAssignmentFinalHTML;
                 returnObj.success = true;
                 returnObj.successMessage = "";
+
                 return returnObj;
             }
             catch (Exception ex) { 

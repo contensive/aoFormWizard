@@ -23,6 +23,9 @@
                 <div class="card rounded-3">
                         <div class="card-body px-5">
                             <div>
+                                <input type="hidden" id="currentSortBy" value="{{currentSortBy}}">
+                                <input type="hidden" id="currentSubmissionDisplayed" value="{{currentSubmissionDisplayed}}">
+
                                 <h2 class="border-bottom pb-3 pt-5 mb-4">Submitted 2025 Scholarship Applications </h2>
                                 <div class=" table-responsive">
                                     <input type="hidden" value="{{scoreWidgetId}}" id="scoreWidgetId">                                
@@ -30,11 +33,11 @@
                                         <thead class="table-secondary">
                                         <tr>
                                             <th scope="col">First Name</th>
-                                            <th scope="col">Last Name</th>
+                                            <th onclick="sortTable('{{lastNameSortBy}}')" scope="col">Last Name {{{lastNameSortbyString}}}</th>
                                             <th scope="col">Email</th>
                                             <th scope="col">Date Submitted</th>
                                             <th scope="col">Score</th>
-                                            <th scope="col">Average score</th>
+                                            <th onclick="sortTable('{{averageScoreSortBy}}')" scope="col">Average score {{{averageScoreSortbyString}}}</th>
                                             <th scope="col"># of scores submitted</th>
                                         </tr>
                                         </thead>
@@ -286,8 +289,43 @@
                 var scoreWidgetId = document.getElementById("scoreWidgetId").value;
                 console.log("submissionId: " + submissionId + " scoreWidgetId: " + scoreWidgetId);
                 var formData = new FormData();
+                var sortBy = document.getElementById("currentSortBy").value;
+
                 formData.append('submissionId', submissionId);
                 formData.append('scoreWidgetId', scoreWidgetId);
+                formData.append('sortBy', sortBy);
+
+                $.ajax({
+                    url: "/GetApplicationInfo",
+                    type: "POST",
+                    data: formData,
+                    contentType: false,
+                    processData: false
+                }).done(function(response) {
+                    var obj = JSON.parse(response);
+                    console.log(obj);
+                    if (obj.success) {           
+                    //alert(obj.successMessage);
+                    document.getElementById("sectionReplace").innerHTML = obj.html;
+                    //location.reload();
+                    }else{
+                    alert(obj.errorMessage);
+                    //return false;
+                    }
+                }).fail(function(data) {
+                    alert("Error. The server couldn't be reached");
+                });
+                    
+        }
+
+        function sortTable(sortBy) {
+                var scoreWidgetId = document.getElementById("scoreWidgetId").value;
+                console.log("sortBy: " + sortBy + " scoreWidgetId: " + scoreWidgetId);
+                var submissionId = document.getElementById("currentSubmissionDisplayed").value;
+                var formData = new FormData();
+                formData.append('sortBy', sortBy);
+                formData.append('scoreWidgetId', scoreWidgetId);
+                formData.append('submissionId', submissionId);
 
                 $.ajax({
                     url: "/GetApplicationInfo",
