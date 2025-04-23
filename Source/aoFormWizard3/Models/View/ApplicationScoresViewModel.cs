@@ -31,7 +31,6 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
         public class ApplicationScoresTableRow {
             public List<ModalDataRow> submittedApplicationsDetailsRows { get; set; }
             public string scorerFirstName { get; set; }
-            public string scorerMiddleInitial { get; set; }
             public string scorerLastName { get; set; }
             public string scorerEmail { get; set; }
             public string dateSubmitted { get; set; }
@@ -58,7 +57,6 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
 
         public class ApplicationData {
             public string firstName { get; set; }
-            public string middleInitial { get; set; }
             public string lastName { get; set; }
             public string resident { get; set; }
             public string residentResponse { get; set; }
@@ -144,8 +142,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
 
                         var applicationScoresData = ApplicationScoresModel.createList<ApplicationScoresModel>(cp, "");
                         string applicationSubmittedInfo = $"select firstname as 'firstname', lastname as 'lastname', " +
-                                                          $"middleInitial as 'middleInitial', " +
-                                                          $"email as 'email' from ccFormResponse " +
+                                                          $" email as 'email' from ccFormResponse " +
                                                           $"left join ccMembers on ccFormResponse.memberid = ccMembers.id " +
                                                           $"where ccFormResponse.memberid = {application.memberId}" +
                                                           $" and ccFormResponse.formWidget = {settings.formid}";
@@ -153,12 +150,10 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                             if (cs.OpenSQL(applicationSubmittedInfo)) {
                                 string firstName = cs.GetText("firstname");
                                 string lastName = cs.GetText("lastname");
-                                string middleName = cs.GetText("middleInitial");
                                 string email = cs.GetText("email");
                                 hint = 7;
                                 newRow.scorerFirstName = firstName;
                                 newRow.scorerLastName = lastName;
-                                newRow.scorerMiddleInitial = middleName;
                                 newRow.scorerEmail = email;
                                 newRow.submissionId = application.id;
                                 hint = 8;
@@ -246,7 +241,6 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
 
                         var applicationScoresData = ApplicationScoresModel.createList<ApplicationScoresModel>(cp, "");
                         string applicationSubmittedInfo = $"select firstname as 'firstname', lastname as 'lastname', " +
-                                                          $"middleInitial as 'middleInitial', " +
                                                           $"email as 'email' from ccFormResponse " +
                                                           $"left join ccMembers on ccFormResponse.memberid = ccMembers.id " +
                                                           $"where ccFormResponse.memberid = {application.memberId}";
@@ -254,12 +248,10 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                             if (cs.OpenSQL(applicationSubmittedInfo)) {
                                 string firstName = cs.GetText("firstname");
                                 string lastName = cs.GetText("lastname");
-                                string middleName = cs.GetText("middleInitial");
                                 string email = cs.GetText("email");
                                 hint = 7;
                                 newRow.scorerFirstName = firstName;
                                 newRow.scorerLastName = lastName;
-                                newRow.scorerMiddleInitial = middleName;
                                 newRow.scorerEmail = email;
                                 newRow.submissionId = application.id;
                                 hint = 8;
