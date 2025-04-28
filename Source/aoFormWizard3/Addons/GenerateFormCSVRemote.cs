@@ -57,7 +57,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons {
                 }
                 form.body = formBody.ToString();
                 form.addFormButton(buttonUpdateForm);
-                return form.getHtml(cp);
+                return form.getHtml();
             }
             catch (Exception ex) {
                 cp.Site.ErrorReport(ex);
