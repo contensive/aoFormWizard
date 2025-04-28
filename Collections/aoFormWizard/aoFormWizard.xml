@@ -50,6 +50,12 @@
 		<IncludeAddon name="JQuery" guid="{9C882078-0DAC-48E3-AD4B-CF2AA230DF80}"/>
 		<IncludeAddon name="jQuery BlockUI" guid="{F6087787-E01E-4E09-AC02-502D0387E048}"/>
 	</Addon>
+	<Addon name="Generate Form CSV" guid="{8C838E47-E38F-4001-84BD-6CC83883ABEB}" type="Tool">
+		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Addons.GenerateFormCSVRemote]]></DotNetClass>
+		<Admin>Yes</Admin>
+		<BlockEditTools>Yes</BlockEditTools>
+		<RemoteMethod>yes</RemoteMethod>
+	</Addon>
 	<Addon name="Application Scoring Widget" guid="{7D3BD03E-5A92-4228-8278-3115CF6C7B1E}" type="Add-on">
 		<htmldocument>Yes</htmldocument>
     	<AliasList>Application Scoring</AliasList>
@@ -100,6 +106,7 @@
 		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Views.FormWidget]]></DotNetClass>
 		<RemoteMethod>yes</RemoteMethod>
 	</Addon>
+	
 	<Addon name="GetScoreDetailsModalData" guid="{20724B70-0427-4A20-9DBB-B46666F88F80}" type="Add-on">
 		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Addons.GetScoreDetailsModalData]]></DotNetClass>
 		<RemoteMethod>yes</RemoteMethod>
