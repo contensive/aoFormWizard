@@ -519,9 +519,7 @@
 	</CDef>
 	
 	<CDef Name="People" guid="{C1985DC4-C985-4406-9934-61A911543454}">
-		<Field Name="middleInitial" EditTab="" active="True" AdminOnly="False" Authorable="True" Caption="Middle Initial" DeveloperOnly="False" EditSortPriority="101" FieldType="Text" HTMLContent="False" IndexColumn="0" IndexSortDirection="" IndexSortOrder="0" IndexWidth="" RedirectID="" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="">
-			<HelpDefault><![CDATA[The middle initial of this user.]]></HelpDefault>
-		</Field>
+		
 	</CDef>
 	
 	<ImportCollection name="JQuery">{A435BF70-041B-43D1-8A8D-5D9D59A7FCD0}</ImportCollection>

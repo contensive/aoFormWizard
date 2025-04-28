@@ -3,6 +3,7 @@ using System.Data;
 using Contensive.Addon.aoFormWizard3.Models.Db;
 using Contensive.BaseClasses;
 using Contensive.Models.Db;
+using HtmlAgilityPack;
 using Microsoft.VisualBasic.CompilerServices;
 
 namespace Contensive.Addon.aoFormWizard3.Views {
@@ -34,14 +35,15 @@ namespace Contensive.Addon.aoFormWizard3.Views {
                 if (buildVersion < 3) {
                     //
                     // -- change question type from string to integer
-                    CP.Db.ExecuteNonQuery("update ccFormFields set inputtypeid=1 where inputtype='TEXT'");
-                    CP.Db.ExecuteNonQuery("update ccFormFields set inputtypeid=2 where inputtype='TEXTAREA'");
-                    CP.Db.ExecuteNonQuery("update ccFormFields set inputtypeid=3 where inputtype='CHECKBOX'");
-                    CP.Db.ExecuteNonQuery("update ccFormFields set inputtypeid=4 where inputtype='RADIO'");
-                    CP.Db.ExecuteNonQuery("update ccFormFields set inputtypeid=5 where inputtype='FILE'");
-                    CP.Db.ExecuteNonQuery("update ccFormFields set inputtypeid=6 where inputtype='SELECT'");
+                    if(CP.Db.IsTable("ccFormFields")) {
+                        CP.Db.ExecuteNonQuery("update ccFormFields set inputtypeid=1 where inputtype='TEXT'");
+                        CP.Db.ExecuteNonQuery("update ccFormFields set inputtypeid=2 where inputtype='TEXTAREA'");
+                        CP.Db.ExecuteNonQuery("update ccFormFields set inputtypeid=3 where inputtype='CHECKBOX'");
+                        CP.Db.ExecuteNonQuery("update ccFormFields set inputtypeid=4 where inputtype='RADIO'");
+                        CP.Db.ExecuteNonQuery("update ccFormFields set inputtypeid=5 where inputtype='FILE'");
+                        CP.Db.ExecuteNonQuery("update ccFormFields set inputtypeid=6 where inputtype='SELECT'");
+                    }
                 }
-
                 if(buildVersion < 4) {
                     //
                     // xml has updated table names so the new ones must be dropped

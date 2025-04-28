@@ -19,19 +19,24 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
         public string scoringInstructions { get; set; }
         public string scoringInstructionsTopOfApplication { get; set; }
         public new static ApplicationScoreWidgetsModel createOrAddSettings(CPBaseClass cp, string settingsGuid, string recordNameOrSuffix) {
-            // -- create object from existing record
-            var result = create<ApplicationScoreWidgetsModel>(cp, settingsGuid);
-            if (result is not null) {
+            try {
+                // -- create object from existing record
+                var result = create<ApplicationScoreWidgetsModel>(cp, settingsGuid);
+                if (result is not null) {
+                    return result;
+                }
+                // 
+                // -- create default formset
+                result = addDefault<ApplicationScoreWidgetsModel>(cp);
+                result.name = "Application Scoring Widget " + result.id;
+                result.ccguid = settingsGuid;
+                result.formid = FormWidgetsModel.createFirstOfList<FormWidgetsModel>(cp, "", "dateadded desc")?.id ?? 0;
+                result.save(cp);
                 return result;
+            } catch (Exception ex) {
+                cp.Site.ErrorReport(ex);
+                throw;
             }
-            // 
-            // -- create default formset
-            result = addDefault<ApplicationScoreWidgetsModel>(cp);
-            result.name = "Application Scoring Widget " + result.id;            
-            result.ccguid = settingsGuid;
-            result.formid = FormWidgetsModel.createFirstOfList<FormWidgetsModel>(cp, "", "dateadded desc").id;
-            result.save(cp);
-            return result;
         }
     }
 }
