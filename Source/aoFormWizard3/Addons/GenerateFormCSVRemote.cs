@@ -26,7 +26,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons {
                 List<Dictionary<string, string>> csvRows = new List<Dictionary<string, string>>();
 
                 if (formWidgetId > 0) {
-                    var responses = DbBaseModel.createList<FormResponseModel>(cp, $"formwidget = {formWidgetId}");
+                    var responses = DbBaseModel.createList<FormResponseModel>(cp, $"formwidget = {formWidgetId} and datesubmitted is not null");
                     foreach (var response in responses) {
                         FormResponseDataModel newRow = null;
                         if (!string.IsNullOrEmpty(response.formResponseData)) {
@@ -44,8 +44,9 @@ namespace Contensive.Addon.aoFormWizard3.Addons {
                                     else {
                                         answer = item.Value.textAnswer;
                                     }
-                                        
-                                    questionAnswers.Add(item.Value.question, answer);
+                                    if (!questionAnswers.ContainsKey(item.Value.question)) {
+                                        questionAnswers.Add(item.Value.question, answer);
+                                    }
                                 }
                             }
                             csvRows.Add(questionAnswers);
@@ -93,7 +94,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons {
                 var formWidgetsIds = formWidgetsList.Select(x => x.id.ToString()).ToList();
                 formBody.Append(cp.Html5.H4("Select form"));
                 
-                formBody.Append(cp.Html5.Div(cp.AdminUI.GetLookupListEditor("formWidgetId", formWidgetsIds, 0, "inviteUsersAddToGroup", false, false)));
+                formBody.Append(cp.Html5.Div(cp.AdminUI.GetLookupContentEditor("formWidgetId", "form widgets", 0, "formWidgetList", false, false)));
                 if (formWidgetId > 0) {
                     formBody.Append("<b>" + cp.Html5.A(buttonDownloadCSV, new CPBase.BaseModels.HtmlAttributesA { href = cp.Http.CdnFilePathPrefix + fileName, download = fileName }));
                 }
