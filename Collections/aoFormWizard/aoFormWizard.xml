@@ -521,13 +521,7 @@
 	<CDef Name="People" guid="{C1985DC4-C985-4406-9934-61A911543454}">
 		
 	</CDef>
-	<data>
-		<record content="portals" guid="{D5B3AF11-0AD2-4E4B-B39C-81953591B673}" name="Forms">
-			<field name="active">True</field>
-			<field name="defaultconfigjson"></field>
-			<field name="defaultfeatureid"></field>
-			<field name="sortorder"></field>
-		</record>
+	<data>		
 		<record content="portal features" guid="{47734771-F400-45D2-9B5A-E76A60B3EECA}" name="Application Scoring">
 			<field name="active">True</field>
 			<field name="addonid">{7D3BD03E-5A92-4228-8278-3115CF6C7B1E}</field>
