@@ -552,6 +552,19 @@
 		-->
 	</data>
 	
+	<record content="Portals" guid="{D5B3AF11-0AD2-4E4B-B39C-81953591B673}" name="Forms">
+			<field name="name"><![CDATA[Forms]]></field>
+			<field name="active">True</field>
+			<field name="sortorder"></field>
+			<field name="createkey">0</field>
+			<field name="ccguid"><![CDATA[{D5B3AF11-0AD2-4E4B-B39C-81953591B673}]]></field>
+			<field name="defaultconfigjson"></field>
+			<field name="defaultfeatureid"> </field>
+			<field name="portallinks" />
+			<field name="collectionid">{b5d1fe5b-71ec-403d-90e8-01ae7f8e18ad}</field>
+			<field Name="icon">dashboardIcons\form.svg</field>
+	</record>
+	
 	<ImportCollection name="JQuery">{A435BF70-041B-43D1-8A8D-5D9D59A7FCD0}</ImportCollection>
 	<Resource name="uiFormWizard.zip" type="files" path="formwizard" />
 </Collection>
