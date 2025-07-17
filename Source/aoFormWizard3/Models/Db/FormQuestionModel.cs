@@ -3,7 +3,7 @@ using Contensive.Models.Db;
 using System.Collections.Generic;
 
 namespace Contensive.Addon.aoFormWizard3.Models.Db {
-    public class FormQuestionsModel : DbBaseModel {
+    public class FormQuestionModel : DbBaseModel {
         public static DbBaseTableMetadataModel tableMetadata { get; private set; } = new DbBaseTableMetadataModel("Form Questions", "ccFormQuestions", "default", false);
         // 
         // ====================================================================================================
@@ -13,6 +13,9 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
         public string headline { get; set; }
         public string description { get; set; }
         public int contentfieldid { get; set; }
+        /// <summary>
+        /// should be formPageId
+        /// </summary>
         public int formid { get; set; }
         ///// <summary>
         ///// Field type, string, can be "checkbox", "radio", "file", "text","textarea","select"
@@ -65,8 +68,8 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
         /// <param name="cp"></param>
         /// <param name="pageId"></param>
         /// <returns></returns>
-        public static List<FormQuestionsModel> getQuestionList(CPBaseClass cp, int pageId) {
-            return DbBaseModel.createList<FormQuestionsModel>(cp, $"(formid={pageId})", "sortorder,id");
+        public static List<FormQuestionModel> getQuestionList(CPBaseClass cp, int pageId) {
+            return DbBaseModel.createList<FormQuestionModel>(cp, $"(formid={pageId})", "sortorder,id");
         }
 
     }

@@ -22,6 +22,9 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
         public string formResponseData { get; set; }
         public int visitid { get; set; }
         public int memberId { get; set; }
+        /// <summary>
+        /// should be formWidgetId
+        /// </summary>
         public int formWidget { get; set; }
         public DateTime dateSubmitted { get; set; }
     }

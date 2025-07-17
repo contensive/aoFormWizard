@@ -102,7 +102,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 viewModel.currentSubmissionDisplayed = 0;
                 viewModel.lastNameSortbyString = "<i class=\"fa-solid fa-sort\"></i>";
                 viewModel.averageScoreSortbyString = "<i class=\"fa-solid fa-sort\"></i>";
-                var applicationFormModel = DbBaseModel.createFirstOfList<FormWidgetsModel>(cp, "", "dateadded desc");
+                var applicationFormModel = DbBaseModel.createFirstOfList<FormWidgetModel>(cp, "", "dateadded desc");
                 /*
                 if (applicationFormModel != null) {
                     var currentResponse = FormResponseModel.createFirstOfList<FormResponseModel>(cp, $"formWidget = {settings.formid}", "id desc");
@@ -200,7 +200,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 viewModel.currentSortBy = sortBy;
                 viewModel.currentSubmissionDisplayed = submissionId;
                 
-                var applicationFormModel = DbBaseModel.createFirstOfList<FormWidgetsModel>(cp, $"id = {settings.formid}", "dateadded desc");
+                var applicationFormModel = DbBaseModel.createFirstOfList<FormWidgetModel>(cp, $"id = {settings.formid}", "dateadded desc");
                 if (applicationFormModel != null) {
                     cp.Log.Error("applicationFormModel != null submissionId: " + submissionId);
                     var currentResponse = FormResponseModel.create<FormResponseModel>(cp, submissionId);

@@ -30,7 +30,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
                 result = addDefault<ApplicationScoreWidgetsModel>(cp);
                 result.name = "Application Scoring Widget " + result.id;
                 result.ccguid = settingsGuid;
-                result.formid = FormWidgetsModel.createFirstOfList<FormWidgetsModel>(cp, "", "dateadded desc")?.id ?? 0;
+                result.formid = FormWidgetModel.createFirstOfList<FormWidgetModel>(cp, "", "dateadded desc")?.id ?? 0;
                 result.save(cp);
                 return result;
             } catch (Exception ex) {

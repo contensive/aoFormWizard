@@ -13,7 +13,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Contensive.Addon.aoFormWizard3.Addons {
-    public class GenerateFormCSVRemote : AddonBaseClass {
+    public class ExportFormDataTool : AddonBaseClass {
         private const string buttonDownloadCSV = "Download CSV";
         private const string buttonUpdateForm = "Generate CSV";
 
@@ -84,13 +84,13 @@ namespace Contensive.Addon.aoFormWizard3.Addons {
                     }
                 }
                 
-                form.title = "Generate form CSV tool";
-                form.description = "This form creates a csv file from the responses of a form";
+                form.title = "Export Form Data Tool";
+                form.description = "This form exoorts the responses from forms to csv file.";
                 form.isOuterContainer = true;
                 form.includeForm = true;
                 StringBuilder formBody = new();
 
-                var formWidgetsList = FormWidgetsModel.createList<FormWidgetsModel>(cp, "", "id desc");
+                var formWidgetsList = FormWidgetModel.createList<FormWidgetModel>(cp, "", "id desc");
                 var formWidgetsIds = formWidgetsList.Select(x => x.id.ToString()).ToList();
                 formBody.Append(cp.Html5.H4("Select form"));
                 

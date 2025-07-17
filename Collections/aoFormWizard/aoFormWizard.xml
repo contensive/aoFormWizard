@@ -2,9 +2,15 @@
 <Collection name="Form Wizard" guid="{B5D1FE5B-71EC-403D-90E8-01AE7F8E18AD}" system="No" updatable="Yes" blockNavigatorNode="No" onInstallAddonGuid="{B1F99A92-DD9C-4C64-9A13-6415EC0975F1}">
 	<HelpLink></HelpLink>
 	<Help></Help>
+	<!--
+		install
+	-->
 	<Addon name="Form Wizard Install" guid="{B1F99A92-DD9C-4C64-9A13-6415EC0975F1}" type="Add-on">
 		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Views.OnInstallClass]]></DotNetClass>
 	</Addon>
+	<!--
+		form widget
+	-->
 	<Addon name="Form Widget" guid="{8284FA0C-6C9D-43E1-9E57-8E9DD35D2DCC}" type="Add-on">
 		<htmldocument>Yes</htmldocument>
     	<AliasList>Dynamic Form,Form Widget</AliasList>
@@ -50,58 +56,192 @@
 		<IncludeAddon name="JQuery" guid="{9C882078-0DAC-48E3-AD4B-CF2AA230DF80}"/>
 		<IncludeAddon name="jQuery BlockUI" guid="{F6087787-E01E-4E09-AC02-502D0387E048}"/>
 	</Addon>
-	<Addon name="Generate Form CSV" guid="{8C838E47-E38F-4001-84BD-6CC83883ABEB}" type="Tool">
-		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Addons.GenerateFormCSVRemote]]></DotNetClass>
+	<!--
+		create test data, non-portal tool
+	-->
+	<Addon name="Create Form Test Data" guid="{5BBDCA38-D992-48D4-87DE-E3B2C125D786}" type="Tool">
+		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Addons.CreateTestDataTool]]></DotNetClass>
 		<Admin>Yes</Admin>
-		<BlockEditTools>Yes</BlockEditTools>
-		<RemoteMethod>yes</RemoteMethod>
 	</Addon>
+	<!--
+		portal
+	-->
+	<Data>
+		<Record content="Portals" guid="{D5B3AF11-0AD2-4E4B-B39C-81953591B673}" name="Forms">
+			<field name="defaultfeatureid"> </field>
+			<field name="collectionid">{b5d1fe5b-71ec-403d-90e8-01ae7f8e18ad}</field>
+			<field Name="icon">formwizard\dashboardIcons\form.svg</field>
+		</Record>
+	</Data>
+	<!-- 
+		Tools:
+	-->
+	<Data>
+		<Record content="portal features" guid="{db62c2b2-720c-4c27-852a-bbd4f3887baa}" name="Form-Tools">
+			<field name="portalId">{D5B3AF11-0AD2-4E4B-B39C-81953591B673}</field>
+			<field name="parentfeatureid"></field>
+			<field name="addonid"></field>
+			<field name="datacontentid"></field>
+			<field name="heading">Tools</field>
+			<field name="sortorder">Tools</field>
+		</Record>
+	</Data>
+	<!-- 
+		Application Scoring Tool
+	-->
+	<Data>	
+		<Record content="portal features" guid="{47734771-F400-45D2-9B5A-E76A60B3EECA}" name="Form-Tools,Application Scoring">
+			<field name="portalid">{D5B3AF11-0AD2-4E4B-B39C-81953591B673}</field>
+			<field name="parentfeatureid">{db62c2b2-720c-4c27-852a-bbd4f3887baa}</field>
+			<field name="addonid">{7D3BD03E-5A92-4228-8278-3115CF6C7B1E}</field>
+			<field name="datacontentid"></field>
+			<field name="heading">Application Scoring</field>
+			<field name="sortorder">Application Scoring</field>
+		</Record>
+	</Data>	
 	<Addon name="Application Scoring Widget" guid="{7D3BD03E-5A92-4228-8278-3115CF6C7B1E}" type="Add-on">
 		<htmldocument>Yes</htmldocument>
     	<AliasList>Application Scoring</AliasList>
-		<Copy></Copy>
-		<CopyText></CopyText>
-		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Addons.ApplicationScoresWidget]]></DotNetClass>
-		<ArgumentList><![CDATA[ ]]></ArgumentList>
-		<AsAjax>No</AsAjax>
-		<Filter>No</Filter>
-		<Help></Help>
-		<HelpLink></HelpLink>
-		<Icon Link="" width="0" height="0" sprites="0" />
-		<InIframe>No</InIframe>
+		<DotNetClass>Contensive.Addon.aoFormWizard3.Addons.ApplicationScoresWidget</DotNetClass>
 		<BlockEditTools>Yes</BlockEditTools>
-		<FormXML></FormXML>
-		<IsInline>No</IsInline>
-		<JavascriptInHead></JavascriptInHead>
-		<javascriptForceHead>No</javascriptForceHead>
-		<JSHeadScriptSrc></JSHeadScriptSrc>
-		<!-- deprecated --><JSBodyScriptSrc></JSBodyScriptSrc>
-		<!-- deprecated --><JavascriptBodyEnd></JavascriptBodyEnd>
-		<!-- deprecated --><JavascriptOnLoad></JavascriptOnLoad>
 		<Content>Yes</Content>
-		<Template>No</Template>
-		<Email>No</Email>
 		<Admin>Yes</Admin>
 		<Category>Applications.Advanced Forms</Category>
-		<OnPageEndEvent>No</OnPageEndEvent>
-		<OnPageStartEvent>No</OnPageStartEvent>
-		<OnBodyStart>No</OnBodyStart>
-		<OnBodyEnd>No</OnBodyEnd>
-		<RemoteMethod>No</RemoteMethod>
-		<ProcessRunOnce>No</ProcessRunOnce>
-		<ProcessInterval>0</ProcessInterval>
-		<MetaDescription></MetaDescription>
-		<OtherHeadTags></OtherHeadTags>
-		<PageTitle></PageTitle>
-		<RemoteAssetLink></RemoteAssetLink>
-		<Styles></Styles>
-		<styleslinkhref></styleslinkhref>
-		<Scripting Language="VBScript" EntryPoint="" Timeout="0"/>
 		<instanceSettingPrimaryContentId><![CDATA[Application Score Widgets]]></instanceSettingPrimaryContentId>
 		<IncludeAddon name="JQuery" guid="{9C882078-0DAC-48E3-AD4B-CF2AA230DF80}"/>
 		<IncludeAddon name="jQuery BlockUI" guid="{F6087787-E01E-4E09-AC02-502D0387E048}"/>
 	</Addon>
-	
+	<!-- 
+		Export Form Data Tool
+	-->
+	<Data>	
+		<Record content="portal features" guid="{a9836451-6813-409c-be36-b4ce1cad8deb}" name="Form-Tools,Export Form Data">
+			<field name="portalid">{D5B3AF11-0AD2-4E4B-B39C-81953591B673}</field>
+			<field name="parentfeatureid">{db62c2b2-720c-4c27-852a-bbd4f3887baa}</field>
+			<field name="addonid">{8C838E47-E38F-4001-84BD-6CC83883ABEB}</field>
+			<field name="datacontentid"></field>
+			<field name="heading">Export Form Data</field>
+			<field name="sortorder">Export Form Data</field>
+		</Record>
+	</Data>
+	<Addon name="Export Form Data" guid="{8C838E47-E38F-4001-84BD-6CC83883ABEB}" type="Tool">
+		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Addons.ExportFormDataTool]]></DotNetClass>
+		<Admin>Yes</Admin>
+		<RemoteMethod>yes</RemoteMethod>
+	</Addon>
+	<!-- 
+		Sample Form Widget
+	-->
+	<Data>
+		<Record content="portal features" guid="{2D0712E9-8052-4A16-BF76-E33782B5F377}" name="Form,Sample Form Widget">
+			<field name="portalId">{D5B3AF11-0AD2-4E4B-B39C-81953591B673}</field>
+			<field name="parentFeatureId"></field>
+			<field name="addonId">{996B7069-1F0B-453E-A246-DAF08D869B95}</field>
+			<field name="dataContentId"></field>
+			<field name="Heading"></field>
+			<field name="sortorder"></field>
+			<!--  -->
+			<field name="active">false</field>
+		</Record>	
+	</Data>
+	<Addon Name="Sample Form Pie Chart Widget" Guid="{996B7069-1F0B-453E-A246-DAF08D869B95}" Type="Add-on">
+		<DashboardWidget>Yes</DashboardWidget>
+		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets.SampleFormWidget]]></DotNetClass>
+	</Addon>
+
+	<!-- 
+		Form Widget List
+	-->
+	<Data>
+		<Record content="portal features" guid="{F043F3E1-1F5D-4D6E-A2D9-45124EE66D72}" name="Forms">
+			<field name="portalId">{D5B3AF11-0AD2-4E4B-B39C-81953591B673}</field>
+			<field name="parentFeatureId"></field>
+			<field name="addonId">{F2E3D417-8C2B-49FF-A568-57A04414A8A1}</field>
+			<field name="dataContentId"></field>
+			<field name="Heading"><![CDATA[Forms]]></field>
+			<field name="SortOrder"><![CDATA[010]]></field>
+		</Record>
+	</Data>
+	<Addon name="Form List" guid="{F2E3D417-8C2B-49FF-A568-57A04414A8A1}" type="Add-on">
+		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets.FormWidgetListAddon]]></DotNetClass>
+	</Addon>
+
+	<!-- 
+		Form Widget Edit
+	-->
+	<Data>
+		<Record content="portal features" guid="{D527F5BF-DF35-49F5-B03F-E8F6BC65A454}" name="Form Widget Edit">
+			<field name="portalId">{D5B3AF11-0AD2-4E4B-B39C-81953591B673}</field>
+			<field name="parentFeatureId">{F043F3E1-1F5D-4D6E-A2D9-45124EE66D72}</field>
+			<field name="addonId">{3F37844D-8C72-4C77-924E-BAD55734ACCB}</field>
+			<field name="dataContentId"></field>
+			<field name="Heading"><![CDATA[Form Details]]></field>
+			<field name="SortOrder"><![CDATA[010]]></field>
+		</Record>
+	</Data>
+	<Addon name="Form Widget Edit" guid="{3F37844D-8C72-4C77-924E-BAD55734ACCB}" type="Add-on">
+		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets.FormWidgetEditAddon]]></DotNetClass>
+	</Addon>
+
+	<!-- 
+		Form Page List
+	-->
+	<Data>
+		<Record content="portal features" guid="{66DD89C8-9AFB-43C7-9A67-4092E4F9819B}" name="Form Pages">
+			<field name="portalId">{D5B3AF11-0AD2-4E4B-B39C-81953591B673}</field>
+			<field name="parentFeatureId">{F043F3E1-1F5D-4D6E-A2D9-45124EE66D72}</field>
+			<field name="addonId">{17319699-1BDB-420D-8B17-A21B04198321}</field>
+			<field name="dataContentId"></field>
+			<field name="Heading"><![CDATA[Form Pages]]></field>
+			<field name="SortOrder"><![CDATA[020]]></field>
+		</Record>
+	</Data>
+	<Addon name="Form Page List" guid="{17319699-1BDB-420D-8B17-A21B04198321}" type="Add-on">
+		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets.FormPageListAddon]]></DotNetClass>
+	</Addon>
+
+	<!-- 
+		Form Page Edit
+	-->
+	<Data>
+		<Record content="portal features" guid="{0358AA13-2C29-4F82-B2DF-78D89E7DAE6A}" name="Form Page Edit">
+			<field name="portalId">{D5B3AF11-0AD2-4E4B-B39C-81953591B673}</field>
+			<field name="parentFeatureId">{66DD89C8-9AFB-43C7-9A67-4092E4F9819B}</field>
+			<field name="addonId">{4C25B351-C03B-4235-B3CA-094CDDC70430}</field>
+			<field name="dataContentId"></field>
+			<field name="Heading"><![CDATA[Form Page Details]]></field>
+			<field name="SortOrder"><![CDATA[020]]></field>
+		</Record>
+	</Data>
+	<Addon name="Form Page Edit" guid="{4C25B351-C03B-4235-B3CA-094CDDC70430}" type="Add-on">
+		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets.FormPageEditAddon]]></DotNetClass>
+	</Addon>
+
+	<!-- 
+		Form Response List
+	-->
+	<Data>
+		<Record content="portal features" guid="{CBBB730E-1390-471B-A311-F49E6C12E35A}" name="Responses">
+			<field name="portalId">{D5B3AF11-0AD2-4E4B-B39C-81953591B673}</field>
+			<field name="parentFeatureId"></field>
+			<field name="addonId">{909559CA-59D3-4A1B-9915-2D69297AFE2D}</field>
+			<field name="dataContentId"></field>
+			<field name="Heading"><![CDATA[Responses]]></field>
+			<field name="SortOrder"><![CDATA[020]]></field>
+		</Record>
+	</Data>
+	<Addon name="Form Response List" guid="{909559CA-59D3-4A1B-9915-2D69297AFE2D}" type="Add-on">
+		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets.FormResponseListAddon]]></DotNetClass>
+	</Addon>
+
+
+
+
+
+
+	<!-- 
+		Addons
+	-->	
 	<Addon name="FormWidgetSubmit" guid="{CD4427D8-11DD-4E65-ACF9-1C2928B281F0}" type="Add-on">
 		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Views.FormWidget]]></DotNetClass>
 		<RemoteMethod>yes</RemoteMethod>
@@ -518,47 +658,9 @@
 		</Field>
 	</CDef>
 	
-	<CDef Name="People" guid="{C1985DC4-C985-4406-9934-61A911543454}">
-		
+	<CDef Name="People" guid="{C1985DC4-C985-4406-9934-61A911543454}">		
 	</CDef>
-	<data>	
 
-		<record content="Portals" guid="{D5B3AF11-0AD2-4E4B-B39C-81953591B673}" name="Forms">
-			<field name="name"><![CDATA[Forms]]></field>
-			<field name="active">True</field>
-			<field name="sortorder"></field>
-			<field name="createkey">0</field>
-			<field name="ccguid"><![CDATA[{D5B3AF11-0AD2-4E4B-B39C-81953591B673}]]></field>
-			<field name="defaultconfigjson"></field>
-			<field name="defaultfeatureid"> </field>
-			<field name="portallinks" />
-			<field name="collectionid">{b5d1fe5b-71ec-403d-90e8-01ae7f8e18ad}</field>
-			<field Name="icon">formwizard\dashboardIcons\form.svg</field>
-	</record>
-	
-		<record content="portal features" guid="{47734771-F400-45D2-9B5A-E76A60B3EECA}" name="Application Scoring">
-			<field name="active">True</field>
-			<field name="addonid">{7D3BD03E-5A92-4228-8278-3115CF6C7B1E}</field>
-			<field name="addpadding">False</field>
-			<field name="datacontentid"></field>
-			<field name="heading"><![CDATA[Application Scoring]]></field>
-			<field name="parentfeatureid"></field>
-			<field name="portalid">{D5B3AF11-0AD2-4E4B-B39C-81953591B673}</field>
-			<field name="sortorder"></field>
-		</record>
-		<!--
-		<record content="portal features" guid="xxxxxxxxx" name="xxxxxxxxxx">
-			<field name="active">True</field>
-			<field name="addonid">xxxxxxxxxx</field>
-			<field name="addpadding">False</field>
-			<field name="datacontentid">xxxxxxxxxx</field>
-			<field name="heading"><![CDATA[xxxxxxxxxx]]></field>
-			<field name="parentfeatureid"></field>
-			<field name="portalid">{D5B3AF11-0AD2-4E4B-B39C-81953591B673}</field>
-			<field name="sortorder"></field>
-		</record>
-		-->
-	</data>
 	
 	<ImportCollection name="JQuery">{A435BF70-041B-43D1-8A8D-5D9D59A7FCD0}</ImportCollection>
 	<Resource name="uiFormWizard.zip" type="files" path="formwizard" />

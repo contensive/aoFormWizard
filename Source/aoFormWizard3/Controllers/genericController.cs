@@ -5,7 +5,19 @@ using Microsoft.VisualBasic.CompilerServices;
 
 namespace Contensive.Addon.aoFormWizard3.Controllers {
     public sealed class GenericController {
-        private GenericController() {
+        // 
+        // ====================================================================================================
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sourcedate"></param>
+        /// <returns></returns>
+        internal static string encodeBlankShortDate(DateTime sourcedate) {
+            if (sourcedate >= DateTime.Parse("1900-01-01")) {
+                return sourcedate.ToShortDateString();
+            } else {
+                return "";
+            }
         }
         // 
         // ====================================================================================================

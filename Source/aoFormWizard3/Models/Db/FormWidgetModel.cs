@@ -4,7 +4,7 @@ using Contensive.DesignBlockBase.Models.Db;
 using Contensive.Models.Db;
 
 namespace Contensive.Addon.aoFormWizard3.Models.Db {
-    public class FormWidgetsModel : SettingsBaseModel {
+    public class FormWidgetModel : SettingsBaseModel {
         //
         public static DbBaseTableMetadataModel tableMetadata { get; private set; } = new DbBaseTableMetadataModel("Form Widgets", "ccFormWidgets", "default", false);        // <------ set set model Name and everywhere that matches this string
         // 
@@ -25,16 +25,16 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
         public bool allowRecaptcha { get; set; }
         // 
         // ====================================================================================================
-        public new static FormWidgetsModel createOrAddSettings(CPBaseClass cp, string settingsGuid, string recordNameOrSuffix) {
+        public new static FormWidgetModel createOrAddSettings(CPBaseClass cp, string settingsGuid, string recordNameOrSuffix) {
             // 
             // -- create object from existing record
-            var result = create<FormWidgetsModel>(cp, settingsGuid);
+            var result = create<FormWidgetModel>(cp, settingsGuid);
             if (result is not null) {
                 return result; 
             }
             // 
             // -- create default formset
-            result = addDefault<FormWidgetsModel>(cp);
+            result = addDefault<FormWidgetModel>(cp);
             result.name = "Dynamic Form " + result.id + " added to page " + cp.Doc.PageId + ", " + cp.Doc.PageName;
             result.addResetButton = false;
             result.resetButtonName = "Reset";
@@ -46,7 +46,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
             result.save(cp);
             // 
             // -- add form one
-            var formOne = addDefault<FormPagesModel>(cp);
+            var formOne = addDefault<FormPageModel>(cp);
             formOne.name = "Form #1 of " + result.name;
             formOne.formsetid = result.id;
             formOne.description = "<h2>Form 1: Sample Form Content</h2>" + "<p>This form was automatically created by the Form Design Block.</p>" + "<p>A Dynamic Form is a list of Form Fields that you create and configure. Users complete the form and submit responses.</p>";
@@ -55,12 +55,12 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
             formOne.save(cp);
             // 
             // -- form 1 field A
-            var formOneFieldA = DbBaseModel.addDefault<FormQuestionsModel>(cp);
+            var formOneFieldA = DbBaseModel.addDefault<FormQuestionModel>(cp);
             formOneFieldA.formid = formOne.id;
             formOneFieldA.caption = "Text Field Caption";
             formOneFieldA.description = "Text Field Description";
             formOneFieldA.headline = "";
-            formOneFieldA.inputTypeId = (int)FormQuestionsModel.inputTypeEnum.text;
+            formOneFieldA.inputTypeId = (int)FormQuestionModel.inputTypeEnum.text;
             formOneFieldA.name = "Text Field Name";
             formOneFieldA.optionList = "a,b,c,d,e,f,g";
             formOneFieldA.replacetext = "replace-text";
@@ -69,12 +69,12 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
             formOneFieldA.save(cp);
             // 
             // -- form 1 field B
-            var formOneFieldB = DbBaseModel.addDefault<FormQuestionsModel>(cp);
+            var formOneFieldB = DbBaseModel.addDefault<FormQuestionModel>(cp);
             formOneFieldB.formid = formOne.id;
             formOneFieldB.caption = "Checkbox Field Caption";
             formOneFieldB.description = "Checkbox Field Description";
             formOneFieldB.headline = "";
-            formOneFieldB.inputTypeId = (int)FormQuestionsModel.inputTypeEnum.checkbox;
+            formOneFieldB.inputTypeId = (int)FormQuestionModel.inputTypeEnum.checkbox;
             formOneFieldB.name = "Checkbox Field Name";
             formOneFieldB.optionList = "a,b,c,d,e,f,g";
             formOneFieldB.replacetext = "replace-text";
@@ -83,12 +83,12 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
             formOneFieldB.save(cp);
             // 
             // -- form 1 field C
-            var formOneFieldC = DbBaseModel.addDefault<FormQuestionsModel>(cp);
+            var formOneFieldC = DbBaseModel.addDefault<FormQuestionModel>(cp);
             formOneFieldC.formid = formOne.id;
             formOneFieldC.caption = "Radio Field Caption";
             formOneFieldC.description = "Radio Field Description";
             formOneFieldC.headline = "";
-            formOneFieldC.inputTypeId = (int)FormQuestionsModel.inputTypeEnum.radio;
+            formOneFieldC.inputTypeId = (int)FormQuestionModel.inputTypeEnum.radio;
             formOneFieldC.name = "Radio Field Name";
             formOneFieldC.optionList = "a,b,c,d,e,f,g";
             formOneFieldC.replacetext = "replace-text";
@@ -97,12 +97,12 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
             formOneFieldC.save(cp);
             // 
             // -- form 1 field D
-            var formOneFieldD = DbBaseModel.addDefault<FormQuestionsModel>(cp);
+            var formOneFieldD = DbBaseModel.addDefault<FormQuestionModel>(cp);
             formOneFieldD.formid = formOne.id;
             formOneFieldD.caption = "File Field Caption";
             formOneFieldD.description = "File Field Description";
             formOneFieldD.headline = "";
-            formOneFieldD.inputTypeId = (int)FormQuestionsModel.inputTypeEnum.file;
+            formOneFieldD.inputTypeId = (int)FormQuestionModel.inputTypeEnum.file;
             formOneFieldD.name = "File Field Name";
             formOneFieldD.optionList = "a,b,c,d,e,f,g";
             formOneFieldD.replacetext = "replace-text";
