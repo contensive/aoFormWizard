@@ -18,6 +18,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
         public int groupAllowedToScore { get; set; }
         public string scoringInstructions { get; set; }
         public string scoringInstructionsTopOfApplication { get; set; }
+        public string header { get; set; }
         public new static ApplicationScoreWidgetsModel createOrAddSettings(CPBaseClass cp, string settingsGuid, string recordNameOrSuffix) {
             try {
                 // -- create object from existing record

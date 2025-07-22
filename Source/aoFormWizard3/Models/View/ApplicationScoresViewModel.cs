@@ -27,6 +27,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
         public int currentSubmissionDisplayed { get; set; }
         public string lastNameSortbyString { get; set; }
         public string averageScoreSortbyString { get; set; }
+        public string header { get; set; }
 
         public class ApplicationScoresTableRow {
             public List<ModalDataRow> submittedApplicationsDetailsRows { get; set; }
@@ -95,6 +96,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 points.Reverse();
                 viewModel.scoresDropDownOptions = points;
                 viewModel.id = settings.id;
+                viewModel.header = settings.header;
                 viewModel.scoreWidgetId = settings.id;
                 viewModel.scoringInstructions = settings.scoringInstructions;
                 viewModel.scoringInstructionsTopOfApplication = settings.scoringInstructionsTopOfApplication;

@@ -591,6 +591,11 @@
 				<![CDATA[Instructions that appear at the top of the Application]]>
 			</HelpDefault>
 		</Field>
+		<Field Name="header" active="True" AdminOnly="False" Authorable="True" Caption="Header" DeveloperOnly="False" EditSortPriority="110" FieldType="Text" HTMLContent="False" IndexColumn="0" IndexSortDirection="" IndexSortOrder="99" IndexWidth="50" RedirectID="0" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
+			<HelpDefault>
+				<![CDATA[Text that appears at the top of the widget]]>
+			</HelpDefault>
+		</Field>
 		<!-- 
 			feature
 		-->
