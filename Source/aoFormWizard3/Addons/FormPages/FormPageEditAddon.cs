@@ -33,11 +33,17 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 // -- validate portal environment
                 if (!cp.AdminUI.EndpointContainsPortal()) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, guidPortalFeature, ""); }
                 // 
-                string errorMessage = "";
+                // -- cancel
                 var request = new RequestModel(cp);
+                if (request.button.Equals(Constants.ButtonCancel)) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormPageListAddon.guidPortalFeature); }
+                //
+                // -- form widget required, else redirect to form widget list
+                if (request.formWidgetId <= 0) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormWidgetListAddon.guidPortalFeature); }
+                // 
                 using (var app = new ApplicationModel(cp)) {
+                    string errorMessage = "";
                     processView(app, request, ref errorMessage);
-                    return getView(app, request);
+                    return getView(app, request, errorMessage);
                 }
             } catch (Exception ex) {
                 cp.Site.ErrorReport(ex);
@@ -47,22 +53,30 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
         // 
         // =====================================================================================
         //
-        public static string getView(ApplicationModel app, RequestModel request) {
+        public static string getView(ApplicationModel app, RequestModel request, string userErrorMessage) {
             CPBaseClass cp = app.cp;
             try {
+                //
+                // -- init builder
                 var layoutBuilder = cp.AdminUI.CreateLayoutBuilderNameValue();
                 //
-                FormPageModel record = DbBaseModel.create<FormPageModel>(cp, request.formPageId);
-                //
+                // -- get data
+                FormWidgetModel formWidget = DbBaseModel.create<FormWidgetModel>(cp, request.formWidgetId);
+                if (formWidget == null) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormWidgetListAddon.guidPortalFeature); }
+                FormPageModel formPage = DbBaseModel.create<FormPageModel>(cp, request.formPageId);
+                // 
+                // -- add rows
                 layoutBuilder.addRow();
                 layoutBuilder.rowName = "Name";
-                layoutBuilder.rowValue = cp.Html5.InputText(Constants.rnName, 255, record?.name ?? "", "form-control");
+                layoutBuilder.rowValue = cp.Html5.InputText(Constants.rnName, 255, formPage?.name ?? "", "form-control");
                 layoutBuilder.rowHelp = "The name for this form page used by administrators to manage the form. The user will not see this name.";
                 //
-                layoutBuilder.title = (record == null) ? "Add Form Page" : "Edit Form Page";
-                layoutBuilder.portalSubNavTitle = (record == null) ? "Add Form Page" : record.name;
+                // -- setup layout
+                layoutBuilder.title = (formPage == null) ? "Add Form Page" : "Edit Form Page";
+                layoutBuilder.portalSubNavTitle = (formPage == null ? "Add Form Page" : formPage.name) + $"<br>in form '{formWidget.name}'";
                 layoutBuilder.description = "A form page is one page of questions a user see when submitting a form online. A form can have one or more form pages. Each form page contains one or more form questions.";
                 layoutBuilder.callbackAddonGuid = guidAddon;
+                layoutBuilder.failMessage = userErrorMessage;
                 // 
                 // -- add buttons
                 layoutBuilder.addFormButton(Constants.buttonOK);
@@ -72,6 +86,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 // -- add hiddens
                 //
                 // -- feature subnav link querystring - clicks must include these values
+                cp.Doc.AddRefreshQueryString(Constants.rnFormPageId, request.formPageId);
                 cp.Doc.AddRefreshQueryString(Constants.rnFormWidgetId, request.formWidgetId);
                 //
                 return layoutBuilder.getHtml();

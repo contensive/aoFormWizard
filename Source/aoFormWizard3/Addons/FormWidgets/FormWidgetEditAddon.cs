@@ -52,15 +52,15 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
             try {
                 var layoutBuilder = cp.AdminUI.CreateLayoutBuilderNameValue();
                 //
-                FormWidgetModel record = DbBaseModel.create<FormWidgetModel>(cp, request.formWidgetId);
+                FormWidgetModel formWidget = DbBaseModel.create<FormWidgetModel>(cp, request.formWidgetId);
                 //
                 layoutBuilder.addRow();
                 layoutBuilder.rowName = "Name";
-                layoutBuilder.rowValue = cp.Html5.InputText(Constants.rnName,255, record?.name ?? "" , "form-control");
+                layoutBuilder.rowValue = cp.Html5.InputText(Constants.rnName,255, formWidget?.name ?? "" , "form-control");
                 layoutBuilder.rowHelp = "The name for this form widget. Use the name to recognize the form in a list, for example, 'membership application form' or 'contact us form'. The name does not appear on the public form.";
                 //
-                layoutBuilder.title = (record == null) ? "Add Form" : "Edit Form";
-                layoutBuilder.portalSubNavTitle = (record == null) ? "Add Form" : record.name;
+                layoutBuilder.title = (formWidget == null) ? "Add Form" : "Edit Form";
+                layoutBuilder.portalSubNavTitle = (formWidget == null) ? "Add Form" : formWidget.name;
                 layoutBuilder.description = "This form widget has the controls for the entire set of form pages. A form widget is dropped on the website and contains one or more form-pages. Each form page contains one or more form questions.";
                 layoutBuilder.callbackAddonGuid = guidAddon;
                 // 

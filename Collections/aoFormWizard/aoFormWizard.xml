@@ -170,12 +170,12 @@
 		Form Widget Edit
 	-->
 	<Data>
-		<Record content="portal features" guid="{D527F5BF-DF35-49F5-B03F-E8F6BC65A454}" name="Form Widget Edit">
+		<Record content="portal features" guid="{D527F5BF-DF35-49F5-B03F-E8F6BC65A454}" name="Form Edit">
 			<field name="portalId">{D5B3AF11-0AD2-4E4B-B39C-81953591B673}</field>
 			<field name="parentFeatureId">{F043F3E1-1F5D-4D6E-A2D9-45124EE66D72}</field>
 			<field name="addonId">{3F37844D-8C72-4C77-924E-BAD55734ACCB}</field>
 			<field name="dataContentId"></field>
-			<field name="Heading"><![CDATA[Form Details]]></field>
+			<field name="Heading"><![CDATA[Form Edit]]></field>
 			<field name="SortOrder"><![CDATA[010]]></field>
 		</Record>
 	</Data>
@@ -187,12 +187,12 @@
 		Form Page List
 	-->
 	<Data>
-		<Record content="portal features" guid="{66DD89C8-9AFB-43C7-9A67-4092E4F9819B}" name="Form Pages">
+		<Record content="portal features" guid="{66DD89C8-9AFB-43C7-9A67-4092E4F9819B}" name="Form-Pages">
 			<field name="portalId">{D5B3AF11-0AD2-4E4B-B39C-81953591B673}</field>
 			<field name="parentFeatureId">{F043F3E1-1F5D-4D6E-A2D9-45124EE66D72}</field>
 			<field name="addonId">{17319699-1BDB-420D-8B17-A21B04198321}</field>
 			<field name="dataContentId"></field>
-			<field name="Heading"><![CDATA[Form Pages]]></field>
+			<field name="Heading"><![CDATA[Form-Pages]]></field>
 			<field name="SortOrder"><![CDATA[020]]></field>
 		</Record>
 	</Data>
@@ -204,18 +204,44 @@
 		Form Page Edit
 	-->
 	<Data>
-		<Record content="portal features" guid="{0358AA13-2C29-4F82-B2DF-78D89E7DAE6A}" name="Form Page Edit">
+		<Record content="portal features" guid="{0358AA13-2C29-4F82-B2DF-78D89E7DAE6A}" name="Form-Page Edit">
 			<field name="portalId">{D5B3AF11-0AD2-4E4B-B39C-81953591B673}</field>
 			<field name="parentFeatureId">{66DD89C8-9AFB-43C7-9A67-4092E4F9819B}</field>
 			<field name="addonId">{4C25B351-C03B-4235-B3CA-094CDDC70430}</field>
 			<field name="dataContentId"></field>
-			<field name="Heading"><![CDATA[Form Page Details]]></field>
+			<field name="Heading"><![CDATA[Form-Page Edit]]></field>
 			<field name="SortOrder"><![CDATA[020]]></field>
 		</Record>
 	</Data>
 	<Addon name="Form Page Edit" guid="{4C25B351-C03B-4235-B3CA-094CDDC70430}" type="Add-on">
 		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets.FormPageEditAddon]]></DotNetClass>
 	</Addon>
+
+	<!-- 
+		Form Question List
+	-->
+	<Data>
+		<Record content="portal features" guid="{540D0034-E405-4EC9-B80D-038056053923}" name="Form-Questions">
+			<field name="portalId">{D5B3AF11-0AD2-4E4B-B39C-81953591B673}</field>
+			<field name="parentFeatureId">{66DD89C8-9AFB-43C7-9A67-4092E4F9819B}</field>
+			<field name="addonId">{1373B564-3722-478E-B693-E007B2547B3F}</field>
+			<field name="dataContentId"></field>
+			<field name="Heading"><![CDATA[Form-Questions]]></field>
+			<field name="SortOrder"><![CDATA[030]]></field>
+		</Record>
+	</Data>
+	<Addon name="Form Question List" guid="{1373B564-3722-478E-B693-E007B2547B3F}" type="Add-on">
+		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets.FormQuestionListAddon]]></DotNetClass>
+	</Addon>
+
+
+
+
+
+
+
+
+
 
 	<!-- 
 		Form Response List

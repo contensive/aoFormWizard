@@ -40,6 +40,8 @@ namespace Contensive.Addon.aoFormWizard3 {
         public const string rnFormWidgetId = "formWidgetId";
         public const string rnFormResponseId = "formResponseId";
         public const string rnFormPageId = "formPageId";
+        public const string rnFormQuestionId = "rnFormQuestionId";
+        public const string rnResponseUserId = "rnUserId";
         //
         public const string rnRemoveFilter = "removeFilter";
         public const string rnSampleId = "sampleId";

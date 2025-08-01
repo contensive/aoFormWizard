@@ -1,9 +1,11 @@
 ﻿using Contensive.Addon.aoFormWizard3.Controllers;
+using Contensive.Addon.aoFormWizard3.Models.Db;
 using Contensive.Addon.aoFormWizard3.Models.Domain;
 using Contensive.BaseClasses;
 using Contensive.BaseClasses.LayoutBuilder;
 using Contensive.Models.Db;
 using System;
+using static Contensive.BaseClasses.LayoutBuilder.LayoutBuilderBaseClass;
 
 namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
     //
@@ -12,10 +14,11 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
     /// Meetings
     /// </summary>
     /// <remarks></remarks>
-    public class FormWidgetListAddon : AddonBaseClass {
+    public class FormPageListAddon : AddonBaseClass {
         //
-        public const string guidPortalFeature = "{F043F3E1-1F5D-4D6E-A2D9-45124EE66D72}";
-        public const string guidAddon = "{F2E3D417-8C2B-49FF-A568-57A04414A8A1}";
+        public const string guidPortalFeature = "{66DD89C8-9AFB-43C7-9A67-4092E4F9819B}";
+        public const string guidAddon = "{17319699-1BDB-420D-8B17-A21B04198321}";
+        public const string viewName = "formPageList";
         // 
         // =====================================================================================
         /// <summary>
@@ -32,15 +35,17 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 // -- validate portal environment
                 if (!cp.AdminUI.EndpointContainsPortal()) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, guidPortalFeature, ""); }
                 //
-                var request = new RequestModel(cp);
-                // 
                 // -- cancel
-                if (request.button.Equals(Constants.ButtonCancel)) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, ""); }
+                var request = new RequestModel(cp);
+                if (request.button.Equals(Constants.ButtonCancel)) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormWidgetListAddon.guidPortalFeature); }
+                //
+                // -- form widget required, else redirect to form widget list
+                if (request.formWidgetId <= 0) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormWidgetListAddon.guidPortalFeature); }
                 // 
                 using (var app = new ApplicationModel(cp)) {
                     string userErrorMessage = "";
                     processView(app, request, ref userErrorMessage);
-                    return getView(app, request);
+                    return getView(app, request, userErrorMessage);
                 }
             } catch (Exception ex) {
                 cp.Site.ErrorReport(ex);
@@ -108,9 +113,10 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
         /// </summary>
         /// <param name="app"></param>
         /// <param name="request"></param>
+        /// <param name="userErrorMessage"></param>
         /// <returns></returns>
         /// <remarks></remarks>
-        internal static string getView(ApplicationModel app, RequestModel request) {
+        internal static string getView(ApplicationModel app, RequestModel request, string userErrorMessage) {
             CPBaseClass cp = app.cp;
             try {
                 //
@@ -121,29 +127,55 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 layoutBuilder.addColumn();
                 layoutBuilder.columnCaption = "&nbsp;";
                 layoutBuilder.columnName = "";
-                layoutBuilder.columnCaptionClass = "afwWidth50px afwTextAlignCenter";
-                layoutBuilder.columnCellClass = "afwTextAlignCenter";
+                layoutBuilder.columnCaptionClass = AfwStyles.afwWidth50px + AfwStyles.afwTextAlignCenter;
+                layoutBuilder.columnCellClass = AfwStyles.afwTextAlignCenter;
+                layoutBuilder.columnVisible = true;
+                layoutBuilder.columnDownloadable = false;
                 //
                 layoutBuilder.addColumn();
                 layoutBuilder.columnCaption = "&nbsp;";
                 layoutBuilder.columnName = "";
-                layoutBuilder.columnCaptionClass = "afwWidth50px afwTextAlignCenter";
-                layoutBuilder.columnCellClass = "afwTextAlignCenter";
+                layoutBuilder.columnCaptionClass = AfwStyles.afwWidth50px + AfwStyles.afwTextAlignCenter;
+                layoutBuilder.columnCellClass = AfwStyles.afwTextAlignCenter;
+                layoutBuilder.columnVisible = true;
+                layoutBuilder.columnDownloadable = false;
                 // 
                 layoutBuilder.addColumn();
-                layoutBuilder.columnCaption = "Form";
-                layoutBuilder.columnName = "Form";
-                layoutBuilder.columnCaptionClass = "afwWidth400px afwTextAlignLeft";
-                layoutBuilder.columnCellClass = "afwTextAlignLeft";
+                layoutBuilder.columnCaption = "Form Page";
+                layoutBuilder.columnName = "FormPages";
+                layoutBuilder.columnCaptionClass = AfwStyles.afwWidth400px + AfwStyles.afwTextAlignLeft;
+                layoutBuilder.columnCellClass = AfwStyles.afwTextAlignLeft;
+                layoutBuilder.columnVisible = true;
+                layoutBuilder.columnDownloadable = true;
                 // 
                 layoutBuilder.addColumn();
-                layoutBuilder.columnCaption = "Responses";
-                layoutBuilder.columnName = "Responses";
-                layoutBuilder.columnCaptionClass = " afwTextAlignLeft";
-                layoutBuilder.columnCellClass = "afwTextAlignLeft";
+                layoutBuilder.columnCaption = "Form Widget";
+                layoutBuilder.columnName = "FormWidget";
+                layoutBuilder.columnCaptionClass = AfwStyles.afwWidth400px + AfwStyles.afwTextAlignLeft;
+                layoutBuilder.columnCellClass = AfwStyles.afwTextAlignLeft;
+                layoutBuilder.columnVisible = true;
+                layoutBuilder.columnDownloadable = true;
+                // 
+                layoutBuilder.addColumn();
+                layoutBuilder.columnCaption = "Form Questions";
+                layoutBuilder.columnName = "FormQuestions";
+                layoutBuilder.columnCaptionClass = AfwStyles.afwTextAlignLeft;
+                layoutBuilder.columnCellClass = AfwStyles.afwTextAlignLeft;
+                layoutBuilder.columnVisible = true;
+                layoutBuilder.columnDownloadable = true;
+                // 
+                layoutBuilder.addColumn();
+                layoutBuilder.columnCaption = "Sort Order";
+                layoutBuilder.columnName = "SortOrder";
+                layoutBuilder.columnCaptionClass = AfwStyles.afwTextAlignLeft;
+                layoutBuilder.columnCellClass = AfwStyles.afwWidth100px + AfwStyles.afwTextAlignLeft;
+                layoutBuilder.columnVisible = true;
+                layoutBuilder.columnDownloadable = true;
+                // 
+                // -- add filters
                 //
-                FormListDataModel data = new(cp, request, layoutBuilder.sqlOrderBy, layoutBuilder.sqlSearchTerm, layoutBuilder.paginationPageNumber, layoutBuilder.paginationPageSize);
-                //
+                // -- get data  
+                FormPageListDataModel data = new(cp, request, layoutBuilder.sqlOrderBy, layoutBuilder.sqlSearchTerm, layoutBuilder.paginationPageNumber, layoutBuilder.paginationPageSize);
                 layoutBuilder.recordCount = data.rowCount;
                 //
                 int rowPtr = 0;
@@ -154,51 +186,36 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                     //
                     layoutBuilder.setCell((rowPtrStart + rowPtr + 1).ToString());
                     //
-                    layoutBuilder.setCell($"<input type=checkbox name=\"row{rowPtr}\" value=\"{row.formWidgetId}\">");
-                    // 
-                    string formLink = cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, FormWidgetEditAddon.guidPortalFeature) + $"&{Constants.rnFormWidgetId}={row.formWidgetId}";
-                    layoutBuilder.setCell($"<a href=\"{formLink}\">{row.formWidgetName}</a>");
+                    layoutBuilder.setCell($"<input type=checkbox name=\"row{rowPtr}\" value=\"{row.formPageId}\">");
                     //
-                    string formResponseCountLink = cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, guidPortalFeature) + $"&{Constants.rnFormWidgetId}={row.formWidgetId}";
-                    layoutBuilder.setCell($"<a href=\"{formResponseCountLink}\">{row.formResponseCount}</a>");
-                    ////
-                    //// -- confirm link, include all filters so page refresheshes
-                    //string cancelLink = @$"
-                    //        {cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, guidPortalFeature)}
-                    //        &{Constants.rnCancelRegistrationId}={row.formWidgetId}
-                    //        &{Constants.rnMeetingId}={row.meetingId}";
-                    //layoutBuilder.addRowEllipseMenuItem("Cancel registration", cancelLink);
-                    ////
-                    //// -- cancel link, include all filters so page refresheshes
-                    //string confirmLink = @$"
-                    //        {cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, guidPortalFeature)}
-                    //        &{Constants.rnConfirmRegistrationId}={row.formWidgetId}
-                    //        &{Constants.rnMeetingId}={row.meetingId}";
-                    //layoutBuilder.addRowEllipseMenuItem("Cancel registration", cancelLink);
+                    // -- form page
+                    string formPageEditLink = cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, FormPageEditAddon.guidPortalFeature) + $"&{Constants.rnFormWidgetId}={row.formWidgetId}&{Constants.rnFormPageId}={row.formPageId}";
+                    layoutBuilder.setCell($"<a href=\"{formPageEditLink}\">{row.formPageName}</a>", row.formPageName);
+                    // 
+                    // -- form widget 
+                    string formWidgetLink = cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, FormWidgetEditAddon.guidPortalFeature) + $"&{Constants.rnFormWidgetId}={row.formWidgetId}";
+                    layoutBuilder.setCell($"<a href=\"{formWidgetLink}\">{row.formWidgetName}</a>", row.formWidgetName);
+                    //
+                    // -- form questions
+                    string formQuestionListLink = cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, guidPortalFeature) + $"&{Constants.rnFormWidgetId}={row.formWidgetId}&{Constants.rnFormPageId}={row.formPageId}";
+                    layoutBuilder.setCell($"<a href=\"{formQuestionListLink}\">{row.formQuestionCount}</a>", row.formQuestionCount);
+                    //
+                    // -- form page sort order
+                    layoutBuilder.setCell(row.formPageSortOrder);
                     //
                     rowPtr += 1;
                 }
                 //
                 // -- build page
-                layoutBuilder.title = "Form List";
+                layoutBuilder.title = "Form Pages";
                 layoutBuilder.description = "Forms are created by dropping the Form Widget on a page or by creating a form here, and adding Form-Pages, and Form-Questions to the form. Each time a user submits the form online it creates a Form Response.";
                 layoutBuilder.callbackAddonGuid = guidAddon;
                 layoutBuilder.paginationRecordAlias = "forms";
-                // 
-                // -- add filters
-                //if (request.meetingId > 0) { layoutBuilder.addActiveFilter($"meeting:{cp.Content.GetRecordName("meetings", request.meetingId)}", Constants.rnRemoveFilter, Constants.rnMeetingId); }
-                //if (request.filterNotConfirmed) { layoutBuilder.addActiveFilter($"Not Confirmed", Constants.rnRemoveFilter, Constants.rnFilterNotConfirmed); }
-                //if (request.filterCancelled) { layoutBuilder.addActiveFilter($"Canceled", Constants.rnRemoveFilter, Constants.rnFilterCancelled); }
-                //if (request.filterFromDate > DateTime.MinValue) { layoutBuilder.addActiveFilter($"{request.filterFromDate.ToShortDateString()}", Constants.rnRemoveFilter, Constants.rnFilterFromDate); }
-                //
-                //layoutBuilder.addFilterSelectContent("Meeting", Constants.rnMeetingId, request.meetingId, "meetings", "", "Any Meeting");
-                //layoutBuilder.addFilterCheckbox("Unconfirmed", "filterNotConfirmed", "1", request.filterNotConfirmed);
-                //layoutBuilder.addFilterCheckbox("Cancelled", "filterCancelled", "1", request.filterCancelled);
-                //layoutBuilder.addFilterDateInput("From", "filterFromDate", request.filterFromDate);
+                layoutBuilder.portalSubNavTitle = DbBaseModel.getRecordName<FormWidgetModel>(cp, request.formWidgetId);
+                layoutBuilder.failMessage = userErrorMessage;
+                layoutBuilder.allowDownloadButton = true;
                 // 
                 // -- add buttons
-                //layoutBuilder.addFormButton(Constants.ButtonConfirmRegistration);
-                //layoutBuilder.addFormButton(Constants.ButtonCancelRegistration);
                 layoutBuilder.addFormButton(Constants.ButtonRefresh);
                 layoutBuilder.addFormButton(Constants.ButtonCancel);
                 // 
@@ -206,7 +223,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 layoutBuilder.addFormHidden("rowCnt", rowPtr);
                 //
                 // -- feature subnav link querystring - clicks must include these values
-                //cp.Doc.AddRefreshQueryString(Constants.rnMeetingId, meetingId);
+                cp.Doc.AddRefreshQueryString(Constants.rnFormWidgetId, request.formWidgetId);
                 //
                 return layoutBuilder.getHtml();
             } catch (Exception ex) {
@@ -221,12 +238,21 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 if (!string.IsNullOrEmpty(removeFilter)) { cp.Doc.SetProperty(removeFilter, ""); }
                 //
                 button = cp.Doc.GetText(Constants.rnButton);
-                sampleId = cp.Doc.GetInteger(Constants.rnSampleId);
+                formWidgetId = cp.Doc.GetInteger(Constants.rnFormWidgetId);
+                //filterNotConfirmed = cp.Doc.GetBoolean(Constants.rnFilterNotConfirmed);
+                //filterCancelled = cp.Doc.GetBoolean(Constants.rnFilterCancelled);
+                //filterFromDate = cp.Doc.GetDate(Constants.rnFilterFromDate);
             }
             //
             public string button { get; }
             //
-            public int sampleId { get; set; }
+            public int formWidgetId { get; set; }
+            //
+            //public bool filterNotConfirmed { get; set; }
+            ////
+            //public bool filterCancelled { get; set; }
+            ////
+            //public DateTime filterFromDate { get; set; }
         }
     }
 }

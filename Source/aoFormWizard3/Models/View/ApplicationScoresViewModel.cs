@@ -5,10 +5,6 @@ using Contensive.Models.Db;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Contensive.Addon.aoFormWizard3.Models.View.ApplicationScoresViewModel;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Contensive.Addon.aoFormWizard3.Models.View {
     public class ApplicationScoresViewModel : DesignBlockViewBaseModel {
