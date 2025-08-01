@@ -234,15 +234,6 @@
 		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets.FormQuestionListAddon]]></DotNetClass>
 	</Addon>
 
-
-
-
-
-
-
-
-
-
 	<!-- 
 		Form Response List
 	-->
@@ -258,6 +249,23 @@
 	</Data>
 	<Addon name="Form Response List" guid="{909559CA-59D3-4A1B-9915-2D69297AFE2D}" type="Add-on">
 		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets.FormResponseListAddon]]></DotNetClass>
+	</Addon>
+
+	<!-- 
+		Form Response Detail
+	-->
+	<Data>
+		<Record content="portal features" guid="{10F67098-2D21-4F04-B196-EDBDEF52AFC2}" name="Response Details">
+			<field name="portalId">{D5B3AF11-0AD2-4E4B-B39C-81953591B673}</field>
+			<field name="parentFeatureId">{CBBB730E-1390-471B-A311-F49E6C12E35A}</field>
+			<field name="addonId">{1B1C0DEC-334F-4A1A-BC03-444093BEB924}</field>
+			<field name="dataContentId"></field>
+			<field name="Heading"><![CDATA[Response Details]]></field>
+			<field name="SortOrder"><![CDATA[020]]></field>
+		</Record>
+	</Data>
+	<Addon name="Form Response Details" guid="{1B1C0DEC-334F-4A1A-BC03-444093BEB924}" type="Add-on">
+		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets.FormResponseDetailsAddon]]></DotNetClass>
 	</Addon>
 
 

@@ -83,7 +83,8 @@
                             </div>
 
                             {{#applicationViewModel}}
-                                <div class="mt-4 border p-3 rounded-3">
+                            <div class="mt-4 border p-3 rounded-3">
+                                <div id="js-response-preview">
                                     {{#pageDescription}}
                                         <div class="text-center p-2 border-bottom mb-4">{{{pageDescription}}}</div>
                                     {{/pageDescription}}
@@ -208,33 +209,34 @@
                                     
                                     </div>
 
-                                    <hr class="border-secondary my-4">
-
-                                    
-                                    <div> {{{scoringInstructions}}}</div>
-                                    <div class="row">
-                                    
-                                        <div class="col-md-6">
-                                            <input type="hidden" disabled id="responseId" value="{{responseId}}">
-                                            <input type="hidden" disabled id="applicationId" value="{{id}}">
-                                            <label class="fw-bold mb-1 form-label" for="">Overall Grade</label>
-                                            <select id="score" class="form-select" aria-label="">
-                                                <option selected disabled value="">Select...</option>
-                                                {{#scoresDropDownOptions}}
-                                                <option value="{{.}}">{{.}}</option>
-                                                {{/scoresDropDownOptions}}
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="" class="fw-bold mb-1 form-label">Comment</label>
-                                            <textarea name="comment" id="scoreComment" class="form-control" maxlength="200" placeholder=""></textarea>
+                                    <div id="js-score-widget-tools">
+                                        <hr class="border-secondary my-4">
+                                        <div> {{{scoringInstructions}}}</div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <input type="hidden" disabled id="responseId" value="{{responseId}}">
+                                                <input type="hidden" disabled id="applicationId" value="{{id}}">
+                                                <label class="fw-bold mb-1 form-label" for="">Overall Grade</label>
+                                                <select id="score" class="form-select" aria-label="">
+                                                    <option selected disabled value="">Select...</option>
+                                                    {{#scoresDropDownOptions}}
+                                                    <option value="{{.}}">{{.}}</option>
+                                                    {{/scoresDropDownOptions}}
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="" class="fw-bold mb-1 form-label">Comment</label>
+                                                <textarea name="comment" id="scoreComment" class="form-control" maxlength="200" placeholder=""></textarea>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div>                            
+                            </div>
                             {{/applicationViewModel}}
+
                         </div>
                        
-                        {{#applicationViewModel}}
+                    {{#applicationViewModel}}
                     <div class="card-footer px-5 py-3 d-flex justify-content-end">
                         <div class="me-3"><button onclick="scoreTableRowOnClick('0')"class="btn btn-outline-danger">Cancel</button></div>
                         <div><button onclick="submitApplicationScore()" class="btn btn-primary px-5">Submit</button></div>

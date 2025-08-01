@@ -133,6 +133,7 @@
     <Compile Include="Addons\FormWidgetLegacyUpgrade.cs" />
     <Compile Include="Addons\ExportFormDataTool.cs" />
     <Compile Include="Addons\GetApplicationInfo.cs" />
+    <Compile Include="Addons\ResponseEdit\FormResponseDetailsAddon.cs" />
     <Compile Include="Addons\ResponseEdit\FormResponseListAddon.cs" />
     <Compile Include="Addons\TestData\CreateTestDataTool.cs" />
     <Compile Include="Controllers\FormController.cs" />

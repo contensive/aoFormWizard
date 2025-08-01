@@ -175,6 +175,7 @@ namespace Contensive.Addon.aoFormWizard3.Views {
                 //
                 // -- update layout
                 CP.Layout.updateLayout(Constants.guidLayoutFormWizard, Constants.nameLayoutFormWizard, Constants.pathFilenameLayoutFormWizard);
+                CP.Layout.updateLayout(Constants.guidLayoutApplicationScore, Constants.nameLayoutApplicationScore, Constants.pathFilenameLayoutApplicationScore);
                 //
                 return string.Empty;
             } catch (Exception ex) {
