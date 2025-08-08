@@ -6,6 +6,7 @@ using Contensive.Models.Db;
 using Microsoft.SqlServer.Server;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -109,11 +110,14 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
             try {
                 //
                 cp.Log.Debug($"aoFormWizard.FormSetViewModel.create() start");
+                //
+                FormModel form = DbBaseModel.create<FormModel>(cp, settings.formId);
+                form ??= FormModel.createFormFromWizard(cp, settings);
                 // 
                 // -- process form request
                 // -- the request includes the srcPageId that needs to be processed
                 //
-                string userFormResponseSql = settings.useUserProperty ? $"memberid = {cp.User.Id}" : $"visitid={cp.Visit.Id}";
+                string userFormResponseSql = form.useUserProperty ? $"memberid = {cp.User.Id}" : $"visitid={cp.Visit.Id}";
 
                 FormResponseModel userFormResponse = DbBaseModel.createFirstOfList<FormResponseModel>(cp, $"formwidget = {settings.id} and {userFormResponseSql}", "id desc");
                 //
@@ -128,7 +132,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 // -- form completee, show thank you and exit
                 if (savedAnswers.isComplete) {
                     return new FormViewModel() {
-                        pageDescription = settings.thankyoucopy,
+                        pageDescription = form.thankyoucopy,
                         isThankYouPage = true
                     };
                 }
@@ -164,11 +168,11 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                     if (page.id != savedAnswers.currentPageid && !formViewData.isEditing) { continue; }
                     //
                     // -- recapcha
-                    if (page == pageList.First() && settings.allowRecaptcha && !savedAnswers.recaptchaSuccess) {
+                    if (page == pageList.First() && form.allowRecaptcha && !savedAnswers.recaptchaSuccess) {
                         //
                         cp.Log.Debug($"aoFormWizard.FormSetViewModel.create(), add recaptcha");
                         // 
-                        formViewData.allowRecaptcha = settings.allowRecaptcha;
+                        formViewData.allowRecaptcha = form.allowRecaptcha;
                         formViewData.recaptchaHTML = cp.Addon.Execute(Constants.guidAddonRecaptchav2);
                         if (cp.UserError.OK()) {
                             savedAnswers.recaptchaSuccess = true;
@@ -183,11 +187,11 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                     //
                     //formViewData.pageHeader = page.name;
                     formViewData.pageDescription = page.description;
-                    formViewData.previousButton = page == pageList.First() ? "" : string.IsNullOrEmpty(settings.backButtonName) ? "Previous" : settings.backButtonName;
-                    formViewData.resetButton = !settings.addResetButton ? "" : string.IsNullOrEmpty(settings.resetButtonName) ? "Reset" : settings.resetButtonName;
-                    formViewData.submitButton = page != pageList.Last() ? "" : string.IsNullOrEmpty(settings.submitButtonName) ? "Submit" : settings.submitButtonName;
-                    formViewData.continueButton = page == pageList.Last() ? "" : string.IsNullOrEmpty(settings.continueButtonName) ? "Continue" : settings.continueButtonName;
-                    formViewData.saveButton = !settings.useUserProperty ? "" : string.IsNullOrEmpty(settings.saveButtonName) ? "Save" : settings.saveButtonName;
+                    formViewData.previousButton = page == pageList.First() ? "" : string.IsNullOrEmpty(form.backButtonName) ? "Previous" : form.backButtonName;
+                    formViewData.resetButton = !form.addResetButton ? "" : string.IsNullOrEmpty(form.resetButtonName) ? "Reset" : form.resetButtonName;
+                    formViewData.submitButton = page != pageList.Last() ? "" : string.IsNullOrEmpty(form.submitButtonName) ? "Submit" : form.submitButtonName;
+                    formViewData.continueButton = page == pageList.Last() ? "" : string.IsNullOrEmpty(form.continueButtonName) ? "Continue" : form.continueButtonName;
+                    formViewData.saveButton = !form.useUserProperty ? "" : string.IsNullOrEmpty(form.saveButtonName) ? "Save" : form.saveButtonName;
 
                     if (formViewData.isEditing) {
                         formViewData.formEditWrapper = "ccEditWrapper";
@@ -391,8 +395,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                     // -- the rendering of this form page is complete. If not editing, exit with just one page
                     if (!formViewData.isEditing) {
                         break;
-                    }
-                    else {
+                    } else {
                         var currentEditingPage = new EditingPageData();
                         currentEditingPage.pageDescription = page.description;
                         currentEditingPage.listOfEditingFieldsClass = formViewData.listOfFieldsClass;
@@ -405,8 +408,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 }
                 formViewData.formAddLink = cp.Content.GetAddLink(FormPageModel.tableMetadata.contentName, "formsetid=" + settings.id, false, formViewData.isEditing);
                 return formViewData;
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 cp.Site.ErrorReport(ex);
                 return null;
             }
@@ -417,6 +419,9 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
             try {
                 //
                 cp.Log.Debug($"aoFormWizard.FormSetViewModel.create() start");
+                //
+                FormModel form = DbBaseModel.create<FormModel>(cp, settings.formId);
+                form ??= FormModel.createFormFromWizard(cp, settings);
                 // 
                 // -- process form request
                 // -- the request includes the srcPageId that needs to be processed
@@ -424,9 +429,8 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 string userFormResponseSql = "";
                 if (userId > 0) {
                     userFormResponseSql = $"memberid = {userId}";
-                }
-                else {
-                    userFormResponseSql = settings.useUserProperty ? $"memberid = {cp.User.Id}" : $"visitid={cp.Visit.Id}";
+                } else {
+                    userFormResponseSql = form.useUserProperty ? $"memberid = {cp.User.Id}" : $"visitid={cp.Visit.Id}";
                 }
                 FormResponseModel userFormResponse = DbBaseModel.createFirstOfList<FormResponseModel>(cp, userFormResponseSql, "id desc");
                 //
@@ -476,11 +480,11 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                     if (page.id != savedAnswers.currentPageid && !formViewData.isEditing) { continue; }
                     //
                     // -- recapcha
-                    if (page == pageList.First() && settings.allowRecaptcha && !savedAnswers.recaptchaSuccess) {
+                    if (page == pageList.First() && form.allowRecaptcha && !savedAnswers.recaptchaSuccess) {
                         //
                         cp.Log.Debug($"aoFormWizard.FormSetViewModel.create(), add recaptcha");
                         // 
-                        formViewData.allowRecaptcha = settings.allowRecaptcha;
+                        formViewData.allowRecaptcha = form.allowRecaptcha;
                         formViewData.recaptchaHTML = cp.Addon.Execute(Constants.guidAddonRecaptchav2);
                         if (cp.UserError.OK()) {
                             savedAnswers.recaptchaSuccess = true;
@@ -495,11 +499,11 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                     //
                     //formViewData.pageHeader = page.name;
                     formViewData.pageDescription = page.description;
-                    formViewData.previousButton = page == pageList.First() ? "" : string.IsNullOrEmpty(settings.backButtonName) ? "Previous" : settings.backButtonName;
-                    formViewData.resetButton = !settings.addResetButton ? "" : string.IsNullOrEmpty(settings.resetButtonName) ? "Reset" : settings.resetButtonName;
-                    formViewData.submitButton = page != pageList.Last() ? "" : string.IsNullOrEmpty(settings.submitButtonName) ? "Submit" : settings.submitButtonName;
-                    formViewData.continueButton = page == pageList.Last() ? "" : string.IsNullOrEmpty(settings.continueButtonName) ? "Continue" : settings.continueButtonName;
-                    formViewData.saveButton = !settings.useUserProperty ? "" : string.IsNullOrEmpty(settings.saveButtonName) ? "Save" : settings.saveButtonName;
+                    formViewData.previousButton = page == pageList.First() ? "" : string.IsNullOrEmpty(form.backButtonName) ? "Previous" : form.backButtonName;
+                    formViewData.resetButton = !form.addResetButton ? "" : string.IsNullOrEmpty(form.resetButtonName) ? "Reset" : form.resetButtonName;
+                    formViewData.submitButton = page != pageList.Last() ? "" : string.IsNullOrEmpty(form.submitButtonName) ? "Submit" : form.submitButtonName;
+                    formViewData.continueButton = page == pageList.Last() ? "" : string.IsNullOrEmpty(form.continueButtonName) ? "Continue" : form.continueButtonName;
+                    formViewData.saveButton = !form.useUserProperty ? "" : string.IsNullOrEmpty(form.saveButtonName) ? "Save" : form.saveButtonName;
                     if (formViewData.isEditing) {
                         formViewData.formEditWrapper = "ccEditWrapper";
                         formViewData.formdEditLink = cp.Content.GetEditLink(FormPageModel.tableMetadata.contentName, page.id.ToString(), false, "", formViewData.isEditing);
@@ -701,8 +705,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                     // -- the rendering of this form page is complete. If not editing, exit with just one page
                     if (!formViewData.isEditing) {
                         break;
-                    }
-                    else {
+                    } else {
                         var currentEditingPage = new EditingPageData();
                         currentEditingPage.pageDescription = page.description;
                         currentEditingPage.listOfEditingFieldsClass = formViewData.listOfFieldsClass;
@@ -715,8 +718,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 }
                 formViewData.formAddLink = cp.Content.GetAddLink(FormPageModel.tableMetadata.contentName, "formsetid=" + settings.id, false, formViewData.isEditing);
                 return formViewData;
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 cp.Site.ErrorReport(ex);
                 return null;
             }
@@ -729,10 +731,10 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
         /// set the savedAnswers.currentPageid to the next page
         /// </summary>
         /// <param name="cp"></param>
-        /// <param name="formSet"></param>
+        /// <param name="formWidget"></param>
         /// <param name="userFormResponse"></param>
         /// <returns></returns>
-        public static bool processRequest(CPBaseClass cp, FormWidgetModel formSet, ref FormResponseModel userFormResponse) {
+        public static bool processRequest(CPBaseClass cp, FormWidgetModel formWidget, ref FormResponseModel userFormResponse) {
             string returnHtml = string.Empty;
             int hint = 0;
             try {
@@ -742,9 +744,12 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 // -- handle no button
                 if (string.IsNullOrWhiteSpace(button) || srcPageId.Equals(0)) { return false; }
                 //
+                var form = DbBaseModel.create<FormModel>(cp, formWidget.formId);
+                form ??= FormModel.createFormFromWizard(cp, formWidget);
+                //
                 // -- handle reset button
-                string resetButton = string.IsNullOrEmpty(formSet.resetButtonName) ? "Reset" : formSet.resetButtonName;
-                if (userFormResponse != null && formSet.addResetButton && !string.IsNullOrEmpty(resetButton) && button.Equals(resetButton)) {
+                string resetButton = string.IsNullOrEmpty(form.resetButtonName) ? "Reset" : form.resetButtonName;
+                if (userFormResponse != null && form.addResetButton && !string.IsNullOrEmpty(resetButton) && button.Equals(resetButton)) {
                     DbBaseModel.delete<FormResponseModel>(cp, userFormResponse.ccguid);
                     userFormResponse = null;
                     return false;
@@ -753,15 +758,15 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 // -- verify the users response
                 if (userFormResponse is null) {
                     userFormResponse = DbBaseModel.addDefault<FormResponseModel>(cp);
-                    userFormResponse.formWidget = formSet.id;
-                    userFormResponse.name = "Form Set " + formSet.name + " started " + DateTime.Now.ToString("MM/dd/yyyy") + " by " + cp.User.Name;
+                    userFormResponse.formWidget = formWidget.id;
+                    userFormResponse.name = "Form Set " + formWidget.name + " started " + DateTime.Now.ToString("MM/dd/yyyy") + " by " + cp.User.Name;
                 }
-                userFormResponse.formWidget = formSet.id;
+                userFormResponse.formWidget = formWidget.id;
                 userFormResponse.visitid = cp.Visit.Id;
                 userFormResponse.memberId = cp.User.Id;
                 //
                 // -- determine the page to process
-                List<FormPageModel> pageList = FormPageModel.getPageList(cp, formSet.id);
+                List<FormPageModel> pageList = FormPageModel.getPageList(cp, formWidget.id);
                 var currentPage = pageList.Find((x) => x.id == srcPageId);
                 if (currentPage is null) {
                     //
@@ -783,7 +788,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 }
                 //
                 // -- handle previous button
-                string backButton = string.IsNullOrEmpty(formSet.backButtonName) ? "Previous" : formSet.backButtonName;
+                string backButton = string.IsNullOrEmpty(form.backButtonName) ? "Previous" : form.backButtonName;
                 if (button == backButton) {
                     if (currentPage == pageList.First()) { return false; }
                     var previousPage = pageList.First();
@@ -862,8 +867,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                     // -- save answer
                                     if (!savedAnswersForm_Page_Question.choiceAnswerDict.ContainsKey(formPage_Question_Option)) {
                                         savedAnswersForm_Page_Question.choiceAnswerDict.Add(formPage_Question_Option, isSelected);
-                                    }
-                                    else {
+                                    } else {
                                         savedAnswersForm_Page_Question.choiceAnswerDict[formPage_Question_Option] = isSelected;
                                     }
                                     if (isSelected) {
@@ -1032,8 +1036,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                             }
                                         }
                                     }
-                                }
-                                else if (currentPage.saveTypeId.Equals(2)) {
+                                } else if (currentPage.saveTypeId.Equals(2)) {
                                     // 
                                     // -- save to people
                                     if (cp.Content.IsField("People", formPage_Question.name)) {
@@ -1064,9 +1067,9 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 // -- continue to next page
                 //
                 // -- if last question done processing, mark this form-page complete
-                string continueButton = string.IsNullOrEmpty(formSet.continueButtonName) ? "Continue" : formSet.continueButtonName;
-                string saveButton = string.IsNullOrEmpty(formSet.saveButtonName) ? "Save" : formSet.saveButtonName;
-                string submitButton = string.IsNullOrEmpty(formSet.submitButtonName) ? "Submit" : formSet.submitButtonName;
+                string continueButton = string.IsNullOrEmpty(form.continueButtonName) ? "Continue" : form.continueButtonName;
+                string saveButton = string.IsNullOrEmpty(form.saveButtonName) ? "Save" : form.saveButtonName;
+                string submitButton = string.IsNullOrEmpty(form.submitButtonName) ? "Submit" : form.submitButtonName;
                 if (!string.IsNullOrEmpty(button) && (button == continueButton || button == submitButton || button == saveButton)) {
                     //
                     // -- mark this page complete
@@ -1079,8 +1082,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                         userFormResponse.dateSubmitted = DateTime.Now;
                         savedAnswers.isComplete = true;
                         savedAnswers.currentPageid = 0;
-                    }
-                    else if(button != saveButton) {
+                    } else if (button != saveButton) {
                         //
                         // -- go to the next page
                         bool setNext = false;
@@ -1099,12 +1101,12 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                     //
                     // -- the entire form is complete
                     //
-                    cp.Email.sendSystem(formSet.notificationemailid, htmlVersion.ToString());
-                    if (formSet.responseemailid > 0) {
-                        cp.Email.sendSystem(formSet.responseemailid, "", cp.User.Id);
+                    cp.Email.sendSystem(form.notificationemailid, htmlVersion.ToString());
+                    if (form.responseemailid > 0) {
+                        cp.Email.sendSystem(form.responseemailid, "", cp.User.Id);
                     }
-                    if (formSet.joingroupid != 0) {
-                        cp.Group.AddUser(formSet.joingroupid, cp.User.Id);
+                    if (form.joingroupid != 0) {
+                        cp.Group.AddUser(form.joingroupid, cp.User.Id);
                     }
                 }
 
@@ -1114,8 +1116,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 userFormResponse.copy = textVersion.ToString();
                 userFormResponse.save(cp);
                 return true;
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 cp.Site.ErrorReport("hint=" + hint.ToString() + " " + ex.ToString());
                 return false;
             }

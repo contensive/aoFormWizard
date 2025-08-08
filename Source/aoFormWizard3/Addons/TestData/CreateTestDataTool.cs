@@ -103,7 +103,6 @@ namespace Contensive.Addon.aoFormWizard3.Addons {
             result += $"<div style=\"margin-left:{margin}px\">Form Widget: {formWidget.name}</div>";
             //
             formWidget.modifiedDate = DateTime.Now;
-            formWidget.backButtonName = formWidget.backButtonName;
             //
             formWidget.save(app.cp);
             //

@@ -62,7 +62,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.Domain {
                         m.id as submitterId, m.name as submitterName
                     from 
                         ccFormResponse r 
-                        left join ccFormWidgets f on f.id=r.formWidget
+                        left join ccForms f on f.id=r.formWidget
                         left join ccmembers m on m.id=r.createdBy
                     where 
 	                    {sqlWhere}

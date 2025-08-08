@@ -48,7 +48,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.Domain {
                         count(*) 
                     from
                         ccFormPages p 
-                        left join ccFormWidgets f on f.id=p.formsetid 
+                        left join ccForms f on f.id=p.formsetid 
                     where 
                         {sqlWhere}
                 ";
@@ -66,7 +66,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.Domain {
                         (select count(*) from ccFormQuestions where formid=p.id) as formQuestionCount
                     from 
                         ccFormPages p 
-                        left join ccFormWidgets f on f.id=p.formsetid
+                        left join ccForms f on f.id=p.formsetid
                     where 
 	                    {sqlWhere}
                     order by

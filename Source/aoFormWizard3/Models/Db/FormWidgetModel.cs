@@ -10,45 +10,37 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
         // 
         // ====================================================================================================
         // -- instance properties
-        public string backButtonName { get; set; }
-        public bool addResetButton { get; set; }
-        public string resetButtonName { get; set; }
-        public string continueButtonName { get; set; }
-        public string submitButtonName { get; set; }
-        public string saveButtonName { get; set; }
-
-        public int joingroupid { get; set; }
-        public int notificationemailid { get; set; }
-        public int responseemailid { get; set; }
-        public string thankyoucopy { get; set; }        
-        public bool useUserProperty { get; set; }
-        public bool allowRecaptcha { get; set; }
+        public int formId  { get; set; }
         // 
         // ====================================================================================================
         public new static FormWidgetModel createOrAddSettings(CPBaseClass cp, string settingsGuid, string recordNameOrSuffix) {
             // 
             // -- create object from existing record
-            var result = create<FormWidgetModel>(cp, settingsGuid);
-            if (result is not null) {
-                return result; 
+            var resultWidget = create<FormWidgetModel>(cp, settingsGuid);
+            if (resultWidget is not null) {
+                return resultWidget; 
             }
             // 
             // -- create default formset
-            result = addDefault<FormWidgetModel>(cp);
-            result.name = "Dynamic Form " + result.id + " added to page " + cp.Doc.PageId + ", " + cp.Doc.PageName;
-            result.addResetButton = false;
-            result.resetButtonName = "Reset";
-            result.backButtonName = "Previous";
-            result.continueButtonName = "Continue";
-            result.submitButtonName = "Complete";
-            result.saveButtonName = "Save";
-            result.ccguid = settingsGuid;
-            result.save(cp);
+            resultWidget = addDefault<FormWidgetModel>(cp);
+            resultWidget.name = "Form Widget " + resultWidget.id + " added to page " + cp.Doc.PageId + ", " + cp.Doc.PageName;
+            resultWidget.ccguid = settingsGuid;
+            resultWidget.save(cp);
+            //
+            var form = DbBaseModel.addDefault<FormModel>(cp, cp.Doc.PageId);
+            resultWidget.name = "Form " + form.id + " added to page " + cp.Doc.PageId + ", " + cp.Doc.PageName;
+            form.addResetButton = false;
+            form.resetButtonName = "Reset";
+            form.backButtonName = "Previous";
+            form.continueButtonName = "Continue";
+            form.submitButtonName = "Complete";
+            form.saveButtonName = "Save";
+            form.save(cp);
             // 
             // -- add form one
             var formOne = addDefault<FormPageModel>(cp);
-            formOne.name = "Form #1 of " + result.name;
-            formOne.formsetid = result.id;
+            formOne.name = "Form #1 of " + form.name;
+            formOne.formsetid = form.id;
             formOne.description = "<h2>Form 1: Sample Form Content</h2>" + "<p>This form was automatically created by the Form Design Block.</p>" + "<p>A Dynamic Form is a list of Form Fields that you create and configure. Users complete the form and submit responses.</p>";
 
             formOne.sortOrder = "1";
@@ -138,7 +130,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
             // 
             // -- create custom content
             // 
-            return result;
+            return resultWidget;
         }
 
     }

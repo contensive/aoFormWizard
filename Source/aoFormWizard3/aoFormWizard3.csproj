@@ -141,6 +141,7 @@
     <Compile Include="Models\Db\ApplicationScoresModel.cs" />
     <Compile Include="Models\Db\ApplicationScoreWidgetsModel.cs" />
     <Compile Include="Models\Db\ApplicationViewsModel.cs" />
+    <Compile Include="Models\Db\FormModel.cs" />
     <Compile Include="Models\Domain\ApplicationModel.cs" />
     <Compile Include="Models\Domain\FormQuestionListDataModel.cs" />
     <Compile Include="Models\Domain\FormResponseListDataModel.cs" />

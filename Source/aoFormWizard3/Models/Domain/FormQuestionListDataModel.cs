@@ -47,7 +47,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.Domain {
                     from
                         ccFormQuestions q
                         left join ccFormPages p on q.formid=p.id
-                        left join ccFormWidgets w on w.id=p.formsetid 
+                        left join ccForms w on w.id=p.formsetid 
                     where 
                         {sqlWhere}
                 ";
@@ -66,7 +66,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.Domain {
                     from 
                         ccFormQuestions q
                         left join ccFormPages p on q.formid=p.id
-                        left join ccFormWidgets w on w.id=p.formsetid
+                        left join ccForms w on w.id=p.formsetid
                     where 
 	                    {sqlWhere}
                     order by
