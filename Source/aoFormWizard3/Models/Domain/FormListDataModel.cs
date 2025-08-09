@@ -21,7 +21,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.Domain {
             public string formWidgetName { get; set; }
             public int formResponseCount { get; set; }
         }
-        public FormListDataModel(CPBaseClass cp, FormWidgetListAddon.RequestModel request, string sqlOrderBy, string searchTerm, int pageNumber, int pageSize) {
+        public FormListDataModel(CPBaseClass cp, FormListAddon.RequestModel request, string sqlOrderBy, string searchTerm, int pageNumber, int pageSize) {
             try {
                 //
                 // -- sql where from search and filters

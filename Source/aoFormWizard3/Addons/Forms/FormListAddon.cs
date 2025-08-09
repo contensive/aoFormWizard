@@ -13,11 +13,11 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
     /// Meetings
     /// </summary>
     /// <remarks></remarks>
-    public class FormWidgetListAddon : AddonBaseClass {
+    public class FormListAddon : AddonBaseClass {
         //
         public const string guidPortalFeature = "{F043F3E1-1F5D-4D6E-A2D9-45124EE66D72}";
         public const string guidAddon = "{F2E3D417-8C2B-49FF-A568-57A04414A8A1}";
-        public const string viewName = "FormWidgetList";
+        public const string viewName = "FormList";
         // 
         // =====================================================================================
         /// <summary>
@@ -174,7 +174,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                     //
                     layoutBuilder.setCell($"<input type=checkbox name=\"row{rowPtr}\" value=\"{row.formWidgetId}\">");
                     // 
-                    string formLink = cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, FormWidgetEditAddon.guidPortalFeature) + $"&{Constants.rnFormWidgetId}={row.formWidgetId}";
+                    string formLink = cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, FormEditAddon.guidPortalFeature) + $"&{Constants.rnFormWidgetId}={row.formWidgetId}";
                     layoutBuilder.setCell($"<a href=\"{formLink}\">{row.formWidgetName}</a>", row.formWidgetName);
                     //
                     string formResponseCountLink = cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, FormResponseListAddon.guidPortalFeature) + $"&{Constants.rnFormWidgetId}={row.formWidgetId}";

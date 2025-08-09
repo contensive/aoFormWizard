@@ -44,7 +44,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons {
                 if (cp.ServerConfig.productionEnvironment) { return "<p>This tool is disabled because the server is a production server</p>"; }
                 // 
                 // -- Go To Forms Manager
-                if (cp.Doc.GetText("button").Equals("Go To Forms Manager")) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormWidgetListAddon.guidPortalFeature); }
+                if (cp.Doc.GetText("button").Equals("Go To Forms Manager")) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormListAddon.guidPortalFeature); }
                 // 
                 // -- cancel
                 if (cp.Doc.GetText("button").Equals(Constants.ButtonCancel)) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, ""); }

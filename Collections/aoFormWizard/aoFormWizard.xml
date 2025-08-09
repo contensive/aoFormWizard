@@ -150,7 +150,7 @@
 	</Addon>
 
 	<!-- 
-		Form Widget List
+		Form List
 	-->
 	<Data>
 		<Record content="portal features" guid="{F043F3E1-1F5D-4D6E-A2D9-45124EE66D72}" name="Forms">
@@ -163,11 +163,11 @@
 		</Record>
 	</Data>
 	<Addon name="Form List" guid="{F2E3D417-8C2B-49FF-A568-57A04414A8A1}" type="Add-on">
-		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets.FormWidgetListAddon]]></DotNetClass>
+		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets.FormListAddon]]></DotNetClass>
 	</Addon>
 
 	<!-- 
-		Form Widget Edit
+		Form Edit
 	-->
 	<Data>
 		<Record content="portal features" guid="{D527F5BF-DF35-49F5-B03F-E8F6BC65A454}" name="Form Edit">
@@ -179,8 +179,8 @@
 			<field name="SortOrder"><![CDATA[010]]></field>
 		</Record>
 	</Data>
-	<Addon name="Form Widget Edit" guid="{3F37844D-8C72-4C77-924E-BAD55734ACCB}" type="Add-on">
-		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets.FormWidgetEditAddon]]></DotNetClass>
+	<Addon name="Form Edit" guid="{3F37844D-8C72-4C77-924E-BAD55734ACCB}" type="Add-on">
+		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets.FormEditAddon]]></DotNetClass>
 	</Addon>
 
 	<!-- 

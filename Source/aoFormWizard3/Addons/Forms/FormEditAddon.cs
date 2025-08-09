@@ -13,7 +13,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
     /// Meeting Edit Feature
     /// </summary>
     /// <remarks></remarks>
-    public class FormWidgetEditAddon : AddonBaseClass {
+    public class FormEditAddon : AddonBaseClass {
         //
         public const string guidPortalFeature = "{D527F5BF-DF35-49F5-B03F-E8F6BC65A454}";
         public const string guidAddon = "{3F37844D-8C72-4C77-924E-BAD55734ACCB}";
@@ -98,7 +98,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                         }
                     case Constants.buttonOK: {
                             saveFormWidget(cp, request);
-                            cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormWidgetListAddon.guidPortalFeature, "");
+                            cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormListAddon.guidPortalFeature, "");
                             return;
                         }
                     case Constants.buttonDelete: {
@@ -109,11 +109,11 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                                 DbBaseModel.delete<FormPageModel>(cp, formPage.id);
                             }
                             DbBaseModel.delete<FormWidgetModel>(cp, request.formWidgetId);
-                            cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormWidgetListAddon.guidPortalFeature, "");
+                            cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormListAddon.guidPortalFeature, "");
                             return;
                         }
                     case Constants.ButtonCancel: {
-                            cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormWidgetListAddon.guidPortalFeature, "");
+                            cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormListAddon.guidPortalFeature, "");
                             return;
                         }
                     default: {
