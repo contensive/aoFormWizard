@@ -17,8 +17,8 @@ namespace Contensive.Addon.aoFormWizard3.Models.Domain {
         //
         public class RowDataModel {
             // 
-            public int formWidgetId { get; set; }
-            public string formWidgetName { get; set; }
+            public int formId { get; set; }
+            public string formName { get; set; }
             public int formResponseCount { get; set; }
         }
         public FormListDataModel(CPBaseClass cp, FormListAddon.RequestModel request, string sqlOrderBy, string searchTerm, int pageNumber, int pageSize) {
@@ -54,7 +54,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.Domain {
                 // -- output data
                 string sql = @$"
                     select
-                        f.id as formWidgetId, f.name as formWidgetName,
+                        f.id as formId, f.name as formName,
                         m.id as submitterId, m.name as submitterName,
                         (select count(*) from ccFormResponse r where r.formWidget=f.id) as formResponseCount
                     from 
@@ -70,8 +70,8 @@ namespace Contensive.Addon.aoFormWizard3.Models.Domain {
                 using (DataTable dt = cp.Db.ExecuteQuery(sql)) {
                     foreach (DataRow row in dt.Rows) {
                         rowData.Add(new RowDataModel() {
-                            formWidgetId = cp.Utils.EncodeInteger(row["formWidgetId"]),
-                            formWidgetName = cp.Utils.EncodeText(row["formWidgetName"]),
+                            formId = cp.Utils.EncodeInteger(row["formId"]),
+                            formName = cp.Utils.EncodeText(row["formName"]),
                             formResponseCount = cp.Utils.EncodeInteger(row["formResponseCount"]),
                         });
                     }

@@ -172,12 +172,12 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                     //
                     layoutBuilder.setCell((rowPtrStart + rowPtr + 1).ToString());
                     //
-                    layoutBuilder.setCell($"<input type=checkbox name=\"row{rowPtr}\" value=\"{row.formWidgetId}\">");
+                    layoutBuilder.setCell($"<input type=checkbox name=\"row{rowPtr}\" value=\"{row.formId}\">");
                     // 
-                    string formLink = cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, FormEditAddon.guidPortalFeature) + $"&{Constants.rnFormWidgetId}={row.formWidgetId}";
-                    layoutBuilder.setCell($"<a href=\"{formLink}\">{row.formWidgetName}</a>", row.formWidgetName);
+                    string formLink = cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, FormEditAddon.guidPortalFeature) + $"&{Constants.rnFormWidgetId}={row.formId}";
+                    layoutBuilder.setCell($"<a href=\"{formLink}\">{row.formName}</a>", row.formName);
                     //
-                    string formResponseCountLink = cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, FormResponseListAddon.guidPortalFeature) + $"&{Constants.rnFormWidgetId}={row.formWidgetId}";
+                    string formResponseCountLink = cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, FormResponseListAddon.guidPortalFeature) + $"&{Constants.rnFormWidgetId}={row.formId}";
                     layoutBuilder.setCell($"<a href=\"{formResponseCountLink}\">{row.formResponseCount}</a>", row.formResponseCount.ToString());
                     //
                     // -- elipsis menu
