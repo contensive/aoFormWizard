@@ -128,8 +128,15 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 //
                 FormModel form = DbBaseModel.create<FormModel>(cp, settings.formId);
                 if( form is null) {
+                    if(cp.User.IsAdmin) {
+                        return new FormViewModel() {
+                            isSelectFormPage = true,
+                            pageDescription = "Select a Form to use with this widget.",
+                            isEditing = cp.User.IsEditing()
+                        };
+                    }
                     return new FormViewModel() {
-                        is
+                        isNotAvailablePage = true   
                     };
                 }
                 // 
@@ -137,10 +144,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 // -- the request includes the srcPageId that needs to be processed
                 //
                 string userFormResponseSql = form.useUserProperty ? $"memberid = {cp.User.Id}" : $"visitid={cp.Visit.Id}";
-
                 FormResponseModel userFormResponse = DbBaseModel.createFirstOfList<FormResponseModel>(cp, $"formwidget = {settings.id} and {userFormResponseSql}", "id desc");
-                //
-                // -- process the request
                 processRequest(cp, settings, ref userFormResponse);
                 //
                 // -- validate the savedAnswers object
@@ -152,7 +156,8 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 if (savedAnswers.isComplete) {
                     return new FormViewModel() {
                         pageDescription = form.thankyoucopy,
-                        isThankYouPage = true
+                        isThankYouPage = true,
+                        isEditing = cp.User.IsEditing()
                     };
                 }
                 //

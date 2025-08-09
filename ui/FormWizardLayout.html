@@ -1,20 +1,16 @@
 {{^isEditing}}
 <div class="designBlockContainer blockText" style="{{styleHeight}}{{styleBackgroundImage}}">
-	<div class="{{contentContainerClass}}">
-		
+	<div class="{{contentContainerClass}}">		
 		<div class="col-lg-10 mx-auto">
 			{{{formdEditLink}}}
 			<form id="{{formHtmlId}}" >
-				<div class="card rounded-3 {{formEditWrapper}}">
-					
-					{{^isThankYouPage}}
-					
+				<div class="card rounded-3 {{formEditWrapper}}">					
+					{{^isThankYouPage}}					
 						{{#pageDescription}}
 							<div class="card-header text-center p-4">{{{pageDescription}}}</div>
 						{{/pageDescription}}
 						{{^pageDescription}}
-						{{/pageDescription}}
-						
+						{{/pageDescription}}					
 
 						<div class="card-body px-5">
 							
