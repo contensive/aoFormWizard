@@ -19,6 +19,22 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
         // 
         public int id { get; set; }
         /// <summary>
+        /// display the form to the user to submit
+        /// </summary>
+        public bool isFormPage { get; set; }
+        /// <summary>
+        /// display the thank you page
+        /// </summary>
+        public bool isThankYouPage { get; set; }
+        /// <summary>
+        /// display the page saying the form is not ready (not configured, non-admin user)
+        /// </summary>
+        public bool isNotAvailablePage { get; set; }
+        /// <summary>
+        /// display if the page is not ready and the user is admin -- select form or create form
+        /// </summary>
+        public bool isSelectFormPage { get; set; }
+        /// <summary>
         /// A short string that is unique to this form.
         /// </summary>
         public string formHtmlId { get; set; }//
@@ -44,7 +60,6 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
         public string formdEditLink { get; set; }
         public string formAddLink { get; set; }
         public bool isEditing { get; set; }
-        public bool isThankYouPage { get; set; }
         public List<FormPageModel> pageList { get; set; }
         public List<EditingPageData> pageListEditingData { get; set; }
         // 
@@ -112,7 +127,11 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 cp.Log.Debug($"aoFormWizard.FormSetViewModel.create() start");
                 //
                 FormModel form = DbBaseModel.create<FormModel>(cp, settings.formId);
-                form ??= FormModel.createFormFromWizard(cp, settings);
+                if( form is null) {
+                    return new FormViewModel() {
+                        is
+                    };
+                }
                 // 
                 // -- process form request
                 // -- the request includes the srcPageId that needs to be processed

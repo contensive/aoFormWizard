@@ -20,7 +20,7 @@ namespace Contensive.Addon.aoFormWizard3.Views {
             try {
                 // 
                 // -- version used to upgrade content
-                const int version = 4;
+                const int version = 5;
                 int buildVersion = CP.Site.GetInteger("Form Wizard Version", 0);
                 //
                 //if (buildVersion < 2) {
@@ -35,7 +35,7 @@ namespace Contensive.Addon.aoFormWizard3.Views {
                 if (buildVersion < 3) {
                     //
                     // -- change question type from string to integer
-                    if(CP.Db.IsTable("ccFormFields")) {
+                    if (CP.Db.IsTable("ccFormFields")) {
                         CP.Db.ExecuteNonQuery("update ccFormFields set inputtypeid=1 where inputtype='TEXT'");
                         CP.Db.ExecuteNonQuery("update ccFormFields set inputtypeid=2 where inputtype='TEXTAREA'");
                         CP.Db.ExecuteNonQuery("update ccFormFields set inputtypeid=3 where inputtype='CHECKBOX'");
@@ -44,7 +44,7 @@ namespace Contensive.Addon.aoFormWizard3.Views {
                         CP.Db.ExecuteNonQuery("update ccFormFields set inputtypeid=6 where inputtype='SELECT'");
                     }
                 }
-                if(buildVersion < 4) {
+                if (buildVersion < 4) {
                     //
                     // xml has updated table names so the new ones must be dropped
                     // before the old ones can be updated
@@ -130,11 +130,11 @@ namespace Contensive.Addon.aoFormWizard3.Views {
                     string ccFormSetsCountSQL = "select count(id) as 'count' from cctables where name = 'ccFormSets'";
                     int ccFormsetsCount = 0;
                     using (var cs = CP.CSNew()) {
-                        if(cs.OpenSQL(ccFormSetsCountSQL)) {
+                        if (cs.OpenSQL(ccFormSetsCountSQL)) {
                             ccFormsetsCount = cs.GetInteger("count");
                         }
-                    }  
-                    if(ccFormsetsCount > 0) {
+                    }
+                    if (ccFormsetsCount > 0) {
                         CP.Db.ExecuteNonQuery("exec sp_rename 'ccFormSets', 'ccFormWidgets';");
                     }
 
@@ -170,6 +170,43 @@ namespace Contensive.Addon.aoFormWizard3.Views {
                     if (ccFormFieldsCount > 0) {
                         CP.Db.ExecuteNonQuery("exec sp_rename 'ccFormFields', 'ccFormQuestions';");
                     }
+                }
+                if (buildVersion < 5) {
+                    //
+                    // -- convert ccformWidgets to ccformWidgets and ccForms 
+                    // -- previously the widget had the form details but we want the user to be able to select the form
+                    foreach ( var formWidget in DbBaseModel.createList<FormWidgetModel>(CP)) {
+                        if (formWidget.formId == 0) {
+                            FormModel form = FormModel.createFormFromWizard(CP, formWidget);
+                            formWidget.formId = form.id;
+                            formWidget.save(CP);
+                        }
+                    }
+                    //using (DataTable dt = CP.Db.ExecuteQuery("select * from ccFormWidgets")) {
+                    //    foreach (DataRow row in dt.Rows) {
+                    //        int formId = CP.Utils.EncodeInteger(row["id"]);
+                    //        if (formId == 0) {
+                    //            var form = DbBaseModel.addDefault<FormModel>(CP);
+                    //            form.addResetButton = CP.Utils.EncodeBoolean(row["addResetButton"]);
+                    //            form.backButtonName = CP.Utils.EncodeText(row["backButtonName"]);
+                    //            form.continueButtonName = CP.Utils.EncodeText(row["continueButtonName"]);
+                    //            form.resetButtonName = CP.Utils.EncodeText(row["resetButtonName"]);
+                    //            form.submitButtonName = CP.Utils.EncodeText(row["submitButtonName"]);
+                    //            form.saveButtonName = CP.Utils.EncodeText(row["saveButtonName"]);
+                    //            form.joingroupid = CP.Utils.EncodeInteger(row["joingroupid"]);
+                    //            form.notificationemailid = CP.Utils.EncodeInteger(row["notificationemailid"]);
+                    //            form.responseemailid = CP.Utils.EncodeInteger(row["responseemailid"]);
+                    //            form.thankyoucopy = CP.Utils.EncodeText(row["thankyoucopy"]);
+                    //            form.useUserProperty = CP.Utils.EncodeBoolean(row["useUserProperty"]);
+                    //            form.allowRecaptcha = CP.Utils.EncodeBoolean(row["allowRecaptcha"]);
+                    //            form.createdBy = CP.Utils.EncodeInteger(row["createdBy"]);
+                    //            form.dateAdded = CP.Utils.EncodeDate(row["dateAdded"]);
+                    //            form.modifiedDate = CP.Utils.EncodeDate(row["modifiedDate"]);
+                    //            form.modifiedBy = CP.Utils.EncodeInteger(row["modifiedBy"]);
+                    //        }
+                    //        CP.Db.ExecuteNonQuery($"update ccFormWidgets set formId={formId} where id={CP.Utils.EncodeInteger(row["id"])}");
+                    //    }
+                    //}
                 }
                 CP.Site.SetProperty("Form Wizard Version", version);
                 //
