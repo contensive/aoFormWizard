@@ -21,19 +21,19 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
         /// <summary>
         /// display the form to the user to submit
         /// </summary>
-        public bool isFormPage { get; set; }
+        public bool isUserView { get; set; }
         /// <summary>
         /// display the thank you page
         /// </summary>
-        public bool isThankYouPage { get; set; }
+        public bool isThankYouView { get; set; }
         /// <summary>
         /// display the page saying the form is not ready (not configured, non-admin user)
         /// </summary>
-        public bool isNotAvailablePage { get; set; }
+        public bool isNotAvailableView { get; set; }
         /// <summary>
         /// display if the page is not ready and the user is admin -- select form or create form
         /// </summary>
-        public bool isSelectFormPage { get; set; }
+        public bool isSelectFormView { get; set; }
         /// <summary>
         /// A short string that is unique to this form.
         /// </summary>
@@ -130,13 +130,13 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 if( form is null) {
                     if(cp.User.IsAdmin) {
                         return new FormViewModel() {
-                            isSelectFormPage = true,
+                            isSelectFormView = true,
                             pageDescription = "Select a Form to use with this widget.",
                             isEditing = cp.User.IsEditing()
                         };
                     }
                     return new FormViewModel() {
-                        isNotAvailablePage = true   
+                        isNotAvailableView = true   
                     };
                 }
                 // 
@@ -156,7 +156,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 if (savedAnswers.isComplete) {
                     return new FormViewModel() {
                         pageDescription = form.thankyoucopy,
-                        isThankYouPage = true,
+                        isThankYouView = true,
                         isEditing = cp.User.IsEditing()
                     };
                 }
@@ -171,6 +171,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 // -- begin create output data
                 var formViewData = create<FormViewModel>(cp, settings);
                 formViewData.id = settings.id;
+                formViewData.isUserView = true;
                 formViewData.instanceId = settings.ccguid;
                 formViewData.formHtmlId = string.IsNullOrEmpty(("formHtmlId")) ? cp.Utils.GetRandomString(4) : ("formHtmlId");
                 formViewData.srcPageId = savedAnswers.currentPageid;
