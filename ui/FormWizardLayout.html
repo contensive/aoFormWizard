@@ -2,16 +2,21 @@
 	<div class="{{contentContainerClass}}">		
 		<div class="col-lg-10 mx-auto">
 			<form id="{{formHtmlId}}" >
-				{{{formdEditLink}}}
-				<div class="card rounded-3 {{formEditWrapper}}">
 
-					{{#isNotAvailableView}}	
+				<!-- view: isNotAvailableView  -->
+
+				{{#isNotAvailableView}}	
+					<div class="card rounded-3">
 						<div class="card-body px-5">
 							<p class="p-0 m-0">The form is not currently available.</p>
 						</div>
-					{{/isNotAvailableView}}	
+					</div>
+				{{/isNotAvailableView}}	
 
-					{{#isSelectFormView}}
+				<!-- view: isSelectFormView  -->
+
+				{{#isSelectFormView}}
+					<div class="card rounded-3">
 						<div class="card-header bg-white p-5">
 							<div class="alert alert-warning" role="alert">
 								<b>Administrator:</b> 
@@ -51,321 +56,318 @@
 							</div>
 							{{{inputHiddenTags}}}  
 						</div>
-					{{/isSelectFormView}}
+					</div>
+				{{/isSelectFormView}}				
+				 
+				<!-- view: isDisplayFormView  -->
 
-					{{#isThankYouView}}
-						<div class="card card-body px-5">
-							<div class="my-5 pt-2">
-								{{{pageDescription}}}
-							</div>
-						</div>			
-					{{/isThankYouView}}
+				{{#isDisplayFormView}}
+					<!-- form -->
+					{{{formEditLink}}}
+					<div class=" {{formEditWrapperClass}}">
 
-					{{#isUserView}}	
-						{{^isEditing}}	
-							<!-- userView, notediting-->			
-							{{#pageDescription}}
-								<div class="card-header text-center p-4">{{{pageDescription}}}</div>
-							{{/pageDescription}}
-							<div class="card-body px-5">
-								{{#listOfFieldsClass}}
-									{{#isDefault}}
-										{{{fieldEditLink}}}
-										<div class="{{fieldEditWrapper}}">
-											{{#headline}}<h2 class="border-bottom pb-3 pt-5 mb-4">{{headline}}</h2>{{/headline}}
-											<div class="mb-4">
-												<label class="control-label mb-0" for="FormType_{{id}}">
-													<h6 class="fw-bold">{{caption}}</h6>
-												</label>
-												<div>
-													{{{fielddescription}}}
-													<input class="form-control {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" placeholder="{{^required}}(optional){{/required}} {{#required}}{{/required}}" id="FormType_{{id}}" name="formField_{{id}}" type="{{inputtype}}" value="{{currentValue}}" {{#required}}required{{/required}}>
-													{{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
-												</div>
-											</div>
-										</div>
-									{{/isDefault}}
-								
-									{{#isFile}}
-										{{{fieldEditLink}}}
-										<div class="{{fieldEditWrapper}}">
-											{{#headline}}<h2 class="border-bottom pb-3 pt-5 mb-4">{{headline}}</h2>{{/headline}}
-											<div class="mb-4">
-												<label class="control-label mb-0" for="FormType_{{id}}">
-													<h6 class="fw-bold">{{caption}}</h6>
-												</label>
-												<div>
-													{{{fielddescription}}}
-													{{#currentValue}}
-														<div class="mt-2">
-															<a href="{{currentFileUrl}}" target="_blank">{{currentValue}}</a>
-														</div>
-													{{/currentValue}}
-													<input class="form-control {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" placeholder="{{^required}}optional{{/required}} {{#required}}{{/required}}" id="FormType_{{id}}" name="formField_{{id}}" type="{{inputtype}}" value="{{currentValue}}" {{#required}}required{{/required}}>
-													{{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
-												</div>
-											</div>
-										</div>
-									{{/isFile}}
+						{{#isThankYouView}}
 
-									{{#isTextArea}}
-										{{{fieldEditLink}}}
-										<div class="{{fieldEditWrapper}}">
-											{{#headline}}<h2 class="border-bottom pb-3 pt-5 mb-4">{{headline}}</h2>{{/headline}}
-											<div class="mb-4">
-												<label class="control-label" for="FormType_{{id}}">
-													<h6 class="fw-bold">{{caption}}</h6>
-												</label>
-												<div>
-													{{{fielddescription}}}
-													<textarea rows="5" class="form-control {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" placeholder="{{^required}}(optional){{/required}} {{#required}}{{/required}}" id="FormType_{{id}}" name="formField_{{id}}" type="{{inputtype}}" {{#required}}required{{/required}}>{{currentValue}}</textarea>
-													{{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
-												</div>
-											</div>
-										</div>
-									{{/isTextArea}}
-
-									{{#isCheckbox}}
-										{{{fieldEditLink}}}
-										<div class="{{fieldEditWrapper}}">
-											{{#headline}}<h2 class="border-bottom pb-3 pt-5 mb-4">{{headline}}</h2>{{/headline}}
-											<div class="mb-4">
-												<h6 class="fw-bold">{{caption}} {{^required}}<span class="text-muted fw-light">(optional)</span>{{/required}}</h6>
-												<div>
-													{{{fielddescription}}}
-													{{#optionList}}
-														<div class="form-check">
-															<input class="form-check-input {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" name="formField_{{id}}" type="checkbox" id="formField_{{id}}_{{optionPtr}}" value="{{optionPtr}}" {{#isSelected}}checked{{/isSelected}}>
-															<label class="form-check-label" for="formField_{{id}}_{{optionPtr}}">{{optionName}}</label>
-														</div>
-													{{/optionList}}
-												</div>
-												{{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
-											</div>
-										</div>
-									{{/isCheckbox}}
-
-									{{#isRadio}}
-										{{{fieldEditLink}}}
-										<div class="{{fieldEditWrapper}}">
-											{{#headline}}<h2 class="border-bottom pb-3 pt-5 mb-4">{{headline}}</h2>{{/headline}}
-											<div class="mb-4">
-												<h6 class="fw-bold">{{caption}} {{^required}}<span class="text-muted fw-light">(optional)</span>{{/required}}</h6>
-												<div>
-													{{{fielddescription}}}
-													{{#optionList}}
-														<div class="form-check">
-														<input class="form-check-input {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" type="radio" name="formField_{{id}}" id="formField_{{id}}_{{optionPtr}}" value="{{optionPtr}}"  {{#isSelected}}checked{{/isSelected}}>
-														<label class="form-check-label" for="formField_{{id}}_{{optionPtr}}">{{optionName}}</label>
-														</div>
-													{{/optionList}}
-												</div>
-												{{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
-											</div>
-										</div>
-									{{/isRadio}}
-
-									{{#isSelect}}
-										{{{fieldEditLink}}}
-										<div class="{{fieldEditWrapper}}">
-											{{#headline}}<h2 class="border-bottom pb-3 pt-5 mb-4">{{headline}}</h2>{{/headline}}
-											<div class="mb-4">
-												<h6 class="fw-bold">{{caption}} {{^required}}<span class="text-muted fw-light">(optional)</span>{{/required}}</h6>
-												<div>
-													{{{fielddescription}}}
-														<div class="form-check">
-															<select class="mt-2 form-control {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" name="formField_{{id}}" id="formField_{{id}}" {{#required}}required{{/required}}>
-																<option value="" selected>Choose...</option>
-																{{#optionList}}
-																	<option id="formField_{{optionPtr}}" value="{{optionPtr}}">{{optionName}}</option>
-																{{/optionList}}
-															</select>
-															<label class="form-check-label" for="formField_{{optionPtr}}">{{optionName}}</label>
-														</div>
-												</div>
-												{{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
-											</div>
-										</div>
-									{{/isSelect}}
-
-								{{/listOfFieldsClass}}
-								{{{fieldAddLink}}}
-								{{{formAddLink}}}
-								{{#allowRecaptcha}}
-									<div class="mb-4">
-										<label class="control-label mb-0">
-											{{{recaptchaHTML}}}
-										</label>
+							<div class="card rounded-3">						
+								<div class="card card-body px-5">
+									<div class="my-5 pt-2">
+										{{{pageDescription}}}
 									</div>
-								{{/allowRecaptcha}}						
-							</div>
-							<div class="card-footer px-5 py-3">
-								{{#previousButton}}
-									<button class="btn btn-outline-primary js-formWidgetButton" name="button" type="submit" value="{{previousButton}}">{{previousButton}}</button>
-								{{/previousButton}}
-								{{#resetButton}}
-									<button class="btn btn-danger js-formWidgetButton" name="button" type="submit" value="{{resetButton}}">{{resetButton}}</button>
-								{{/resetButton}}
-								{{#continueButton}}
-									<button class="btn btn-primary js-formWidgetButton" name="button" type="submit" value="{{continueButton}}">{{continueButton}}</button>
-								{{/continueButton}}
-								{{#saveButton}}
-									<button class="btn btn-primary js-formWidgetButton" name="button" type="submit" value="{{saveButton}}">{{saveButton}}</button>
-								{{/saveButton}}
-								{{#submitButton}}
-									<button class="btn btn-primary js-formWidgetButton" name="button" type="submit" value="{{submitButton}}">{{submitButton}}</button>
-								{{/submitButton}}
-								<input type=hidden name=instanceid value="{{instanceid}}">
-								<input type=hidden name=formHtmlId value="{{formHtmlId}}">
-								<input type=hidden name=srcPageId value="{{srcPageId}}">
-							</div>
-						{{/isEditing}}
+								</div>		
+							</div>	
 
-						{{#isEditing}}
-							<!-- userView, editing-->
-							{{#pageListEditingData}}
+						{{/isThankYouView}}
+
+						{{#isUserView}}	
+							{{^isEditing}}
+							<!-- form page -->
+							<div class="card rounded-3">
+
+
+
+								<!-- userView, notediting-->			
 								{{#pageDescription}}
 									<div class="card-header text-center p-4">{{{pageDescription}}}</div>
 								{{/pageDescription}}
 								<div class="card-body px-5">
-									{{#listOfEditingFieldsClass}}
-										{{#isDefault}}
-											{{{fieldEditLink}}}
-											<div class="{{fieldEditWrapper}}">
-											{{#headline}}<h2 class="border-bottom pb-3 pt-5 mb-4">{{headline}}</h2>{{/headline}}
-											<div class="mb-4">
-											<label class="control-label mb-0" for="FormType_{{id}}">
-											<h6 class="fw-bold">{{caption}}</h6>
-											</label>
-											<div>
-											{{{fielddescription}}}
-											<input class="form-control {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" placeholder="{{^required}}(optional){{/required}} {{#required}}{{/required}}" id="FormType_{{id}}" name="formField_{{id}}" type="{{inputtype}}" value="{{currentValue}}" {{#required}}required{{/required}}>
-											{{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
-											</div>
-											</div>
-											</div>
-										{{/isDefault}}
+									{{#formQuestionList}}
+										<div class="">
+											{{#isDefault}}
+												{{#headline}}<h2 class="border-bottom pb-3 pt-5 mb-4">{{headline}}</h2>{{/headline}}
+												<div class="mb-4">
+													<label class="control-label mb-0" for="FormType_{{id}}">
+														<h6 class="fw-bold">{{caption}}</h6>
+													</label>
+													<div>
+														{{{fielddescription}}}
+														<input class="form-control {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" placeholder="{{^required}}(optional){{/required}} {{#required}}{{/required}}" id="FormType_{{id}}" name="formField_{{id}}" type="{{inputtype}}" value="{{currentValue}}" {{#required}}required{{/required}}>
+														{{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
+													</div>
+												</div>
+											{{/isDefault}}
+									
+											{{#isFile}}
+												{{#headline}}<h2 class="border-bottom pb-3 pt-5 mb-4">{{headline}}</h2>{{/headline}}
+												<div class="mb-4">
+													<label class="control-label mb-0" for="FormType_{{id}}">
+														<h6 class="fw-bold">{{caption}}</h6>
+													</label>
+													<div>
+														{{{fielddescription}}}
+														{{#currentValue}}
+															<div class="mt-2">
+																<a href="{{currentFileUrl}}" target="_blank">{{currentValue}}</a>
+															</div>
+														{{/currentValue}}
+														<input class="form-control {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" placeholder="{{^required}}optional{{/required}} {{#required}}{{/required}}" id="FormType_{{id}}" name="formField_{{id}}" type="{{inputtype}}" value="{{currentValue}}" {{#required}}required{{/required}}>
+														{{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
+													</div>
+												</div>
+											{{/isFile}}
 
-										{{#isFile}}
-											{{{fieldEditLink}}}
-											<div class="{{fieldEditWrapper}}">
-											{{#headline}}<h2 class="border-bottom pb-3 pt-5 mb-4">{{headline}}</h2>{{/headline}}
-											<div class="mb-4">
-											<label class="control-label mb-0" for="FormType_{{id}}">
-											<h6 class="fw-bold">{{caption}}</h6>
-											</label>
-											<div>
-											{{{fielddescription}}}
-											{{#currentValue}}
-											<div class="mt-2">
-											<a href="{{currentFileUrl}}" target="_blank">{{currentValue}}</a>
-											</div>
-											{{/currentValue}}
-											<input class="form-control {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" placeholder="{{^required}}optional{{/required}} {{#required}}{{/required}}" id="FormType_{{id}}" name="formField_{{id}}" type="{{inputtype}}" value="{{currentValue}}" {{#required}}required{{/required}}>
-											{{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
-											</div>
-											</div>
-											</div>
-										{{/isFile}}
+											{{#isTextArea}}
+												{{#headline}}<h2 class="border-bottom pb-3 pt-5 mb-4">{{headline}}</h2>{{/headline}}
+												<div class="mb-4">
+													<label class="control-label" for="FormType_{{id}}">
+														<h6 class="fw-bold">{{caption}}</h6>
+													</label>
+													<div>
+														{{{fielddescription}}}
+														<textarea rows="5" class="form-control {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" placeholder="{{^required}}(optional){{/required}} {{#required}}{{/required}}" id="FormType_{{id}}" name="formField_{{id}}" type="{{inputtype}}" {{#required}}required{{/required}}>{{currentValue}}</textarea>
+														{{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
+													</div>
+												</div>
+											{{/isTextArea}}
 
-										{{#isTextArea}}
-											{{{fieldEditLink}}}
-											<div class="{{fieldEditWrapper}}">
-											{{#headline}}<h2 class="border-bottom pb-3 pt-5 mb-4">{{headline}}</h2>{{/headline}}
-											<div class="mb-4">
-											<label class="control-label" for="FormType_{{id}}">
-											<h6 class="fw-bold">{{caption}}</h6>
-											</label>
-											<div>
-											{{{fielddescription}}}
-											<textarea rows="5" class="form-control {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" placeholder="{{^required}}(optional){{/required}} {{#required}}{{/required}}" id="FormType_{{id}}" name="formField_{{id}}" type="{{inputtype}}" {{#required}}required{{/required}}>{{currentValue}}</textarea>
-											{{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
-											</div>
-											</div>
-											</div>
-										{{/isTextArea}}
+											{{#isCheckbox}}
+												{{#headline}}<h2 class="border-bottom pb-3 pt-5 mb-4">{{headline}}</h2>{{/headline}}
+												<div class="mb-4">
+													<h6 class="fw-bold">{{caption}} {{^required}}<span class="text-muted fw-light">(optional)</span>{{/required}}</h6>
+													<div>
+														{{{fielddescription}}}
+														{{#optionList}}
+															<div class="form-check">
+																<input class="form-check-input {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" name="formField_{{id}}" type="checkbox" id="formField_{{id}}_{{optionPtr}}" value="{{optionPtr}}" {{#isSelected}}checked{{/isSelected}}>
+																<label class="form-check-label" for="formField_{{id}}_{{optionPtr}}">{{optionName}}</label>
+															</div>
+														{{/optionList}}
+													</div>
+													{{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
+												</div>
+											{{/isCheckbox}}
 
-										{{#isCheckbox}}
-											{{{fieldEditLink}}}
-											<div class="{{fieldEditWrapper}}">
-											{{#headline}}<h2 class="border-bottom pb-3 pt-5 mb-4">{{headline}}</h2>{{/headline}}
-											<div class="mb-4">
-											<h6 class="fw-bold">{{caption}} {{^required}}<span class="text-muted fw-light">(optional)</span>{{/required}}</h6>
-											<div>
-											{{{fielddescription}}}
-											{{#optionList}}
-											<div class="form-check">
-											<input class="form-check-input {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" name="formField_{{id}}" type="checkbox" id="formField_{{id}}_{{optionPtr}}" value="{{optionPtr}}" {{#isSelected}}checked{{/isSelected}}>
-											<label class="form-check-label" for="formField_{{id}}_{{optionPtr}}">{{optionName}}</label>
-											</div>
-											{{/optionList}}
-											</div>
-											{{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
-											</div>
-											</div>
-										{{/isCheckbox}}
+											{{#isRadio}}
+												{{#headline}}<h2 class="border-bottom pb-3 pt-5 mb-4">{{headline}}</h2>{{/headline}}
+												<div class="mb-4">
+													<h6 class="fw-bold">{{caption}} {{^required}}<span class="text-muted fw-light">(optional)</span>{{/required}}</h6>
+													<div>
+														{{{fielddescription}}}
+														{{#optionList}}
+															<div class="form-check">
+															<input class="form-check-input {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" type="radio" name="formField_{{id}}" id="formField_{{id}}_{{optionPtr}}" value="{{optionPtr}}"  {{#isSelected}}checked{{/isSelected}}>
+															<label class="form-check-label" for="formField_{{id}}_{{optionPtr}}">{{optionName}}</label>
+															</div>
+														{{/optionList}}
+													</div>
+													{{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
+												</div>
+											{{/isRadio}}
 
-										{{#isRadio}}
-											{{{fieldEditLink}}}
-											<div class="{{fieldEditWrapper}}">
-											{{#headline}}<h2 class="border-bottom pb-3 pt-5 mb-4">{{headline}}</h2>{{/headline}}
-											<div class="mb-4">
-											<h6 class="fw-bold">{{caption}} {{^required}}<span class="text-muted fw-light">(optional)</span>{{/required}}</h6>
-											<div>
-											{{{fielddescription}}}
-											{{#optionList}}
-											<div class="form-check">
-											<input class="form-check-input {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" type="radio" name="formField_{{id}}" id="formField_{{id}}_{{optionPtr}}" value="{{optionPtr}}"  {{#isSelected}}checked{{/isSelected}}>
-											<label class="form-check-label" for="formField_{{id}}_{{optionPtr}}">{{optionName}}</label>
-											</div>
-											{{/optionList}}
-											</div>
-											{{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
-											</div>
-											</div>
-										{{/isRadio}}
-
-										{{#isSelect}}
-											{{{fieldEditLink}}}
-											<div class="{{fieldEditWrapper}}">
-											{{#headline}}<h2 class="border-bottom pb-3 pt-5 mb-4">{{headline}}</h2>{{/headline}}
-											<div class="mb-4">
-											<h6 class="fw-bold">{{caption}} {{^required}}<span class="text-muted fw-light">(optional)</span>{{/required}}</h6>
-											<div>
-											{{{fielddescription}}}
-											<div class="form-check">
-											<select class="mt-2 form-control {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" name="formField_{{id}}" id="formField_{{id}}" {{#required}}required{{/required}}>
-											<option value="" selected>Choose...</option>
-											{{#optionList}}
-											<option id="formField_{{optionPtr}}" value="{{optionPtr}}">{{optionName}}</option>
-											{{/optionList}}
-											</select>
-											<label class="form-check-label" for="formField_{{optionPtr}}">{{optionName}}</label>
-											</div>
-											</div>
-											{{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
-											</div>
-											</div>
-										{{/isSelect}}
-									{{/listOfEditingFieldsClass}}
-
-									{{{fieldAddLink}}}
-									{{{formAddLink}}}
-
+											{{#isSelect}}
+												{{#headline}}<h2 class="border-bottom pb-3 pt-5 mb-4">{{headline}}</h2>{{/headline}}
+												<div class="mb-4">
+													<h6 class="fw-bold">{{caption}} {{^required}}<span class="text-muted fw-light">(optional)</span>{{/required}}</h6>
+													<div>
+														{{{fielddescription}}}
+															<div class="form-check">
+																<select class="mt-2 form-control {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" name="formField_{{id}}" id="formField_{{id}}" {{#required}}required{{/required}}>
+																	<option value="" selected>Choose...</option>
+																	{{#optionList}}
+																		<option id="formField_{{optionPtr}}" value="{{optionPtr}}">{{optionName}}</option>
+																	{{/optionList}}
+																</select>
+																<label class="form-check-label" for="formField_{{optionPtr}}">{{optionName}}</label>
+															</div>
+													</div>
+													{{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
+												</div>
+											{{/isSelect}}
+										</div>
+									{{/formQuestionList}}
 									{{#allowRecaptcha}}
 										<div class="mb-4">
 											<label class="control-label mb-0">
-												[recaptcha]
+												{{{recaptchaHTML}}}
 											</label>
 										</div>
-									{{/allowRecaptcha}}
-
+									{{/allowRecaptcha}}						
 								</div>
-							{{/pageListEditingData}}
-						{{/isEditing}}
-					{{/isUserView}}
+								<div class="card-footer px-5 py-3">
+									{{#previousButton}}
+										<button class="btn btn-outline-primary js-formWidgetButton" name="button" type="submit" value="{{previousButton}}">{{previousButton}}</button>
+									{{/previousButton}}
+									{{#resetButton}}
+										<button class="btn btn-danger js-formWidgetButton" name="button" type="submit" value="{{resetButton}}">{{resetButton}}</button>
+									{{/resetButton}}
+									{{#continueButton}}
+										<button class="btn btn-primary js-formWidgetButton" name="button" type="submit" value="{{continueButton}}">{{continueButton}}</button>
+									{{/continueButton}}
+									{{#saveButton}}
+										<button class="btn btn-primary js-formWidgetButton" name="button" type="submit" value="{{saveButton}}">{{saveButton}}</button>
+									{{/saveButton}}
+									{{#submitButton}}
+										<button class="btn btn-primary js-formWidgetButton" name="button" type="submit" value="{{submitButton}}">{{submitButton}}</button>
+									{{/submitButton}}
+									<input type=hidden name=instanceid value="{{instanceid}}">
+									<input type=hidden name=formHtmlId value="{{formHtmlId}}">
+									<input type=hidden name=srcPageId value="{{srcPageId}}">
+								</div>
+							</div>
+							{{/isEditing}}
 
-				</div>
+							{{#isEditing}}
+								<!-- userView, editing-->
+								{{#editingDataPageList}}
+
+
+								<!-- form page -->
+								{{{formPageEditLink}}}
+								<div class="{{formPageEditWrapperClass}}">
+									<div class="card rounded-3">
+										{{#pageDescription}}
+											<div class="card-header text-center p-4">{{{pageDescription}}}</div>
+										{{/pageDescription}}
+										<div class="card-body px-5">
+											{{#formQuestionList}}
+												{{{formQuestionEditLink}}}
+												<div class="{{formQuestionEditWrapperClass}}">
+													{{#isDefault}}
+														{{#headline}}<h2 class="border-bottom pb-3 pt-5 mb-4">{{headline}}</h2>{{/headline}}
+														<div class="mb-4">
+															<label class="control-label mb-0" for="FormType_{{id}}">
+																<h6 class="fw-bold">{{caption}}</h6>
+															</label>
+															<div>
+																{{{fielddescription}}}
+																<input class="form-control {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" placeholder="{{^required}}(optional){{/required}} {{#required}}{{/required}}" id="FormType_{{id}}" name="formField_{{id}}" type="{{inputtype}}" value="{{currentValue}}" {{#required}}required{{/required}}>
+																{{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
+															</div>
+														</div>
+													{{/isDefault}}
+
+													{{#isFile}}
+														{{#headline}}<h2 class="border-bottom pb-3 pt-5 mb-4">{{headline}}</h2>{{/headline}}
+														<div class="mb-4">
+															<label class="control-label mb-0" for="FormType_{{id}}">
+																<h6 class="fw-bold">{{caption}}</h6>
+															</label>
+															<div>
+																{{{fielddescription}}}
+																{{#currentValue}}
+																	<div class="mt-2">
+																		<a href="{{currentFileUrl}}" target="_blank">{{currentValue}}</a>
+																	</div>
+																{{/currentValue}}
+																<input class="form-control {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" placeholder="{{^required}}optional{{/required}} {{#required}}{{/required}}" id="FormType_{{id}}" name="formField_{{id}}" type="{{inputtype}}" value="{{currentValue}}" {{#required}}required{{/required}}>
+																{{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
+															</div>
+														</div>
+													{{/isFile}}
+
+													{{#isTextArea}}
+														{{#headline}}<h2 class="border-bottom pb-3 pt-5 mb-4">{{headline}}</h2>{{/headline}}
+														<div class="mb-4">
+															<label class="control-label" for="FormType_{{id}}">
+																<h6 class="fw-bold">{{caption}}</h6>
+															</label>
+															<div>
+																{{{fielddescription}}}
+																<textarea rows="5" class="form-control {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" placeholder="{{^required}}(optional){{/required}} {{#required}}{{/required}}" id="FormType_{{id}}" name="formField_{{id}}" type="{{inputtype}}" {{#required}}required{{/required}}>{{currentValue}}</textarea>
+																{{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
+															</div>
+														</div>
+													{{/isTextArea}}
+
+													{{#isCheckbox}}
+														{{#headline}}<h2 class="border-bottom pb-3 pt-5 mb-4">{{headline}}</h2>{{/headline}}
+														<div class="mb-4">
+															<h6 class="fw-bold">{{caption}} {{^required}}<span class="text-muted fw-light">(optional)</span>{{/required}}</h6>
+															<div>
+																{{{fielddescription}}}
+																{{#optionList}}
+																	<div class="form-check">
+																		<input class="form-check-input {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" name="formField_{{id}}" type="checkbox" id="formField_{{id}}_{{optionPtr}}" value="{{optionPtr}}" {{#isSelected}}checked{{/isSelected}}>
+																		<label class="form-check-label" for="formField_{{id}}_{{optionPtr}}">{{optionName}}</label>
+																	</div>
+																{{/optionList}}
+															</div>
+															{{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
+														</div>
+													{{/isCheckbox}}
+
+													{{#isRadio}}
+														{{#headline}}<h2 class="border-bottom pb-3 pt-5 mb-4">{{headline}}</h2>{{/headline}}
+														<div class="mb-4">
+															<h6 class="fw-bold">{{caption}} {{^required}}<span class="text-muted fw-light">(optional)</span>{{/required}}</h6>
+															<div>
+																{{{fielddescription}}}
+																{{#optionList}}
+																	<div class="form-check">
+																		<input class="form-check-input {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" type="radio" name="formField_{{id}}" id="formField_{{id}}_{{optionPtr}}" value="{{optionPtr}}"  {{#isSelected}}checked{{/isSelected}}>
+																		<label class="form-check-label" for="formField_{{id}}_{{optionPtr}}">{{optionName}}</label>
+																	</div>
+																{{/optionList}}
+															</div>
+															{{#invalidAnswer}}
+																<div class="invalid-feedback">This question is required.</div>
+															{{/invalidAnswer}}
+														</div>
+													{{/isRadio}}
+
+													{{#isSelect}}
+															{{#headline}}<h2 class="border-bottom pb-3 pt-5 mb-4">{{headline}}</h2>{{/headline}}
+															<div class="mb-4">
+																<h6 class="fw-bold">{{caption}} {{^required}}<span class="text-muted fw-light">(optional)</span>{{/required}}</h6>
+																<div>
+																	{{{fielddescription}}}
+																	<div class="form-check">
+																		<select class="mt-2 form-control {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" name="formField_{{id}}" id="formField_{{id}}" {{#required}}required{{/required}}>
+																			<option value="" selected>Choose...</option>
+																			{{#optionList}}
+																				<option id="formField_{{optionPtr}}" value="{{optionPtr}}">{{optionName}}</option>
+																			{{/optionList}}
+																		</select>
+																		<label class="form-check-label" for="formField_{{optionPtr}}">{{optionName}}</label>
+																	</div>
+																</div>
+																{{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
+															</div>
+													{{/isSelect}}
+												</div>
+											{{/formQuestionList}}
+
+											{{{formQuestionAddLink}}}
+
+											{{#allowRecaptcha}}
+												<div class="mb-4">
+													<label class="control-label mb-0">
+														[recaptcha]
+													</label>
+												</div>
+											{{/allowRecaptcha}}
+
+										</div>
+									</div>
+								</div>
+								{{/editingDataPageList}}
+										
+								{{{formPageAddLink}}}
+
+							{{/isEditing}}
+						{{/isUserView}}
+					</div>
+				{{/isDisplayFormView}}
+
 			</form>
 		</div>
 	</div>

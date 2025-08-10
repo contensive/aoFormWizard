@@ -9,7 +9,7 @@ using System.Linq;
 namespace Contensive.Addon.aoFormWizard3.Models.View {
     public class ApplicationScoresViewModel : DesignBlockViewBaseModel {
         public List<ApplicationScoresTableRow> submittedApplications { get; set; }
-        public FormViewModel applicationViewModel { get; set; }
+        public FormWidgetViewModel applicationViewModel { get; set; }
         public List<int> scoresDropDownOptions { get; set; }
         public List<GradeTableValues> gradeTableValues { get; set; }
         public int id { get; set; }
@@ -205,7 +205,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                     if (currentResponse != null) {
                         cp.Log.Error("currentResponse != null");
                         viewModel.responseId = currentResponse.id;
-                        viewModel.applicationViewModel = FormViewModel.createForScoringWidget(cp, applicationFormModel, currentResponse.memberId);
+                        viewModel.applicationViewModel = FormWidgetViewModel.createForScoringWidget(cp, applicationFormModel, currentResponse.memberId);
                     }
                 }
 

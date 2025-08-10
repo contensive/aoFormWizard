@@ -18,17 +18,9 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
     /// <summary>
     /// Construct the view to be displayed (the current form)
     /// </summary>
-    public class FormViewModel : DesignBlockViewBaseModel {
+    public class FormWidgetViewModel : DesignBlockViewBaseModel {
         // 
         public int id { get; set; }
-        /// <summary>
-        /// display the form to the user to submit
-        /// </summary>
-        public bool isUserView { get; set; }
-        /// <summary>
-        /// display the thank you page
-        /// </summary>
-        public bool isThankYouView { get; set; }
         /// <summary>
         /// display the page saying the form is not ready (not configured, non-admin user)
         /// </summary>
@@ -37,6 +29,33 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
         /// display if the page is not ready and the user is admin -- select form or create form
         /// </summary>
         public bool isSelectFormView { get; set; }
+        /// <summary>
+        /// true if the form is configured and can be displayed
+        /// </summary>
+        public bool isDisplayFormView {
+            get {
+                return !isNotAvailableView && !isSelectFormView;
+            }
+        }
+        //
+        /// <summary>
+        /// The edit link for the form (within the widget, contains form-pages)
+        /// </summary>
+        public string formEditLink { get; set; }
+        //
+        /// <summary>
+        /// class added to the form edit wrapper
+        /// </summary>
+        public string formEditWrapperClass { get; set; }
+        //
+        /// <summary>
+        /// display the form to the user to submit
+        /// </summary>
+        public bool isUserView { get; set; }
+        /// <summary>
+        /// display the thank you page
+        /// </summary>
+        public bool isThankYouView { get; set; }
         /// <summary>
         /// for the SelectFormView, if true there are form options to select
         /// </summary>
@@ -69,19 +88,19 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
         public bool allowRecaptcha { get; set; }
         public string recaptchaHTML { get; set; }
         public string pageDescription { get; set; }
-        public List<FieldViewModel> listOfFieldsClass { get; set; } = new List<FieldViewModel>();
+        public List<FieldViewModel> formQuestionList { get; set; } = new List<FieldViewModel>();
         public string fieldAddLink { get; set; }
         public string previousButton { get; set; }
         public string resetButton { get; set; }
         public string submitButton { get; set; }
         public string saveButton { get; set; }
         public string continueButton { get; set; }
-        public string formEditWrapper { get; set; }
-        public string formdEditLink { get; set; }
-        public string formAddLink { get; set; }
+        //public string formPageEditWrapperClass { get; set; }
+        //public string formPageEditLink { get; set; }
+        public string formPageAddLink { get; set; }
         public bool isEditing { get; set; }
         public List<FormPageModel> pageList { get; set; }
-        public List<EditingPageData> pageListEditingData { get; set; }
+        public List<EditingDataPage> editingDataPageList { get; set; }
         // 
         public class FieldViewModel {
             public string inputtype { get; set; }
@@ -100,8 +119,8 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
             public bool isDefault { get; set; }
             public int id { get; set; }
             public List<OptionClass> optionList { get; set; } = new List<OptionClass>();
-            public string fieldEditWrapper { get; set; }
-            public string fieldEditLink { get; set; }
+            public string formQuestionEditWrapperClass { get; set; }
+            public string formQuestionEditLink { get; set; }
             public bool invalidAnswer { get; set; }
         }
         // 
@@ -111,23 +130,26 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
             public bool isSelected { get; set; }
             public bool isChecked { get; set; }
         }
-        // 
-        public class ButtonClass {
-            public string buttonCaption { get; set; }
-            public bool isVisible { get; set; }
-        }
-
-        public class EditingPageData {
+        //// 
+        //public class ButtonClass {
+        //    public string buttonCaption { get; set; }
+        //    public bool isVisible { get; set; }
+        //}
+        //
+        /// <summary>
+        /// When in edit mode, this is the list of all pages so the user can edit any page
+        /// </summary>
+        public class EditingDataPage {
             public string pageDescription { get; set; }
-            public List<FieldViewModel> listOfEditingFieldsClass { get; set; } = new List<FieldViewModel>();
-            public string fieldAddLink { get; set; }
+            public List<FieldViewModel> formQuestionList { get; set; } = new List<FieldViewModel>();
+            public string formQuestionAddLink { get; set; }
             public string previousButton { get; set; }
             public string resetButton { get; set; }
             public string submitButton { get; set; }
             public string saveButton { get; set; }
             public string continueButton { get; set; }
-            public string formEditWrapper { get; set; }
-            public string formdEditLink { get; set; }
+            public string formPageEditWrapperClass { get; set; }
+            public string formPageEditLink { get; set; }
             public string formAddLink { get; set; }
             public bool isEditing { get; set; }
             public bool isThankYouPage { get; set; }
@@ -141,7 +163,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
         /// <param name="cp"></param>
         /// <param name="formWidget"></param>
         /// <returns></returns>
-        public static FormViewModel create(CPBaseClass cp, FormWidgetModel formWidget) {
+        public static FormWidgetViewModel create(CPBaseClass cp, FormWidgetModel formWidget) {
             try {
                 //
                 cp.Log.Debug($"aoFormWizard.FormSetViewModel.create() start");
@@ -159,7 +181,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                     if (button.Equals("Select Form")) {
                         formWidget.formId = cp.Doc.GetInteger("setFormWizardFormId");
                         if (formWidget.formId == 0) {
-                            var result = new FormViewModel {
+                            var result = new FormWidgetViewModel {
                                 isSelectFormView = true,
                                 pageDescription = "No form selected. Please select a form before clicking the Select Form button.",
                                 isEditing = cp.User.IsEditing(),
@@ -178,7 +200,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                     //
                     // -- no form is selected
                     if (cp.User.IsAdmin) {
-                        var result = new FormViewModel {
+                        var result = new FormWidgetViewModel {
                             isSelectFormView = true,
                             pageDescription = "Select a Form to use with this widget.",
                             isEditing = cp.User.IsEditing(),
@@ -187,7 +209,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                         populateFormSelections(cp, result);
                         return result;
                     }
-                    return new FormViewModel() {
+                    return new FormWidgetViewModel() {
                         isNotAvailableView = true
                     };
                 }
@@ -206,20 +228,34 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 //
                 // -- form completee, show thank you and exit
                 if (savedAnswers.isComplete) {
-                    return new FormViewModel() {
+                    return new FormWidgetViewModel() {
                         pageDescription = form.thankyoucopy,
                         isThankYouView = true,
                         isEditing = cp.User.IsEditing()
                     };
                 }
+                // 
+                // -- begin create output data
+                var formViewData = create<FormWidgetViewModel>(cp, formWidget);
+                formViewData.id = formWidget.id;
+                formViewData.isUserView = true;
+                formViewData.instanceId = formWidget.ccguid;
+                formViewData.formHtmlId = string.IsNullOrEmpty(("formHtmlId")) ? cp.Utils.GetRandomString(4) : ("formHtmlId");
+                formViewData.srcPageId = savedAnswers.currentPageid;
+                formViewData.allowRecaptcha = false;
+                formViewData.recaptchaHTML = "";
+                formViewData.isEditing = cp.User.IsEditing();
+                formViewData.editingDataPageList = [];
+                formViewData.formEditWrapperClass = formViewData.isEditing ? "ccEditWrapper" : "";
+                formViewData.formEditLink = formViewData.isEditing ? cp.Content.GetEditLink(FormModel.tableMetadata.contentName, form.id.ToString(), false, "", formViewData.isEditing) : "";
                 //
                 // -- validate the current page
-                List<FormPageModel> pageList = FormPageModel.getPageList(cp, form.id);
-                if (pageList.Count == 0) {
+                formViewData.pageList = FormPageModel.getPageList(cp, form.id);
+                if (formViewData.pageList.Count == 0) {
                     if (!cp.User.IsAdmin) {
                         //
                         // -- no pages in the form, not admin
-                        return new FormViewModel() {
+                        return new FormWidgetViewModel() {
                             isNotAvailableView = true
                         };
                     }
@@ -230,41 +266,28 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                     formPage.name = $"Initial Page for {form.name}";
                     formPage.save(cp);
                     //
-                    pageList = FormPageModel.getPageList(cp, form.id);
+                    formViewData.pageList = FormPageModel.getPageList(cp, form.id);
                 }
-                if (pageList.Count > 0) {
-                    var currentpage = pageList.Find((x) => x.id == savedAnswers.currentPageid);
+                if (formViewData.pageList.Count > 0) {
+                    var currentpage = formViewData.pageList.Find((x) => x.id == savedAnswers.currentPageid);
                     if (currentpage is null) {
-                        savedAnswers.currentPageid = pageList.First().id;
+                        savedAnswers.currentPageid = formViewData.pageList.First().id;
                     }
                 }
-                // 
-                // -- begin create output data
-                var formViewData = create<FormViewModel>(cp, formWidget);
-                formViewData.id = formWidget.id;
-                formViewData.isUserView = true;
-                formViewData.instanceId = formWidget.ccguid;
-                formViewData.formHtmlId = string.IsNullOrEmpty(("formHtmlId")) ? cp.Utils.GetRandomString(4) : ("formHtmlId");
-                formViewData.srcPageId = savedAnswers.currentPageid;
-                formViewData.allowRecaptcha = false;
-                formViewData.recaptchaHTML = "";
-                formViewData.isEditing = cp.User.IsEditing();
-                formViewData.pageList = pageList;
-                formViewData.pageListEditingData = [];
                 //
-                if (pageList.Count <= 0) { return formViewData; }
+                if (formViewData.pageList.Count <= 0) { return formViewData; }
                 // 
                 // -- output one page with page one header
-                foreach (FormPageModel page in pageList) {
+                foreach (FormPageModel page in formViewData.pageList) {
                     if (formViewData.isEditing) {
-                        formViewData.listOfFieldsClass = new List<FieldViewModel>();
+                        formViewData.formQuestionList = new List<FieldViewModel>();
                     }
                     //
                     //-- skip to the current page
                     if (page.id != savedAnswers.currentPageid && !formViewData.isEditing) { continue; }
                     //
                     // -- recapcha
-                    if (page == pageList.First() && form.allowRecaptcha && !savedAnswers.recaptchaSuccess) {
+                    if (form.allowRecaptcha && !formViewData.isEditing && !savedAnswers.recaptchaSuccess) {
                         //
                         cp.Log.Debug($"aoFormWizard.FormSetViewModel.create(), add recaptcha");
                         // 
@@ -283,16 +306,16 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                     //
                     //formViewData.pageHeader = page.name;
                     formViewData.pageDescription = page.description;
-                    formViewData.previousButton = page == pageList.First() ? "" : string.IsNullOrEmpty(form.backButtonName) ? "Previous" : form.backButtonName;
+                    formViewData.previousButton = page == formViewData.pageList.First() ? "" : string.IsNullOrEmpty(form.backButtonName) ? "Previous" : form.backButtonName;
                     formViewData.resetButton = !form.addResetButton ? "" : string.IsNullOrEmpty(form.resetButtonName) ? "Reset" : form.resetButtonName;
-                    formViewData.submitButton = page != pageList.Last() ? "" : string.IsNullOrEmpty(form.submitButtonName) ? "Submit" : form.submitButtonName;
-                    formViewData.continueButton = page == pageList.Last() ? "" : string.IsNullOrEmpty(form.continueButtonName) ? "Continue" : form.continueButtonName;
+                    formViewData.submitButton = page != formViewData.pageList.Last() ? "" : string.IsNullOrEmpty(form.submitButtonName) ? "Submit" : form.submitButtonName;
+                    formViewData.continueButton = page == formViewData.pageList.Last() ? "" : string.IsNullOrEmpty(form.continueButtonName) ? "Continue" : form.continueButtonName;
                     formViewData.saveButton = !form.useUserProperty ? "" : string.IsNullOrEmpty(form.saveButtonName) ? "Save" : form.saveButtonName;
 
-                    if (formViewData.isEditing) {
-                        formViewData.formEditWrapper = "ccEditWrapper";
-                        formViewData.formdEditLink = cp.Content.GetEditLink(FormPageModel.tableMetadata.contentName, page.id.ToString(), false, "", formViewData.isEditing);
-                    }
+                    //if (formViewData.isEditing) {
+                    //    formViewData.formPageEditWrapperClass = "ccEditWrapper";
+                    //    formViewData.formPageEditLink = cp.Content.GetEditLink(FormPageModel.tableMetadata.contentName, page.id.ToString(), false, "", formViewData.isEditing);
+                    //}
                     //
 
                     int questionPtr = 0;
@@ -324,7 +347,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                     if (string.IsNullOrEmpty(caption)) {
                                         caption = question.name;
                                     }
-                                    formViewData.listOfFieldsClass.Add(new FieldViewModel() {
+                                    formViewData.formQuestionList.Add(new FieldViewModel() {
                                         caption = caption,
                                         name = question.name,
                                         currentValue = "",
@@ -340,8 +363,8 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                         isFile = false,
                                         id = question.id,
                                         optionList = optionList,
-                                        fieldEditLink = fieldEditLink,
-                                        fieldEditWrapper = formViewData.isEditing ? "ccEditWrapper" : "",
+                                        formQuestionEditLink = fieldEditLink,
+                                        formQuestionEditWrapperClass = formViewData.isEditing ? "ccEditWrapper" : "",
                                         invalidAnswer = savedAnswers_Page_Question.invalidAnswer
                                     });
                                     break;
@@ -351,7 +374,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                     if (string.IsNullOrEmpty(caption)) {
                                         caption = question.name;
                                     }
-                                    formViewData.listOfFieldsClass.Add(new FieldViewModel() {
+                                    formViewData.formQuestionList.Add(new FieldViewModel() {
                                         caption = caption,
                                         name = question.name,
                                         currentValue = "",
@@ -367,8 +390,8 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                         isFile = false,
                                         id = question.id,
                                         optionList = optionList,
-                                        fieldEditLink = fieldEditLink,
-                                        fieldEditWrapper = formViewData.isEditing ? "ccEditWrapper" : "",
+                                        formQuestionEditLink = fieldEditLink,
+                                        formQuestionEditWrapperClass = formViewData.isEditing ? "ccEditWrapper" : "",
                                         invalidAnswer = savedAnswers_Page_Question.invalidAnswer
                                     });
                                     break;
@@ -378,7 +401,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                     if (string.IsNullOrEmpty(caption)) {
                                         caption = question.name;
                                     }
-                                    formViewData.listOfFieldsClass.Add(new FieldViewModel() {
+                                    formViewData.formQuestionList.Add(new FieldViewModel() {
                                         caption = caption,
                                         name = question.name,
                                         currentValue = "",
@@ -394,8 +417,8 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                         isFile = false,
                                         id = question.id,
                                         optionList = optionList,
-                                        fieldEditLink = fieldEditLink,
-                                        fieldEditWrapper = formViewData.isEditing ? "ccEditWrapper" : "",
+                                        formQuestionEditLink = fieldEditLink,
+                                        formQuestionEditWrapperClass = formViewData.isEditing ? "ccEditWrapper" : "",
                                         invalidAnswer = savedAnswers_Page_Question.invalidAnswer
                                     });
                                     break;
@@ -405,7 +428,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                     if (string.IsNullOrEmpty(caption)) {
                                         caption = question.name;
                                     }
-                                    formViewData.listOfFieldsClass.Add(new FieldViewModel() {
+                                    formViewData.formQuestionList.Add(new FieldViewModel() {
                                         caption = caption,
                                         name = question.name,
                                         currentValue = savedAnswers_Page_Question.textAnswer,
@@ -421,8 +444,8 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                         isFile = false,
                                         id = question.id,
                                         optionList = optionList,
-                                        fieldEditLink = fieldEditLink,
-                                        fieldEditWrapper = formViewData.isEditing ? "ccEditWrapper" : "",
+                                        formQuestionEditLink = fieldEditLink,
+                                        formQuestionEditWrapperClass = formViewData.isEditing ? "ccEditWrapper" : "",
                                         invalidAnswer = savedAnswers_Page_Question.invalidAnswer
                                     });
                                     break;
@@ -433,7 +456,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                     if (string.IsNullOrEmpty(caption)) {
                                         caption = question.name;
                                     }
-                                    formViewData.listOfFieldsClass.Add(new FieldViewModel() {
+                                    formViewData.formQuestionList.Add(new FieldViewModel() {
                                         caption = caption,
                                         name = question.name,
                                         currentFileUrl = string.IsNullOrEmpty(savedAnswers_Page_Question.textAnswer) ? "" : cp.Http.CdnFilePathPrefixAbsolute + savedAnswers_Page_Question.textAnswer,
@@ -450,8 +473,8 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                         isFile = true,
                                         id = question.id,
                                         optionList = optionList,
-                                        fieldEditLink = fieldEditLink,
-                                        fieldEditWrapper = formViewData.isEditing ? "ccEditWrapper" : "",
+                                        formQuestionEditLink = fieldEditLink,
+                                        formQuestionEditWrapperClass = formViewData.isEditing ? "ccEditWrapper" : "",
                                         invalidAnswer = savedAnswers_Page_Question.invalidAnswer
                                     });
                                     break;
@@ -462,7 +485,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                     if (string.IsNullOrEmpty(caption)) {
                                         caption = question.name;
                                     }
-                                    formViewData.listOfFieldsClass.Add(new FieldViewModel() {
+                                    formViewData.formQuestionList.Add(new FieldViewModel() {
                                         caption = caption,
                                         name = question.name,
                                         currentValue = savedAnswers_Page_Question.textAnswer,
@@ -477,8 +500,8 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                         isSelect = false,
                                         id = question.id,
                                         optionList = optionList,
-                                        fieldEditLink = fieldEditLink,
-                                        fieldEditWrapper = formViewData.isEditing ? "ccEditWrapper" : "",
+                                        formQuestionEditLink = fieldEditLink,
+                                        formQuestionEditWrapperClass = formViewData.isEditing ? "ccEditWrapper" : "",
                                         invalidAnswer = savedAnswers_Page_Question.invalidAnswer
                                     });
                                     break;
@@ -486,23 +509,23 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                         }
                         questionPtr += 1;
                     }
-                    formViewData.fieldAddLink = cp.Content.GetAddLink(FormQuestionModel.tableMetadata.contentName, "formid=" + page.id, false, formViewData.isEditing);
+                    //formViewData.fieldAddLink = cp.Content.GetAddLink(FormQuestionModel.tableMetadata.contentName, "formid=" + page.id, false, formViewData.isEditing);
                     //
                     // -- the rendering of this form page is complete. If not editing, exit with just one page
                     if (!formViewData.isEditing) {
                         break;
                     } else {
-                        var currentEditingPage = new EditingPageData();
-                        currentEditingPage.pageDescription = page.description;
-                        currentEditingPage.listOfEditingFieldsClass = formViewData.listOfFieldsClass;
-                        currentEditingPage.formEditWrapper = formViewData.formEditWrapper;
-                        currentEditingPage.formdEditLink = formViewData.formdEditLink;
-                        currentEditingPage.fieldAddLink = formViewData.fieldAddLink;
-                        currentEditingPage.formAddLink = cp.Content.GetAddLink(FormPageModel.tableMetadata.contentName, "formid=" + form.id, false, formViewData.isEditing);
-                        formViewData.pageListEditingData.Add(currentEditingPage);
+                        formViewData.editingDataPageList.Add(new EditingDataPage {
+                            pageDescription = page.description,
+                            formQuestionList = formViewData.formQuestionList,
+                            formPageEditWrapperClass = "ccEditWrapper",
+                            formPageEditLink = cp.Content.GetEditLink(FormPageModel.tableMetadata.contentName, page.id.ToString(), false, "", formViewData.isEditing),
+                            formQuestionAddLink = cp.Content.GetAddLink(FormQuestionModel.tableMetadata.contentName, "formid=" + page.id, false, formViewData.isEditing),
+                            formAddLink = cp.Content.GetAddLink(FormPageModel.tableMetadata.contentName, "formid=" + form.id, false, formViewData.isEditing)
+                        });
                     }
                 }
-                formViewData.formAddLink = cp.Content.GetAddLink(FormPageModel.tableMetadata.contentName, "formid=" + form.id, false, formViewData.isEditing);
+                formViewData.formPageAddLink = cp.Content.GetAddLink(FormPageModel.tableMetadata.contentName, "formid=" + form.id, false, formViewData.isEditing);
                 return formViewData;
             } catch (Exception ex) {
                 cp.Site.ErrorReport(ex);
@@ -510,7 +533,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
             }
         }
 
-        private static void populateFormSelections(CPBaseClass cp, FormViewModel asdf) {
+        private static void populateFormSelections(CPBaseClass cp, FormWidgetViewModel asdf) {
             using (DataTable dt = cp.Db.ExecuteQuery("select id, name from ccForms order by name")) {
                 foreach (DataRow row in dt.Rows) {
                     asdf._selectOptions.Add(new NameValueSelected(cp.Utils.EncodeText(row["name"]), cp.Utils.EncodeInteger(row["id"]).ToString(), false));
@@ -519,7 +542,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
         }
 
         // this create method is used for the application scoring widget to see another users form response
-        public static FormViewModel createForScoringWidget(CPBaseClass cp, FormWidgetModel settings, int userId) {
+        public static FormWidgetViewModel createForScoringWidget(CPBaseClass cp, FormWidgetModel settings, int userId) {
             try {
                 //
                 cp.Log.Debug($"aoFormWizard.FormSetViewModel.create() start");
@@ -563,7 +586,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 }
                 // 
                 // -- begin create output data
-                var formViewData = create<FormViewModel>(cp, settings);
+                var formViewData = create<FormWidgetViewModel>(cp, settings);
                 formViewData.id = settings.id;
                 formViewData.instanceId = settings.ccguid;
                 formViewData.formHtmlId = string.IsNullOrEmpty(("formHtmlId")) ? cp.Utils.GetRandomString(4) : ("formHtmlId");
@@ -572,7 +595,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 formViewData.recaptchaHTML = "";
                 formViewData.isEditing = cp.User.IsEditing();
                 formViewData.pageList = pageList;
-                formViewData.pageListEditingData = new List<EditingPageData>();
+                formViewData.editingDataPageList = new List<EditingDataPage>();
 
                 if (pageList.Count <= 0) { return formViewData; }
                 // 
@@ -583,7 +606,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                     if (page.id != savedAnswers.currentPageid && !formViewData.isEditing) { continue; }
                     //
                     // -- recapcha
-                    if (page == pageList.First() && form.allowRecaptcha && !savedAnswers.recaptchaSuccess) {
+                    if (form.allowRecaptcha && !formViewData.isEditing && !savedAnswers.recaptchaSuccess) {
                         //
                         cp.Log.Debug($"aoFormWizard.FormSetViewModel.create(), add recaptcha");
                         // 
@@ -607,10 +630,10 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                     formViewData.submitButton = page != pageList.Last() ? "" : string.IsNullOrEmpty(form.submitButtonName) ? "Submit" : form.submitButtonName;
                     formViewData.continueButton = page == pageList.Last() ? "" : string.IsNullOrEmpty(form.continueButtonName) ? "Continue" : form.continueButtonName;
                     formViewData.saveButton = !form.useUserProperty ? "" : string.IsNullOrEmpty(form.saveButtonName) ? "Save" : form.saveButtonName;
-                    if (formViewData.isEditing) {
-                        formViewData.formEditWrapper = "ccEditWrapper";
-                        formViewData.formdEditLink = cp.Content.GetEditLink(FormPageModel.tableMetadata.contentName, page.id.ToString(), false, "", formViewData.isEditing);
-                    }
+                    //if (formViewData.isEditing) {
+                    //    formViewData.formPageEditWrapperClass = "ccEditWrapper";
+                    //    formViewData.formPageEditLink = cp.Content.GetEditLink(FormPageModel.tableMetadata.contentName, page.id.ToString(), false, "", formViewData.isEditing);
+                    //}
                     //
 
                     int questionPtr = 0;
@@ -641,7 +664,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                     if (string.IsNullOrEmpty(caption)) {
                                         caption = question.name;
                                     }
-                                    formViewData.listOfFieldsClass.Add(new FieldViewModel() {
+                                    formViewData.formQuestionList.Add(new FieldViewModel() {
                                         caption = caption,
                                         name = question.name,
                                         currentValue = "",
@@ -657,8 +680,8 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                         isFile = false,
                                         id = question.id,
                                         optionList = optionList,
-                                        fieldEditLink = fieldEditLink,
-                                        fieldEditWrapper = formViewData.isEditing ? "ccEditWrapper" : "",
+                                        formQuestionEditLink = fieldEditLink,
+                                        formQuestionEditWrapperClass = formViewData.isEditing ? "ccEditWrapper" : "",
                                         invalidAnswer = savedAnswers_Page_Question.invalidAnswer
                                     });
                                     break;
@@ -668,7 +691,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                     if (string.IsNullOrEmpty(caption)) {
                                         caption = question.name;
                                     }
-                                    formViewData.listOfFieldsClass.Add(new FieldViewModel() {
+                                    formViewData.formQuestionList.Add(new FieldViewModel() {
                                         caption = caption,
                                         name = question.name,
                                         currentValue = "",
@@ -684,8 +707,8 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                         isFile = false,
                                         id = question.id,
                                         optionList = optionList,
-                                        fieldEditLink = fieldEditLink,
-                                        fieldEditWrapper = formViewData.isEditing ? "ccEditWrapper" : "",
+                                        formQuestionEditLink = fieldEditLink,
+                                        formQuestionEditWrapperClass = formViewData.isEditing ? "ccEditWrapper" : "",
                                         invalidAnswer = savedAnswers_Page_Question.invalidAnswer
                                     });
                                     break;
@@ -695,7 +718,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                     if (string.IsNullOrEmpty(caption)) {
                                         caption = question.name;
                                     }
-                                    formViewData.listOfFieldsClass.Add(new FieldViewModel() {
+                                    formViewData.formQuestionList.Add(new FieldViewModel() {
                                         caption = caption,
                                         name = question.name,
                                         currentValue = "",
@@ -711,8 +734,8 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                         isFile = false,
                                         id = question.id,
                                         optionList = optionList,
-                                        fieldEditLink = fieldEditLink,
-                                        fieldEditWrapper = formViewData.isEditing ? "ccEditWrapper" : "",
+                                        formQuestionEditLink = fieldEditLink,
+                                        formQuestionEditWrapperClass = formViewData.isEditing ? "ccEditWrapper" : "",
                                         invalidAnswer = savedAnswers_Page_Question.invalidAnswer
                                     });
                                     break;
@@ -722,7 +745,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                     if (string.IsNullOrEmpty(caption)) {
                                         caption = question.name;
                                     }
-                                    formViewData.listOfFieldsClass.Add(new FieldViewModel() {
+                                    formViewData.formQuestionList.Add(new FieldViewModel() {
                                         caption = caption,
                                         name = question.name,
                                         currentValue = savedAnswers_Page_Question.textAnswer,
@@ -738,8 +761,8 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                         isFile = false,
                                         id = question.id,
                                         optionList = optionList,
-                                        fieldEditLink = fieldEditLink,
-                                        fieldEditWrapper = formViewData.isEditing ? "ccEditWrapper" : "",
+                                        formQuestionEditLink = fieldEditLink,
+                                        formQuestionEditWrapperClass = formViewData.isEditing ? "ccEditWrapper" : "",
                                         invalidAnswer = savedAnswers_Page_Question.invalidAnswer
                                     });
                                     break;
@@ -750,7 +773,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                     if (string.IsNullOrEmpty(caption)) {
                                         caption = question.name;
                                     }
-                                    formViewData.listOfFieldsClass.Add(new FieldViewModel() {
+                                    formViewData.formQuestionList.Add(new FieldViewModel() {
                                         caption = caption,
                                         name = question.name,
                                         currentFileUrl = string.IsNullOrEmpty(savedAnswers_Page_Question.textAnswer) ? "" : cp.Http.CdnFilePathPrefixAbsolute + savedAnswers_Page_Question.textAnswer,
@@ -767,8 +790,8 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                         isFile = true,
                                         id = question.id,
                                         optionList = optionList,
-                                        fieldEditLink = fieldEditLink,
-                                        fieldEditWrapper = formViewData.isEditing ? "ccEditWrapper" : "",
+                                        formQuestionEditLink = fieldEditLink,
+                                        formQuestionEditWrapperClass = formViewData.isEditing ? "ccEditWrapper" : "",
                                         invalidAnswer = savedAnswers_Page_Question.invalidAnswer
                                     });
                                     break;
@@ -779,7 +802,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                     if (string.IsNullOrEmpty(caption)) {
                                         caption = question.name;
                                     }
-                                    formViewData.listOfFieldsClass.Add(new FieldViewModel() {
+                                    formViewData.formQuestionList.Add(new FieldViewModel() {
                                         caption = caption,
                                         name = question.name,
                                         currentValue = savedAnswers_Page_Question.textAnswer,
@@ -794,8 +817,8 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                         isSelect = false,
                                         id = question.id,
                                         optionList = optionList,
-                                        fieldEditLink = fieldEditLink,
-                                        fieldEditWrapper = formViewData.isEditing ? "ccEditWrapper" : "",
+                                        formQuestionEditLink = fieldEditLink,
+                                        formQuestionEditWrapperClass = formViewData.isEditing ? "ccEditWrapper" : "",
                                         invalidAnswer = savedAnswers_Page_Question.invalidAnswer
                                     });
                                     break;
@@ -803,23 +826,23 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                         }
                         questionPtr += 1;
                     }
-                    formViewData.fieldAddLink = cp.Content.GetAddLink(FormQuestionModel.tableMetadata.contentName, "formid=" + page.id, false, formViewData.isEditing);
+                    //formViewData.fieldAddLink = cp.Content.GetAddLink(FormQuestionModel.tableMetadata.contentName, "formid=" + page.id, false, formViewData.isEditing);
                     //
                     // -- the rendering of this form page is complete. If not editing, exit with just one page
                     if (!formViewData.isEditing) {
                         break;
                     } else {
-                        var currentEditingPage = new EditingPageData();
+                        var currentEditingPage = new EditingDataPage();
                         currentEditingPage.pageDescription = page.description;
-                        currentEditingPage.listOfEditingFieldsClass = formViewData.listOfFieldsClass;
-                        currentEditingPage.formEditWrapper = formViewData.formEditWrapper;
-                        currentEditingPage.formdEditLink = formViewData.formdEditLink;
-                        currentEditingPage.fieldAddLink = formViewData.fieldAddLink;
+                        currentEditingPage.formQuestionList = formViewData.formQuestionList;
+                        currentEditingPage.formPageEditWrapperClass = " ccEditWrapper";
+                        currentEditingPage.formPageEditLink = cp.Content.GetEditLink(FormPageModel.tableMetadata.contentName, page.id.ToString(), false, "", formViewData.isEditing);
+                        currentEditingPage.formQuestionAddLink = cp.Content.GetAddLink(FormQuestionModel.tableMetadata.contentName, "formid=" + page.id, false, formViewData.isEditing);
                         currentEditingPage.formAddLink = cp.Content.GetAddLink(FormPageModel.tableMetadata.contentName, "formid=" + form.id, false, formViewData.isEditing);
-                        formViewData.pageListEditingData.Add(currentEditingPage);
+                        formViewData.editingDataPageList.Add(currentEditingPage);
                     }
                 }
-                formViewData.formAddLink = cp.Content.GetAddLink(FormPageModel.tableMetadata.contentName, "formid=" + form.id, false, formViewData.isEditing);
+                formViewData.formPageAddLink = cp.Content.GetAddLink(FormPageModel.tableMetadata.contentName, "formid=" + form.id, false, formViewData.isEditing);
                 return formViewData;
             } catch (Exception ex) {
                 cp.Site.ErrorReport(ex);

@@ -161,7 +161,7 @@
     <Compile Include="Models\Db\FormWidgetModel.cs" />
     <Compile Include="Models\Db\FormQuestionModel.cs" />
     <Compile Include="Models\Db\FormResponseModel.cs" />
-    <Compile Include="Models\View\FormViewModel.cs" />
+    <Compile Include="Models\View\FormWidgetViewModel.cs" />
     <Compile Include="Addons\FormWidget.cs" />
     <Compile Include="My Project\AssemblyInfo.cs" />
     <Compile Include="My Project\Application.Designer.cs">

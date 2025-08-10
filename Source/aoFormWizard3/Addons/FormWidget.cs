@@ -17,7 +17,7 @@ namespace Contensive.Addon.aoFormWizard3.Views {
         /// <returns></returns>
         public override object Execute(CPBaseClass cp) {
             try {
-                return DesignBlockController.renderWidget<FormWidgetModel, FormViewModel>(cp,
+                return DesignBlockController.renderWidget<FormWidgetModel, FormWidgetViewModel>(cp,
                     widgetName: "Form Widget",
                     layoutGuid: Constants.guidLayoutFormWizard,
                     layoutName: Constants.nameLayoutFormWizard,
