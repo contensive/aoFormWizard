@@ -133,7 +133,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                     appScoreWidget = DbBaseModel.addDefault<ApplicationScoreWidgetsModel>(cp);
                     appScoreWidget.name = mockWidgetGuid;
                     appScoreWidget.ccguid = mockWidgetGuid;
-                    appScoreWidget.formid = response.formWidget;
+                    appScoreWidget.formid = response.formId;
                     appScoreWidget.save(cp);
                 }
                 cp.Doc.SetProperty("scoreWidgetId", appScoreWidget.id);

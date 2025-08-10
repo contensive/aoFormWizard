@@ -26,6 +26,10 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
         /// should be formWidgetId
         /// </summary>
         public int formWidget { get; set; }
+        /// <summary>
+        /// the form this resonse
+        /// </summary>
+        public int formId { get; set; }
         public DateTime dateSubmitted { get; set; }
     }
     public class FormResponseDataModel {

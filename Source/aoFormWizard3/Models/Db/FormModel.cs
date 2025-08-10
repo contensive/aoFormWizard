@@ -35,6 +35,15 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
             if (formWidget.id==0 && cp.Db.IsTableField("ccFormWidgets", "backButtonName")) {
                 cp.Log.Debug("aoFormWizard.FormSetViewModel.create(), upgrade from formWidget to form records");
                 //
+                // -- point formpage to form, not to widget
+                cp.Db.ExecuteNonQuery($"update ccFormPages set formId=f.id from ccFormWidgets w left join ccforms f on f.id=w.formid where w.id={formWidget.id}");
+                //
+                // -- point response to form, not to widget
+                cp.Db.ExecuteNonQuery($"update ccFormResponses set formId=f.id from ccFormWidgets w left join ccforms f on f.id=w.formid where w.id={formWidget.id}");
+                //
+                // -- point ccApplicationScoreWidgets to form, not to widget
+                cp.Db.ExecuteNonQuery($"update ccApplicationScoreWidgets set formId=f.id from ccFormWidgets w left join ccforms f on f.id=w.formid where w.id={formWidget.id}");
+                //
                 // -- copy the formWidget settings to the form
                 using (DataTable dt = cp.Db.ExecuteQuery($"select * from ccFormWidgets where id={formWidget.id}")) {
                     if (dt.Rows.Count > 0) {
@@ -57,6 +66,8 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
                         form.modifiedDate = cp.Utils.EncodeDate(row["modifiedDate"]);
                         form.modifiedBy = cp.Utils.EncodeInteger(row["modifiedBy"]);
                         form.save(cp);
+                        //
+                        // -- each form page should now reference the form by it's forsetId, not the formWidget
                         //
                         formWidget.formId = form.id;
                         formWidget.save(cp);

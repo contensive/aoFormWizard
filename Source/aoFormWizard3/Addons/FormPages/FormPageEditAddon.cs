@@ -38,7 +38,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 if (request.button.Equals(Constants.ButtonCancel)) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormPageListAddon.guidPortalFeature); }
                 //
                 // -- form widget required, else redirect to form widget list
-                if (request.formWidgetId <= 0) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormListAddon.guidPortalFeature); }
+                if (request.formId <= 0) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormListAddon.guidPortalFeature); }
                 // 
                 using (var app = new ApplicationModel(cp)) {
                     string errorMessage = "";
@@ -61,8 +61,8 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 var layoutBuilder = cp.AdminUI.CreateLayoutBuilderNameValue();
                 //
                 // -- get data
-                FormWidgetModel formWidget = DbBaseModel.create<FormWidgetModel>(cp, request.formWidgetId);
-                if (formWidget == null) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormListAddon.guidPortalFeature); }
+                FormModel form = DbBaseModel.create<FormModel>(cp, request.formId);
+                if (form == null) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormListAddon.guidPortalFeature); }
                 FormPageModel formPage = DbBaseModel.create<FormPageModel>(cp, request.formPageId);
                 // 
                 // -- add rows
@@ -73,7 +73,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 //
                 // -- setup layout
                 layoutBuilder.title = (formPage == null) ? "Add Form Page" : "Edit Form Page";
-                layoutBuilder.portalSubNavTitle = (formPage == null ? "Add Form Page" : formPage.name) + $"<br>in form '{formWidget.name}'";
+                layoutBuilder.portalSubNavTitle = (formPage == null ? "Add Form Page" : formPage.name) + $"<br>in form '{form.name}'";
                 layoutBuilder.description = "A form page is one page of questions a user see when submitting a form online. A form can have one or more form pages. Each form page contains one or more form questions.";
                 layoutBuilder.callbackAddonGuid = guidAddon;
                 layoutBuilder.failMessage = userErrorMessage;
@@ -87,7 +87,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 //
                 // -- feature subnav link querystring - clicks must include these values
                 cp.Doc.AddRefreshQueryString(Constants.rnFormPageId, request.formPageId);
-                cp.Doc.AddRefreshQueryString(Constants.rnFormWidgetId, request.formWidgetId);
+                cp.Doc.AddRefreshQueryString(Constants.rnFormId, request.formId);
                 //
                 return layoutBuilder.getHtml();
             } catch (Exception ex) {
@@ -166,7 +166,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 //
                 // -- initialize properties (cannot use default constructor)
                 button = cp.Doc.GetText(Constants.rnButton);
-                formWidgetId = cp.Doc.GetInteger(Constants.rnFormWidgetId);
+                formId = cp.Doc.GetInteger(Constants.rnFormId);
                 formPageId = cp.Doc.GetInteger(Constants.rnFormPageId);
                 //
                 // -- individual fields for the record, request name and requestModel name match the field name (except id)
@@ -176,7 +176,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
             //
             public string button { get; }
             //
-            public int formWidgetId { get; set; }
+            public int formId { get; set; }
             //
             public int formPageId { get; set; }
             //

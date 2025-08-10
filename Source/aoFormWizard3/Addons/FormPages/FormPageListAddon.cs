@@ -40,7 +40,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 if (request.button.Equals(Constants.ButtonCancel)) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormListAddon.guidPortalFeature); }
                 //
                 // -- form widget required, else redirect to form widget list
-                if (request.formWidgetId <= 0) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormListAddon.guidPortalFeature); }
+                if (request.formId <= 0) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormListAddon.guidPortalFeature); }
                 // 
                 using (var app = new ApplicationModel(cp)) {
                     string userErrorMessage = "";
@@ -149,7 +149,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 layoutBuilder.columnDownloadable = true;
                 // 
                 layoutBuilder.addColumn();
-                layoutBuilder.columnCaption = "Form Widget";
+                layoutBuilder.columnCaption = "Form";
                 layoutBuilder.columnName = "FormWidget";
                 layoutBuilder.columnCaptionClass = AfwStyles.afwWidth400px + AfwStyles.afwTextAlignLeft;
                 layoutBuilder.columnCellClass = AfwStyles.afwTextAlignLeft;
@@ -189,15 +189,15 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                     layoutBuilder.setCell($"<input type=checkbox name=\"row{rowPtr}\" value=\"{row.formPageId}\">");
                     //
                     // -- form page
-                    string formPageEditLink = cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, FormPageEditAddon.guidPortalFeature) + $"&{Constants.rnFormWidgetId}={row.formWidgetId}&{Constants.rnFormPageId}={row.formPageId}";
+                    string formPageEditLink = cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, FormPageEditAddon.guidPortalFeature) + $"&{Constants.rnFormId}={row.formId}&{Constants.rnFormPageId}={row.formPageId}";
                     layoutBuilder.setCell($"<a href=\"{formPageEditLink}\">{row.formPageName}</a>", row.formPageName);
                     // 
-                    // -- form widget 
-                    string formWidgetLink = cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, FormEditAddon.guidPortalFeature) + $"&{Constants.rnFormWidgetId}={row.formWidgetId}";
-                    layoutBuilder.setCell($"<a href=\"{formWidgetLink}\">{row.formWidgetName}</a>", row.formWidgetName);
+                    // -- form  
+                    string formLink = cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, FormEditAddon.guidPortalFeature) + $"&{Constants.rnFormId}={row.formId}";
+                    layoutBuilder.setCell($"<a href=\"{formLink}\">{row.formName}</a>", row.formName);
                     //
                     // -- form questions
-                    string formQuestionListLink = cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, guidPortalFeature) + $"&{Constants.rnFormWidgetId}={row.formWidgetId}&{Constants.rnFormPageId}={row.formPageId}";
+                    string formQuestionListLink = cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, guidPortalFeature) + $"&{Constants.rnFormId}={row.formId}&{Constants.rnFormPageId}={row.formPageId}";
                     layoutBuilder.setCell($"<a href=\"{formQuestionListLink}\">{row.formQuestionCount}</a>", row.formQuestionCount);
                     //
                     // -- form page sort order
@@ -211,7 +211,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 layoutBuilder.description = "Forms are created by dropping the Form Widget on a page or by creating a form here, and adding Form-Pages, and Form-Questions to the form. Each time a user submits the form online it creates a Form Response.";
                 layoutBuilder.callbackAddonGuid = guidAddon;
                 layoutBuilder.paginationRecordAlias = "forms";
-                layoutBuilder.portalSubNavTitle = DbBaseModel.getRecordName<FormWidgetModel>(cp, request.formWidgetId);
+                layoutBuilder.portalSubNavTitle = DbBaseModel.getRecordName<FormModel>(cp, request.formId);
                 layoutBuilder.failMessage = userErrorMessage;
                 layoutBuilder.allowDownloadButton = true;
                 // 
@@ -223,7 +223,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 layoutBuilder.addFormHidden("rowCnt", rowPtr);
                 //
                 // -- feature subnav link querystring - clicks must include these values
-                cp.Doc.AddRefreshQueryString(Constants.rnFormWidgetId, request.formWidgetId);
+                cp.Doc.AddRefreshQueryString(Constants.rnFormId, request.formId);
                 //
                 return layoutBuilder.getHtml();
             } catch (Exception ex) {
@@ -238,7 +238,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 if (!string.IsNullOrEmpty(removeFilter)) { cp.Doc.SetProperty(removeFilter, ""); }
                 //
                 button = cp.Doc.GetText(Constants.rnButton);
-                formWidgetId = cp.Doc.GetInteger(Constants.rnFormWidgetId);
+                formId = cp.Doc.GetInteger(Constants.rnFormId);
                 //filterNotConfirmed = cp.Doc.GetBoolean(Constants.rnFilterNotConfirmed);
                 //filterCancelled = cp.Doc.GetBoolean(Constants.rnFilterCancelled);
                 //filterFromDate = cp.Doc.GetDate(Constants.rnFilterFromDate);
@@ -246,13 +246,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
             //
             public string button { get; }
             //
-            public int formWidgetId { get; set; }
-            //
-            //public bool filterNotConfirmed { get; set; }
-            ////
-            //public bool filterCancelled { get; set; }
-            ////
-            //public DateTime filterFromDate { get; set; }
+            public int formId { get; set; }
         }
     }
 }

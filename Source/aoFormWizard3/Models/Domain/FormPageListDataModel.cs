@@ -19,8 +19,8 @@ namespace Contensive.Addon.aoFormWizard3.Models.Domain {
             // 
             public int formPageId { get; set; }
             public string formPageName { get; set; }
-            public int formWidgetId { get; set; }
-            public string formWidgetName { get; set; }
+            public int formId { get; set; }
+            public string formName { get; set; }
             public int formQuestionCount { get; set; }
             public string formPageSortOrder { get; set; }
         }
@@ -30,12 +30,12 @@ namespace Contensive.Addon.aoFormWizard3.Models.Domain {
                 // -- sql where from search and filters
                 string sqlWhere = "(1=1)";
                 //
-                // -- formWidgetId is required
-                sqlWhere += $" and (p.formsetid={request.formWidgetId})";
+                // -- form is required
+                sqlWhere += $" and (p.formid={request.formId})";
                 //
                 string sqlTerm = cp.Db.EncodeSQLTextLike(searchTerm);
                 sqlWhere += string.IsNullOrEmpty(searchTerm) ? "" : $" and(f.name like {sqlTerm})";
-                if (request.formWidgetId != 0) {
+                if (request.formId != 0) {
                 }
                 //if (request.filterNotConfirmed) { sqlWhere += $"and(r.confirmationdate is null)"; }
                 //if (request.filterCancelled) { sqlWhere += $"and(r.cancellationdate is not null)"; }
@@ -48,7 +48,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.Domain {
                         count(*) 
                     from
                         ccFormPages p 
-                        left join ccForms f on f.id=p.formsetid 
+                        left join ccForms f on f.id=p.formid
                     where 
                         {sqlWhere}
                 ";
@@ -66,7 +66,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.Domain {
                         (select count(*) from ccFormQuestions where formid=p.id) as formQuestionCount
                     from 
                         ccFormPages p 
-                        left join ccForms f on f.id=p.formsetid
+                        left join ccForms f on f.id=p.formid
                     where 
 	                    {sqlWhere}
                     order by
@@ -79,8 +79,8 @@ namespace Contensive.Addon.aoFormWizard3.Models.Domain {
                         rowData.Add(new RowDataModel() {
                             formPageId = cp.Utils.EncodeInteger(row["formPageId"]),
                             formPageName = cp.Utils.EncodeText(row["formPageName"]),
-                            formWidgetId = cp.Utils.EncodeInteger(row["formWidgetId"]),
-                            formWidgetName = cp.Utils.EncodeText(row["formWidgetName"]),
+                            formId = cp.Utils.EncodeInteger(row["formWidgetId"]),
+                            formName = cp.Utils.EncodeText(row["formWidgetName"]),
                             formQuestionCount = cp.Utils.EncodeInteger(row["formQuestionCount"]),
                             formPageSortOrder = cp.Utils.EncodeText(row["formPageSortOrder"]),
                         });

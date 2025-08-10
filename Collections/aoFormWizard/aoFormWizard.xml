@@ -370,12 +370,20 @@
 
 
 	<CDef Name="Form Widgets" Active="1" AdminOnly="0" AllowAdd="1" AllowCalendarEvents="0" AllowContentChildTool="0" AllowContentTracking="0" AllowDelete="1" AllowMetaContent="" AllowTopicRules="0" AllowWorkflowAuthoring="0" AuthoringDataSourceName="Default" AuthoringTableName="ccFormWidgets" ContentDataSourceName="Default" ContentTableName="ccFormWidgets" DefaultSortMethod="By Name" DeveloperOnly="0" DropDownFieldList="NAME" EditorGroupName="" Parent="" IconLink="" IconHeight="0" IconWidth="0" IconSprites="0" isbasecontent="0" guid="{63A9BD0B-393B-474F-BA04-F0538BDD38D3}" >
-		<Field Name="formId" Caption="Form Displayed By This Widget" EditGroup="Styles"  EditTab="Styles" FieldType="Lookup" Authorable="True" EditSortPriority="1000" DefaultValue="" active="True" AdminOnly="False" DeveloperOnly="False" HTMLContent="False" Required="False" TextBuffered="False" UniqueName="False" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IndexColumn="0" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="" RedirectPath="" IsBaseField="False" LookupContent="Forms" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
+		<Field Name="name" active="True" AdminOnly="False" Authorable="True" Caption="Widget Name" DeveloperOnly="False" EditSortPriority="110" FieldType="Text" HTMLContent="False" IndexColumn="0" IndexSortDirection="" IndexSortOrder="99" IndexWidth="50" RedirectID="0" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
+			<HelpDefault>
+				<![CDATA[Optional. Not visible on the website. These records represent the placement of widgets on pages.]]>
+			</HelpDefault>
+		</Field>
+		<Field Name="formId" Caption="Form Displayed By This Widget" EditGroup=""  EditTab="" FieldType="Lookup" Authorable="True" EditSortPriority="1000" DefaultValue="" active="True" AdminOnly="False" DeveloperOnly="False" HTMLContent="False" Required="False" TextBuffered="False" UniqueName="False" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IndexColumn="0" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="" RedirectPath="" IsBaseField="False" LookupContent="Forms" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
 			<HelpDefault><![CDATA[Form displayed by this widget.]]></HelpDefault>
 		</Field>
 		<!-- 
 		base common fields
 		-->
+		<Field Name="backgroundimagefilename" Caption="Background Image" EditGroup="" EditTab="Styles" FieldType="Image" Authorable="True" EditSortPriority="100" DefaultValue="" active="True" AdminOnly="False" DeveloperOnly="False" HTMLContent="False" Required="False" TextBuffered="False" UniqueName="False" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IndexColumn="0" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="" RedirectPath="" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
+			<HelpDefault><![CDATA[Add a background image to the design block. It will be reduced in size to cover the entire background.]]></HelpDefault>
+		</Field>
 		<Field Name="padtop" Caption="Top Padding" EditGroup="Padding" EditTab="Styles" FieldType="Boolean" Authorable="True" EditSortPriority="2000" DefaultValue="1" active="True" AdminOnly="False" DeveloperOnly="False" HTMLContent="False" Required="False" TextBuffered="False" UniqueName="False" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IndexColumn="0" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="" RedirectPath="" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
 			<HelpDefault><![CDATA[Add space between the edge of the block and the content.]]></HelpDefault>
 		</Field>
@@ -387,9 +395,6 @@
 		</Field>
 		<Field Name="padleft" Caption="Left Padding" EditGroup="Padding" EditTab="Styles" FieldType="Boolean" Authorable="True" EditSortPriority="2030" DefaultValue="0" active="True" AdminOnly="False" DeveloperOnly="False" HTMLContent="False" Required="False" TextBuffered="False" UniqueName="False" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IndexColumn="0" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="" RedirectPath="" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
 			<HelpDefault><![CDATA[Add space between the edge of the block and the content.]]></HelpDefault>
-		</Field>
-		<Field Name="backgroundimagefilename" Caption="Background Image" EditGroup="Background" EditTab="Background" FieldType="Image" Authorable="True" EditSortPriority="2040" DefaultValue="" active="True" AdminOnly="False" DeveloperOnly="False" HTMLContent="False" Required="False" TextBuffered="False" UniqueName="False" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IndexColumn="0" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="" RedirectPath="" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
-			<HelpDefault><![CDATA[Add a background image to the design block. It will be reduced in size to cover the entire background.]]></HelpDefault>
 		</Field>
 		<Field Name="asfullbleed" Caption="Include Margins for Content" EditGroup="Padding"  EditTab="Styles" FieldType="Boolean" Authorable="True" EditSortPriority="2050" DefaultValue="1" active="True" AdminOnly="False" DeveloperOnly="False" HTMLContent="False" Required="False" TextBuffered="False" UniqueName="False" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IndexColumn="0" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="" RedirectPath="" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
 			<HelpDefault><![CDATA[When not checked, the content always extends to the right and left edge of the widget. When checked, a margin on the right and left is created for wide screens. The design block background will still extend to the edge of the widget. Some templates may include their own right and left margin.]]></HelpDefault>
@@ -466,9 +471,12 @@
 				<![CDATA[Include a recaptcha bot blocker (ask if the user is a human) on the first page of the form.]]>
 			</HelpDefault>
 		</Field>
-		<Field Name="useUserProperty" active="True" AdminOnly="False" Authorable="True" Caption="Require Login to Allow Save and Continue Later " DeveloperOnly="False" EditSortPriority="1010" FieldType="Boolean" HTMLContent="False" IndexColumn="0" IndexSortDirection="" IndexSortOrder="99" IndexWidth="40" RedirectID="0" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
+		<Field Name="useUserProperty" active="True" AdminOnly="False" Authorable="True" Caption="User or Visit Submission" DeveloperOnly="False" EditSortPriority="1010" FieldType="Boolean" HTMLContent="False" IndexColumn="0" IndexSortDirection="" IndexSortOrder="99" IndexWidth="40" RedirectID="0" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
 			<HelpDefault>
-				<![CDATA[When checked user properties will be used]]>
+				<![CDATA[
+				When checked, the submission will be tracked for each user instead of each visit.
+				This means login or registration will be required, and if the user abaondons a submission they can return later and continue.
+				If unchecked an abondoned submission cannot be completed in the future.]]>
 			</HelpDefault>
 		</Field>
 		<!-- 
@@ -490,6 +498,9 @@
 				<![CDATA[Enter a short name for this page of the online form. An online form may have several pages. This name does not appear on your public form but a relevant name will help you organize your content.]]>
 			</HelpDefault>
 		</Field>
+		<Field Name="formId" Caption="Page's Form" EditGroup=""  EditTab="" FieldType="Lookup" Authorable="True" EditSortPriority="1000" DefaultValue="" active="True" AdminOnly="False" DeveloperOnly="False" HTMLContent="False" Required="False" TextBuffered="False" UniqueName="False" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IndexColumn="0" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="" RedirectPath="" IsBaseField="False" LookupContent="Forms" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
+			<HelpDefault><![CDATA[Form that includes this page.]]></HelpDefault>
+		</Field>
 		<Field Name="description" active="True" AdminOnly="False" Authorable="True" Caption="Description" DeveloperOnly="False" EditSortPriority="1010" FieldType="Html" HTMLContent="False" IndexColumn="0" IndexSortDirection="" IndexSortOrder="99" IndexWidth="40" RedirectID="0" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
 			<HelpDefault>
 				<![CDATA[Enter optional form instructions. These instructions appear at the top of this page.]]>
@@ -508,15 +519,15 @@
 				<![CDATA[An alpha numeric string used to determine the order that this form-page appears in the form widget. The default value is 9999 which adds new form-pages to the end.]]>
 			</HelpDefault>
 		</Field>
-		<Field Name="formsetid" active="True" AdminOnly="False" Authorable="True" Caption="Form Set" DeveloperOnly="False" EditSortPriority="1000" FieldType="Lookup" HTMLContent="False" IndexColumn="10" IndexSortDirection="" IndexSortOrder="99" IndexWidth="40" RedirectID="" RedirectPath="" Required="true" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="Form" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="Form Widgets" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
-			<HelpDefault>
-				<![CDATA[Select the FormSet. A FormSet is an online form placed on a page. It can have one or more pages (forms).]]>
-			</HelpDefault>
-		</Field>
 		
 		<!--
 			deprecated
 		-->
+		<Field Name="formsetid" active="false" AdminOnly="False" Authorable="false" Caption="Form Set (deprecated)" DeveloperOnly="False" EditSortPriority="1000" FieldType="Lookup" HTMLContent="False" IndexColumn="10" IndexSortDirection="" IndexSortOrder="99" IndexWidth="40" RedirectID="" RedirectPath="" Required="true" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="Form" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="Form Widgets" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
+			<HelpDefault>
+				<![CDATA[Select the FormSet. A FormSet is an online form placed on a page. It can have one or more pages (forms).]]>
+			</HelpDefault>
+		</Field>
 		<Field Name="body" active="True" Authorable="false" Caption="body (deprecated)" FieldType="HTML" EditTab="deprecated" AdminOnly="true" DeveloperOnly="False" EditSortPriority="9999" HTMLContent="True" IndexColumn="-1" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
 			<HelpDefault>
 				<![CDATA[ ]]>
@@ -595,13 +606,17 @@
     <Field Name="visitID" Active="true" AdminOnly="0" Authorable="1" Caption="Visit ID" DeveloperOnly="0" EditSortPriority="2000" FieldType="Integer" HtmlContent="0" IndexColumn="99" IndexSortDirection="0" IndexSortOrder="0" IndexWidth="0" LookupContent="" NotEditable="0" Password="0" ReadOnly="0" RedirectContent="" RedirectId="" RedirectPath="" Required="0" TextBuffered="0" UniqueName="0" DefaultValue="" RSSTitle="" RSSDescription="" MemberSelectGroup="" EditGroup="" EditTab="Tracking" Scramble="0" LookupList="" ManyToManyContent="" ManyToManyRuleContent="" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="">
       <HelpDefault><![CDATA[ ]]></HelpDefault>
     </Field>
-	<Field Name="formWidget" Active="true" AdminOnly="0" Authorable="1" Caption="Form Widget" DeveloperOnly="0" EditSortPriority="2000" FieldType="Lookup" HtmlContent="0" IndexColumn="99" IndexSortDirection="0" IndexSortOrder="0" IndexWidth="0" LookupContent="Form Widgets" NotEditable="0" Password="0" ReadOnly="0" RedirectContent="" RedirectId="" RedirectPath="" Required="0" TextBuffered="0" UniqueName="0" DefaultValue="" RSSTitle="" RSSDescription="" MemberSelectGroup="" EditGroup="" EditTab="Tracking" Scramble="0" LookupList="" ManyToManyContent="" ManyToManyRuleContent="" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="">
+	<Field Name="formId" Active="true" AdminOnly="0" Authorable="1" Caption="Form" DeveloperOnly="0" EditSortPriority="2000" FieldType="Lookup" HtmlContent="0" IndexColumn="99" IndexSortDirection="0" IndexSortOrder="0" IndexWidth="0" LookupContent="Forms" NotEditable="0" Password="0" ReadOnly="0" RedirectContent="" RedirectId="" RedirectPath="" Required="0" TextBuffered="0" UniqueName="0" DefaultValue="" RSSTitle="" RSSDescription="" MemberSelectGroup="" EditGroup="" EditTab="Tracking" Scramble="0" LookupList="" ManyToManyContent="" ManyToManyRuleContent="" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="">
       <HelpDefault><![CDATA[ The form widget that was submitted ]]></HelpDefault>
     </Field>
     <Field Name="memberId" Active="true" AdminOnly="0" Authorable="1" Caption="Member ID" DeveloperOnly="0" EditSortPriority="3000" FieldType="Integer" HtmlContent="0" IndexColumn="99" IndexSortDirection="0" IndexSortOrder="0" IndexWidth="0" LookupContent="" NotEditable="0" Password="0" ReadOnly="0" RedirectContent="" RedirectId="" RedirectPath="" Required="0" TextBuffered="0" UniqueName="0" DefaultValue="" RSSTitle="" RSSDescription="" MemberSelectGroup="" EditGroup="" EditTab="Tracking" Scramble="0" LookupList="" ManyToManyContent="" ManyToManyRuleContent="" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="">
       <HelpDefault><![CDATA[ ]]></HelpDefault>
     </Field>
-  	</CDef>
+	<!-- deprecated -->
+	<Field Name="formWidget" Active="true" AdminOnly="0" Authorable="0" Caption="Form Widget" DeveloperOnly="0" EditSortPriority="2000" FieldType="Lookup" HtmlContent="0" IndexColumn="99" IndexSortDirection="0" IndexSortOrder="0" IndexWidth="0" LookupContent="Form Widgets" NotEditable="0" Password="0" ReadOnly="0" RedirectContent="" RedirectId="" RedirectPath="" Required="0" TextBuffered="0" UniqueName="0" DefaultValue="" RSSTitle="" RSSDescription="" MemberSelectGroup="" EditGroup="" EditTab="Tracking" Scramble="0" LookupList="" ManyToManyContent="" ManyToManyRuleContent="" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="">
+		<HelpDefault><![CDATA[ The form widget that was submitted ]]></HelpDefault>
+	  </Field>
+		</CDef>
 	<CDef Name="Application Views" NavTypeId="" AddonCategoryId="" ActiveOnly="1" AdminOnly="0" AliasID="id" AliasName="name" AllowAdd="1" AllowContentTracking="0" AllowDelete="1" AllowTopicRules="0" AllowWorkflowAuthoring="0" AuthoringDataSourceName="DEFAULT" AuthoringTableName="applicationViews" ContentDataSourceName="DEFAULT" ContentTableName="applicationViews" DefaultSortMethod="By Name" DeveloperOnly="0" DropDownFieldList="NAME" EditorGroupName="" Parent="" AllowContentChildTool="0" NavIconType="Content" IconLink="" IconWidth="" IconHeight="" IconSprites="" Guid="{CD7AD74F-4A2E-462F-B601-4A4EFD91788B}">
 		<Field Name="responseViewed" Active="true" AdminOnly="0" Authorable="1" Caption="Response Viewed" DeveloperOnly="0" EditSortPriority="1000" FieldType="Lookup" HtmlContent="0" IndexColumn="1" IndexSortDirection="0" IndexSortOrder="0" IndexWidth="80" LookupContent="Form Response" NotEditable="1" Password="0" ReadOnly="0" RedirectContent="" RedirectId="" RedirectPath="" Required="0" TextBuffered="0" UniqueName="0" DefaultValue="" RSSTitle="" RSSDescription="" MemberSelectGroup="" EditGroup="" EditTab="" Scramble="0" LookupList="" ManyToManyContent="" ManyToManyRuleContent="" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="">
 		<HelpDefault><![CDATA[ ]]></HelpDefault>

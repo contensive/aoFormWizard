@@ -52,15 +52,15 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
             try {
                 var layoutBuilder = cp.AdminUI.CreateLayoutBuilderNameValue();
                 //
-                FormWidgetModel formWidget = DbBaseModel.create<FormWidgetModel>(cp, request.formWidgetId);
+                FormModel form = DbBaseModel.create<FormModel>(cp, request.formId);
                 //
                 layoutBuilder.addRow();
                 layoutBuilder.rowName = "Name";
-                layoutBuilder.rowValue = cp.Html5.InputText(Constants.rnName,255, formWidget?.name ?? "" , "form-control");
+                layoutBuilder.rowValue = cp.Html5.InputText(Constants.rnName,255, form?.name ?? "" , "form-control");
                 layoutBuilder.rowHelp = "The name for this form widget. Use the name to recognize the form in a list, for example, 'membership application form' or 'contact us form'. The name does not appear on the public form.";
                 //
-                layoutBuilder.title = (formWidget == null) ? "Add Form" : "Edit Form";
-                layoutBuilder.portalSubNavTitle = (formWidget == null) ? "Add Form" : formWidget.name;
+                layoutBuilder.title = (form == null) ? "Add Form" : "Edit Form";
+                layoutBuilder.portalSubNavTitle = (form == null) ? "Add Form" : form.name;
                 layoutBuilder.description = "This form widget has the controls for the entire set of form pages. A form widget is dropped on the website and contains one or more form-pages. Each form page contains one or more form questions.";
                 layoutBuilder.callbackAddonGuid = guidAddon;
                 // 
@@ -72,7 +72,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 // -- add hiddens
                 //
                 // -- feature subnav link querystring - clicks must include these values
-                cp.Doc.AddRefreshQueryString(Constants.rnFormWidgetId, request.formWidgetId);
+                cp.Doc.AddRefreshQueryString(Constants.rnFormId, request.formId);
                 //
                 return layoutBuilder.getHtml();
             } catch (Exception ex) {
@@ -93,22 +93,18 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
             try {
                 switch (request.button ?? "") {
                     case Constants.buttonSave: {
-                            saveFormWidget(cp, request);
+                            saveForm(cp, request);
                             return;
                         }
                     case Constants.buttonOK: {
-                            saveFormWidget(cp, request);
+                            saveForm(cp, request);
                             cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormListAddon.guidPortalFeature, "");
                             return;
                         }
                     case Constants.buttonDelete: {
-                            foreach (var formPage in DbBaseModel.createList<FormPageModel>(cp, $"formsetid={request.formWidgetId}")) {
-                                foreach (var formQuestion in DbBaseModel.createList<FormQuestionModel>(cp, $"formid={formPage.id}")) {
-                                    DbBaseModel.delete<FormQuestionModel>(cp, formQuestion.id);
-                                }
-                                DbBaseModel.delete<FormPageModel>(cp, formPage.id);
-                            }
-                            DbBaseModel.delete<FormWidgetModel>(cp, request.formWidgetId);
+                            
+                            // -- delete the form widget but NOT the form it points to
+                            DbBaseModel.delete<FormModel>(cp, request.formId);
                             cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormListAddon.guidPortalFeature, "");
                             return;
                         }
@@ -128,14 +124,14 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
         // 
         // ====================================================================================================
         // 
-        private static void saveFormWidget(CPBaseClass cp, RequestModel request) {
+        private static void saveForm(CPBaseClass cp, RequestModel request) {
             try {
-                var formWidget = DbBaseModel.create<FormWidgetModel>(cp, request.formWidgetId);
-                if (formWidget is null) {
-                    formWidget = DbBaseModel.addDefault<FormWidgetModel>(cp);
+                var form = DbBaseModel.create<FormModel>(cp, request.formId);
+                if (form is null) {
+                    form = DbBaseModel.addDefault<FormModel>(cp);
                 }
-                formWidget.name = request.name;
-                formWidget.save(cp);
+                form.name = request.name;
+                form.save(cp);
             } catch (Exception ex) {
                 cp.Site.ErrorReport(ex);
             }
@@ -154,7 +150,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 //
                 // -- initialize properties (cannot use default constructor)
                 button = cp.Doc.GetText(Constants.rnButton);
-                formWidgetId = cp.Doc.GetInteger(Constants.rnFormWidgetId);
+                formId = cp.Doc.GetInteger(Constants.rnFormId);
                 //
                 // -- individual fields for the record, request name and requestModel name match the field name (except id)
                 name = cp.Doc.GetText("name");
@@ -163,7 +159,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
             //
             public string button { get; }
             //
-            public int formWidgetId { get; set; }
+            public int formId { get; set; }
             //
             public string name { get; set; }
         }

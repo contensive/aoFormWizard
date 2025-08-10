@@ -40,7 +40,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 if (request.button.Equals(Constants.ButtonCancel)) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormPageEditAddon.guidPortalFeature) + $"&{Constants.rnFormPageId}={request.formPageId}"; }
                 //
                 // -- form widget and page required, else redirect to form widget list
-                if (request.formWidgetId <= 0) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormListAddon.guidPortalFeature); }
+                if (request.formId <= 0) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormListAddon.guidPortalFeature); }
                 if (request.formPageId <= 0) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormListAddon.guidPortalFeature); }
                 // 
                 using (var app = new ApplicationModel(cp)) {
@@ -191,15 +191,15 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                     layoutBuilder.setCell($"<input type=checkbox name=\"row{rowPtr}\" value=\"{row.formPageId}\">");
                     //
                     // -- form question
-                    string formQuestionEditLink = cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, "FormQuestionEditAddon.guidPortalFeature") + $"&{Constants.rnFormWidgetId}={row.formWidgetId}&{Constants.rnFormPageId}={row.formPageId}&{Constants.rnFormQuestionId}={row.formQuestionId}";
+                    string formQuestionEditLink = cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, "FormQuestionEditAddon.guidPortalFeature") + $"&{Constants.rnFormId}={row.formId}&{Constants.rnFormPageId}={row.formPageId}&{Constants.rnFormQuestionId}={row.formQuestionId}";
                     layoutBuilder.setCell($"<a href=\"{formQuestionEditLink}\">{row.formQuestionName}</a>", row.formQuestionName);
                     //
                     // -- form page
-                    string formPageEditLink = cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, FormPageEditAddon.guidPortalFeature) + $"&{Constants.rnFormWidgetId}={row.formWidgetId}&{Constants.rnFormPageId}={row.formPageId}";
+                    string formPageEditLink = cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, FormPageEditAddon.guidPortalFeature) + $"&{Constants.rnFormId}={row.formId}&{Constants.rnFormPageId}={row.formPageId}";
                     layoutBuilder.setCell($"<a href=\"{formPageEditLink}\">{row.formPageName}</a>", row.formPageName);
                     // 
                     // -- form widget 
-                    string formWidgetLink = cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, FormEditAddon.guidPortalFeature) + $"&{Constants.rnFormWidgetId}={row.formWidgetId}";
+                    string formWidgetLink = cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, FormEditAddon.guidPortalFeature) + $"&{Constants.rnFormId}={row.formId}";
                     layoutBuilder.setCell($"<a href=\"{formWidgetLink}\">{row.formWidgetName}</a>", row.formWidgetName);
                     //
                     // -- sort order
@@ -225,7 +225,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 layoutBuilder.addFormHidden("rowCnt", rowPtr);
                 //
                 // -- feature subnav link querystring - clicks must include these values
-                cp.Doc.AddRefreshQueryString(Constants.rnFormWidgetId, request.formWidgetId);
+                cp.Doc.AddRefreshQueryString(Constants.rnFormId, request.formId);
                 //
                 return layoutBuilder.getHtml();
             } catch (Exception ex) {
@@ -240,13 +240,13 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 if (!string.IsNullOrEmpty(removeFilter)) { cp.Doc.SetProperty(removeFilter, ""); }
                 //
                 button = cp.Doc.GetText(Constants.rnButton);
-                formWidgetId = cp.Doc.GetInteger(Constants.rnFormWidgetId);
+                formId = cp.Doc.GetInteger(Constants.rnFormId);
                 formPageId = cp.Doc.GetInteger(Constants.rnFormPageId);
             }
             //
             public string button { get; }
             //
-            public int formWidgetId { get; set; }
+            public int formId { get; set; }
             //
             public int formPageId { get; set; }
         }

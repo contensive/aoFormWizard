@@ -77,7 +77,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons {
             //
             // -- create data
             foreach (string dataGuid in DataGuids) {
-                body += createFormWidgets(app, margin, dataGuid);
+                body += createFormWidget(app, margin, dataGuid);
                 //body += createFormResponses(app, margin, dataGuid);
             }
             return body;
@@ -85,31 +85,48 @@ namespace Contensive.Addon.aoFormWizard3.Addons {
         //
         // =====================================================================================
         //
-        public string createFormWidgets(ApplicationModel app, int margin, string dataGuid) {
+        public string createFormWidget(ApplicationModel app, int margin, string dataGuid) {
             CPBaseClass cp = app.cp;
             //
             string nameSuffix = dataGuid.Substring(1, 1);
             //
             string result = "";
+            //
+            // -- create the form for this widget (use same guid as widget)
+            FormModel form = DbBaseModel.create<FormModel>(app.cp, dataGuid);
+            if (form == null) {
+                form = DbBaseModel.addDefault<FormModel>(app.cp);
+                form.ccguid = dataGuid;
+            }
+            form.name = $"Form {nameSuffix}";
+            form.addResetButton = false;
+            form.resetButtonName = "Reset";
+            form.backButtonName = "Previous";
+            form.continueButtonName = "Continue";
+            form.submitButtonName = "Complete";
+            form.saveButtonName = "Save";
+            form.modifiedDate = DateTime.Now;
+            form.save(app.cp);
+            //
             FormWidgetModel formWidget = DbBaseModel.create<FormWidgetModel>(app.cp, dataGuid);
             if (formWidget == null) {
                 formWidget = DbBaseModel.addDefault<FormWidgetModel>(app.cp);
                 formWidget.ccguid = dataGuid;
             }
-            //
-            app.cp.Db.ExecuteNonQuery($"delete from ccFormResponse where formwidget={formWidget.id}");
-            //
-            formWidget.name = $"form {nameSuffix}";
-            result += $"<div style=\"margin-left:{margin}px\">Form Widget: {formWidget.name}</div>";
-            //
+            formWidget.formId = form.id;
+            formWidget.name = $"form widget {nameSuffix}";
             formWidget.modifiedDate = DateTime.Now;
-            //
             formWidget.save(app.cp);
             //
-            // -- form pages, digit 5
+            result += $"<div style=\"margin-left:{margin}px\">Form Widget: {formWidget.name}</div>";
+            //
+            // -- delete submissions for this form
+            app.cp.Db.ExecuteNonQuery($"delete from ccFormResponse where formwidget={formWidget.id}");
+            //
+            // -- create form pages for this form, digit 5
             for (int index = 0; index < app.cp.Utils.EncodeInteger(dataGuid.Substring(2, 1)); index++) {
                 int formPageId = 0;
-                result += createFormPages(app, margin + indent, dataGuid, formWidget, ref formPageId, index, nameSuffix);
+                result += createFormPages(app, margin + indent, dataGuid, form, ref formPageId, index, nameSuffix);
             }
             //
             return result;
@@ -117,15 +134,15 @@ namespace Contensive.Addon.aoFormWizard3.Addons {
         //
         // =====================================================================================
         //
-        public string createFormPages(ApplicationModel app, int margin, string dataGuid, FormWidgetModel formWidget, ref int formPageId, int index, string nameSuffix) {
+        public string createFormPages(ApplicationModel app, int margin, string dataGuid, FormModel form, ref int formPageId, int index, string nameSuffix) {
             string result = "";
-            var formPage = DbBaseModel.create<FormPageModel>(app.cp, $"{formWidget.ccguid}-{index}");
+            var formPage = DbBaseModel.create<FormPageModel>(app.cp, $"{form.ccguid}-{index}");
             if (formPage == null) {
                 formPage = DbBaseModel.addDefault<FormPageModel>(app.cp);
-                formPage.ccguid = $"{formWidget.ccguid}-{index}";
+                formPage.ccguid = $"{form.ccguid}-{index}";
             }
             formPage.name = $"formPage-{index}-{nameSuffix}";
-            formPage.formsetid = formWidget.id;
+            formPage.formid = form.id;
             //
             //
             formPage.save(app.cp);
@@ -136,7 +153,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons {
             // -- form page questions, digit 6-8
             for (int i = 0; i < app.cp.Utils.EncodeInteger(dataGuid.Substring(3, 2)); i++) {
                 int formQuestionId = 0;
-                result += createFormQuestions(app, margin + indent, dataGuid, formWidget, formPage, ref formQuestionId, i, nameSuffix);
+                result += createFormQuestions(app, margin + indent, dataGuid, form, formPage, ref formQuestionId, i, nameSuffix);
             }
             //
             return result;
@@ -144,12 +161,12 @@ namespace Contensive.Addon.aoFormWizard3.Addons {
         //
         // =====================================================================================
         //
-        public string createFormQuestions(ApplicationModel app, int margin, string dataGuid, FormWidgetModel formWidget, FormPageModel formPage, ref int formQuestionId, int index, string nameSuffix) {
+        public string createFormQuestions(ApplicationModel app, int margin, string dataGuid, FormModel form, FormPageModel formPage, ref int formQuestionId, int index, string nameSuffix) {
             string result = "";
-            var formQuestion = DbBaseModel.create<FormQuestionModel>(app.cp, $"{formWidget.ccguid}-{index}");
+            var formQuestion = DbBaseModel.create<FormQuestionModel>(app.cp, $"{form.ccguid}-{index}");
             if (formQuestion == null) {
                 formQuestion = DbBaseModel.addDefault<FormQuestionModel>(app.cp);
-                formQuestion.ccguid = $"{formWidget.ccguid}-{index}";
+                formQuestion.ccguid = $"{form.ccguid}-{index}";
             }
             formQuestion.name = $"formQuestion-{index}-{nameSuffix}";
             formQuestion.formid = formPage.id;

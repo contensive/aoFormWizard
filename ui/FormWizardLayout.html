@@ -7,18 +7,50 @@
 
 					{{#isNotAvailableView}}	
 						<div class="card-body px-5">
-							<div class="my-5 pt-2">
-								<p>The form is not currently available.</p>
-							</div>
+							<p class="p-0 m-0">The form is not currently available.</p>
 						</div>
 					{{/isNotAvailableView}}	
 
 					{{#isSelectFormView}}
-					<div class="card-body px-5">
-						<div class="my-5 pt-2">
-							<p>Select or create form.</p>
+						<div class="card-header bg-white p-5">
+							<div class="alert alert-warning" role="alert">
+								<b>Administrator:</b> 
+								{{#hasSelectOptions}}
+									<p>To begin accepting form submissions, select a previously created form or create a new form.</p>
+								{{/hasSelectOptions}}
+								{{^hasSelectOptions}}
+									<p>There are no previously created forms. Create a new form in Form Manager or create a form here and edit it in Form Manager.</p>
+								{{/hasSelectOptions}}
+								<p></p>
+							</div>
 						</div>
-					</div>	
+						<div class="card-body p-5">                       
+							<div class="mb-5">
+								{{#hasSelectOptions}}
+									<h4 class="fw-bold border-bottom mb-4 pb-3">Select Form or Create New Form</h4>
+									<p>Administrator: To accept form submissions you must first assign a form to this Form Widget. If you previously created a form, select it here. If not, create a new form. To edit the form, turn on edit and click the edit tag</p>
+									<select class="form-select" name="setFormWizardFormId" aria-label="Select Form">
+										<option selected>Select Form</option>
+										{{#selectOptions}}
+											<option value="{{value}}">{{name}}</option>
+										{{/selectOptions}}
+									</select>
+								{{/hasSelectOptions}}
+								{{^hasSelectOptions}}
+								<h4 class="fw-bold border-bottom mb-4 pb-3">Create New Form</h4>
+								<p>Instructions for create</p>
+								{{/hasSelectOptions}}
+							</div>
+						</div>
+						<div class="card-footer rounded-bottom bg-white px-5 py-3">
+							<div class="d-flex justify-content-between">
+								<div class="me-3">
+									{{#hasSelectOptions}}<input type="submit" name="button" value="Select Form" class="btn btn-outline-primary me-3">{{/hasSelectOptions}}
+									<input type="submit" name="button" value="Create Form" class="btn btn-primary">
+								</div>					
+							</div>
+							{{{inputHiddenTags}}}  
+						</div>
 					{{/isSelectFormView}}
 
 					{{#isThankYouView}}

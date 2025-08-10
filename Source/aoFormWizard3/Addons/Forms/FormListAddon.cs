@@ -153,11 +153,6 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 layoutBuilder.columnDownloadable = true;
                 //
                 // -- add column for elipsis menu
-                //layoutBuilder.addColumn();
-                //// 
-                //// -- add filters
-                //request.formWidgetId = layoutBuilder.getFilterInteger(Constants.rnFormWidgetId, viewName);
-                //layoutBuilder.addFilterSelectContent("Form", Constants.rnFormWidgetId, request.formWidgetId, "form widgets", "", "Any Form");
                 //
                 // -- build data
                 FormListDataModel data = new(cp, request, layoutBuilder.sqlOrderBy, layoutBuilder.sqlSearchTerm, layoutBuilder.paginationPageNumber, layoutBuilder.paginationPageSize);
@@ -174,19 +169,13 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                     //
                     layoutBuilder.setCell($"<input type=checkbox name=\"row{rowPtr}\" value=\"{row.formId}\">");
                     // 
-                    string formLink = cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, FormEditAddon.guidPortalFeature) + $"&{Constants.rnFormWidgetId}={row.formId}";
-                    layoutBuilder.setCell($"<a href=\"{formLink}\">{row.formName}</a>", row.formName);
+                    string formLink = cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, FormEditAddon.guidPortalFeature) + $"&{Constants.rnFormId}={row.formId}";
+                    layoutBuilder.setCell($"<a href=\"{formLink}\">{(string.IsNullOrEmpty( row.formName) ? "(Unnamed Form)" : row.formName)}</a>", row.formName);
                     //
-                    string formResponseCountLink = cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, FormResponseListAddon.guidPortalFeature) + $"&{Constants.rnFormWidgetId}={row.formId}";
+                    string formResponseCountLink = cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, FormResponseListAddon.guidPortalFeature) + $"&{Constants.rnFormId}={row.formId}";
                     layoutBuilder.setCell($"<a href=\"{formResponseCountLink}\">{row.formResponseCount}</a>", row.formResponseCount.ToString());
                     //
                     // -- elipsis menu
-                    //// -- confirm link, include all filters so page refresheshes
-                    //string cancelLink = @$"
-                    //        {cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, guidPortalFeature)}
-                    //        &{Constants.rnCancelRegistrationId}={row.formWidgetId}
-                    //        &{Constants.rnMeetingId}={row.meetingId}";
-                    //layoutBuilder.addRowEllipseMenuItem("Cancel registration", cancelLink);
                     //
                     rowPtr += 1;
                 }

@@ -1,6 +1,9 @@
-﻿using Contensive.Addon.aoFormWizard3.Controllers;
+﻿using Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets;
+using Contensive.Addon.aoFormWizard3.Controllers;
 using Contensive.Addon.aoFormWizard3.Models.Db;
+using Contensive.Addon.aoFormWizard3.Views;
 using Contensive.BaseClasses;
+using Contensive.BaseClasses.LayoutBuilder;
 using Contensive.DesignBlockBase.Models.View;
 using Contensive.Models.Db;
 using Microsoft.SqlServer.Server;
@@ -34,6 +37,23 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
         /// display if the page is not ready and the user is admin -- select form or create form
         /// </summary>
         public bool isSelectFormView { get; set; }
+        /// <summary>
+        /// for the SelectFormView, if true there are form options to select
+        /// </summary>
+        public bool hasSelectOptions {
+            get {
+                return selectOptions.Count > 0;
+            }
+        }
+        /// <summary>
+        /// list of forms that can be attached to this widget
+        /// </summary>
+        public List<NameValueSelected> selectOptions {
+            get {
+                return _selectOptions ??= [];
+            }
+        }
+        private List<NameValueSelected> _selectOptions;
         /// <summary>
         /// A short string that is unique to this form.
         /// </summary>
@@ -119,24 +139,56 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
         /// Populate the view model from the entity model
         /// </summary>
         /// <param name="cp"></param>
-        /// <param name="settings"></param>
+        /// <param name="formWidget"></param>
         /// <returns></returns>
-        public static FormViewModel create(CPBaseClass cp, FormWidgetModel settings) {
+        public static FormViewModel create(CPBaseClass cp, FormWidgetModel formWidget) {
             try {
                 //
                 cp.Log.Debug($"aoFormWizard.FormSetViewModel.create() start");
                 //
-                FormModel form = DbBaseModel.create<FormModel>(cp, settings.formId);
-                if( form is null) {
-                    if(cp.User.IsAdmin) {
-                        return new FormViewModel() {
+                string button = cp.Doc.GetText("button");
+                if (cp.User.IsAdmin) {
+                    //
+                    // -- process special cases. handle create form
+                    if (button.Equals("Create Form")) {
+                        formWidget.formId = (DbBaseModel.addDefault<FormModel>(cp)).id;
+                        formWidget.save(cp);
+                    }
+                    //
+                    // -- handle select form
+                    if (button.Equals("Select Form")) {
+                        formWidget.formId = cp.Doc.GetInteger("setFormWizardFormId");
+                        if (formWidget.formId == 0) {
+                            var result = new FormViewModel {
+                                isSelectFormView = true,
+                                pageDescription = "No form selected. Please select a form before clicking the Select Form button.",
+                                isEditing = cp.User.IsEditing(),
+                                _selectOptions = []
+                            };
+                            populateFormSelections(cp, result);
+                            return result;
+                        }
+                        formWidget.save(cp);
+                    }
+                }
+                //
+                //
+                FormModel form = DbBaseModel.create<FormModel>(cp, formWidget.formId);
+                if (form is null) {
+                    //
+                    // -- no form is selected
+                    if (cp.User.IsAdmin) {
+                        var result = new FormViewModel {
                             isSelectFormView = true,
                             pageDescription = "Select a Form to use with this widget.",
-                            isEditing = cp.User.IsEditing()
+                            isEditing = cp.User.IsEditing(),
+                            _selectOptions = []
                         };
+                        populateFormSelections(cp, result);
+                        return result;
                     }
                     return new FormViewModel() {
-                        isNotAvailableView = true   
+                        isNotAvailableView = true
                     };
                 }
                 // 
@@ -144,8 +196,8 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 // -- the request includes the srcPageId that needs to be processed
                 //
                 string userFormResponseSql = form.useUserProperty ? $"memberid = {cp.User.Id}" : $"visitid={cp.Visit.Id}";
-                FormResponseModel userFormResponse = DbBaseModel.createFirstOfList<FormResponseModel>(cp, $"formwidget = {settings.id} and {userFormResponseSql}", "id desc");
-                processRequest(cp, settings, ref userFormResponse);
+                FormResponseModel userFormResponse = DbBaseModel.createFirstOfList<FormResponseModel>(cp, $"formwidget = {formWidget.id} and {userFormResponseSql}", "id desc");
+                processRequest(cp, form.id, ref userFormResponse);
                 //
                 // -- validate the savedAnswers object
                 FormResponseDataModel savedAnswers = string.IsNullOrEmpty(userFormResponse?.formResponseData) ? new() : cp.JSON.Deserialize<FormResponseDataModel>(userFormResponse.formResponseData);
@@ -162,25 +214,44 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 }
                 //
                 // -- validate the current page
-                var pageList = FormPageModel.getPageList(cp, settings.id);
-                var currentpage = pageList.Find((x) => x.id == savedAnswers.currentPageid);
-                if (currentpage is null) {
-                    savedAnswers.currentPageid = pageList.First().id;
+                List<FormPageModel> pageList = FormPageModel.getPageList(cp, form.id);
+                if (pageList.Count == 0) {
+                    if (!cp.User.IsAdmin) {
+                        //
+                        // -- no pages in the form, not admin
+                        return new FormViewModel() {
+                            isNotAvailableView = true
+                        };
+                    }
+                    //
+                    // -- no pages, admin, add a form-page and reload formlist
+                    var formPage = DbBaseModel.addDefault<FormPageModel>(cp);
+                    formPage.formid = form.id;
+                    formPage.name = $"Initial Page for {form.name}";
+                    formPage.save(cp);
+                    //
+                    pageList = FormPageModel.getPageList(cp, form.id);
+                }
+                if (pageList.Count > 0) {
+                    var currentpage = pageList.Find((x) => x.id == savedAnswers.currentPageid);
+                    if (currentpage is null) {
+                        savedAnswers.currentPageid = pageList.First().id;
+                    }
                 }
                 // 
                 // -- begin create output data
-                var formViewData = create<FormViewModel>(cp, settings);
-                formViewData.id = settings.id;
+                var formViewData = create<FormViewModel>(cp, formWidget);
+                formViewData.id = formWidget.id;
                 formViewData.isUserView = true;
-                formViewData.instanceId = settings.ccguid;
+                formViewData.instanceId = formWidget.ccguid;
                 formViewData.formHtmlId = string.IsNullOrEmpty(("formHtmlId")) ? cp.Utils.GetRandomString(4) : ("formHtmlId");
                 formViewData.srcPageId = savedAnswers.currentPageid;
                 formViewData.allowRecaptcha = false;
                 formViewData.recaptchaHTML = "";
                 formViewData.isEditing = cp.User.IsEditing();
                 formViewData.pageList = pageList;
-                formViewData.pageListEditingData = new List<EditingPageData>();
-
+                formViewData.pageListEditingData = [];
+                //
                 if (pageList.Count <= 0) { return formViewData; }
                 // 
                 // -- output one page with page one header
@@ -427,15 +498,23 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                         currentEditingPage.formEditWrapper = formViewData.formEditWrapper;
                         currentEditingPage.formdEditLink = formViewData.formdEditLink;
                         currentEditingPage.fieldAddLink = formViewData.fieldAddLink;
-                        currentEditingPage.formAddLink = cp.Content.GetAddLink(FormPageModel.tableMetadata.contentName, "formsetid=" + settings.id, false, formViewData.isEditing);
+                        currentEditingPage.formAddLink = cp.Content.GetAddLink(FormPageModel.tableMetadata.contentName, "formid=" + form.id, false, formViewData.isEditing);
                         formViewData.pageListEditingData.Add(currentEditingPage);
                     }
                 }
-                formViewData.formAddLink = cp.Content.GetAddLink(FormPageModel.tableMetadata.contentName, "formsetid=" + settings.id, false, formViewData.isEditing);
+                formViewData.formAddLink = cp.Content.GetAddLink(FormPageModel.tableMetadata.contentName, "formid=" + form.id, false, formViewData.isEditing);
                 return formViewData;
             } catch (Exception ex) {
                 cp.Site.ErrorReport(ex);
                 return null;
+            }
+        }
+
+        private static void populateFormSelections(CPBaseClass cp, FormViewModel asdf) {
+            using (DataTable dt = cp.Db.ExecuteQuery("select id, name from ccForms order by name")) {
+                foreach (DataRow row in dt.Rows) {
+                    asdf._selectOptions.Add(new NameValueSelected(cp.Utils.EncodeText(row["name"]), cp.Utils.EncodeInteger(row["id"]).ToString(), false));
+                }
             }
         }
 
@@ -446,7 +525,6 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 cp.Log.Debug($"aoFormWizard.FormSetViewModel.create() start");
                 //
                 FormModel form = DbBaseModel.create<FormModel>(cp, settings.formId);
-                form ??= FormModel.createFormFromWizard(cp, settings);
                 // 
                 // -- process form request
                 // -- the request includes the srcPageId that needs to be processed
@@ -460,7 +538,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 FormResponseModel userFormResponse = DbBaseModel.createFirstOfList<FormResponseModel>(cp, userFormResponseSql, "id desc");
                 //
                 // -- process the request
-                processRequest(cp, settings, ref userFormResponse);
+                processRequest(cp, form.id, ref userFormResponse);
                 //
                 // -- validate the savedAnswers object
                 FormResponseDataModel savedAnswers = string.IsNullOrEmpty(userFormResponse?.formResponseData) ? new() : cp.JSON.Deserialize<FormResponseDataModel>(userFormResponse.formResponseData);
@@ -478,7 +556,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 */
                 //
                 // -- validate the current page
-                var pageList = FormPageModel.getPageList(cp, settings.id);
+                var pageList = FormPageModel.getPageList(cp, form.id);
                 var currentpage = pageList.Find((x) => x.id == savedAnswers.currentPageid);
                 if (currentpage is null) {
                     savedAnswers.currentPageid = pageList.First().id;
@@ -737,11 +815,11 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                         currentEditingPage.formEditWrapper = formViewData.formEditWrapper;
                         currentEditingPage.formdEditLink = formViewData.formdEditLink;
                         currentEditingPage.fieldAddLink = formViewData.fieldAddLink;
-                        currentEditingPage.formAddLink = cp.Content.GetAddLink(FormPageModel.tableMetadata.contentName, "formsetid=" + settings.id, false, formViewData.isEditing);
+                        currentEditingPage.formAddLink = cp.Content.GetAddLink(FormPageModel.tableMetadata.contentName, "formid=" + form.id, false, formViewData.isEditing);
                         formViewData.pageListEditingData.Add(currentEditingPage);
                     }
                 }
-                formViewData.formAddLink = cp.Content.GetAddLink(FormPageModel.tableMetadata.contentName, "formsetid=" + settings.id, false, formViewData.isEditing);
+                formViewData.formAddLink = cp.Content.GetAddLink(FormPageModel.tableMetadata.contentName, "formid=" + form.id, false, formViewData.isEditing);
                 return formViewData;
             } catch (Exception ex) {
                 cp.Site.ErrorReport(ex);
@@ -759,7 +837,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
         /// <param name="formWidget"></param>
         /// <param name="userFormResponse"></param>
         /// <returns></returns>
-        public static bool processRequest(CPBaseClass cp, FormWidgetModel formWidget, ref FormResponseModel userFormResponse) {
+        public static bool processRequest(CPBaseClass cp, int formId, ref FormResponseModel userFormResponse) {
             string returnHtml = string.Empty;
             int hint = 0;
             try {
@@ -769,8 +847,8 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 // -- handle no button
                 if (string.IsNullOrWhiteSpace(button) || srcPageId.Equals(0)) { return false; }
                 //
-                var form = DbBaseModel.create<FormModel>(cp, formWidget.formId);
-                form ??= FormModel.createFormFromWizard(cp, formWidget);
+                var form = DbBaseModel.create<FormModel>(cp, formId);
+                //form ??= FormModel.createFormFromWizard(cp, formWidget);
                 //
                 // -- handle reset button
                 string resetButton = string.IsNullOrEmpty(form.resetButtonName) ? "Reset" : form.resetButtonName;
@@ -783,15 +861,15 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 // -- verify the users response
                 if (userFormResponse is null) {
                     userFormResponse = DbBaseModel.addDefault<FormResponseModel>(cp);
-                    userFormResponse.formWidget = formWidget.id;
-                    userFormResponse.name = "Form Set " + formWidget.name + " started " + DateTime.Now.ToString("MM/dd/yyyy") + " by " + cp.User.Name;
+                    userFormResponse.formId = form.id;
+                    userFormResponse.name = $"Form {form.name} started {DateTime.Now.ToString("MM/dd/yyyy")} by {cp.User.Name}";
                 }
-                userFormResponse.formWidget = formWidget.id;
+                userFormResponse.formId = form.id;
                 userFormResponse.visitid = cp.Visit.Id;
                 userFormResponse.memberId = cp.User.Id;
                 //
                 // -- determine the page to process
-                List<FormPageModel> pageList = FormPageModel.getPageList(cp, formWidget.id);
+                List<FormPageModel> pageList = FormPageModel.getPageList(cp, form.id);
                 var currentPage = pageList.Find((x) => x.id == srcPageId);
                 if (currentPage is null) {
                     //

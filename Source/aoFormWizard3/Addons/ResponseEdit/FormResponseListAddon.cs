@@ -152,8 +152,8 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 layoutBuilder.columnCellClass = AfwStyles.afwTextAlignLeft;
                 // 
                 // -- add filters
-                request.formWidgetId = layoutBuilder.getFilterInteger(Constants.rnFormWidgetId, viewName);
-                layoutBuilder.addFilterSelectContent("Form", Constants.rnFormWidgetId, request.formWidgetId, "form widgets", "", "Any Form");
+                request.formId = layoutBuilder.getFilterInteger(Constants.rnFormId, viewName);
+                layoutBuilder.addFilterSelectContent("Form", Constants.rnFormId, request.formId, "forms", "", "Any Form");
                 //
                 // todo: tjis hsould be a list of users that have filled out forms
                 //
@@ -172,14 +172,14 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                     //
                     layoutBuilder.setCell((rowPtrStart + rowPtr + 1).ToString());
                     //
-                    layoutBuilder.setCell($"<input type=checkbox name=\"row{rowPtr}\" value=\"{row.formWidgetId}\">");
+                    layoutBuilder.setCell($"<input type=checkbox name=\"row{rowPtr}\" value=\"{row.formId}\">");
                     //
                     // -- form response
                     string formResponseCountLink = cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, FormResponseDetailsAddon.guidPortalFeature) + $"&{Constants.rnFormResponseId}={row.formResponseId}";
                     layoutBuilder.setCell($"<a href=\"{formResponseCountLink}\">{row.formResponseName}</a>");
                     // 
                     // -- form widget
-                    string formLink = cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, FormEditAddon.guidPortalFeature) + $"&{Constants.rnFormWidgetId}={row.formWidgetId}";
+                    string formLink = cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, FormEditAddon.guidPortalFeature) + $"&{Constants.rnFormId}={row.formId}";
                     layoutBuilder.setCell($"<a href=\"{formLink}\">{row.formWidgetName}</a>");
                     //
                     // -- submitter
@@ -205,8 +205,8 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 layoutBuilder.addFormHidden("rowCnt", rowPtr);
                 //
                 // -- feature subnav link querystring - clicks must include these values
-                cp.Doc.AddRefreshQueryString(Constants.rnFormWidgetId, request.formWidgetId);
-                cp.Doc.AddRefreshQueryString(Constants.rnFormPageId, request.formPageId);   
+                cp.Doc.AddRefreshQueryString(Constants.rnFormId, request.formId);
+                cp.Doc.AddRefreshQueryString(Constants.rnFormPageId, request.formPageId);
                 //
                 return layoutBuilder.getHtml();
             } catch (Exception ex) {
@@ -221,14 +221,14 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 if (!string.IsNullOrEmpty(removeFilter)) { cp.Doc.SetProperty(removeFilter, ""); }
                 //
                 button = cp.Doc.GetText(Constants.rnButton);
-                formWidgetId = cp.Doc.GetInteger(Constants.rnFormWidgetId);
+                formId = cp.Doc.GetInteger(Constants.rnFormId);
                 formPageId = cp.Doc.GetInteger(Constants.rnFormPageId);
                 responseUserId = cp.Doc.GetInteger(Constants.rnResponseUserId);
             }
             //
             public string button { get; }
             //
-            public int formWidgetId { get; set; }
+            public int formId { get; set; }
             //
             public int formPageId { get; set; }
             //

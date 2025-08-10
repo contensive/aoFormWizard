@@ -182,14 +182,31 @@ namespace Contensive.Addon.aoFormWizard3.Views {
                             formWidget.save(CP);
                         }
                     }
+                    //
+                    // -- mark legacy fields non-authorable
+                    CP.Db.ExecuteNonQuery(@$"delete from ccfields where contentid={CP.Content.GetID("form widgets")} and name in (
+                        'addResetButton',
+                        'backButtonName',
+                        'continueButtonName',
+                        'resetButtonName',
+                        'submitButtonName',
+                        'saveButtonName',
+                        'joingroupid',
+                        'notificationemailid',
+                        'responseemailid',
+                        'thankyoucopy',
+                        'useUserProperty',
+                        'allowRecaptcha')
+                    ");
+
                     //using (DataTable dt = CP.Db.ExecuteQuery("select * from ccFormWidgets")) {
                     //    foreach (DataRow row in dt.Rows) {
                     //        int formId = CP.Utils.EncodeInteger(row["id"]);
                     //        if (formId == 0) {
                     //            var form = DbBaseModel.addDefault<FormModel>(CP);
-                    //            form.addResetButton = CP.Utils.EncodeBoolean(row["addResetButton"]);
-                    //            form.backButtonName = CP.Utils.EncodeText(row["backButtonName"]);
-                    //            form.continueButtonName = CP.Utils.EncodeText(row["continueButtonName"]);
+                    //            form.addResetButton = CP.Utils.EncodeBoolean(row[""]);
+                    //            form.backButtonName = CP.Utils.EncodeText(row[""]);
+                    //            form.continueButtonName = CP.Utils.EncodeText(row[""]);
                     //            form.resetButtonName = CP.Utils.EncodeText(row["resetButtonName"]);
                     //            form.submitButtonName = CP.Utils.EncodeText(row["submitButtonName"]);
                     //            form.saveButtonName = CP.Utils.EncodeText(row["saveButtonName"]);

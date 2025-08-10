@@ -12,9 +12,12 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
         // -- instance properties
         public int contentid { get; set; }
         /// <summary>
-        /// should be formWidgetId
+        /// the ccForms record under which the form page is presented
+        /// Widgets point to a form
+        /// forms have form pages
+        /// form pages have form questions
         /// </summary>
-        public int formsetid { get; set; }
+        public int formid { get; set; }
         /// <summary>
         /// description
         /// </summary>
@@ -46,10 +49,10 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
         /// return the form pages in the correct order
         /// </summary>
         /// <param name="cp"></param>
-        /// <param name="formSetId"></param>
+        /// <param name="formId"></param>
         /// <returns></returns>
-        public static List<FormPageModel> getPageList(CPBaseClass cp, int formSetId) {
-            return DbBaseModel.createList<FormPageModel>(cp, $"(formsetid={formSetId})", "sortorder,id");
+        public static List<FormPageModel> getPageList(CPBaseClass cp, int formId) {
+            return DbBaseModel.createList<FormPageModel>(cp, $"(formid={formId})", "sortorder,id");
         }
     }
 }

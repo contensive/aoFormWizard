@@ -17,7 +17,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.Domain {
         //
         public class RowDataModel {
             // 
-            public int formWidgetId { get; set; }
+            public int formId { get; set; }
             public string formWidgetName { get; set; }
             public int formResponseId { get; set; }
             public string formResponseName { get; set; }
@@ -74,7 +74,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.Domain {
                 using (DataTable dt = cp.Db.ExecuteQuery(sql)) {
                     foreach (DataRow row in dt.Rows) {
                         rowData.Add(new RowDataModel() {
-                            formWidgetId = cp.Utils.EncodeInteger(row["formWidgetId"]),
+                            formId = cp.Utils.EncodeInteger(row["formWidgetId"]),
                             formWidgetName = cp.Utils.EncodeText(row["formWidgetName"]),
                             formResponseId = cp.Utils.EncodeInteger(row["formResponseId"]),
                             formResponseName = cp.Utils.EncodeText(row["formResponseName"]),

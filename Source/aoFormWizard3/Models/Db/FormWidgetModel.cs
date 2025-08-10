@@ -10,7 +10,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
         // 
         // ====================================================================================================
         // -- instance properties
-        public int formId  { get; set; }
+        public int formId { get; set; }
         // 
         // ====================================================================================================
         public new static FormWidgetModel createOrAddSettings(CPBaseClass cp, string settingsGuid, string recordNameOrSuffix) {
@@ -18,7 +18,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
             // -- create object from existing record
             var resultWidget = create<FormWidgetModel>(cp, settingsGuid);
             if (resultWidget is not null) {
-                return resultWidget; 
+                return resultWidget;
             }
             // 
             // -- create default formset
@@ -27,109 +27,112 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
             resultWidget.ccguid = settingsGuid;
             resultWidget.save(cp);
             //
-            var form = DbBaseModel.addDefault<FormModel>(cp, cp.Doc.PageId);
-            resultWidget.name = "Form " + form.id + " added to page " + cp.Doc.PageId + ", " + cp.Doc.PageName;
-            form.addResetButton = false;
-            form.resetButtonName = "Reset";
-            form.backButtonName = "Previous";
-            form.continueButtonName = "Continue";
-            form.submitButtonName = "Complete";
-            form.saveButtonName = "Save";
-            form.save(cp);
-            // 
-            // -- add form one
-            var formOne = addDefault<FormPageModel>(cp);
-            formOne.name = "Form #1 of " + form.name;
-            formOne.formsetid = form.id;
-            formOne.description = "<h2>Form 1: Sample Form Content</h2>" + "<p>This form was automatically created by the Form Design Block.</p>" + "<p>A Dynamic Form is a list of Form Fields that you create and configure. Users complete the form and submit responses.</p>";
-
-            formOne.sortOrder = "1";
-            formOne.save(cp);
-            // 
-            // -- form 1 field A
-            var formOneFieldA = DbBaseModel.addDefault<FormQuestionModel>(cp);
-            formOneFieldA.formid = formOne.id;
-            formOneFieldA.caption = "Text Field Caption";
-            formOneFieldA.description = "Text Field Description";
-            formOneFieldA.headline = "";
-            formOneFieldA.inputTypeId = (int)FormQuestionModel.inputTypeEnum.text;
-            formOneFieldA.name = "Text Field Name";
-            formOneFieldA.optionList = "a,b,c,d,e,f,g";
-            formOneFieldA.replacetext = "replace-text";
-            formOneFieldA.@required = true;
-            formOneFieldA.sortOrder = "01";
-            formOneFieldA.save(cp);
-            // 
-            // -- form 1 field B
-            var formOneFieldB = DbBaseModel.addDefault<FormQuestionModel>(cp);
-            formOneFieldB.formid = formOne.id;
-            formOneFieldB.caption = "Checkbox Field Caption";
-            formOneFieldB.description = "Checkbox Field Description";
-            formOneFieldB.headline = "";
-            formOneFieldB.inputTypeId = (int)FormQuestionModel.inputTypeEnum.checkbox;
-            formOneFieldB.name = "Checkbox Field Name";
-            formOneFieldB.optionList = "a,b,c,d,e,f,g";
-            formOneFieldB.replacetext = "replace-text";
-            formOneFieldB.@required = true;
-            formOneFieldB.sortOrder = "02";
-            formOneFieldB.save(cp);
-            // 
-            // -- form 1 field C
-            var formOneFieldC = DbBaseModel.addDefault<FormQuestionModel>(cp);
-            formOneFieldC.formid = formOne.id;
-            formOneFieldC.caption = "Radio Field Caption";
-            formOneFieldC.description = "Radio Field Description";
-            formOneFieldC.headline = "";
-            formOneFieldC.inputTypeId = (int)FormQuestionModel.inputTypeEnum.radio;
-            formOneFieldC.name = "Radio Field Name";
-            formOneFieldC.optionList = "a,b,c,d,e,f,g";
-            formOneFieldC.replacetext = "replace-text";
-            formOneFieldC.@required = true;
-            formOneFieldC.sortOrder = "02";
-            formOneFieldC.save(cp);
-            // 
-            // -- form 1 field D
-            var formOneFieldD = DbBaseModel.addDefault<FormQuestionModel>(cp);
-            formOneFieldD.formid = formOne.id;
-            formOneFieldD.caption = "File Field Caption";
-            formOneFieldD.description = "File Field Description";
-            formOneFieldD.headline = "";
-            formOneFieldD.inputTypeId = (int)FormQuestionModel.inputTypeEnum.file;
-            formOneFieldD.name = "File Field Name";
-            formOneFieldD.optionList = "a,b,c,d,e,f,g";
-            formOneFieldD.replacetext = "replace-text";
-            formOneFieldD.@required = true;
-            formOneFieldD.sortOrder = "02";
-            formOneFieldD.save(cp);
-            // 
-            // -- add form two
-            /*
-            var formTwo = DbBaseModel.addDefault<FormModel>(cp);
-            formTwo.name = "Form #2 of " + result.name;
-            formTwo.formsetid = result.id;
-            formOne.description = "<h2>Form 2: Sample Form Content Form</h2>" + "<p>This is the second form in the form wizard.</p>";
-            formOne.sortOrder = "2";
-            formTwo.save(cp);
-            // 
-            // -- form 2 field A
-            var formTwoFieldA = DbBaseModel.addDefault<FormFieldModel>(cp);
-            formTwoFieldA.formid = formTwo.id;
-            formTwoFieldA.caption = "Text Field Caption";
-            formTwoFieldA.description = "Text Field Description";
-            formTwoFieldA.headline = "";
-            formTwoFieldA.inputTypeId = (int)FormFieldModel.inputTypeEnum.text;
-            formTwoFieldA.name = "Text Field Name";
-            formTwoFieldA.optionList = "a,b,c,d,e,f,g";
-            formTwoFieldA.replacetext = "replace-text";
-            formTwoFieldA.@required = true;
-            formTwoFieldA.sortOrder = "01";
-            formTwoFieldA.save(cp);
-            // 
-            */
-            formOne.save(cp);
-            // 
-            // -- create custom content
-            // 
+            // -- if there are no forms, create the sample.
+            // -- else do not automatically create form. Let admin select a current form, or create one from the widget form
+            if (DbBaseModel.createList<FormModel>(cp).Count == 0) {
+                //
+                // -- there are no forms, so this is the first, create the sample
+                FormModel form = DbBaseModel.addDefault<FormModel>(cp);
+                form.name = "Form 1 of the form-widget added to page [" + cp.Doc.PageId + ", " + cp.Doc.PageName + "]";
+                form.addResetButton = false;
+                form.resetButtonName = "Reset";
+                form.backButtonName = "Previous";
+                form.continueButtonName = "Continue";
+                form.submitButtonName = "Complete";
+                form.saveButtonName = "Save";
+                form.save(cp);
+                //
+                resultWidget.formId = form.id;
+                resultWidget.save(cp);
+                // 
+                // -- add form one
+                FormPageModel formPageOne = addDefault<FormPageModel>(cp);
+                formPageOne.name = "Form #1 of " + form.name;
+                formPageOne.formid = form.id;
+                formPageOne.description = "<h2>Form 1: Sample Form Content</h2>" + "<p>This form was automatically created by the Form Design Block.</p>" + "<p>A Dynamic Form is a list of Form Fields that you create and configure. Users complete the form and submit responses.</p>";
+                formPageOne.sortOrder = "1";
+                formPageOne.save(cp);
+                // 
+                // -- form 1 field A
+                var formPageOneQuestionA = addDefault<FormQuestionModel>(cp);
+                formPageOneQuestionA.formid = formPageOne.id;
+                formPageOneQuestionA.caption = "Text Field Caption";
+                formPageOneQuestionA.description = "Text Field Description";
+                formPageOneQuestionA.headline = "";
+                formPageOneQuestionA.inputTypeId = (int)FormQuestionModel.inputTypeEnum.text;
+                formPageOneQuestionA.name = "Text Field Name";
+                formPageOneQuestionA.optionList = "a,b,c,d,e,f,g";
+                formPageOneQuestionA.replacetext = "replace-text";
+                formPageOneQuestionA.@required = true;
+                formPageOneQuestionA.sortOrder = "01";
+                formPageOneQuestionA.save(cp);
+                // 
+                // -- form 1 field B
+                var formPageOneQuestionB = addDefault<FormQuestionModel>(cp);
+                formPageOneQuestionB.formid = formPageOne.id;
+                formPageOneQuestionB.caption = "Checkbox Field Caption";
+                formPageOneQuestionB.description = "Checkbox Field Description";
+                formPageOneQuestionB.headline = "";
+                formPageOneQuestionB.inputTypeId = (int)FormQuestionModel.inputTypeEnum.checkbox;
+                formPageOneQuestionB.name = "Checkbox Field Name";
+                formPageOneQuestionB.optionList = "a,b,c,d,e,f,g";
+                formPageOneQuestionB.replacetext = "replace-text";
+                formPageOneQuestionB.@required = true;
+                formPageOneQuestionB.sortOrder = "02";
+                formPageOneQuestionB.save(cp);
+                // 
+                // -- form 1 field C
+                var formPageOneQuestionC = addDefault<FormQuestionModel>(cp);
+                formPageOneQuestionC.formid = formPageOne.id;
+                formPageOneQuestionC.caption = "Radio Field Caption";
+                formPageOneQuestionC.description = "Radio Field Description";
+                formPageOneQuestionC.headline = "";
+                formPageOneQuestionC.inputTypeId = (int)FormQuestionModel.inputTypeEnum.radio;
+                formPageOneQuestionC.name = "Radio Field Name";
+                formPageOneQuestionC.optionList = "a,b,c,d,e,f,g";
+                formPageOneQuestionC.replacetext = "replace-text";
+                formPageOneQuestionC.@required = true;
+                formPageOneQuestionC.sortOrder = "02";
+                formPageOneQuestionC.save(cp);
+                // 
+                // -- form 1 field D
+                var formPageOneQuestionD = addDefault<FormQuestionModel>(cp);
+                formPageOneQuestionD.formid = formPageOne.id;
+                formPageOneQuestionD.caption = "File Field Caption";
+                formPageOneQuestionD.description = "File Field Description";
+                formPageOneQuestionD.headline = "";
+                formPageOneQuestionD.inputTypeId = (int)FormQuestionModel.inputTypeEnum.file;
+                formPageOneQuestionD.name = "File Field Name";
+                formPageOneQuestionD.optionList = "a,b,c,d,e,f,g";
+                formPageOneQuestionD.replacetext = "replace-text";
+                formPageOneQuestionD.@required = true;
+                formPageOneQuestionD.sortOrder = "02";
+                formPageOneQuestionD.save(cp);
+                // 
+                // -- add form page two
+                FormPageModel formPageTwo = addDefault<FormPageModel>(cp);
+                formPageTwo.name = "Form 2 of the form-widget added to page " + cp.Doc.PageId + ", " + cp.Doc.PageName;
+                formPageTwo.formid = form.id;
+                formPageTwo.description = "<h2>Form 2: Sample Form Content Form</h2>" + "<p>This is the second form in the form wizard.</p>";
+                formPageTwo.sortOrder = "2";
+                formPageTwo.save(cp);
+                // 
+                // -- form 2 field A
+                var formPageTwoQuestionA = DbBaseModel.addDefault<FormQuestionModel>(cp);
+                formPageTwoQuestionA.formid = formPageTwo.id;
+                formPageTwoQuestionA.caption = "Text Field Caption";
+                formPageTwoQuestionA.description = "Text Field Description";
+                formPageTwoQuestionA.headline = "";
+                formPageTwoQuestionA.inputTypeId = (int)FormQuestionModel.inputTypeEnum.text;
+                formPageTwoQuestionA.name = "Text Field Name";
+                formPageTwoQuestionA.optionList = "a,b,c,d,e,f,g";
+                formPageTwoQuestionA.replacetext = "replace-text";
+                formPageTwoQuestionA.@required = true;
+                formPageTwoQuestionA.sortOrder = "01";
+                formPageTwoQuestionA.save(cp);
+                // 
+                formPageOne.save(cp);
+            }
             return resultWidget;
         }
 
