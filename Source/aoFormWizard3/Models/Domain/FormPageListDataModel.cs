@@ -62,7 +62,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.Domain {
                 string sql = @$"
                     select
                         p.id as formPageId, p.name as formPageName, p.sortOrder as formPageSortOrder,
-                        f.id as formWidgetId, f.name as formWidgetName,
+                        f.id as formId, f.name as formName,
                         (select count(*) from ccFormQuestions where formid=p.id) as formQuestionCount
                     from 
                         ccFormPages p 
@@ -79,8 +79,8 @@ namespace Contensive.Addon.aoFormWizard3.Models.Domain {
                         rowData.Add(new RowDataModel() {
                             formPageId = cp.Utils.EncodeInteger(row["formPageId"]),
                             formPageName = cp.Utils.EncodeText(row["formPageName"]),
-                            formId = cp.Utils.EncodeInteger(row["formWidgetId"]),
-                            formName = cp.Utils.EncodeText(row["formWidgetName"]),
+                            formId = cp.Utils.EncodeInteger(row["formId"]),
+                            formName = cp.Utils.EncodeText(row["formName"]),
                             formQuestionCount = cp.Utils.EncodeInteger(row["formQuestionCount"]),
                             formPageSortOrder = cp.Utils.EncodeText(row["formPageSortOrder"]),
                         });

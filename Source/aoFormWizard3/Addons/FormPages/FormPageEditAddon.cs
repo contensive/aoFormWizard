@@ -35,7 +35,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 // 
                 // -- cancel
                 var request = new RequestModel(cp);
-                if (request.button.Equals(Constants.ButtonCancel)) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormPageListAddon.guidPortalFeature); }
+                if (request.button.Equals(Constants.buttonCancel)) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormPageListAddon.guidPortalFeature); }
                 //
                 // -- form widget required, else redirect to form widget list
                 if (request.formId <= 0) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormListAddon.guidPortalFeature); }
@@ -81,7 +81,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 // -- add buttons
                 layoutBuilder.addFormButton(Constants.buttonOK);
                 layoutBuilder.addFormButton(Constants.buttonSave);
-                layoutBuilder.addFormButton(Constants.ButtonCancel);
+                layoutBuilder.addFormButton(Constants.buttonCancel);
                 // 
                 // -- add hiddens
                 //
@@ -124,7 +124,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                             cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormListAddon.guidPortalFeature, "");
                             return;
                         }
-                    case Constants.ButtonCancel: {
+                    case Constants.buttonCancel: {
                             cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormListAddon.guidPortalFeature, "");
                             return;
                         }

@@ -18,7 +18,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.Domain {
         public class RowDataModel {
             // 
             public int formId { get; set; }
-            public string formWidgetName { get; set; }
+            public string formName { get; set; }
             public int formResponseId { get; set; }
             public string formResponseName { get; set; }
             public int submitterId { get; set; }
@@ -58,11 +58,11 @@ namespace Contensive.Addon.aoFormWizard3.Models.Domain {
                 string sql = @$"
                     select
                         r.id as formResponseId, r.name as formResponseName,
-                        f.id as formWidgetId, f.name as formWidgetName,
+                        f.id as formId, f.name as formName,
                         m.id as submitterId, m.name as submitterName
                     from 
                         ccFormResponse r 
-                        left join ccForms f on f.id=r.formWidget
+                        left join ccForms f on f.id=r.formid
                         left join ccmembers m on m.id=r.createdBy
                     where 
 	                    {sqlWhere}
@@ -74,8 +74,8 @@ namespace Contensive.Addon.aoFormWizard3.Models.Domain {
                 using (DataTable dt = cp.Db.ExecuteQuery(sql)) {
                     foreach (DataRow row in dt.Rows) {
                         rowData.Add(new RowDataModel() {
-                            formId = cp.Utils.EncodeInteger(row["formWidgetId"]),
-                            formWidgetName = cp.Utils.EncodeText(row["formWidgetName"]),
+                            formId = cp.Utils.EncodeInteger(row["formId"]),
+                            formName = cp.Utils.EncodeText(row["formName"]),
                             formResponseId = cp.Utils.EncodeInteger(row["formResponseId"]),
                             formResponseName = cp.Utils.EncodeText(row["formResponseName"]),
                             submitterId = cp.Utils.EncodeInteger(row["submitterId"]),

@@ -99,10 +99,10 @@
 			<field name="sortorder">Application Scoring</field>
 		</Record>
 	</Data>	
-	<Addon name="Application Scoring Widget" guid="{7D3BD03E-5A92-4228-8278-3115CF6C7B1E}" type="Add-on">
+	<Addon name="Form Submission Scoring Widget" guid="{7D3BD03E-5A92-4228-8278-3115CF6C7B1E}" type="Add-on">
 		<htmldocument>Yes</htmldocument>
-    	<AliasList>Application Scoring</AliasList>
-		<DotNetClass>Contensive.Addon.aoFormWizard3.Addons.ApplicationScoresWidget</DotNetClass>
+    	<AliasList>Application Scoring,Application Scoring Widget</AliasList>
+		<DotNetClass>Contensive.Addon.aoFormWizard3.Addons.FormSubmissionScoringWidget</DotNetClass>
 		<BlockEditTools>Yes</BlockEditTools>
 		<Content>Yes</Content>
 		<Admin>Yes</Admin>
@@ -285,20 +285,21 @@
 		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Addons.GetScoreDetailsModalData]]></DotNetClass>
 		<RemoteMethod>yes</RemoteMethod>
 	</Addon>
-	<Addon name="GetApplicationInfo" guid="{C292FD2B-416B-4909-936B-01953D0C5094}" type="Add-on">
-		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Addons.GetApplicationInfo]]></DotNetClass>
+	<Addon name="GetSubmissionScoringData" guid="{C292FD2B-416B-4909-936B-01953D0C5094}" type="Add-on">
+		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Addons.GetSubmissionScoringDataRemote]]></DotNetClass>
 		<RemoteMethod>yes</RemoteMethod>
 	</Addon>	
-	<Addon name="ApplicationScoringWidgetSubmit" guid="{5B9977D4-6EF5-4194-86E2-7A58A0E47E13}" type="Add-on">
-		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Addons.ApplicationScoringWidgetSubmit]]></DotNetClass>
+	<Addon name="SetFormSubmissionScore" guid="{5B9977D4-6EF5-4194-86E2-7A58A0E47E13}" type="Add-on">
+		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Addons.SetFormSubmissionScoreRemote]]></DotNetClass>
 		<RemoteMethod>yes</RemoteMethod>
 	</Addon>
 	<!-- 
 		upgrade old form wizard
 	-->
-	<Addon name="Form Widget 2" guid="{eab0f274-5a24-458f-bf1d-1ecd10833ff3}" type="Add-on">
+	<Addon name="Legacy Form Widge" guid="{eab0f274-5a24-458f-bf1d-1ecd10833ff3}" type="Add-on">
+		<Alias>Form Widget 2</Alias>
 		<htmldocument>Yes</htmldocument>
-		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Views.FormWidgetLegacyUpgrade]]></DotNetClass>
+		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Views.LegacyFormWidget]]></DotNetClass>
 		<BlockEditTools>Yes</BlockEditTools>
 		<Content>No</Content>
 		<Template>No</Template>
@@ -471,11 +472,11 @@
 				<![CDATA[Include a recaptcha bot blocker (ask if the user is a human) on the first page of the form.]]>
 			</HelpDefault>
 		</Field>
-		<Field Name="useUserProperty" active="True" AdminOnly="False" Authorable="True" Caption="User or Visit Submission" DeveloperOnly="False" EditSortPriority="1010" FieldType="Boolean" HTMLContent="False" IndexColumn="0" IndexSortDirection="" IndexSortOrder="99" IndexWidth="40" RedirectID="0" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
+		<Field Name="useUserProperty" active="True" AdminOnly="False" Authorable="True" Caption="Track Submission by User" DeveloperOnly="False" EditSortPriority="1010" FieldType="Boolean" HTMLContent="False" IndexColumn="0" IndexSortDirection="" IndexSortOrder="99" IndexWidth="40" RedirectID="0" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
 			<HelpDefault>
 				<![CDATA[
 				When checked, the submission will be tracked for each user instead of each visit.
-				This means login or registration will be required, and if the user abaondons a submission they can return later and continue.
+				This means if a logged-in user saves a submission, they can return later and continue.
 				If unchecked an abondoned submission cannot be completed in the future.]]>
 			</HelpDefault>
 		</Field>
@@ -629,34 +630,34 @@
 		</Field>    
   	</CDef>
 	<CDef Name="Application Score Widgets" Active="1" AdminOnly="0" AllowAdd="1" AllowCalendarEvents="0" AllowContentChildTool="0" AllowContentTracking="0" AllowDelete="1" AllowMetaContent="" AllowTopicRules="0" AllowWorkflowAuthoring="0" AuthoringDataSourceName="Default" AuthoringTableName="ccApplicationScoreWidgets" ContentDataSourceName="Default" ContentTableName="ccApplicationScoreWidgets" DefaultSortMethod="By Name" DeveloperOnly="0" DropDownFieldList="NAME" EditorGroupName="" Parent="" IconLink="" IconHeight="0" IconWidth="0" IconSprites="0" isbasecontent="0" guid="{76671AFF-3A3E-4979-9D2D-45D6B0071F6C}" >
-		<Field Name="name" active="True" AdminOnly="False" Authorable="True" Caption="Form Name" DeveloperOnly="False" EditSortPriority="110" FieldType="Text" HTMLContent="False" IndexColumn="0" IndexSortDirection="" IndexSortOrder="99" IndexWidth="50" RedirectID="0" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
+		<Field Name="name" active="True" AdminOnly="False" Authorable="True" Caption="Name" DeveloperOnly="False" EditSortPriority="110" FieldType="Text" HTMLContent="False" IndexColumn="0" IndexSortDirection="" IndexSortOrder="99" IndexWidth="10" RedirectID="0" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
 			<HelpDefault>
-				<![CDATA[Optional. Not visible on the website. Use to identify this form set in a list.]]>
+				<![CDATA[Optional. Not visible on the website. Use to identify this entry in a list when editing.]]>
 			</HelpDefault>
 		</Field>		
-		<Field Name="formid" active="True" AdminOnly="False" Authorable="True" Caption="Form Widget" DeveloperOnly="False" EditSortPriority="1000" FieldType="Lookup" HTMLContent="False" IndexColumn="0" IndexSortDirection="" IndexSortOrder="99" IndexWidth="20" RedirectID="" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="Form Widgets" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
+		<Field Name="formid" active="True" AdminOnly="False" Authorable="True" Caption="Form To Score" DeveloperOnly="False" EditSortPriority="1000" FieldType="Lookup" HTMLContent="False" IndexColumn="0" IndexSortDirection="" IndexSortOrder="99" IndexWidth="10" RedirectID="" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="Forms" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
 			<HelpDefault>
-				<![CDATA[The form that this widget keeps track of.]]>
+				<![CDATA[The form to be scored.]]>
 			</HelpDefault>
 		</Field>		
-		<Field Name="groupAllowedToScore" active="True" AdminOnly="False" Authorable="True" Caption="Group allowed to submit scores" DeveloperOnly="False" EditSortPriority="1000" FieldType="Lookup" HTMLContent="False" IndexColumn="-1" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="0" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="Groups" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
+		<Field Name="groupAllowedToScore" active="True" AdminOnly="False" Authorable="True" Caption="Group allowed to submit scores" DeveloperOnly="False" EditSortPriority="1010" FieldType="Lookup" HTMLContent="False" IndexColumn="-1" IndexSortDirection="" IndexSortOrder="0" IndexWidth="10" RedirectID="" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="0" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="Groups" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
 			<HelpDefault>
 				<![CDATA[Optional. When set, only members of this group will be allowed to score this application]]>
 			</HelpDefault>
 		</Field>
-		<Field Name="scoringInstructions" active="True" AdminOnly="False" Authorable="True" Caption="Scoring Instructions" DeveloperOnly="False" EditSortPriority="110" FieldType="Html" HTMLContent="False" IndexColumn="0" IndexSortDirection="" IndexSortOrder="99" IndexWidth="50" RedirectID="0" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
+		<Field Name="header" active="True" AdminOnly="False" Authorable="True" Caption="Header" DeveloperOnly="False" EditSortPriority="110" FieldType="Text" HTMLContent="False" IndexColumn="0" IndexSortDirection="" IndexSortOrder="99" IndexWidth="10" RedirectID="0" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
 			<HelpDefault>
-				<![CDATA[Instructions that appear at the bottom of the Application Score Widget]]>
+				<![CDATA[Text that appears at the top of the scoring widget]]>
 			</HelpDefault>
 		</Field>
-		<Field Name="scoringInstructionsTopOfApplication" active="True" AdminOnly="False" Authorable="True" Caption="Scoring Instructions Top of Application" DeveloperOnly="False" EditSortPriority="110" FieldType="Html" HTMLContent="False" IndexColumn="0" IndexSortDirection="" IndexSortOrder="99" IndexWidth="50" RedirectID="0" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
+		<Field Name="scoringInstructionsTopOfApplication" active="True" AdminOnly="False" Authorable="True" Caption="Scoring Instructions Top of Application" DeveloperOnly="False" EditSortPriority="1020" FieldType="Html" HTMLContent="False" IndexColumn="0" IndexSortDirection="" IndexSortOrder="99" IndexWidth="0" RedirectID="0" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
 			<HelpDefault>
 				<![CDATA[Instructions that appear at the top of the Application]]>
 			</HelpDefault>
 		</Field>
-		<Field Name="header" active="True" AdminOnly="False" Authorable="True" Caption="Header" DeveloperOnly="False" EditSortPriority="110" FieldType="Text" HTMLContent="False" IndexColumn="0" IndexSortDirection="" IndexSortOrder="99" IndexWidth="50" RedirectID="0" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
+		<Field Name="scoringInstructions" active="True" AdminOnly="False" Authorable="True" Caption="Scoring Instructions" DeveloperOnly="False" EditSortPriority="1030" FieldType="Html" HTMLContent="False" IndexColumn="0" IndexSortDirection="" IndexSortOrder="99" IndexWidth="0" RedirectID="0" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
 			<HelpDefault>
-				<![CDATA[Text that appears at the top of the widget]]>
+				<![CDATA[Instructions that appear at the bottom of the Application Score Widget]]>
 			</HelpDefault>
 		</Field>
 		<!-- 
@@ -727,11 +728,7 @@
 	</CDef>
 	
 	<CDef Name="People" guid="{C1985DC4-C985-4406-9934-61A911543454}">		
-	</CDef>
-
-	
+	</CDef>	
 	<ImportCollection name="JQuery">{A435BF70-041B-43D1-8A8D-5D9D59A7FCD0}</ImportCollection>
 	<Resource name="uiFormWizard.zip" type="files" path="formwizard" />
-	<Resource name="FormResultsLayout.html" type="file" path="formwizard" />
-	<Resource name="FormWizardLayout.html" type="file" path="formwizard" />
 </Collection>

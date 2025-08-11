@@ -183,7 +183,7 @@ namespace Contensive.Addon.aoFormWizard3.Views {
                         }
                     }
                     //
-                    // -- mark legacy fields non-authorable
+                    // -- delete legacy fields
                     CP.Db.ExecuteNonQuery(@$"delete from ccfields where contentid={CP.Content.GetID("form widgets")} and name in (
                         'addResetButton',
                         'backButtonName',

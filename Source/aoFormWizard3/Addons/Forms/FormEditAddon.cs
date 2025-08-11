@@ -67,7 +67,8 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 // -- add buttons
                 layoutBuilder.addFormButton(Constants.buttonOK);
                 layoutBuilder.addFormButton(Constants.buttonSave);
-                layoutBuilder.addFormButton(Constants.ButtonCancel);
+                layoutBuilder.addFormButton(Constants.buttonCancel);
+                layoutBuilder.addFormButton(Constants.buttonDelete);
                 // 
                 // -- add hiddens
                 //
@@ -108,7 +109,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                             cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormListAddon.guidPortalFeature, "");
                             return;
                         }
-                    case Constants.ButtonCancel: {
+                    case Constants.buttonCancel: {
                             cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormListAddon.guidPortalFeature, "");
                             return;
                         }

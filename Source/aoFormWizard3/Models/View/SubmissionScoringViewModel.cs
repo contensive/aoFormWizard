@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Contensive.Addon.aoFormWizard3.Models.View {
-    public class ApplicationScoresViewModel : DesignBlockViewBaseModel {
+    public class SubmissionScoringViewModel : DesignBlockViewBaseModel {
         public List<ApplicationScoresTableRow> submittedApplications { get; set; }
         public FormWidgetViewModel applicationViewModel { get; set; }
         public List<int> scoresDropDownOptions { get; set; }
@@ -81,29 +81,34 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
         }
 
 
-        public static ApplicationScoresViewModel create(CPBaseClass cp, ApplicationScoreWidgetsModel settings) {
+        public static SubmissionScoringViewModel create(CPBaseClass cp, ApplicationScoreWidgetsModel settings) {
             int hint = 0;
             try {
                 hint = 1;
-                var viewModel = new ApplicationScoresViewModel();
-                viewModel.submittedApplications = new List<ApplicationScoresTableRow>();
-                viewModel.gradeTableValues = new List<GradeTableValues>();
                 List<int> points = Enumerable.Range(1, 10).ToList();
                 points.Reverse();
-                viewModel.scoresDropDownOptions = points;
-                viewModel.id = settings.id;
-                viewModel.header = settings.header;
-                viewModel.scoreWidgetId = settings.id;
-                viewModel.scoringInstructions = settings.scoringInstructions;
-                viewModel.scoringInstructionsTopOfApplication = settings.scoringInstructionsTopOfApplication;
-                viewModel.currentSortBy = 0;
-                viewModel.currentSubmissionDisplayed = 0;
-                viewModel.lastNameSortbyString = "<i class=\"fa-solid fa-sort\"></i>";
-                viewModel.averageScoreSortbyString = "<i class=\"fa-solid fa-sort\"></i>";
+                //
+                var viewModel = new SubmissionScoringViewModel {
+                    submittedApplications = [],
+                    gradeTableValues = [],
+                    id = settings.id,
+                    header = settings.header,
+                    scoreWidgetId = settings.id,
+                    scoringInstructions = settings.scoringInstructions,
+                    scoringInstructionsTopOfApplication = settings.scoringInstructionsTopOfApplication,
+                    currentSortBy = 0,
+                    currentSubmissionDisplayed = 0,
+                    lastNameSortbyString = "<i class=\"fa-solid fa-sort\"></i>",
+                    averageScoreSortbyString = "<i class=\"fa-solid fa-sort\"></i>",
+                    scoresDropDownOptions = points,
+                    lastNameSortBy = 1,
+                    averageScoreSortBy = 3
+                };
+                //
                 var applicationFormModel = DbBaseModel.createFirstOfList<FormWidgetModel>(cp, "", "dateadded desc");
                 /*
                 if (applicationFormModel != null) {
-                    var currentResponse = FormResponseModel.createFirstOfList<FormResponseModel>(cp, $"formWidget = {settings.formid}", "id desc");
+                    var currentResponse = FormResponseModel.createFirstOfList<FormResponseModel>(cp, $"formid = {settings.formid}", "id desc");
                     if (currentResponse != null) {
                         viewModel.responseId = currentResponse.id;
                         viewModel.applicationViewModel = FormViewModel.createForScoringWidget(cp, applicationFormModel, currentResponse.memberId);
@@ -111,7 +116,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 }
                 */
 
-                List<FormResponseModel> applications = DbBaseModel.createList<FormResponseModel>(cp, $"formWidget = {settings.formid} and datesubmitted is not null");
+                List<FormResponseModel> applications = DbBaseModel.createList<FormResponseModel>(cp, $"formid = {settings.formid} and datesubmitted is not null");
                 if (applications != null) {
                     hint = 2;
                     foreach (var application in applications) {
@@ -143,7 +148,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                                           $" email as 'email' from ccFormResponse " +
                                                           $"left join ccMembers on ccFormResponse.memberid = ccMembers.id " +
                                                           $"where ccFormResponse.memberid = {application.memberId}" +
-                                                          $" and ccFormResponse.formWidget = {settings.formid}";
+                                                          $" and ccFormResponse.formid = {settings.formid}";
                         using (var cs = cp.CSNew()) {
                             if (cs.OpenSQL(applicationSubmittedInfo)) {
                                 string firstName = cs.GetText("firstname");
@@ -171,8 +176,6 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                     }
                 }
                 hint = 10;
-                viewModel.lastNameSortBy = 1;
-                viewModel.averageScoreSortBy = 3;
                 return viewModel;
             }
             catch (Exception ex) {
@@ -181,36 +184,43 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
             }
         }
 
-        public static ApplicationScoresViewModel getApplicationScoreWidgetUpdate(CPBaseClass cp, ApplicationScoreWidgetsModel settings, int formResponseId, int sortBy) {
+        public static SubmissionScoringViewModel getSubmissionScoringViewModel(CPBaseClass cp, ApplicationScoreWidgetsModel settings, int displayFormResponseId, int sortBy) {
             int hint = 0;
             try {
                 hint = 1;
-                var viewModel = new ApplicationScoresViewModel();
-                viewModel.submittedApplications = new List<ApplicationScoresTableRow>();
-                viewModel.gradeTableValues = new List<GradeTableValues>();
                 List<int> points = Enumerable.Range(1, 10).ToList();
                 points.Reverse();
-                viewModel.scoresDropDownOptions = points;
-                viewModel.id = settings.id;
-                viewModel.scoreWidgetId = settings.id;
-                viewModel.scoringInstructions = settings.scoringInstructions;
-                viewModel.scoringInstructionsTopOfApplication = settings.scoringInstructionsTopOfApplication;
-                viewModel.currentSortBy = sortBy;
-                viewModel.currentSubmissionDisplayed = formResponseId;
-                
-                var applicationFormModel = DbBaseModel.createFirstOfList<FormWidgetModel>(cp, $"id = {settings.formid}", "dateadded desc");
-                if (applicationFormModel != null) {
-                    cp.Log.Error("applicationFormModel != null submissionId: " + formResponseId);
-                    var currentResponse = FormResponseModel.create<FormResponseModel>(cp, formResponseId);
-                    if (currentResponse != null) {
-                        cp.Log.Error("currentResponse != null");
-                        viewModel.responseId = currentResponse.id;
-                        viewModel.applicationViewModel = FormWidgetViewModel.createForScoringWidget(cp, applicationFormModel, currentResponse.memberId);
-                    }
+                //
+                var viewModel = new SubmissionScoringViewModel {
+                    submittedApplications = [],
+                    gradeTableValues = [],
+                    id = settings.id,
+                    header = settings.header,
+                    scoreWidgetId = settings.id,
+                    scoringInstructions = settings.scoringInstructions,
+                    scoringInstructionsTopOfApplication = settings.scoringInstructionsTopOfApplication,
+                    currentSortBy = sortBy,
+                    currentSubmissionDisplayed = displayFormResponseId,
+                    lastNameSortbyString = "<i class=\"fa-solid fa-sort\"></i>",
+                    averageScoreSortbyString = "<i class=\"fa-solid fa-sort\"></i>",
+                    scoresDropDownOptions = points,
+                    lastNameSortBy = 1,
+                    averageScoreSortBy = 3
+                };
+                //
+                var form = DbBaseModel.create<FormModel>(cp, settings.formid);
+                if (form is null) {
+                    viewModel.scoringInstructions = "Form not found";
+                    return viewModel;
+                }
+                //
+                var displayFormResponse = DbBaseModel.create<FormResponseModel>(cp, displayFormResponseId);
+                if (displayFormResponse != null) {
+                    viewModel.responseId = displayFormResponse.id;
+                    viewModel.applicationViewModel = FormWidgetViewModel.createForScoringWidget(cp, settings, form, displayFormResponse.memberId);
                 }
 
-
-                List<FormResponseModel> formResponseList = DbBaseModel.createList<FormResponseModel>(cp, $"formWidget = {settings.formid} and datesubmitted is not null");
+                List<FormResponseModel> formResponseList = DbBaseModel.createList<FormResponseModel>(cp, $"(formId = {settings.formid})and(datesubmitted is not null)");
                 if (formResponseList != null) {
                     hint = 2;
                     foreach (FormResponseModel formResponse in formResponseList) {

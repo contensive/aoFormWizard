@@ -79,7 +79,8 @@
 						{{/isThankYouView}}
 
 						{{#isUserView}}	
-							{{^isEditing}}
+							{{^isMultipageMode}}
+							<!-- display only the current page -->
 							<!-- form page -->
 							<div class="card rounded-3">
 
@@ -223,9 +224,10 @@
 									<input type=hidden name=srcPageId value="{{srcPageId}}">
 								</div>
 							</div>
-							{{/isEditing}}
+							{{/isMultipageMode}}
 
-							{{#isEditing}}
+							{{#isMultipageMode}}
+								<!-- display all form pages end to end -->
 								<!-- userView, editing-->
 								{{#editingDataPageList}}
 
@@ -363,7 +365,7 @@
 										
 								{{{formPageAddLink}}}
 
-							{{/isEditing}}
+							{{/isMultipageMode}}
 						{{/isUserView}}
 					</div>
 				{{/isDisplayFormView}}

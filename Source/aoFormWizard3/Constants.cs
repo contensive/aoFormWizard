@@ -19,7 +19,7 @@ namespace Contensive.Addon.aoFormWizard3 {
         // -- application score layout
         public const string guidLayoutApplicationScore = "{B869D9F4-2CE8-4E40-A7A8-A45C12155F6B}";
         public const string nameLayoutApplicationScore = "Application Score Layout";
-        public const string pathFilenameLayoutApplicationScore = "formwizard/FormResultsLayout.html";
+        public const string pathFilenameLayoutApplicationScore = "formwizard/SubmissionScoringWidgetLayout.html";
         //
         public const string guidAddonRecaptchav2 = "{500A1F57-86A2-4D47-B747-4EF4D30A83E2}";
         //
@@ -29,7 +29,7 @@ namespace Contensive.Addon.aoFormWizard3 {
         public const string buttonOK = "OK";
         public const string buttonDelete = "Delete";
         public const string buttonReset = "Reset";
-        public const string ButtonCancel = "Cancel";
+        public const string buttonCancel = "Cancel";
         public const string ButtonConfirmRegistration = "Confirm Registration";
         public const string ButtonCancelRegistration = "Cancel Registration";
         public const string ButtonRefresh = "Refresh";

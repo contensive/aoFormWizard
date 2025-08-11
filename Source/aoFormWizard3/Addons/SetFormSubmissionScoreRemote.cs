@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Contensive.Addon.aoFormWizard3.Addons {
-    public class ApplicationScoringWidgetSubmit : AddonBaseClass {
+    public class SetFormSubmissionScoreRemote : AddonBaseClass {
         public override object Execute(CPBaseClass cp) {
             var returnObj = new RemoteReturnObj();
             try {
@@ -63,9 +63,9 @@ namespace Contensive.Addon.aoFormWizard3.Addons {
                     returnObj.success = false;
                     returnObj.errorMessage = "You are not in the group allowed to submit scores";
                 }
-                ApplicationScoresViewModel viewModel = null;
+                SubmissionScoringViewModel viewModel = null;
                 if (applicationScoreWidget != null) {
-                    viewModel = ApplicationScoresViewModel.getApplicationScoreWidgetUpdate(cp, applicationScoreWidget, 0, 0);
+                    viewModel = SubmissionScoringViewModel.getSubmissionScoringViewModel(cp, applicationScoreWidget, 0, 0);
                 }
 
                 string layout = cp.Layout.GetLayout(Constants.guidLayoutApplicationScore, Constants.nameLayoutApplicationScore, Constants.pathFilenameLayoutApplicationScore);

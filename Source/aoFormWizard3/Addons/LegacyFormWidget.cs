@@ -3,7 +3,7 @@ using System;
 
 namespace Contensive.Addon.aoFormWizard3.Views {
     // 
-    public class FormWidgetLegacyUpgrade : AddonBaseClass {
+    public class LegacyFormWidget : AddonBaseClass {
         // 
         // =====================================================================================
         /// <summary>

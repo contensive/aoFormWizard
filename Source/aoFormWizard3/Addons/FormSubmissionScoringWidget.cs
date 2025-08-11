@@ -5,10 +5,10 @@ using Contensive.DesignBlockBase.Controllers;
 using System;
 
 namespace Contensive.Addon.aoFormWizard3.Addons {
-    public class ApplicationScoresWidget : AddonBaseClass {
+    public class FormSubmissionScoringWidget : AddonBaseClass {
         public override object Execute(CPBaseClass cp) {
             try {
-                return DesignBlockController.renderWidget<ApplicationScoreWidgetsModel, ApplicationScoresViewModel>(cp,
+                return DesignBlockController.renderWidget<ApplicationScoreWidgetsModel, SubmissionScoringViewModel>(cp,
                     widgetName: "Application Scoring Widget",
                     layoutGuid: Constants.guidLayoutApplicationScore,
                     layoutName: Constants.nameLayoutApplicationScore,

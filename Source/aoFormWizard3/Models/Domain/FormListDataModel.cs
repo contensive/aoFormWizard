@@ -56,7 +56,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.Domain {
                     select
                         f.id as formId, f.name as formName,
                         m.id as submitterId, m.name as submitterName,
-                        (select count(*) from ccFormResponse r where r.formWidget=f.id) as formResponseCount
+                        (select count(*) from ccFormResponse r where r.formId=f.id) as formResponseCount
                     from 
                         ccForms f 
                         left join ccmembers m on m.id=f.createdBy

@@ -23,10 +23,6 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
         public int visitid { get; set; }
         public int memberId { get; set; }
         /// <summary>
-        /// should be formWidgetId
-        /// </summary>
-        public int formWidget { get; set; }
-        /// <summary>
         /// the form this resonse
         /// </summary>
         public int formId { get; set; }

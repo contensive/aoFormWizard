@@ -122,17 +122,17 @@
     <Import Include="System.Diagnostics" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Addons\ApplicationScoresWidget.cs" />
-    <Compile Include="Addons\ApplicationScoringWidgetSubmit.cs" />
+    <Compile Include="Addons\FormSubmissionScoringWidget.cs" />
+    <Compile Include="Addons\SetFormSubmissionScoreRemote.cs" />
     <Compile Include="Addons\DashboardWidgets\SampleFormWidget.cs" />
     <Compile Include="Addons\FormPages\FormPageListAddon.cs" />
     <Compile Include="Addons\FormPages\FormPageEditAddon.cs" />
     <Compile Include="Addons\FormQuestions\FormQuestionListAddon.cs" />
     <Compile Include="Addons\Forms\FormEditAddon.cs" />
     <Compile Include="Addons\Forms\FormListAddon.cs" />
-    <Compile Include="Addons\FormWidgetLegacyUpgrade.cs" />
+    <Compile Include="Addons\LegacyFormWidget.cs" />
     <Compile Include="Addons\ExportFormDataTool.cs" />
-    <Compile Include="Addons\GetApplicationInfo.cs" />
+    <Compile Include="Addons\GetSubmissionScoringDataRemote.cs" />
     <Compile Include="Addons\ResponseEdit\FormResponseDetailsAddon.cs" />
     <Compile Include="Addons\ResponseEdit\FormResponseListAddon.cs" />
     <Compile Include="Addons\TestData\CreateTestDataTool.cs" />
@@ -147,7 +147,7 @@
     <Compile Include="Models\Domain\FormResponseListDataModel.cs" />
     <Compile Include="Models\Domain\FormPageListDataModel.cs" />
     <Compile Include="Models\Domain\FormListDataModel.cs" />
-    <Compile Include="Models\View\ApplicationScoresViewModel.cs" />
+    <Compile Include="Models\View\SubmissionScoringViewModel.cs" />
     <Compile Include="My Project\MyNamespace.Static.1.Designer.cs" />
     <Compile Include="My Project\MyNamespace.Static.2.Designer.cs" />
     <Compile Include="My Project\MyNamespace.Static.3.Designer.cs" />

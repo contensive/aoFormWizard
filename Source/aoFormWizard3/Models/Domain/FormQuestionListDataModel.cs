@@ -23,7 +23,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.Domain {
             public int formPageId { get; set; }
             public string formPageName { get; set; }
             public int formId { get; set; }
-            public string formWidgetName { get; set; }
+            public string formName { get; set; }
         }
         public FormQuestionListDataModel(CPBaseClass cp, FormQuestionListAddon.RequestModel request, string sqlOrderBy, string searchTerm, int pageNumber, int pageSize) {
             try {
@@ -62,15 +62,15 @@ namespace Contensive.Addon.aoFormWizard3.Models.Domain {
                     select
                         q.id as formQuestionId,q.name as formQuestionName,q.sortOrder as formQuestionSortOrder,
                         p.id as formPageId, p.name as formPageName, p.sortOrder as formPageSortOrder,
-                        w.id as formWidgetId, w.name as formWidgetName
+                        f.id as formId, f.name as formName
                     from 
                         ccFormQuestions q
                         left join ccFormPages p on q.formid=p.id
-                        left join ccForms w on w.id=p.formid
+                        left join ccForms f on f.id=p.formid
                     where 
 	                    {sqlWhere}
                     order by
-                        {(string.IsNullOrEmpty(sqlOrderBy) ? "w.id,p.sortOrder,p.id,q.sortorder,q.id" : sqlOrderBy)}
+                        {(string.IsNullOrEmpty(sqlOrderBy) ? "f.id,p.sortOrder,p.id,q.sortorder,q.id" : sqlOrderBy)}
                     OFFSET 
                         {(pageNumber - 1) * pageSize} ROWS FETCH NEXT {pageSize} ROWS ONLY
                 ";
@@ -82,8 +82,8 @@ namespace Contensive.Addon.aoFormWizard3.Models.Domain {
                             formQuestionSortOrder = cp.Utils.EncodeText(row["formQuestionSortOrder"]),
                             formPageId = cp.Utils.EncodeInteger(row["formPageId"]),
                             formPageName = cp.Utils.EncodeText(row["formPageName"]),
-                            formId = cp.Utils.EncodeInteger(row["formWidgetId"]),
-                            formWidgetName = cp.Utils.EncodeText(row["formWidgetName"]),
+                            formId = cp.Utils.EncodeInteger(row["formId"]),
+                            formName = cp.Utils.EncodeText(row["formName"]),
                         });
                     }
                 }

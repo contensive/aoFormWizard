@@ -37,7 +37,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 //
                 // -- cancel
                 var request = new RequestModel(cp);
-                if (request.button.Equals(Constants.ButtonCancel)) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormListAddon.guidPortalFeature); }
+                if (request.button.Equals(Constants.buttonCancel)) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormListAddon.guidPortalFeature); }
                 //
                 // -- form widget required, else redirect to form widget list
                 if (request.formId <= 0) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormListAddon.guidPortalFeature); }
@@ -150,7 +150,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 // 
                 layoutBuilder.addColumn();
                 layoutBuilder.columnCaption = "Form";
-                layoutBuilder.columnName = "FormWidget";
+                layoutBuilder.columnName = "Form";
                 layoutBuilder.columnCaptionClass = AfwStyles.afwWidth400px + AfwStyles.afwTextAlignLeft;
                 layoutBuilder.columnCellClass = AfwStyles.afwTextAlignLeft;
                 layoutBuilder.columnVisible = true;
@@ -217,7 +217,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 // 
                 // -- add buttons
                 layoutBuilder.addFormButton(Constants.ButtonRefresh);
-                layoutBuilder.addFormButton(Constants.ButtonCancel);
+                layoutBuilder.addFormButton(Constants.buttonCancel);
                 // 
                 // -- add hiddens
                 layoutBuilder.addFormHidden("rowCnt", rowPtr);

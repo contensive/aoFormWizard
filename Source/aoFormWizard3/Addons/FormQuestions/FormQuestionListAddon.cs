@@ -37,7 +37,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 // 
                 // -- cancel
                 var request = new RequestModel(cp);
-                if (request.button.Equals(Constants.ButtonCancel)) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormPageEditAddon.guidPortalFeature) + $"&{Constants.rnFormPageId}={request.formPageId}"; }
+                if (request.button.Equals(Constants.buttonCancel)) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormPageEditAddon.guidPortalFeature) + $"&{Constants.rnFormPageId}={request.formPageId}"; }
                 //
                 // -- form widget and page required, else redirect to form widget list
                 if (request.formId <= 0) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormListAddon.guidPortalFeature); }
@@ -158,8 +158,8 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 layoutBuilder.columnDownloadable = true;
                 // 
                 layoutBuilder.addColumn();
-                layoutBuilder.columnCaption = "Form Widget";
-                layoutBuilder.columnName = "FormWidget";
+                layoutBuilder.columnCaption = "Form";
+                layoutBuilder.columnName = "Form";
                 layoutBuilder.columnCaptionClass = AfwStyles.afwWidth400px + AfwStyles.afwTextAlignLeft;
                 layoutBuilder.columnCellClass = AfwStyles.afwTextAlignLeft;
                 layoutBuilder.columnVisible = true;
@@ -199,8 +199,8 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                     layoutBuilder.setCell($"<a href=\"{formPageEditLink}\">{row.formPageName}</a>", row.formPageName);
                     // 
                     // -- form widget 
-                    string formWidgetLink = cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, FormEditAddon.guidPortalFeature) + $"&{Constants.rnFormId}={row.formId}";
-                    layoutBuilder.setCell($"<a href=\"{formWidgetLink}\">{row.formWidgetName}</a>", row.formWidgetName);
+                    string formLink = cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, FormEditAddon.guidPortalFeature) + $"&{Constants.rnFormId}={row.formId}";
+                    layoutBuilder.setCell($"<a href=\"{formLink}\">{row.formName}</a>", row.formName);
                     //
                     // -- sort order
                     layoutBuilder.setCell(row.formQuestionSortOrder);
@@ -219,7 +219,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 // 
                 // -- add buttons
                 layoutBuilder.addFormButton(Constants.ButtonRefresh);
-                layoutBuilder.addFormButton(Constants.ButtonCancel);
+                layoutBuilder.addFormButton(Constants.buttonCancel);
                 // 
                 // -- add hiddens
                 layoutBuilder.addFormHidden("rowCnt", rowPtr);

@@ -39,7 +39,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 // 
                 // -- cancel
                 var request = new RequestModel(cp);
-                if (request.button.Equals(Constants.ButtonCancel)) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormResponseListAddon.guidPortalFeature); }
+                if (request.button.Equals(Constants.buttonCancel)) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormResponseListAddon.guidPortalFeature); }
                 // 
                 using (var app = new ApplicationModel(cp)) {
                     string userErrorMessage = "";
@@ -125,7 +125,6 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 // -- build body from app scoring widget
                 FormResponseModel response = DbBaseModel.create<FormResponseModel>(cp, request.formResponseId);
                 if (response is null) { return "The selected response is invalid."; }
-                cp.Doc.SetProperty("submissionId", request.formResponseId);
                 //
                 string mockWidgetGuid = $"Form-Portal-App-Score-Widget-For-Response-{response.id}";
                 ApplicationScoreWidgetsModel appScoreWidget = DbBaseModel.create<ApplicationScoreWidgetsModel>(cp, mockWidgetGuid);
@@ -136,13 +135,16 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                     appScoreWidget.formid = response.formId;
                     appScoreWidget.save(cp);
                 }
+                //
+                // -- call the remote method that returns the html for the submission scoring widget (response scoring widget, application scoring widget)
                 cp.Doc.SetProperty("scoreWidgetId", appScoreWidget.id);
-                string appInfoJson = cp.Addon.ExecuteByUniqueName("GetApplicationInfo");
-                RemoteReturnObj appInfo = cp.JSON.Deserialize<RemoteReturnObj>(appInfoJson);
+                cp.Doc.SetProperty("submissionId", request.formResponseId);
+                string submissionScoringWidgetDataJson = cp.Addon.ExecuteByUniqueName("GetSubmissionScoringData");
+                submissionScoringWidgetDataModel submissionScoringWidgetData = cp.JSON.Deserialize<submissionScoringWidgetDataModel>(submissionScoringWidgetDataJson);
                 //
                 // -- get just the application preview
-                HtmlDocument doc = new HtmlDocument();
-                doc.LoadHtml(appInfo.html);
+                HtmlDocument doc = new();
+                doc.LoadHtml(submissionScoringWidgetData.html);
                 HtmlNode targetDiv = doc.GetElementbyId("js-response-preview");
                 if (targetDiv != null) {
                     layoutBuilder.body = targetDiv.OuterHtml;
@@ -164,7 +166,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 // 
                 // -- add buttons
                 layoutBuilder.addFormButton(Constants.ButtonRefresh);
-                layoutBuilder.addFormButton(Constants.ButtonCancel);
+                layoutBuilder.addFormButton(Constants.buttonCancel);
                 //
                 // -- feature subnav link querystring - clicks must include these values
                 cp.Doc.AddRefreshQueryString(Constants.rnFormResponseId, request.formResponseId);

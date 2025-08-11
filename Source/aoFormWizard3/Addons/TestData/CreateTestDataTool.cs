@@ -47,7 +47,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons {
                 if (cp.Doc.GetText("button").Equals("Go To Forms Manager")) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormListAddon.guidPortalFeature); }
                 // 
                 // -- cancel
-                if (cp.Doc.GetText("button").Equals(Constants.ButtonCancel)) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, ""); }
+                if (cp.Doc.GetText("button").Equals(Constants.buttonCancel)) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, ""); }
                 // 
                 using (var app = new ApplicationModel(cp)) {
                     var layout = app.cp.AdminUI.CreateLayoutBuilder();
@@ -121,7 +121,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons {
             result += $"<div style=\"margin-left:{margin}px\">Form Widget: {formWidget.name}</div>";
             //
             // -- delete submissions for this form
-            app.cp.Db.ExecuteNonQuery($"delete from ccFormResponse where formwidget={formWidget.id}");
+            app.cp.Db.ExecuteNonQuery($"delete from ccFormResponse where formId={formWidget.id}");
             //
             // -- create form pages for this form, digit 5
             for (int index = 0; index < app.cp.Utils.EncodeInteger(dataGuid.Substring(2, 1)); index++) {
@@ -179,33 +179,5 @@ namespace Contensive.Addon.aoFormWizard3.Addons {
             //
             return result;
         }
-
-
-
-
-
-
-        ////
-        //// =====================================================================================
-        ////
-        //public string createFormResponses(ApplicationModel app, int margin, string meetingGuid) {
-        //    StringBuilder result = new StringBuilder();
-        //    FormWidgetModel meeting = DbBaseModel.create<FormWidgetModel>(app.cp, meetingGuid);
-        //    //
-        //    if (meeting == null) {
-        //        return "<div style=\"margin-left:" + margin + "px\">Can not add attendees because meeting not valid</div>";
-        //    }
-        //    //
-        //    if (meeting.dateend < DateTime.Now) {
-        //        return "<div style=\"margin-left:" + margin + "px\">Meeting registration date past</div>";
-        //    }
-        //    List<MeetingAttendeeTypeModel> MeetingAttendeeTypeList = DbBaseModel.createList<MeetingAttendeeTypeModel>(app.cp, $"meetingid={meeting.id}");
-        //    for (int regIndex = 0; regIndex < app.cp.Utils.EncodeInteger(meetingGuid.Substring(6, 3)); regIndex++) {
-        //        //
-        //        // -- the registrant user
-        //        createRegistration(app, margin, result, meeting, regIndex, MeetingAttendeeTypeList);
-        //    }
-        //    return result.ToString();
-        //}
     }
 }
