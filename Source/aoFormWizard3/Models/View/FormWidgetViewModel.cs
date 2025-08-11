@@ -241,7 +241,6 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 formViewData.isUserView = true;
                 formViewData.instanceId = formWidget.ccguid;
                 formViewData.formHtmlId = string.IsNullOrEmpty(("formHtmlId")) ? cp.Utils.GetRandomString(4) : ("formHtmlId");
-                formViewData.srcPageId = savedAnswers.currentPageid;
                 formViewData.allowRecaptcha = false;
                 formViewData.recaptchaHTML = "";
                 formViewData.isEditing = cp.User.IsEditing();
@@ -274,6 +273,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                         savedAnswers.currentPageid = formViewData.pageList.First().id;
                     }
                 }
+                formViewData.srcPageId = savedAnswers.currentPageid;
                 //
                 if (formViewData.pageList.Count <= 0) { return formViewData; }
                 // 
@@ -292,6 +292,8 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                         cp.Log.Debug($"aoFormWizard.FormSetViewModel.create(), add recaptcha");
                         // 
                         formViewData.allowRecaptcha = form.allowRecaptcha;
+                        //const string recaptchaDisplayAddonGuid = "{E9E51C6E-9152-4284-A44F-D3ABC423AB90}";
+                        //formViewData.recaptchaHTML = cp.Addon.Execute(recaptchaDisplayAddonGuid);
                         formViewData.recaptchaHTML = cp.Addon.Execute(Constants.guidAddonRecaptchav2);
                         if (cp.UserError.OK()) {
                             savedAnswers.recaptchaSuccess = true;
@@ -611,6 +613,8 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                         cp.Log.Debug($"aoFormWizard.FormSetViewModel.create(), add recaptcha");
                         // 
                         formViewData.allowRecaptcha = form.allowRecaptcha;
+                        //const string recaptchaDisplayAddonGuid = "{E9E51C6E-9152-4284-A44F-D3ABC423AB90}";
+                        //formViewData.recaptchaHTML = cp.Addon.Execute(recaptchaDisplayAddonGuid);
                         formViewData.recaptchaHTML = cp.Addon.Execute(Constants.guidAddonRecaptchav2);
                         if (cp.UserError.OK()) {
                             savedAnswers.recaptchaSuccess = true;
