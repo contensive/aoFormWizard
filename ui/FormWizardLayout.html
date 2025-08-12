@@ -1,3 +1,5 @@
+<div>isMultipageMode {{isMultipageMode}}</div>
+<div>isPreviewMode {{isPreviewMode}}</div>
 <div class="designBlockContainer blockText" style="{{styleHeight}}{{styleBackgroundImage}}">
 	<div class="{{contentContainerClass}}">		
 		<div class="col-lg-10 mx-auto">
@@ -203,33 +205,35 @@
 										</div>
 									{{/allowRecaptcha}}						
 								</div>
-								<div class="card-footer px-5 py-3">
-									{{#previousButton}}
-										<button class="btn btn-outline-primary js-formWidgetButton" name="button" type="submit" value="{{previousButton}}">{{previousButton}}</button>
-									{{/previousButton}}
-									{{#resetButton}}
-										<button class="btn btn-danger js-formWidgetButton" name="button" type="submit" value="{{resetButton}}">{{resetButton}}</button>
-									{{/resetButton}}
-									{{#continueButton}}
-										<button class="btn btn-primary js-formWidgetButton" name="button" type="submit" value="{{continueButton}}">{{continueButton}}</button>
-									{{/continueButton}}
-									{{#saveButton}}
-										<button class="btn btn-primary js-formWidgetButton" name="button" type="submit" value="{{saveButton}}">{{saveButton}}</button>
-									{{/saveButton}}
-									{{#submitButton}}
-										<button class="btn btn-primary js-formWidgetButton" name="button" type="submit" value="{{submitButton}}">{{submitButton}}</button>
-									{{/submitButton}}
-									<input type=hidden name=instanceid value="{{instanceid}}">
-									<input type=hidden name=formHtmlId value="{{formHtmlId}}">
-									<input type=hidden name=srcPageId value="{{srcPageId}}">
-								</div>
+								{{^isPreviewMode}}
+									<div class="card-footer px-5 py-3">
+										{{#previousButton}}
+											<button class="btn btn-outline-primary js-formWidgetButton" name="button" type="submit" value="{{previousButton}}">{{previousButton}}</button>
+										{{/previousButton}}
+										{{#resetButton}}
+											<button class="btn btn-danger js-formWidgetButton" name="button" type="submit" value="{{resetButton}}">{{resetButton}}</button>
+										{{/resetButton}}
+										{{#continueButton}}
+											<button class="btn btn-primary js-formWidgetButton" name="button" type="submit" value="{{continueButton}}">{{continueButton}}</button>
+										{{/continueButton}}
+										{{#saveButton}}
+											<button class="btn btn-primary js-formWidgetButton" name="button" type="submit" value="{{saveButton}}">{{saveButton}}</button>
+										{{/saveButton}}
+										{{#submitButton}}
+											<button class="btn btn-primary js-formWidgetButton" name="button" type="submit" value="{{submitButton}}">{{submitButton}}</button>
+										{{/submitButton}}
+										<input type=hidden name=instanceid value="{{instanceid}}">
+										<input type=hidden name=formHtmlId value="{{formHtmlId}}">
+										<input type=hidden name=srcPageId value="{{srcPageId}}">
+									</div>
+								{{/isPreviewMode}}
 							</div>
 							{{/isMultipageMode}}
 
 							{{#isMultipageMode}}
 								<!-- display all form pages end to end -->
 								<!-- userView, editing-->
-								{{#editingDataPageList}}
+								{{#formPageList}}
 
 
 								<!-- form page -->
@@ -358,10 +362,32 @@
 												</div>
 											{{/allowRecaptcha}}
 
-										</div>
+										</div>	
+										{{^isPreviewMode}}
+											<div class="card-footer px-5 py-3">
+												{{#previousButton}}
+													<button class="btn btn-outline-primary js-formWidgetButton" name="button" type="submit" value="{{previousButton}}">{{previousButton}}</button>
+												{{/previousButton}}
+												{{#resetButton}}
+													<button class="btn btn-danger js-formWidgetButton" name="button" type="submit" value="{{resetButton}}">{{resetButton}}</button>
+												{{/resetButton}}
+												{{#continueButton}}
+													<button class="btn btn-primary js-formWidgetButton" name="button" type="submit" value="{{continueButton}}">{{continueButton}}</button>
+												{{/continueButton}}
+												{{#saveButton}}
+													<button class="btn btn-primary js-formWidgetButton" name="button" type="submit" value="{{saveButton}}">{{saveButton}}</button>
+												{{/saveButton}}
+												{{#submitButton}}
+													<button class="btn btn-primary js-formWidgetButton" name="button" type="submit" value="{{submitButton}}">{{submitButton}}</button>
+												{{/submitButton}}
+												<input type=hidden name=instanceid value="{{instanceid}}">
+												<input type=hidden name=formHtmlId value="{{formHtmlId}}">
+												<input type=hidden name=srcPageId value="{{srcPageId}}">
+											</div>
+										{{/isPreviewMode}}
 									</div>
 								</div>
-								{{/editingDataPageList}}
+								{{/formPageList}}
 										
 								{{{formPageAddLink}}}
 

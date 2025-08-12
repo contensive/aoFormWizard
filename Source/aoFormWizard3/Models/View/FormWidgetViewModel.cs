@@ -15,18 +15,22 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
     /// Construct the view to be displayed (the current form)
     /// </summary>
     public class FormWidgetViewModel : DesignBlockViewBaseModel {
+        //
         /// <summary>
         /// the id of the formwidget record for this formwidget. The formwidget describes which form is displayed for a widget.
         /// </summary>
         public int id { get; set; }
+        //
         /// <summary>
         /// display the page saying the form is not ready (not configured, non-admin user)
         /// </summary>
         public bool isNotAvailableView { get; set; }
+        //
         /// <summary>
         /// display if the page is not ready and the user is admin -- select form or create form
         /// </summary>
         public bool isSelectFormView { get; set; }
+        //
         /// <summary>
         /// true if the form is configured and can be displayed
         /// </summary>
@@ -50,18 +54,24 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
         /// display the form to the user to submit
         /// </summary>
         public bool isUserView { get; set; }
+        //
         /// <summary>
         /// display the thank you page
         /// </summary>
         public bool isThankYouView { get; set; }
+        //
         /// <summary>
         /// when true, the form displays all the pages one after the other with no navigation buttons
         /// </summary>
-        public bool isMultipagePreviewMode { 
-            get {
-                return isEditing;
-            } 
-        }
+        public bool isMultipageMode { get; set; }
+        //
+        /// <summary>
+        /// if true, the form is displayed as a preview, used for editing the form and for response review.
+        /// Hide buttons and navigation.
+        /// change all inputs to read only.
+        /// </summary>
+        public bool isPreviewMode { get; set; }
+        //
         /// <summary>
         /// for the SelectFormView, if true there are form options to select
         /// </summary>
@@ -70,6 +80,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 return selectOptions.Count > 0;
             }
         }
+        //
         /// <summary>
         /// list of forms that can be attached to this widget
         /// </summary>
@@ -79,34 +90,49 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
             }
         }
         private List<NameValueSelected> _selectOptions;
+        //
         /// <summary>
         /// A short string that is unique to this form.
         /// </summary>
         public string formHtmlId { get; set; }//
+        //
         /// <summary>
         /// The 0-based index to the current page. Saved in the page for processing. Continue moves to the next page.
         /// </summary>
         public int srcPageId { get; set; }
+        //
         /// <summary>
         /// has to be added to the form so it can be rendered in the callback
         /// </summary>
         public string instanceId { get; set; }
+        //
         public bool allowRecaptcha { get; set; }
+        //
         public string recaptchaHTML { get; set; }
+        //
         public string pageDescription { get; set; }
-        public List<FieldViewModel> formQuestionList { get; set; } = new List<FieldViewModel>();
+        //
+        public List<FieldViewModel> formQuestionList { get; set; } = [];
+        //
         public string fieldAddLink { get; set; }
+        //
         public string previousButton { get; set; }
+        //
         public string resetButton { get; set; }
+        //
         public string submitButton { get; set; }
+        //
         public string saveButton { get; set; }
+        //
         public string continueButton { get; set; }
-        //public string formPageEditWrapperClass { get; set; }
-        //public string formPageEditLink { get; set; }
+        //
         public string formPageAddLink { get; set; }
+        //
         public bool isEditing { get; set; }
+        //
         public List<FormPageModel> pageList { get; set; }
-        public List<EditingDataPage> editingDataPageList { get; set; }
+        //
+        public List<FormPageViewModel> formPageList { get; set; }
         // 
         public class FieldViewModel {
             public string inputtype { get; set; }
@@ -136,16 +162,11 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
             public bool isSelected { get; set; }
             public bool isChecked { get; set; }
         }
-        //// 
-        //public class ButtonClass {
-        //    public string buttonCaption { get; set; }
-        //    public bool isVisible { get; set; }
-        //}
         //
         /// <summary>
         /// When in edit mode, this is the list of all pages so the user can edit any page
         /// </summary>
-        public class EditingDataPage {
+        public class FormPageViewModel {
             public string pageDescription { get; set; }
             public List<FieldViewModel> formQuestionList { get; set; } = new List<FieldViewModel>();
             public string formQuestionAddLink { get; set; }
@@ -160,7 +181,6 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
             public bool isEditing { get; set; }
             public bool isThankYouPage { get; set; }
         }
-
         // 
         // ====================================================================================================
         /// <summary>
@@ -235,7 +255,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 resultViewData.allowRecaptcha = false;
                 resultViewData.recaptchaHTML = "";
                 resultViewData.isEditing = cp.User.IsEditing();
-                resultViewData.editingDataPageList = [];
+                resultViewData.formPageList = [];
                 resultViewData.formEditWrapperClass = resultViewData.isEditing ? "ccEditWrapper" : "";
                 resultViewData.formEditLink = resultViewData.isEditing ? cp.Content.GetEditLink(FormModel.tableMetadata.contentName, form.id.ToString(), false, "", resultViewData.isEditing) : "";
                 //
@@ -254,6 +274,9 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 //
                 // -- the output is the normal user output
                 resultViewData.isUserView = true;
+                // -- if editing, preview multipage mode
+                resultViewData.isMultipageMode = cp.User.IsEditing();
+                resultViewData.isPreviewMode = cp.User.IsEditing();
                 //
                 // -- validate the current page
                 resultViewData.pageList = FormPageModel.getPageList(cp, form.id);
@@ -518,20 +541,18 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                         }
                         questionPtr += 1;
                     }
-                    //formViewData.fieldAddLink = cp.Content.GetAddLink(FormQuestionModel.tableMetadata.contentName, "formid=" + page.id, false, formViewData.isEditing);
-                    //
-                    // -- the rendering of this form page is complete. If not editing, exit with just one page
-                    if (!resultViewData.isEditing) {
-                        break;
-                    } else {
-                        resultViewData.editingDataPageList.Add(new EditingDataPage {
-                            pageDescription = page.description,
-                            formQuestionList = resultViewData.formQuestionList,
-                            formPageEditWrapperClass = "ccEditWrapper",
-                            formPageEditLink = cp.Content.GetEditLink(FormPageModel.tableMetadata.contentName, page.id.ToString(), false, "", resultViewData.isEditing),
-                            formQuestionAddLink = cp.Content.GetAddLink(FormQuestionModel.tableMetadata.contentName, "formid=" + page.id, false, resultViewData.isEditing),
-                            formAddLink = cp.Content.GetAddLink(FormPageModel.tableMetadata.contentName, "formid=" + form.id, false, resultViewData.isEditing)
-                        });
+                    resultViewData.formPageList.Add(new FormPageViewModel {
+                        pageDescription = page.description,
+                        formQuestionList = resultViewData.formQuestionList,
+                        formPageEditWrapperClass = "ccEditWrapper",
+                        formPageEditLink = cp.Content.GetEditLink(FormPageModel.tableMetadata.contentName, page.id.ToString(), false, "", resultViewData.isEditing),
+                        formQuestionAddLink = cp.Content.GetAddLink(FormQuestionModel.tableMetadata.contentName, "formid=" + page.id, false, resultViewData.isEditing),
+                        formAddLink = cp.Content.GetAddLink(FormPageModel.tableMetadata.contentName, "formid=" + form.id, false, resultViewData.isEditing)
+                    });
+                    if (!resultViewData.isMultipageMode) { 
+                        //
+                        // -- if not multipage mode, this is the one page to display. Add it to the list and exit
+                        break; 
                     }
                 }
                 resultViewData.formPageAddLink = cp.Content.GetAddLink(FormPageModel.tableMetadata.contentName, "formid=" + form.id, false, resultViewData.isEditing);
@@ -602,7 +623,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 formWidgetViewData.recaptchaHTML = "";
                 formWidgetViewData.isEditing = cp.User.IsEditing();
                 formWidgetViewData.pageList = pageList;
-                formWidgetViewData.editingDataPageList = new List<EditingDataPage>();
+                formWidgetViewData.formPageList = [];
 
                 if (pageList.Count <= 0) { return formWidgetViewData; }
                 // 
@@ -841,14 +862,14 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                     if (!formWidgetViewData.isEditing) {
                         break;
                     } else {
-                        var currentEditingPage = new EditingDataPage();
+                        var currentEditingPage = new FormPageViewModel();
                         currentEditingPage.pageDescription = page.description;
                         currentEditingPage.formQuestionList = formWidgetViewData.formQuestionList;
                         currentEditingPage.formPageEditWrapperClass = " ccEditWrapper";
                         currentEditingPage.formPageEditLink = cp.Content.GetEditLink(FormPageModel.tableMetadata.contentName, page.id.ToString(), false, "", formWidgetViewData.isEditing);
                         currentEditingPage.formQuestionAddLink = cp.Content.GetAddLink(FormQuestionModel.tableMetadata.contentName, "formid=" + page.id, false, formWidgetViewData.isEditing);
                         currentEditingPage.formAddLink = cp.Content.GetAddLink(FormPageModel.tableMetadata.contentName, "formid=" + form.id, false, formWidgetViewData.isEditing);
-                        formWidgetViewData.editingDataPageList.Add(currentEditingPage);
+                        formWidgetViewData.formPageList.Add(currentEditingPage);
                     }
                 }
                 formWidgetViewData.formPageAddLink = cp.Content.GetAddLink(FormPageModel.tableMetadata.contentName, "formid=" + form.id, false, formWidgetViewData.isEditing);
