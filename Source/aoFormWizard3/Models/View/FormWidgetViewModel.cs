@@ -271,7 +271,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 resultViewData.instanceId = formWidget.ccguid;
                 //
                 // -- create the view model from the response data
-                return createFromResponse(cp, resultViewData, isMultipagePreviewMode,  isEditing, form, formResponse);
+                return createFromResponse(cp, resultViewData, isMultipagePreviewMode, isEditing, form, formResponse);
             } catch (Exception ex) {
                 cp.Site.ErrorReport(ex);
                 throw;
@@ -289,6 +289,14 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
         /// <param name="formResponse"></param>
         /// <returns></returns>
         public static FormWidgetViewModel createFromResponse(CPBaseClass cp, FormWidgetViewModel resultViewData, bool isMultipagePreviewMode, bool isEditing, FormModel form, FormResponseModel formResponse) {
+            //
+            if (form is null) {
+                //
+                // -- no form, not available
+                return new FormWidgetViewModel() {
+                    isNotAvailableView = true
+                };
+            }
             // 
             // -- begin create output data
             resultViewData.formHtmlId = string.IsNullOrEmpty(("formHtmlId")) ? cp.Utils.GetRandomString(4) : ("formHtmlId");
@@ -305,7 +313,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
             savedAnswers.pageDict ??= [];
             savedAnswers.activity ??= [];
             //
-            if (!isMultipagePreviewMode &&savedAnswers.isComplete) {
+            if (!isMultipagePreviewMode && savedAnswers.isComplete) {
                 //
                 // -- form complete, show thank you and exit
                 resultViewData.ThankYouCopy = form.thankyoucopy;
