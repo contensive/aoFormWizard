@@ -5,7 +5,7 @@ using Contensive.DesignBlockBase.Controllers;
 using System;
 
 namespace Contensive.Addon.aoFormWizard3.Addons {
-    public class FormSubmissionScoringWidget : AddonBaseClass {
+    public class SubmissionScoringWidget : AddonBaseClass {
         public override object Execute(CPBaseClass cp) {
             try {
                 return DesignBlockController.renderWidget<ApplicationScoreWidgetsModel, SubmissionScoringViewModel>(cp,

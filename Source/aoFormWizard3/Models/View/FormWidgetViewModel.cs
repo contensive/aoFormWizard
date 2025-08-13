@@ -53,7 +53,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
         /// <summary>
         /// display the form to the user to submit
         /// </summary>
-        public bool isUserView { get; set; }
+        public bool isFormView { get; set; }
         //
         /// <summary>
         /// display the thank you page
@@ -62,15 +62,11 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
         //
         /// <summary>
         /// when true, the form displays all the pages one after the other with no navigation buttons
-        /// </summary>
-        public bool isMultipageMode { get; set; }
-        //
-        /// <summary>
         /// if true, the form is displayed as a preview, used for editing the form and for response review.
         /// Hide buttons and navigation.
         /// change all inputs to read only.
         /// </summary>
-        public bool isPreviewMode { get; set; }
+        public bool isMultipagePreviewMode { get; set; }
         //
         /// <summary>
         /// for the SelectFormView, if true there are form options to select
@@ -110,21 +106,24 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
         //
         public string recaptchaHTML { get; set; }
         //
-        public string pageDescription { get; set; }
+        /// <summary>
+        /// the description for the entire form, not just each page
+        /// </summary>
+        public string ThankYouCopy { get; set; }
         //
-        public List<FieldViewModel> formQuestionList { get; set; } = [];
+        //public List<FieldViewModel> formQuestionList { get; set; } = [];
         //
         public string fieldAddLink { get; set; }
         //
-        public string previousButton { get; set; }
-        //
-        public string resetButton { get; set; }
-        //
-        public string submitButton { get; set; }
-        //
-        public string saveButton { get; set; }
-        //
-        public string continueButton { get; set; }
+        //public string previousButton { get; set; }
+        ////
+        //public string resetButton { get; set; }
+        ////
+        //public string submitButton { get; set; }
+        ////
+        //public string saveButton { get; set; }
+        ////
+        //public string continueButton { get; set; }
         //
         public string formPageAddLink { get; set; }
         //
@@ -134,7 +133,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
         //
         public List<FormPageViewModel> formPageList { get; set; }
         // 
-        public class FieldViewModel {
+        public class PageQuestionViewModel {
             public string inputtype { get; set; }
             public string caption { get; set; }
             public string headline { get; set; }
@@ -154,6 +153,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
             public string formQuestionEditWrapperClass { get; set; }
             public string formQuestionEditLink { get; set; }
             public bool invalidAnswer { get; set; }
+            public bool isReadOnly { get; set; }
         }
         // 
         public class OptionClass {
@@ -168,7 +168,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
         /// </summary>
         public class FormPageViewModel {
             public string pageDescription { get; set; }
-            public List<FieldViewModel> formQuestionList { get; set; } = new List<FieldViewModel>();
+            public List<PageQuestionViewModel> pageQuestionList { get; set; } = new List<PageQuestionViewModel>();
             public string formQuestionAddLink { get; set; }
             public string previousButton { get; set; }
             public string resetButton { get; set; }
@@ -184,18 +184,22 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
         // 
         // ====================================================================================================
         /// <summary>
-        /// Populate the view model from the entity model
+        /// method compatible with design-block pattern, called by the public widgets.
+        /// if editing, use multipageMode and previewMode.
         /// </summary>
         /// <param name="cp"></param>
         /// <param name="formWidget"></param>
         /// <returns></returns>
         public static FormWidgetViewModel create(CPBaseClass cp, FormWidgetModel formWidget) {
             try {
+                bool isMultipagePreviewMode = cp.Doc.GetBoolean("isMultipagePreviewMode");
+                bool isEditing = cp.Doc.GetBoolean("isEditing");
+                int formResponseId = cp.Doc.GetInteger("formResponseId");
                 //
-                cp.Log.Debug($"aoFormWizard.FormSetViewModel.create() start");
+                cp.Log.Debug($"aoFormWizard.FormSetViewModel.create() start, isMultipagePreviewMode [{isEditing}], isMultipagePreviewMode [{isEditing}], formResponseId [{formResponseId}]");
                 //
                 string button = cp.Doc.GetText("button");
-                if (cp.User.IsAdmin) {
+                if (!isMultipagePreviewMode && cp.User.IsAdmin) {
                     //
                     // -- process special cases. handle create form
                     if (button.Equals("Create Form")) {
@@ -209,8 +213,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                         if (formWidget.formId == 0) {
                             var result = new FormWidgetViewModel {
                                 isSelectFormView = true,
-                                pageDescription = "No form selected. Please select a form before clicking the Select Form button.",
-                                isEditing = cp.User.IsEditing(),
+                                isEditing = isEditing,
                                 _selectOptions = []
                             };
                             populateFormSelections(cp, result);
@@ -228,8 +231,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                     if (cp.User.IsAdmin) {
                         var result = new FormWidgetViewModel {
                             isSelectFormView = true,
-                            pageDescription = "Select a Form to use with this widget.",
-                            isEditing = cp.User.IsEditing(),
+                            isEditing = isEditing,
                             _selectOptions = []
                         };
                         populateFormSelections(cp, result);
@@ -239,328 +241,360 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                         isNotAvailableView = true
                     };
                 }
+                //
+                // -- determine the submission to display
+                FormResponseModel formResponse = null;
+                if (formResponseId > 0) {
+                    //
+                    // -- open the requested response (for preview mode)
+                    formResponse = DbBaseModel.create<FormResponseModel>(cp, formResponseId);
+                } else {
+                    //
+                    // -- select the the latest response for this form for this user/visit
+                    string userFormResponseSql = form.useUserProperty ? $"memberid = {cp.User.Id}" : $"visitid={cp.Visit.Id}";
+                    formResponse = DbBaseModel.createFirstOfList<FormResponseModel>(cp, $"(formId={form.id})and({userFormResponseSql})", "id desc");
+                }
+                //if (formResponse == null || formResponse.formId != form.id) {
+                //    //
+                //    // -- if the response is not for this form, that is an error. Block
+                //    return new FormWidgetViewModel() {
+                //        isNotAvailableView = true
+                //    };
+                //}
                 // 
                 // -- process form request
-                // -- the request includes the srcPageId that needs to be processed
-                //
-                string userFormResponseSql = form.useUserProperty ? $"memberid = {cp.User.Id}" : $"visitid={cp.Visit.Id}";
-                FormResponseModel userFormResponse = DbBaseModel.createFirstOfList<FormResponseModel>(cp, $"(formId={form.id})and({userFormResponseSql})", "id desc");
-                processRequest(cp, form.id, ref userFormResponse);
-                // 
-                // -- begin create output data
+                if (!isMultipagePreviewMode) {
+                    processRequest(cp, form.id, ref formResponse);
+                }
                 var resultViewData = create<FormWidgetViewModel>(cp, formWidget);
                 resultViewData.id = formWidget.id;
                 resultViewData.instanceId = formWidget.ccguid;
-                resultViewData.formHtmlId = string.IsNullOrEmpty(("formHtmlId")) ? cp.Utils.GetRandomString(4) : ("formHtmlId");
-                resultViewData.allowRecaptcha = false;
-                resultViewData.recaptchaHTML = "";
-                resultViewData.isEditing = cp.User.IsEditing();
-                resultViewData.formPageList = [];
-                resultViewData.formEditWrapperClass = resultViewData.isEditing ? "ccEditWrapper" : "";
-                resultViewData.formEditLink = resultViewData.isEditing ? cp.Content.GetEditLink(FormModel.tableMetadata.contentName, form.id.ToString(), false, "", resultViewData.isEditing) : "";
                 //
-                // -- validate the savedAnswers object
-                FormResponseDataModel savedAnswers = string.IsNullOrEmpty(userFormResponse?.formResponseData) ? new() : cp.JSON.Deserialize<FormResponseDataModel>(userFormResponse.formResponseData);
-                savedAnswers.pageDict ??= [];
-                savedAnswers.activity ??= [];
-                //
-                // -- form completee, show thank you and exit
-                if (savedAnswers.isComplete) {
-                    resultViewData.pageDescription = form.thankyoucopy;
-                    resultViewData.isThankYouView = true;
-                    resultViewData.isEditing = cp.User.IsEditing();
-                    return resultViewData;
-                }
-                //
-                // -- the output is the normal user output
-                resultViewData.isUserView = true;
-                // -- if editing, preview multipage mode
-                resultViewData.isMultipageMode = cp.User.IsEditing();
-                resultViewData.isPreviewMode = cp.User.IsEditing();
-                //
-                // -- validate the current page
-                resultViewData.pageList = FormPageModel.getPageList(cp, form.id);
-                if (resultViewData.pageList.Count == 0) {
-                    if (!cp.User.IsAdmin) {
-                        //
-                        // -- no pages in the form, not admin
-                        return new FormWidgetViewModel() {
-                            isNotAvailableView = true
-                        };
-                    }
-                    //
-                    // -- no pages, admin, add a form-page and reload formlist
-                    var formPage = DbBaseModel.addDefault<FormPageModel>(cp);
-                    formPage.formid = form.id;
-                    formPage.name = $"Initial Page for {form.name}";
-                    formPage.save(cp);
-                    //
-                    resultViewData.pageList = FormPageModel.getPageList(cp, form.id);
-                }
-                if (resultViewData.pageList.Count > 0) {
-                    var currentpage = resultViewData.pageList.Find((x) => x.id == savedAnswers.currentPageid);
-                    if (currentpage is null) {
-                        savedAnswers.currentPageid = resultViewData.pageList.First().id;
-                    }
-                }
-                resultViewData.srcPageId = savedAnswers.currentPageid;
-                //
-                if (resultViewData.pageList.Count <= 0) { return resultViewData; }
-                // 
-                // -- output one page with page one header
-                foreach (FormPageModel page in resultViewData.pageList) {
-                    if (resultViewData.isEditing) {
-                        resultViewData.formQuestionList = new List<FieldViewModel>();
-                    }
-                    //
-                    //-- skip to the current page
-                    if (page.id != savedAnswers.currentPageid && !resultViewData.isEditing) { continue; }
-                    //
-                    // -- recapcha
-                    if (form.allowRecaptcha && !resultViewData.isEditing && !savedAnswers.recaptchaSuccess) {
-                        //
-                        cp.Log.Debug($"aoFormWizard.FormSetViewModel.create(), add recaptcha");
-                        // 
-                        resultViewData.allowRecaptcha = form.allowRecaptcha;
-                        //const string recaptchaDisplayAddonGuid = "{E9E51C6E-9152-4284-A44F-D3ABC423AB90}";
-                        //formViewData.recaptchaHTML = cp.Addon.Execute(recaptchaDisplayAddonGuid);
-                        resultViewData.recaptchaHTML = cp.Addon.Execute(Constants.guidAddonRecaptchav2);
-                        if (cp.UserError.OK()) {
-                            savedAnswers.recaptchaSuccess = true;
-                        }
-                        //
-                        cp.Log.Debug($"aoFormWizard.FormSetViewModel.create(), return recaptchaHTML [{cp.Utils.EncodeHTML(resultViewData.recaptchaHTML)}]");
-                        //
-                    }
-                    //
-                    FormResponseDataPageModel savedAnswers_Page = savedAnswers.pageDict.TryGetValue(page.id, out var savedAnswers_Page_Result) ? savedAnswers_Page_Result : new FormResponseDataPageModel();
-                    savedAnswers_Page.questionDict ??= [];
-                    //
-                    //formViewData.pageHeader = page.name;
-                    resultViewData.pageDescription = page.description;
-                    resultViewData.previousButton = page == resultViewData.pageList.First() ? "" : string.IsNullOrEmpty(form.backButtonName) ? "Previous" : form.backButtonName;
-                    resultViewData.resetButton = !form.addResetButton ? "" : string.IsNullOrEmpty(form.resetButtonName) ? "Reset" : form.resetButtonName;
-                    resultViewData.submitButton = page != resultViewData.pageList.Last() ? "" : string.IsNullOrEmpty(form.submitButtonName) ? "Submit" : form.submitButtonName;
-                    resultViewData.continueButton = page == resultViewData.pageList.Last() ? "" : string.IsNullOrEmpty(form.continueButtonName) ? "Continue" : form.continueButtonName;
-                    resultViewData.saveButton = !form.useUserProperty ? "" : string.IsNullOrEmpty(form.saveButtonName) ? "Save" : form.saveButtonName;
-
-                    //if (formViewData.isEditing) {
-                    //    formViewData.formPageEditWrapperClass = "ccEditWrapper";
-                    //    formViewData.formPageEditLink = cp.Content.GetEditLink(FormPageModel.tableMetadata.contentName, page.id.ToString(), false, "", formViewData.isEditing);
-                    //}
-                    //
-
-                    int questionPtr = 0;
-                    var questionList = FormQuestionModel.getQuestionList(cp, page.id);
-                    foreach (var question in questionList) {
-                        FormResponseDataPageQuestionModel savedAnswers_Page_Question = savedAnswers_Page.questionDict.TryGetValue(question.id, out var savedAnswers_Page_Question_Result) ? savedAnswers_Page_Question_Result : new FormResponseDataPageQuestionModel();
-                        savedAnswers_Page_Question.choiceAnswerDict ??= [];
-                        //
-                        var optionList = new List<OptionClass>();
-                        int optionPtr = 1;
-                        foreach (var questionOptionName in question.optionList.Split(',')) {
-                            if (string.IsNullOrEmpty(questionOptionName)) { continue; }
-                            //
-                            optionList.Add(new OptionClass() {
-                                optionName = questionOptionName,
-                                optionPtr = optionPtr,
-                                isSelected = savedAnswers_Page_Question.choiceAnswerDict.ContainsKey(questionOptionName) ? savedAnswers_Page_Question.choiceAnswerDict[questionOptionName] : false,
-                                isChecked = savedAnswers_Page_Question.choiceAnswerDict.ContainsKey(questionOptionName) ? savedAnswers_Page_Question.choiceAnswerDict[questionOptionName] : false
-                            });
-                            optionPtr += 1;
-                        }
-                        string fieldEditLink = cp.Content.GetEditLink(FormQuestionModel.tableMetadata.contentName, question.id.ToString(), false, "Edit Question", resultViewData.isEditing);
-                        //
-                        cp.Utils.AppendLog($"form-widget, FormViewModel.create, page [{page.id}], question [{question.id}], fieldEditLink [{fieldEditLink}]");
-                        //
-                        switch (question.inputTypeId) {
-                            case (int)FormQuestionModel.inputTypeEnum.radio: {
-                                    string caption = question.caption;
-                                    if (string.IsNullOrEmpty(caption)) {
-                                        caption = question.name;
-                                    }
-                                    resultViewData.formQuestionList.Add(new FieldViewModel() {
-                                        caption = caption,
-                                        name = question.name,
-                                        currentValue = "",
-                                        inputtype = FormQuestionModel.getInputTypeName(question.inputTypeId),
-                                        @required = question.@required,
-                                        headline = question.headline,
-                                        fielddescription = question.description,
-                                        isCheckbox = false,
-                                        isDefault = false,
-                                        isTextArea = false,
-                                        isRadio = true,
-                                        isSelect = false,
-                                        isFile = false,
-                                        id = question.id,
-                                        optionList = optionList,
-                                        formQuestionEditLink = fieldEditLink,
-                                        formQuestionEditWrapperClass = resultViewData.isEditing ? "ccEditWrapper" : "",
-                                        invalidAnswer = savedAnswers_Page_Question.invalidAnswer
-                                    });
-                                    break;
-                                }
-                            case (int)FormQuestionModel.inputTypeEnum.select: {
-                                    string caption = question.caption;
-                                    if (string.IsNullOrEmpty(caption)) {
-                                        caption = question.name;
-                                    }
-                                    resultViewData.formQuestionList.Add(new FieldViewModel() {
-                                        caption = caption,
-                                        name = question.name,
-                                        currentValue = "",
-                                        inputtype = FormQuestionModel.getInputTypeName(question.inputTypeId),
-                                        @required = question.@required,
-                                        headline = question.headline,
-                                        fielddescription = question.description,
-                                        isCheckbox = false,
-                                        isDefault = false,
-                                        isTextArea = false,
-                                        isRadio = false,
-                                        isSelect = true,
-                                        isFile = false,
-                                        id = question.id,
-                                        optionList = optionList,
-                                        formQuestionEditLink = fieldEditLink,
-                                        formQuestionEditWrapperClass = resultViewData.isEditing ? "ccEditWrapper" : "",
-                                        invalidAnswer = savedAnswers_Page_Question.invalidAnswer
-                                    });
-                                    break;
-                                }
-                            case (int)FormQuestionModel.inputTypeEnum.checkbox: {
-                                    string caption = question.caption;
-                                    if (string.IsNullOrEmpty(caption)) {
-                                        caption = question.name;
-                                    }
-                                    resultViewData.formQuestionList.Add(new FieldViewModel() {
-                                        caption = caption,
-                                        name = question.name,
-                                        currentValue = "",
-                                        inputtype = FormQuestionModel.getInputTypeName(question.inputTypeId),
-                                        @required = question.@required,
-                                        headline = question.headline,
-                                        fielddescription = question.description,
-                                        isCheckbox = true,
-                                        isDefault = false,
-                                        isTextArea = false,
-                                        isRadio = false,
-                                        isSelect = false,
-                                        isFile = false,
-                                        id = question.id,
-                                        optionList = optionList,
-                                        formQuestionEditLink = fieldEditLink,
-                                        formQuestionEditWrapperClass = resultViewData.isEditing ? "ccEditWrapper" : "",
-                                        invalidAnswer = savedAnswers_Page_Question.invalidAnswer
-                                    });
-                                    break;
-                                }
-                            case (int)FormQuestionModel.inputTypeEnum.textarea: {
-                                    string caption = question.caption;
-                                    if (string.IsNullOrEmpty(caption)) {
-                                        caption = question.name;
-                                    }
-                                    resultViewData.formQuestionList.Add(new FieldViewModel() {
-                                        caption = caption,
-                                        name = question.name,
-                                        currentValue = savedAnswers_Page_Question.textAnswer,
-                                        inputtype = FormQuestionModel.getInputTypeName(question.inputTypeId),
-                                        @required = question.@required,
-                                        headline = question.headline,
-                                        fielddescription = question.description,
-                                        isCheckbox = false,
-                                        isDefault = false,
-                                        isTextArea = true,
-                                        isRadio = false,
-                                        isSelect = false,
-                                        isFile = false,
-                                        id = question.id,
-                                        optionList = optionList,
-                                        formQuestionEditLink = fieldEditLink,
-                                        formQuestionEditWrapperClass = resultViewData.isEditing ? "ccEditWrapper" : "",
-                                        invalidAnswer = savedAnswers_Page_Question.invalidAnswer
-                                    });
-                                    break;
-                                }
-
-                            case (int)FormQuestionModel.inputTypeEnum.file: {
-                                    string caption = question.caption;
-                                    if (string.IsNullOrEmpty(caption)) {
-                                        caption = question.name;
-                                    }
-                                    resultViewData.formQuestionList.Add(new FieldViewModel() {
-                                        caption = caption,
-                                        name = question.name,
-                                        currentFileUrl = string.IsNullOrEmpty(savedAnswers_Page_Question.textAnswer) ? "" : cp.Http.CdnFilePathPrefixAbsolute + savedAnswers_Page_Question.textAnswer,
-                                        currentValue = Path.GetFileName(savedAnswers_Page_Question.textAnswer),
-                                        inputtype = FormQuestionModel.getInputTypeName(question.inputTypeId),
-                                        @required = question.@required,
-                                        headline = question.headline,
-                                        fielddescription = question.description,
-                                        isCheckbox = false,
-                                        isDefault = false,
-                                        isTextArea = false,
-                                        isRadio = false,
-                                        isSelect = false,
-                                        isFile = true,
-                                        id = question.id,
-                                        optionList = optionList,
-                                        formQuestionEditLink = fieldEditLink,
-                                        formQuestionEditWrapperClass = resultViewData.isEditing ? "ccEditWrapper" : "",
-                                        invalidAnswer = savedAnswers_Page_Question.invalidAnswer
-                                    });
-                                    break;
-                                }
-
-                            default: {
-                                    string caption = question.caption;
-                                    if (string.IsNullOrEmpty(caption)) {
-                                        caption = question.name;
-                                    }
-                                    resultViewData.formQuestionList.Add(new FieldViewModel() {
-                                        caption = caption,
-                                        name = question.name,
-                                        currentValue = savedAnswers_Page_Question.textAnswer,
-                                        inputtype = FormQuestionModel.getInputTypeName(question.inputTypeId),
-                                        @required = question.@required,
-                                        headline = question.headline,
-                                        fielddescription = question.description,
-                                        isCheckbox = false,
-                                        isDefault = true,
-                                        isTextArea = false,
-                                        isRadio = false,
-                                        isSelect = false,
-                                        id = question.id,
-                                        optionList = optionList,
-                                        formQuestionEditLink = fieldEditLink,
-                                        formQuestionEditWrapperClass = resultViewData.isEditing ? "ccEditWrapper" : "",
-                                        invalidAnswer = savedAnswers_Page_Question.invalidAnswer
-                                    });
-                                    break;
-                                }
-                        }
-                        questionPtr += 1;
-                    }
-                    resultViewData.formPageList.Add(new FormPageViewModel {
-                        pageDescription = page.description,
-                        formQuestionList = resultViewData.formQuestionList,
-                        formPageEditWrapperClass = "ccEditWrapper",
-                        formPageEditLink = cp.Content.GetEditLink(FormPageModel.tableMetadata.contentName, page.id.ToString(), false, "", resultViewData.isEditing),
-                        formQuestionAddLink = cp.Content.GetAddLink(FormQuestionModel.tableMetadata.contentName, "formid=" + page.id, false, resultViewData.isEditing),
-                        formAddLink = cp.Content.GetAddLink(FormPageModel.tableMetadata.contentName, "formid=" + form.id, false, resultViewData.isEditing)
-                    });
-                    if (!resultViewData.isMultipageMode) { 
-                        //
-                        // -- if not multipage mode, this is the one page to display. Add it to the list and exit
-                        break; 
-                    }
-                }
-                resultViewData.formPageAddLink = cp.Content.GetAddLink(FormPageModel.tableMetadata.contentName, "formid=" + form.id, false, resultViewData.isEditing);
-                return resultViewData;
+                // -- create the view model from the response data
+                return createFromResponse(cp, resultViewData, isMultipagePreviewMode,  isEditing, form, formResponse);
             } catch (Exception ex) {
                 cp.Site.ErrorReport(ex);
-                return null;
+                throw;
             }
+        }
+        //
+        /// <summary>
+        /// create the view model from the response data.
+        /// </summary>
+        /// <param name="cp"></param>
+        /// <param name="resultViewData"></param>
+        /// <param name="isMultipagePreviewMode"></param>
+        /// <param name="isEditing"></param>
+        /// <param name="form"></param>
+        /// <param name="formResponse"></param>
+        /// <returns></returns>
+        public static FormWidgetViewModel createFromResponse(CPBaseClass cp, FormWidgetViewModel resultViewData, bool isMultipagePreviewMode, bool isEditing, FormModel form, FormResponseModel formResponse) {
+            // 
+            // -- begin create output data
+            resultViewData.formHtmlId = string.IsNullOrEmpty(("formHtmlId")) ? cp.Utils.GetRandomString(4) : ("formHtmlId");
+            resultViewData.allowRecaptcha = false;
+            resultViewData.recaptchaHTML = "";
+            resultViewData.isEditing = isEditing;
+            resultViewData.formPageList = [];
+            resultViewData.formEditWrapperClass = resultViewData.isEditing ? "ccEditWrapper" : "";
+            resultViewData.formEditLink = resultViewData.isEditing ? cp.Content.GetEditLink(FormModel.tableMetadata.contentName, form.id.ToString(), false, "", true) : "";
+            resultViewData.isMultipagePreviewMode = isMultipagePreviewMode;
+            //
+            // -- validate the savedAnswers object
+            FormResponseDataModel savedAnswers = string.IsNullOrEmpty(formResponse?.formResponseData) ? new() : cp.JSON.Deserialize<FormResponseDataModel>(formResponse.formResponseData);
+            savedAnswers.pageDict ??= [];
+            savedAnswers.activity ??= [];
+            //
+            if (!isMultipagePreviewMode &&savedAnswers.isComplete) {
+                //
+                // -- form complete, show thank you and exit
+                resultViewData.ThankYouCopy = form.thankyoucopy;
+                resultViewData.isThankYouView = true;
+                return resultViewData;
+            }
+            //
+            // -- the output is the normal user output
+            resultViewData.isFormView = true;
+            // -- if editing, preview multipage mode
+            //
+            // -- validate the current page
+            resultViewData.pageList = FormPageModel.getPageList(cp, form.id);
+            if (resultViewData.pageList.Count == 0) {
+                if (!cp.User.IsAdmin) {
+                    //
+                    // -- no pages in the form, not admin
+                    return new FormWidgetViewModel() {
+                        isNotAvailableView = true
+                    };
+                }
+                //
+                // -- no pages, admin, add a form-page and reload formlist
+                var formPage = DbBaseModel.addDefault<FormPageModel>(cp);
+                formPage.formid = form.id;
+                formPage.name = $"Initial Page for {form.name}";
+                formPage.save(cp);
+                //
+                resultViewData.pageList = FormPageModel.getPageList(cp, form.id);
+            }
+            if (resultViewData.pageList.Count > 0) {
+                var currentpage = resultViewData.pageList.Find((x) => x.id == savedAnswers.currentPageid);
+                if (currentpage is null) {
+                    savedAnswers.currentPageid = resultViewData.pageList.First().id;
+                }
+            }
+            resultViewData.srcPageId = savedAnswers.currentPageid;
+            //
+            if (resultViewData.pageList.Count <= 0) { return resultViewData; }
+            // 
+            // -- output one page with page one header
+            foreach (FormPageModel page in resultViewData.pageList) {
+                var pageQuestionList = new List<PageQuestionViewModel>();
+                //
+                //-- skip to the current page
+                if (!resultViewData.isMultipagePreviewMode && page.id != savedAnswers.currentPageid) {
+                    //
+                    // -- not multipagemode, and this not the current page
+                    continue;
+                }
+                //
+                // -- recapcha
+                if (form.allowRecaptcha && !savedAnswers.recaptchaSuccess && !resultViewData.isMultipagePreviewMode) {
+                    //
+                    cp.Log.Debug($"aoFormWizard.FormSetViewModel.create(), add recaptcha display");
+                    // 
+                    resultViewData.allowRecaptcha = form.allowRecaptcha;
+                    //const string recaptchaDisplayAddonGuid = "{E9E51C6E-9152-4284-A44F-D3ABC423AB90}";
+                    //formViewData.recaptchaHTML = cp.Addon.Execute(recaptchaDisplayAddonGuid);
+                    resultViewData.recaptchaHTML = cp.Addon.Execute(Constants.guidAddonRecaptchav2);
+                    if (cp.UserError.OK()) {
+                        savedAnswers.recaptchaSuccess = true;
+                    }
+                    //
+                    cp.Log.Debug($"aoFormWizard.FormSetViewModel.create(), return recaptchaHTML [{cp.Utils.EncodeHTML(resultViewData.recaptchaHTML)}]");
+                    //
+                }
+                //
+                FormResponseDataPageModel savedAnswers_Page = savedAnswers.pageDict.TryGetValue(page.id, out var savedAnswers_Page_Result) ? savedAnswers_Page_Result : new FormResponseDataPageModel();
+                savedAnswers_Page.questionDict ??= [];
+                //
+                int questionPtr = 0;
+                var questionList = FormQuestionModel.getQuestionList(cp, page.id);
+                foreach (var question in questionList) {
+                    FormResponseDataPageQuestionModel savedAnswers_Page_Question = savedAnswers_Page.questionDict.TryGetValue(question.id, out var savedAnswers_Page_Question_Result) ? savedAnswers_Page_Question_Result : new FormResponseDataPageQuestionModel();
+                    savedAnswers_Page_Question.choiceAnswerDict ??= [];
+                    //
+                    var optionList = new List<OptionClass>();
+                    int optionPtr = 1;
+                    foreach (var questionOptionName in question.optionList.Split(',')) {
+                        if (string.IsNullOrEmpty(questionOptionName)) { continue; }
+                        //
+                        optionList.Add(new OptionClass() {
+                            optionName = questionOptionName,
+                            optionPtr = optionPtr,
+                            isSelected = savedAnswers_Page_Question.choiceAnswerDict.ContainsKey(questionOptionName) ? savedAnswers_Page_Question.choiceAnswerDict[questionOptionName] : false,
+                            isChecked = savedAnswers_Page_Question.choiceAnswerDict.ContainsKey(questionOptionName) ? savedAnswers_Page_Question.choiceAnswerDict[questionOptionName] : false
+                        });
+                        optionPtr += 1;
+                    }
+                    string fieldEditLink = cp.Content.GetEditLink(FormQuestionModel.tableMetadata.contentName, question.id.ToString(), false, "Edit Question", resultViewData.isEditing);
+                    //
+                    cp.Utils.AppendLog($"form-widget, FormViewModel.create, page [{page.id}], question [{question.id}], fieldEditLink [{fieldEditLink}]");
+                    //
+                    switch (question.inputTypeId) {
+                        case (int)FormQuestionModel.inputTypeEnum.radio: {
+                                string caption = question.caption;
+                                if (string.IsNullOrEmpty(caption)) {
+                                    caption = question.name;
+                                }
+                                pageQuestionList.Add(new PageQuestionViewModel() {
+                                    caption = caption,
+                                    name = question.name,
+                                    currentValue = "",
+                                    inputtype = FormQuestionModel.getInputTypeName(question.inputTypeId),
+                                    @required = question.@required,
+                                    headline = question.headline,
+                                    fielddescription = question.description,
+                                    isCheckbox = false,
+                                    isDefault = false,
+                                    isTextArea = false,
+                                    isRadio = true,
+                                    isSelect = false,
+                                    isFile = false,
+                                    id = question.id,
+                                    optionList = optionList,
+                                    formQuestionEditLink = fieldEditLink,
+                                    formQuestionEditWrapperClass = resultViewData.isEditing ? "ccEditWrapper" : "",
+                                    invalidAnswer = savedAnswers_Page_Question.invalidAnswer,
+                                    isReadOnly = isMultipagePreviewMode
+                                });
+                                break;
+                            }
+                        case (int)FormQuestionModel.inputTypeEnum.select: {
+                                string caption = question.caption;
+                                if (string.IsNullOrEmpty(caption)) {
+                                    caption = question.name;
+                                }
+                                pageQuestionList.Add(new PageQuestionViewModel() {
+                                    caption = caption,
+                                    name = question.name,
+                                    currentValue = "",
+                                    inputtype = FormQuestionModel.getInputTypeName(question.inputTypeId),
+                                    @required = question.@required,
+                                    headline = question.headline,
+                                    fielddescription = question.description,
+                                    isCheckbox = false,
+                                    isDefault = false,
+                                    isTextArea = false,
+                                    isRadio = false,
+                                    isSelect = true,
+                                    isFile = false,
+                                    id = question.id,
+                                    optionList = optionList,
+                                    formQuestionEditLink = fieldEditLink,
+                                    formQuestionEditWrapperClass = resultViewData.isEditing ? "ccEditWrapper" : "",
+                                    invalidAnswer = savedAnswers_Page_Question.invalidAnswer,
+                                    isReadOnly = isMultipagePreviewMode
+                                });
+                                break;
+                            }
+                        case (int)FormQuestionModel.inputTypeEnum.checkbox: {
+                                string caption = question.caption;
+                                if (string.IsNullOrEmpty(caption)) {
+                                    caption = question.name;
+                                }
+                                pageQuestionList.Add(new PageQuestionViewModel() {
+                                    caption = caption,
+                                    name = question.name,
+                                    currentValue = "",
+                                    inputtype = FormQuestionModel.getInputTypeName(question.inputTypeId),
+                                    @required = question.@required,
+                                    headline = question.headline,
+                                    fielddescription = question.description,
+                                    isCheckbox = true,
+                                    isDefault = false,
+                                    isTextArea = false,
+                                    isRadio = false,
+                                    isSelect = false,
+                                    isFile = false,
+                                    id = question.id,
+                                    optionList = optionList,
+                                    formQuestionEditLink = fieldEditLink,
+                                    formQuestionEditWrapperClass = resultViewData.isEditing ? "ccEditWrapper" : "",
+                                    invalidAnswer = savedAnswers_Page_Question.invalidAnswer,
+                                    isReadOnly = isMultipagePreviewMode
+                                });
+                                break;
+                            }
+                        case (int)FormQuestionModel.inputTypeEnum.textarea: {
+                                string caption = question.caption;
+                                if (string.IsNullOrEmpty(caption)) {
+                                    caption = question.name;
+                                }
+                                pageQuestionList.Add(new PageQuestionViewModel() {
+                                    caption = caption,
+                                    name = question.name,
+                                    currentValue = savedAnswers_Page_Question.textAnswer,
+                                    inputtype = FormQuestionModel.getInputTypeName(question.inputTypeId),
+                                    @required = question.@required,
+                                    headline = question.headline,
+                                    fielddescription = question.description,
+                                    isCheckbox = false,
+                                    isDefault = false,
+                                    isTextArea = true,
+                                    isRadio = false,
+                                    isSelect = false,
+                                    isFile = false,
+                                    id = question.id,
+                                    optionList = optionList,
+                                    formQuestionEditLink = fieldEditLink,
+                                    formQuestionEditWrapperClass = resultViewData.isEditing ? "ccEditWrapper" : "",
+                                    invalidAnswer = savedAnswers_Page_Question.invalidAnswer,
+                                    isReadOnly = isMultipagePreviewMode
+                                });
+                                break;
+                            }
+
+                        case (int)FormQuestionModel.inputTypeEnum.file: {
+                                string caption = question.caption;
+                                if (string.IsNullOrEmpty(caption)) {
+                                    caption = question.name;
+                                }
+                                pageQuestionList.Add(new PageQuestionViewModel() {
+                                    caption = caption,
+                                    name = question.name,
+                                    currentFileUrl = string.IsNullOrEmpty(savedAnswers_Page_Question.textAnswer) ? "" : cp.Http.CdnFilePathPrefixAbsolute + savedAnswers_Page_Question.textAnswer,
+                                    currentValue = Path.GetFileName(savedAnswers_Page_Question.textAnswer),
+                                    inputtype = FormQuestionModel.getInputTypeName(question.inputTypeId),
+                                    @required = question.@required,
+                                    headline = question.headline,
+                                    fielddescription = question.description,
+                                    isCheckbox = false,
+                                    isDefault = false,
+                                    isTextArea = false,
+                                    isRadio = false,
+                                    isSelect = false,
+                                    isFile = true,
+                                    id = question.id,
+                                    optionList = optionList,
+                                    formQuestionEditLink = fieldEditLink,
+                                    formQuestionEditWrapperClass = resultViewData.isEditing ? "ccEditWrapper" : "",
+                                    invalidAnswer = savedAnswers_Page_Question.invalidAnswer,
+                                    isReadOnly = isMultipagePreviewMode
+                                });
+                                break;
+                            }
+
+                        default: {
+                                string caption = question.caption;
+                                if (string.IsNullOrEmpty(caption)) {
+                                    caption = question.name;
+                                }
+                                pageQuestionList.Add(new PageQuestionViewModel() {
+                                    caption = caption,
+                                    name = question.name,
+                                    currentValue = savedAnswers_Page_Question.textAnswer,
+                                    inputtype = FormQuestionModel.getInputTypeName(question.inputTypeId),
+                                    @required = question.@required,
+                                    headline = question.headline,
+                                    fielddescription = question.description,
+                                    isCheckbox = false,
+                                    isDefault = true,
+                                    isTextArea = false,
+                                    isRadio = false,
+                                    isSelect = false,
+                                    id = question.id,
+                                    optionList = optionList,
+                                    formQuestionEditLink = fieldEditLink,
+                                    formQuestionEditWrapperClass = resultViewData.isEditing ? "ccEditWrapper" : "",
+                                    invalidAnswer = savedAnswers_Page_Question.invalidAnswer,
+                                    isReadOnly = isMultipagePreviewMode
+                                });
+                                break;
+                            }
+                    }
+                    questionPtr += 1;
+                }
+                resultViewData.formPageList.Add(new FormPageViewModel {
+                    pageDescription = page.description,
+                    pageQuestionList = pageQuestionList,
+                    formPageEditWrapperClass = isEditing ? "ccEditWrapper" : "",
+                    formPageEditLink = cp.Content.GetEditLink(FormPageModel.tableMetadata.contentName, page.id.ToString(), false, "", resultViewData.isEditing),
+                    formQuestionAddLink = cp.Content.GetAddLink(FormQuestionModel.tableMetadata.contentName, "formid=" + page.id, false, resultViewData.isEditing),
+                    formAddLink = cp.Content.GetAddLink(FormPageModel.tableMetadata.contentName, "formid=" + form.id, false, resultViewData.isEditing),
+                    previousButton = page == resultViewData.pageList.First() ? "" : string.IsNullOrEmpty(form.backButtonName) ? "Previous" : form.backButtonName,
+                    resetButton = !form.addResetButton ? "" : string.IsNullOrEmpty(form.resetButtonName) ? "Reset" : form.resetButtonName,
+                    submitButton = page != resultViewData.pageList.Last() ? "" : string.IsNullOrEmpty(form.submitButtonName) ? "Submit" : form.submitButtonName,
+                    continueButton = page == resultViewData.pageList.Last() ? "" : string.IsNullOrEmpty(form.continueButtonName) ? "Continue" : form.continueButtonName,
+                    saveButton = !form.useUserProperty ? "" : string.IsNullOrEmpty(form.saveButtonName) ? "Save" : form.saveButtonName
+                });
+                if (!resultViewData.isMultipagePreviewMode) {
+                    //
+                    // -- if not multipage mode, this is the one page to display. Add it to the list and exit
+                    break;
+                }
+            }
+            resultViewData.formPageAddLink = cp.Content.GetAddLink(FormPageModel.tableMetadata.contentName, "formid=" + form.id, false, resultViewData.isEditing);
+            return resultViewData;
         }
 
         private static void populateFormSelections(CPBaseClass cp, FormWidgetViewModel asdf) {
@@ -596,16 +630,6 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 savedAnswers.pageDict ??= [];
                 savedAnswers.activity ??= [];
                 //
-                // -- form completee, show thank you and exit
-                /*
-                if (savedAnswers.isComplete) {
-                    return new FormViewModel() {
-                        pageDescription = settings.thankyoucopy,
-                        isThankYouPage = true
-                    };
-                }
-                */
-                //
                 // -- validate the current page
                 var pageList = FormPageModel.getPageList(cp, form.id);
                 var currentpage = pageList.Find((x) => x.id == savedAnswers.currentPageid);
@@ -626,6 +650,8 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 formWidgetViewData.formPageList = [];
 
                 if (pageList.Count <= 0) { return formWidgetViewData; }
+                //
+                var pageQuestionList = new List<FormWidgetViewModel.PageQuestionViewModel>();
                 // 
                 // -- output one page with page one header
                 foreach (FormPageModel page in pageList) {
@@ -653,19 +679,6 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                     FormResponseDataPageModel savedAnswers_Page = savedAnswers.pageDict.TryGetValue(page.id, out var savedAnswers_Page_Result) ? savedAnswers_Page_Result : new FormResponseDataPageModel();
                     savedAnswers_Page.questionDict ??= [];
                     //
-                    //formViewData.pageHeader = page.name;
-                    formWidgetViewData.pageDescription = page.description;
-                    formWidgetViewData.previousButton = page == pageList.First() ? "" : string.IsNullOrEmpty(form.backButtonName) ? "Previous" : form.backButtonName;
-                    formWidgetViewData.resetButton = !form.addResetButton ? "" : string.IsNullOrEmpty(form.resetButtonName) ? "Reset" : form.resetButtonName;
-                    formWidgetViewData.submitButton = page != pageList.Last() ? "" : string.IsNullOrEmpty(form.submitButtonName) ? "Submit" : form.submitButtonName;
-                    formWidgetViewData.continueButton = page == pageList.Last() ? "" : string.IsNullOrEmpty(form.continueButtonName) ? "Continue" : form.continueButtonName;
-                    formWidgetViewData.saveButton = !form.useUserProperty ? "" : string.IsNullOrEmpty(form.saveButtonName) ? "Save" : form.saveButtonName;
-                    //if (formViewData.isEditing) {
-                    //    formViewData.formPageEditWrapperClass = "ccEditWrapper";
-                    //    formViewData.formPageEditLink = cp.Content.GetEditLink(FormPageModel.tableMetadata.contentName, page.id.ToString(), false, "", formViewData.isEditing);
-                    //}
-                    //
-
                     int questionPtr = 0;
                     var questionList = FormQuestionModel.getQuestionList(cp, page.id);
                     foreach (var question in questionList) {
@@ -694,7 +707,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                     if (string.IsNullOrEmpty(caption)) {
                                         caption = question.name;
                                     }
-                                    formWidgetViewData.formQuestionList.Add(new FieldViewModel() {
+                                    pageQuestionList.Add(new PageQuestionViewModel() {
                                         caption = caption,
                                         name = question.name,
                                         currentValue = "",
@@ -721,7 +734,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                     if (string.IsNullOrEmpty(caption)) {
                                         caption = question.name;
                                     }
-                                    formWidgetViewData.formQuestionList.Add(new FieldViewModel() {
+                                    pageQuestionList.Add(new PageQuestionViewModel() {
                                         caption = caption,
                                         name = question.name,
                                         currentValue = "",
@@ -748,7 +761,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                     if (string.IsNullOrEmpty(caption)) {
                                         caption = question.name;
                                     }
-                                    formWidgetViewData.formQuestionList.Add(new FieldViewModel() {
+                                    pageQuestionList.Add(new PageQuestionViewModel() {
                                         caption = caption,
                                         name = question.name,
                                         currentValue = "",
@@ -775,7 +788,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                     if (string.IsNullOrEmpty(caption)) {
                                         caption = question.name;
                                     }
-                                    formWidgetViewData.formQuestionList.Add(new FieldViewModel() {
+                                    pageQuestionList.Add(new PageQuestionViewModel() {
                                         caption = caption,
                                         name = question.name,
                                         currentValue = savedAnswers_Page_Question.textAnswer,
@@ -803,7 +816,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                     if (string.IsNullOrEmpty(caption)) {
                                         caption = question.name;
                                     }
-                                    formWidgetViewData.formQuestionList.Add(new FieldViewModel() {
+                                    pageQuestionList.Add(new PageQuestionViewModel() {
                                         caption = caption,
                                         name = question.name,
                                         currentFileUrl = string.IsNullOrEmpty(savedAnswers_Page_Question.textAnswer) ? "" : cp.Http.CdnFilePathPrefixAbsolute + savedAnswers_Page_Question.textAnswer,
@@ -832,7 +845,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                                     if (string.IsNullOrEmpty(caption)) {
                                         caption = question.name;
                                     }
-                                    formWidgetViewData.formQuestionList.Add(new FieldViewModel() {
+                                    pageQuestionList.Add(new PageQuestionViewModel() {
                                         caption = caption,
                                         name = question.name,
                                         currentValue = savedAnswers_Page_Question.textAnswer,
@@ -862,13 +875,19 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                     if (!formWidgetViewData.isEditing) {
                         break;
                     } else {
-                        var currentEditingPage = new FormPageViewModel();
-                        currentEditingPage.pageDescription = page.description;
-                        currentEditingPage.formQuestionList = formWidgetViewData.formQuestionList;
-                        currentEditingPage.formPageEditWrapperClass = " ccEditWrapper";
-                        currentEditingPage.formPageEditLink = cp.Content.GetEditLink(FormPageModel.tableMetadata.contentName, page.id.ToString(), false, "", formWidgetViewData.isEditing);
-                        currentEditingPage.formQuestionAddLink = cp.Content.GetAddLink(FormQuestionModel.tableMetadata.contentName, "formid=" + page.id, false, formWidgetViewData.isEditing);
-                        currentEditingPage.formAddLink = cp.Content.GetAddLink(FormPageModel.tableMetadata.contentName, "formid=" + form.id, false, formWidgetViewData.isEditing);
+                        var currentEditingPage = new FormPageViewModel {
+                            pageDescription = page.description,
+                            pageQuestionList = pageQuestionList,
+                            formPageEditWrapperClass = cp.User.IsEditing() ? " ccEditWrapper" : "",
+                            formPageEditLink = cp.Content.GetEditLink(FormPageModel.tableMetadata.contentName, page.id.ToString(), false, "", formWidgetViewData.isEditing),
+                            formQuestionAddLink = cp.Content.GetAddLink(FormQuestionModel.tableMetadata.contentName, "formid=" + page.id, false, formWidgetViewData.isEditing),
+                            formAddLink = cp.Content.GetAddLink(FormPageModel.tableMetadata.contentName, "formid=" + form.id, false, formWidgetViewData.isEditing),
+                            previousButton = page == pageList.First() ? "" : string.IsNullOrEmpty(form.backButtonName) ? "Previous" : form.backButtonName,
+                            resetButton = !form.addResetButton ? "" : string.IsNullOrEmpty(form.resetButtonName) ? "Reset" : form.resetButtonName,
+                            submitButton = page != pageList.Last() ? "" : string.IsNullOrEmpty(form.submitButtonName) ? "Submit" : form.submitButtonName,
+                            continueButton = page == pageList.Last() ? "" : string.IsNullOrEmpty(form.continueButtonName) ? "Continue" : form.continueButtonName,
+                            saveButton = !form.useUserProperty ? "" : string.IsNullOrEmpty(form.saveButtonName) ? "Save" : form.saveButtonName
+                        };
                         formWidgetViewData.formPageList.Add(currentEditingPage);
                     }
                 }
@@ -887,7 +906,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
         /// set the savedAnswers.currentPageid to the next page
         /// </summary>
         /// <param name="cp"></param>
-        /// <param name="formWidget"></param>
+        /// <param name="formId"></param>
         /// <param name="userFormResponse"></param>
         /// <returns></returns>
         public static bool processRequest(CPBaseClass cp, int formId, ref FormResponseModel userFormResponse) {

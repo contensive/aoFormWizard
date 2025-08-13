@@ -1,8 +1,12 @@
 ﻿using Contensive.Addon.aoFormWizard3.Controllers;
 using Contensive.Addon.aoFormWizard3.Models.Db;
 using Contensive.Addon.aoFormWizard3.Models.Domain;
+using Contensive.Addon.aoFormWizard3.Models.View;
+using Contensive.Addon.aoFormWizard3.Views;
 using Contensive.BaseClasses;
 using Contensive.BaseClasses.LayoutBuilder;
+using Contensive.DesignBlockBase.Controllers;
+using Contensive.DesignBlockBase.Models.View;
 using Contensive.Models.Db;
 using HtmlAgilityPack;
 using System;
@@ -126,6 +130,9 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 FormResponseModel response = DbBaseModel.create<FormResponseModel>(cp, request.formResponseId);
                 if (response is null) { return "The selected response is invalid."; }
                 //
+                var form = DbBaseModel.create<FormModel>(cp, response.formId);
+                if (response is null) { return "The selected form is invalid."; }
+                //
                 string mockWidgetGuid = $"Form-Portal-App-Score-Widget-For-Response-{response.id}";
                 ApplicationScoreWidgetsModel appScoreWidget = DbBaseModel.create<ApplicationScoreWidgetsModel>(cp, mockWidgetGuid);
                 if(appScoreWidget is null) {
@@ -136,27 +143,46 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                     appScoreWidget.save(cp);
                 }
                 //
-                // -- call the remote method that returns the html for the submission scoring widget (response scoring widget, application scoring widget)
-                cp.Doc.SetProperty("scoreWidgetId", appScoreWidget.id);
-                cp.Doc.SetProperty("submissionId", request.formResponseId);
-                string submissionScoringWidgetDataJson = cp.Addon.ExecuteByUniqueName("GetSubmissionScoringData");
-                submissionScoringWidgetDataModel submissionScoringWidgetData = cp.JSON.Deserialize<submissionScoringWidgetDataModel>(submissionScoringWidgetDataJson);
+                // -- would be best to just render the form part of the widget with a specific response, and store in layoutbuilder.body
                 //
-                // -- get just the application preview
-                HtmlDocument doc = new();
-                doc.LoadHtml(submissionScoringWidgetData.html);
-                HtmlNode targetDiv = doc.GetElementbyId("js-response-preview");
-                if (targetDiv != null) {
-                    layoutBuilder.body = targetDiv.OuterHtml;
-                    //
-                    // -- remove the scoring tools at the bottom of the page
-                    doc.LoadHtml(targetDiv.OuterHtml);
-                    HtmlNode scoringToolsDiv = doc.GetElementbyId("js-score-widget-tools");
-                    if (scoringToolsDiv != null) {
-                        scoringToolsDiv.Remove(); // Removes it from the DOM
-                    }
-                    layoutBuilder.body = doc.DocumentNode.OuterHtml; 
-                }
+                // -- but the most compatible interface is the renderWidget call used by the FormWidget.
+                //
+                // -- but to render the widget, I need a FormWidgetModel in the Db and pass the widget it's guid.\
+                var formWidget = new FormWidgetModel();
+                var previewData = DesignBlockViewBaseModel.create<FormWidgetViewModel>(cp, formWidget);
+                previewData.id = 0;
+                previewData.instanceId = "";
+                //
+                previewData = FormWidgetViewModel.createFromResponse(cp, previewData, true, false, form, response);
+                var previewLayout = cp.Layout.GetLayout(Constants.guidLayoutFormWizard, Constants.nameLayoutFormWizard, Constants.pathFilenameLayoutFormWizard);
+                layoutBuilder.body = cp.Mustache.Render(previewLayout, previewData);
+
+                //// old ---------------------------------------------------
+                //// -- call the remote method that returns the html for the submission scoring widget (response scoring widget, application scoring widget)
+                //cp.Doc.SetProperty("scoreWidgetId", appScoreWidget.id);
+                //cp.Doc.SetProperty("submissionId", request.formResponseId);
+                //string submissionScoringWidgetDataJson = cp.Addon.ExecuteByUniqueName("GetSubmissionScoringData");
+                //submissionScoringWidgetDataModel submissionScoringWidgetData = cp.JSON.Deserialize<submissionScoringWidgetDataModel>(submissionScoringWidgetDataJson);
+                ////
+                //// -- get just the application preview
+                //HtmlDocument doc = new();
+                //doc.LoadHtml(submissionScoringWidgetData.html);
+                //HtmlNode targetDiv = doc.GetElementbyId("js-response-preview");
+                //if (targetDiv != null) {
+                //    layoutBuilder.body = targetDiv.OuterHtml;
+                //    //
+                //    // -- remove the scoring tools at the bottom of the page
+                //    doc.LoadHtml(targetDiv.OuterHtml);
+                //    HtmlNode scoringToolsDiv = doc.GetElementbyId("js-score-widget-tools");
+                //    if (scoringToolsDiv != null) {
+                //        scoringToolsDiv.Remove(); // Removes it from the DOM
+                //    }
+                //    layoutBuilder.body = doc.DocumentNode.OuterHtml; 
+                //}
+                //// ---------------------------------------------------
+
+
+
                 //
                 // -- build page
                 layoutBuilder.title = "Form Response Details";

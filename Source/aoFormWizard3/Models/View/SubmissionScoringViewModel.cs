@@ -79,8 +79,13 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
             public string recommendationLetter { get; set; }
 
         }
-
-
+        //
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cp"></param>
+        /// <param name="settings"></param>
+        /// <returns></returns>
         public static SubmissionScoringViewModel create(CPBaseClass cp, ApplicationScoreWidgetsModel settings) {
             int hint = 0;
             try {
@@ -106,73 +111,41 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 };
                 //
                 var applicationFormModel = DbBaseModel.createFirstOfList<FormWidgetModel>(cp, "", "dateadded desc");
-                /*
-                if (applicationFormModel != null) {
-                    var currentResponse = FormResponseModel.createFirstOfList<FormResponseModel>(cp, $"formid = {settings.formid}", "id desc");
-                    if (currentResponse != null) {
-                        viewModel.responseId = currentResponse.id;
-                        viewModel.applicationViewModel = FormViewModel.createForScoringWidget(cp, applicationFormModel, currentResponse.memberId);
-                    }
-                }
-                */
-
-                List<FormResponseModel> applications = DbBaseModel.createList<FormResponseModel>(cp, $"formid = {settings.formid} and datesubmitted is not null");
-                if (applications != null) {
-                    hint = 2;
-                    foreach (var application in applications) {
-                        hint = 3;
-                        var newRow = new ApplicationScoresTableRow();
-                        newRow.id = application.id;
-                        newRow.submittedApplicationsDetailsRows = GetScoreDetailsModalData(cp, settings, application.id);
+                List<FormResponseModel> formResponseList = DbBaseModel.createList<FormResponseModel>(cp, $"formid = {settings.formid} and datesubmitted is not null");
+                if (formResponseList != null) {
+                    foreach (var formResponse in formResponseList) {
                         var formResponses = FormResponseModel.createList<FormResponseModel>(cp, "");
-                        //FormResponseModel responseModel = null;
-                        hint = 4;
-                        /*
-                        foreach (var formResponse in formResponses) {
-                            hint = 5;
-                            if (!string.IsNullOrEmpty(formResponse.formResponseData)) {
-                                var responseData = cp.JSON.Deserialize<FormResponseDataModel>(formResponse.formResponseData).pageDict;
-                                if (responseData != null) {
-                                    if (responseData.ContainsKey(applicationId)) {
-                                        responseModel = formResponse;
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                        */
-                        hint = 6;
-
                         var applicationScoresData = ApplicationScoresModel.createList<ApplicationScoresModel>(cp, "");
-                        string applicationSubmittedInfo = $"select firstname as 'firstname', lastname as 'lastname', " +
-                                                          $" email as 'email' from ccFormResponse " +
-                                                          $"left join ccMembers on ccFormResponse.memberid = ccMembers.id " +
-                                                          $"where ccFormResponse.memberid = {application.memberId}" +
-                                                          $" and ccFormResponse.formid = {settings.formid}";
-                        using (var cs = cp.CSNew()) {
-                            if (cs.OpenSQL(applicationSubmittedInfo)) {
-                                string firstName = cs.GetText("firstname");
-                                string lastName = cs.GetText("lastname");
-                                string email = cs.GetText("email");
-                                hint = 7;
-                                newRow.scorerFirstName = firstName;
-                                newRow.scorerLastName = lastName;
-                                newRow.scorerEmail = email;
-                                newRow.submissionId = application.id;
-                                hint = 8;
-                                var score = applicationScoresData.Where(x => x.scorer == cp.User.Id && x.applicationSubmittedScored == application.id).OrderByDescending(x => x.dateAdded).FirstOrDefault();
-                                newRow.dateSubmitted = application.dateAdded.Value.ToString("MM/dd/yyyy");
-                                newRow.score = score != null ? score.score.ToString() : "";
-                                var scoresByGrader = applicationScoresData.Where(x => x.applicationSubmittedScored == application.id && x.score > 0).ToList();
-                                newRow.cumulativeScore = scoresByGrader.Count() > 0 ? string.Format("{0:0.##}", ((double)scoresByGrader.Sum(x => x.score) / (double)scoresByGrader.Count())) : "";
-                                newRow.numberOfScoresSubmitted = applicationScoresData.Count(x => x.score > 0 && x.applicationSubmittedScored == application.id);
-                                hint = 9;
-                                newRow.responseViews = ApplicationViewsModel.getCount<ApplicationViewsModel>(cp, $"responseViewed = {application.id}");
-                                newRow.hasViewed = ApplicationViewsModel.getCount<ApplicationViewsModel>(cp, $"responseViewed = {application.id} and viewer = {cp.User.Id}") > 0;
-                                viewModel.submittedApplications.Add(newRow);
-                            }
+                        string sql = @$"
+                            select 
+                                firstname as 'firstname', lastname as 'lastname',email as 'email' 
+                            from 
+                                ccFormResponse
+                                left join ccMembers on ccFormResponse.memberid = ccMembers.id
+                            where 
+                                ccFormResponse.memberid = {formResponse.memberId}
+                                and ccFormResponse.formid = {settings.formid}
+                            ";
+                        using var cs = cp.CSNew();
+                        if (cs.OpenSQL(sql)) {
+                            var score = applicationScoresData.Where(x => x.scorer == cp.User.Id && x.applicationSubmittedScored == formResponse.id).OrderByDescending(x => x.dateAdded).FirstOrDefault();
+                            var scoresByGrader = applicationScoresData.Where(x => x.applicationSubmittedScored == formResponse.id && x.score > 0).ToList();
+                            //
+                            viewModel.submittedApplications.Add(new ApplicationScoresTableRow {
+                                id = formResponse.id,
+                                submittedApplicationsDetailsRows = GetScoreDetailsModalData(cp, settings, formResponse.id),
+                                scorerFirstName = cs.GetText("firstname"),
+                                scorerLastName = cs.GetText("lastname"),
+                                scorerEmail = cs.GetText("email"),
+                                submissionId = formResponse.id,
+                                dateSubmitted = formResponse.dateAdded.Value.ToString("MM/dd/yyyy"),
+                                score = score != null ? score.score.ToString() : "",
+                                cumulativeScore = scoresByGrader.Count() > 0 ? string.Format("{0:0.##}", ((double)scoresByGrader.Sum(x => x.score) / (double)scoresByGrader.Count())) : "",
+                                numberOfScoresSubmitted = applicationScoresData.Count(x => x.score > 0 && x.applicationSubmittedScored == formResponse.id),
+                                responseViews = ApplicationViewsModel.getCount<ApplicationViewsModel>(cp, $"responseViewed = {formResponse.id}"),
+                                hasViewed = ApplicationViewsModel.getCount<ApplicationViewsModel>(cp, $"responseViewed = {formResponse.id} and viewer = {cp.User.Id}") > 0
+                            });
                         }
-
                     }
                 }
                 hint = 10;

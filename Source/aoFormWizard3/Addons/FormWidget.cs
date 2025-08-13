@@ -17,55 +17,30 @@ namespace Contensive.Addon.aoFormWizard3.Views {
         /// <returns></returns>
         public override object Execute(CPBaseClass cp) {
             try {
-                return DesignBlockController.renderWidget<FormWidgetModel, FormWidgetViewModel>(cp,
-                    widgetName: "Form Widget",
-                    layoutGuid: Constants.guidLayoutFormWizard,
-                    layoutName: Constants.nameLayoutFormWizard,
-                    layoutPathFilename: Constants.pathFilenameLayoutFormWizard,
-                    layoutBS5PathFilename: Constants.pathFilenameLayoutFormWizard);
+                return getWidget(cp, cp.User.IsEditing(), cp.User.IsEditing(), cp.User.IsEditing() );
             } catch (Exception ex) {
                 cp.Site.ErrorReport(ex);
                 throw;
             }
-            //const string designBlockName = "Form Wizard";
-            //try {
-            //    // 
-            //    // -- read instanceId, guid created uniquely for this instance of the addon on a page
-            //    string result = string.Empty;
-            //    string settingsGuid = InstanceIdController.getSettingsGuid(cp, designBlockName, ref result);
-            //    if (string.IsNullOrEmpty(settingsGuid))
-            //        return result;
-            //    // 
-            //    // -- locate or create a data record for this guid
-            //    var settings = FormSetModel.createOrAddSettings(cp, settingsGuid);
-            //    if (settings is null)
-            //        throw new ApplicationException("Could not create the design block settings record.");
-            //    // 
-            //    // 
-            //    // -- process form request
-            //    var request = new FormRequest() { button = cp.Doc.GetText("button") };
-            //    if (FormController.processRequest(cp, settings, request)) {
-            //        // 
-            //        // -- simple thank you content
-            //        cp.Doc.SetProperty("formwizardcomplete", true);
-            //        result = cp.Html.div(settings.thankyoucopy);
-            //    } else {
-            //        // 
-            //        // -- translate the Db model to a view model and mustache it into the layout
-            //        var viewModel = Models.View.FormViewModel.create(cp, settings);
-            //        if (viewModel is null)
-            //            throw new ApplicationException("Could not create design block view model.");
-            //        // 
-            //        // -- translate view model into html
-            //        result = cp.Html.Form(cp.Mustache.Render(My.Resources.Resources.FormWizard, viewModel));
-            //    }
-            //    // 
-            //    // -- if editing enabled, add the link and wrapperwrapper
-            //    return genericController.addEditWrapper(cp, result, settings.id, settings.name, FormSetModel.contentName);
-            //} catch (Exception ex) {
-            //    cp.Site.ErrorReport(ex);
-            //    return "<!-- " + designBlockName + ", Unexpected Exception -->";
-            //}
+        }
+
+        internal static string  getWidget(CPBaseClass cp, bool isMultipageMode, bool isPreviewMode, bool isEditing) {
+            //
+            // -- these properties are passed to FormWidgetViewModel.
+            // -- the allow for a single layout to handle multipage, preview and editing modes
+            // -- called from the widget, the are all true if the user is editing
+            // -- called from the applciatioin scoring widget, and from the submission details page, same but no editing
+            cp.Doc.SetProperty("isMultipageMode", isMultipageMode);
+            cp.Doc.SetProperty("isPreviewMode", isPreviewMode);
+            cp.Doc.SetProperty("isEditing", isEditing);
+            // -- use the lasted submission for the current session
+            cp.Doc.SetProperty("formResponseId", 0);
+            return DesignBlockController.renderWidget<FormWidgetModel, FormWidgetViewModel>(cp,
+                widgetName: "Form Widget",
+                layoutGuid: Constants.guidLayoutFormWizard,
+                layoutName: Constants.nameLayoutFormWizard,
+                layoutPathFilename: Constants.pathFilenameLayoutFormWizard,
+                layoutBS5PathFilename: Constants.pathFilenameLayoutFormWizard);
         }
     }
     //// 
