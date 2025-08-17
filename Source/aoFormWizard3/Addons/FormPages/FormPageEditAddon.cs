@@ -124,6 +124,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 layoutBuilder.addFormButton(Constants.buttonOK);
                 layoutBuilder.addFormButton(Constants.buttonSave);
                 layoutBuilder.addFormButton(Constants.buttonCancel);
+                layoutBuilder.addFormButton(Constants.buttonDelete);
                 // 
                 // -- add hiddens
                 //

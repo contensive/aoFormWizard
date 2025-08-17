@@ -168,7 +168,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                     layoutBuilder.setCell($"<input type=checkbox name=\"row{rowPtr}\" value=\"{row.formPageId}\">");
                     //
                     // -- form question
-                    string formQuestionEditLink = cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, "FormQuestionEditAddon.guidPortalFeature") + $"&{Constants.rnFormId}={row.formId}&{Constants.rnFormPageId}={row.formPageId}&{Constants.rnFormQuestionId}={row.formQuestionId}";
+                    string formQuestionEditLink = cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, FormQuestionEditAddon.guidPortalFeature) + $"&{Constants.rnFormId}={row.formId}&{Constants.rnFormPageId}={row.formPageId}&{Constants.rnFormQuestionId}={row.formQuestionId}";
                     layoutBuilder.setCell($"<a href=\"{formQuestionEditLink}\">{row.formQuestionName}</a>", row.formQuestionName);
                     //
                     // -- form page
