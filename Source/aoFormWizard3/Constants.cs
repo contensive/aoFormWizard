@@ -33,6 +33,7 @@ namespace Contensive.Addon.aoFormWizard3 {
         public const string ButtonConfirmRegistration = "Confirm Registration";
         public const string ButtonCancelRegistration = "Cancel Registration";
         public const string ButtonRefresh = "Refresh";
+        public const string ButtonAdd = "Add";
         //
         // -- request names
         public const string rnButton = "button";
@@ -41,16 +42,12 @@ namespace Contensive.Addon.aoFormWizard3 {
         public const string rnFormId = "formId";
         public const string rnFormResponseId = "formResponseId";
         public const string rnFormPageId = "formPageId";
-        public const string rnFormQuestionId = "rnFormQuestionId";
-        public const string rnResponseUserId = "rnUserId";
+        public const string rnFormQuestionId = "FormQuestionId";
+        public const string rnResponseUserId = "UserId";
+        public const string rnOnlySubmitted = "OnlySubmitted";
         //
         public const string rnRemoveFilter = "removeFilter";
         public const string rnSampleId = "sampleId";
-        //public const string rnFilterNotConfirmed = "filterNotConfirmed";
-        //public const string rnFilterCancelled = "filterCancelled";
-        //public const string rnFilterFromDate = "filterFromDate";
-        //public const string rnCancelRegistrationId = "cancelRegistrationId";
-        //public const string rnConfirmRegistrationId = "confirmRegistrationId";
         //
         public const string rnName = "name";
         //

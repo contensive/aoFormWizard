@@ -41,13 +41,10 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 // -- validate portal environment
                 if (!cp.AdminUI.EndpointContainsPortal()) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, guidPortalFeature, ""); }
                 // 
-                // -- cancel
                 var request = new RequestModel(cp);
-                if (request.button.Equals(Constants.buttonCancel)) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormResponseListAddon.guidPortalFeature); }
-                // 
                 using (var app = new ApplicationModel(cp)) {
                     string userErrorMessage = "";
-                    processView(app, request, ref userErrorMessage);
+                    if (!processView(app, request, ref userErrorMessage)) { return ""; }
                     return getView(app, request, userErrorMessage);
                 }
             } catch (Exception ex) {
@@ -58,51 +55,16 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
         // 
         // ========================================================================================
         // 
-        public static void processView(ApplicationModel app, RequestModel request, ref string errorMessage) {
+        public static bool processView(ApplicationModel app, RequestModel request, ref string userErrorMessage) {
             CPBaseClass cp = app.cp;
             try {
-                //if (request.button == Constants.ButtonConfirmRegistration) {
-                //    for (var rowPtr = 0; rowPtr < cp.Doc.GetInteger("rowCnt"); rowPtr++) {
-                //        // 
-                //        // -- confirm registration
-                //        if (cp.Doc.GetBoolean("row" + rowPtr)) {
-                //            int registrationId = cp.Doc.GetInteger("row" + rowPtr);
-                //            if (registrationId > 0) {
-                //                MeetingRegistrationModel registration = DbBaseModel.create<MeetingRegistrationModel>(cp, registrationId);
-                //                if (registration == null) {
-                //                    errorMessage = "registration not found";
-                //                    return;
-                //                }
-                //                OrderModel order = DbBaseModel.create<OrderModel>(cp, registration.orderid);
-                //                if (order == null) {
-                //                    errorMessage = "order not found";
-                //                    return;
-                //                }
-                //                // -- cancel the registration
-                //                MeetingRegistrationModel.confirmRegistration(cp, registration, order);
-                //            }
-                //        }
-                //    }
-                //}
-                //if (request.button == Constants.ButtonCancelRegistration) {
-                //    for (var rowPtr = 0; rowPtr < cp.Doc.GetInteger("rowCnt"); rowPtr++) {
-                //        // 
-                //        // -- cancel registration
-                //        if (cp.Doc.GetBoolean("row" + rowPtr)) {
-                //            int registrationId = cp.Doc.GetInteger("row" + rowPtr);
-                //            if (registrationId > 0) {
-                //                MeetingRegistrationModel registration = DbBaseModel.create<MeetingRegistrationModel>(cp, registrationId);
-                //                if (registration == null) {
-                //                    errorMessage = "registration not found";
-                //                    return;
-                //                }
-                //                // -- cancel the registration
-                //                MeetingRegistrationModel.cancelRegistration(cp, registrationId);
-                //            }
-                //        }
-                //    }
-                //}
-                return;
+                // 
+                // -- cancel
+                if (request.button.Equals(Constants.buttonCancel)) {
+                    cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormResponseListAddon.guidPortalFeature);
+                    return false;
+                }
+                return true;
             } catch (Exception ex) {
                 cp.Site.ErrorReport(ex);
                 throw;
@@ -132,57 +94,36 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 //
                 var form = DbBaseModel.create<FormModel>(cp, response.formId);
                 if (response is null) { return "The selected form is invalid."; }
+                PersonModel submittedBy = DbBaseModel.create<PersonModel>(cp, response.memberId);
                 //
-                string mockWidgetGuid = $"Form-Portal-App-Score-Widget-For-Response-{response.id}";
-                ApplicationScoreWidgetsModel appScoreWidget = DbBaseModel.create<ApplicationScoreWidgetsModel>(cp, mockWidgetGuid);
-                if(appScoreWidget is null) {
-                    appScoreWidget = DbBaseModel.addDefault<ApplicationScoreWidgetsModel>(cp);
-                    appScoreWidget.name = mockWidgetGuid;
-                    appScoreWidget.ccguid = mockWidgetGuid;
-                    appScoreWidget.formid = response.formId;
-                    appScoreWidget.save(cp);
-                }
-                //
-                // -- would be best to just render the form part of the widget with a specific response, and store in layoutbuilder.body
-                //
-                // -- but the most compatible interface is the renderWidget call used by the FormWidget.
-                //
-                // -- but to render the widget, I need a FormWidgetModel in the Db and pass the widget it's guid.\
+                // -- Render the form with mulitpage-preview true and editing false
                 var formWidget = new FormWidgetModel();
                 var previewData = DesignBlockViewBaseModel.create<FormWidgetViewModel>(cp, formWidget);
                 previewData.id = 0;
                 previewData.instanceId = "";
-                //
                 previewData = FormWidgetViewModel.createFromResponse(cp, previewData, true, false, form, response);
                 var previewLayout = cp.Layout.GetLayout(Constants.guidLayoutFormWizard, Constants.nameLayoutFormWizard, Constants.pathFilenameLayoutFormWizard);
-                layoutBuilder.body = cp.Mustache.Render(previewLayout, previewData);
-
-                //// old ---------------------------------------------------
-                //// -- call the remote method that returns the html for the submission scoring widget (response scoring widget, application scoring widget)
-                //cp.Doc.SetProperty("scoreWidgetId", appScoreWidget.id);
-                //cp.Doc.SetProperty("submissionId", request.formResponseId);
-                //string submissionScoringWidgetDataJson = cp.Addon.ExecuteByUniqueName("GetSubmissionScoringData");
-                //submissionScoringWidgetDataModel submissionScoringWidgetData = cp.JSON.Deserialize<submissionScoringWidgetDataModel>(submissionScoringWidgetDataJson);
-                ////
-                //// -- get just the application preview
-                //HtmlDocument doc = new();
-                //doc.LoadHtml(submissionScoringWidgetData.html);
-                //HtmlNode targetDiv = doc.GetElementbyId("js-response-preview");
-                //if (targetDiv != null) {
-                //    layoutBuilder.body = targetDiv.OuterHtml;
-                //    //
-                //    // -- remove the scoring tools at the bottom of the page
-                //    doc.LoadHtml(targetDiv.OuterHtml);
-                //    HtmlNode scoringToolsDiv = doc.GetElementbyId("js-score-widget-tools");
-                //    if (scoringToolsDiv != null) {
-                //        scoringToolsDiv.Remove(); // Removes it from the DOM
-                //    }
-                //    layoutBuilder.body = doc.DocumentNode.OuterHtml; 
-                //}
-                //// ---------------------------------------------------
-
-
-
+                string renderedForm = cp.Mustache.Render(previewLayout, previewData);
+                //
+                LayoutBuilderNameValueBaseClass contentLB = cp.AdminUI.CreateLayoutBuilderNameValue();
+                //
+                contentLB.addRow();
+                contentLB.rowName = "Submission";
+                contentLB.rowValue = response.name;
+                //
+                contentLB.addRow();
+                contentLB.rowName = "Submitted";
+                contentLB.rowValue = (response?.dateSubmitted == null || response.dateSubmitted == DateTime.MinValue) ? "(not submitted)" : ((DateTime)response.dateSubmitted).ToString("g");
+                //
+                contentLB.addColumn();
+                contentLB.rowName = "User";
+                contentLB.rowValue = (string.IsNullOrEmpty(submittedBy?.name) ? "unknown" : submittedBy.name) + (string.IsNullOrEmpty(submittedBy?.email) ? "" : $", email {submittedBy.email}");
+                //
+                contentLB.addRow();
+                contentLB.rowName = "";
+                contentLB.rowValue = renderedForm;
+                //
+                layoutBuilder.body = contentLB.getHtml();
                 //
                 // -- build page
                 layoutBuilder.title = "Form Response Details";

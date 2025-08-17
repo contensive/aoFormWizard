@@ -33,11 +33,53 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 // -- validate portal environment
                 if (!cp.AdminUI.EndpointContainsPortal()) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, guidPortalFeature, ""); }
                 // 
-                string errorMessage = "";
+                string userErrorMessage = "";
                 var request = new RequestModel(cp);
                 using (var app = new ApplicationModel(cp)) {
-                    processView(app, request, ref errorMessage);
+                    if(!processView(app, request, ref userErrorMessage)) { return ""; }
                     return getView(app, request);
+                }
+            } catch (Exception ex) {
+                cp.Site.ErrorReport(ex);
+                throw;
+            }
+        }
+        // 
+        // ====================================================================================================
+        /// <summary>
+        /// Process the view
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="cp"></param>
+        /// <param name="request"></param>
+        /// <param name="userErrorMessage"></param>
+        public static bool processView(ApplicationModel app, RequestModel request, ref string userErrorMessage) {
+            CPBaseClass cp = app.cp;
+            try {
+                switch (request.button ?? "") {
+                    case Constants.buttonSave: {
+                            saveForm(cp, request);
+                            return true;
+                        }
+                    case Constants.buttonOK: {
+                            saveForm(cp, request);
+                            cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormListAddon.guidPortalFeature, "");
+                            return false;
+                        }
+                    case Constants.buttonDelete: {
+                            
+                            // -- delete the form widget but NOT the form it points to
+                            DbBaseModel.delete<FormModel>(cp, request.formId);
+                            cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormListAddon.guidPortalFeature, "");
+                            return false;
+                        }
+                    case Constants.buttonCancel: {
+                            cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormListAddon.guidPortalFeature, "");
+                            return false;
+                        }
+                    default: {
+                            return true;
+                        }
                 }
             } catch (Exception ex) {
                 cp.Site.ErrorReport(ex);
@@ -50,17 +92,22 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
         public static string getView(ApplicationModel app, RequestModel request) {
             CPBaseClass cp = app.cp;
             try {
+                //
+                // -- init builder
                 var layoutBuilder = cp.AdminUI.CreateLayoutBuilderNameValue();
                 //
+                // -- init parent portal data
                 FormModel form = DbBaseModel.create<FormModel>(cp, request.formId);
-                //
+                // 
+                // -- add rows
                 layoutBuilder.addRow();
                 layoutBuilder.rowName = "Name";
                 layoutBuilder.rowValue = cp.Html5.InputText(Constants.rnName,255, form?.name ?? "" , "form-control");
                 layoutBuilder.rowHelp = "The name for this form widget. Use the name to recognize the form in a list, for example, 'membership application form' or 'contact us form'. The name does not appear on the public form.";
                 //
+                // -- setup layout
                 layoutBuilder.title = (form == null) ? "Add Form" : "Edit Form";
-                layoutBuilder.portalSubNavTitle = (form == null) ? "Add Form" : form.name;
+                layoutBuilder.portalSubNavTitle = (form == null) ? "" : $"form: {form.name}";
                 layoutBuilder.description = "This form widget has the controls for the entire set of form pages. A form widget is dropped on the website and contains one or more form-pages. Each form page contains one or more form questions.";
                 layoutBuilder.callbackAddonGuid = guidAddon;
                 // 
@@ -72,51 +119,10 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 // 
                 // -- add hiddens
                 //
-                // -- feature subnav link querystring - clicks must include these values
+                // -- set rqs for subnav links
                 cp.Doc.AddRefreshQueryString(Constants.rnFormId, request.formId);
                 //
                 return layoutBuilder.getHtml();
-            } catch (Exception ex) {
-                cp.Site.ErrorReport(ex);
-                throw;
-            }
-        }
-        // 
-        // ====================================================================================================
-        /// <summary>
-        /// Process the view
-        /// </summary>
-        /// <param name="cp"></param>
-        /// <param name="request"></param>
-        /// <param name="errorMessage"></param>
-        public static void processView(ApplicationModel app, RequestModel request, ref string errorMessage) {
-            CPBaseClass cp = app.cp;
-            try {
-                switch (request.button ?? "") {
-                    case Constants.buttonSave: {
-                            saveForm(cp, request);
-                            return;
-                        }
-                    case Constants.buttonOK: {
-                            saveForm(cp, request);
-                            cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormListAddon.guidPortalFeature, "");
-                            return;
-                        }
-                    case Constants.buttonDelete: {
-                            
-                            // -- delete the form widget but NOT the form it points to
-                            DbBaseModel.delete<FormModel>(cp, request.formId);
-                            cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormListAddon.guidPortalFeature, "");
-                            return;
-                        }
-                    case Constants.buttonCancel: {
-                            cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormListAddon.guidPortalFeature, "");
-                            return;
-                        }
-                    default: {
-                            return;
-                        }
-                }
             } catch (Exception ex) {
                 cp.Site.ErrorReport(ex);
                 throw;
@@ -130,6 +136,9 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 var form = DbBaseModel.create<FormModel>(cp, request.formId);
                 if (form is null) {
                     form = DbBaseModel.addDefault<FormModel>(cp);
+                    //
+                    // -- important. this record becomes the current focus for the get method
+                    request.formId = form.id;
                 }
                 form.name = request.name;
                 form.save(cp);

@@ -14,19 +14,19 @@
 		<div class="col-lg-10 mx-auto">
 			<form id="{{formHtmlId}}" >
 
-				<!-- view: isNotAvailableView  -->
+				<!-- view: showNotAvailableView  -->
 
-				{{#isNotAvailableView}}	
+				{{#showNotAvailableView}}	
 					<div class="card rounded-3">
 						<div class="card-body px-5">
 							<p class="p-0 m-0">The form is not currently available.</p>
 						</div>
 					</div>
-				{{/isNotAvailableView}}	
+				{{/showNotAvailableView}}	
 
-				<!-- view: isSelectFormView  -->
+				<!-- view: showSelectFormView  -->
 
-				{{#isSelectFormView}}
+				{{#showSelectFormView}}
 					<div class="card rounded-3">
 						<div class="card-header bg-white p-5">
 							<div class="alert alert-warning" role="alert">
@@ -68,32 +68,20 @@
 							{{{inputHiddenTags}}}  
 						</div>
 					</div>
-				{{/isSelectFormView}}				
+				{{/showSelectFormView}}				
 				 
-				<!-- view: isDisplayFormView  -->
+				<!-- view: showDisplayFormView  -->
 
-				{{#isDisplayFormView}}
+				{{#showDisplayFormView}}
 					<!-- form -->
 					{{{formEditLink}}}
 					<div class=" {{formEditWrapperClass}}">
 
-						{{#isThankYouView}}
-
-							<div class="card rounded-3">						
-								<div class="card card-body px-5">
-									<div class="my-5 pt-2">
-										{{{ThankYouCopy}}}
-									</div>
-								</div>		
-							</div>	
-
-						{{/isThankYouView}}
-
-						{{#isFormView}}	
+						{{#showFormPages}}	
 							{{#formPageList}}
 								<!-- form page -->
 								{{{formPageEditLink}}}
-								<div class="{{formPageEditWrapperClass}}">
+								<div class="{{formPageEditWrapperClass}} mb-4">
 									<div class="card rounded-3">
 										{{#pageDescription}}
 											<div id="" class="card-header text-center p-4 formWidgetPageHeader">{{{pageDescription}}}</div>
@@ -248,9 +236,20 @@
 								<input type=hidden name=srcPageId value="{{srcPageId}}">
 								{{/formPageList}}									
 							{{{formPageAddLink}}}
-						{{/isFormView}}
+						{{/showFormPages}}
+
+						{{#showThankYouPage}}
+							<div class="card rounded-3">						
+								<div class="card card-body px-5">
+									<div class="my-5 pt-2">
+										{{{ThankYouCopy}}}
+									</div>
+								</div>		
+							</div>	
+						{{/showThankYouPage}}
+
 					</div>
-				{{/isDisplayFormView}}
+				{{/showDisplayFormView}}
 			<input type=hidden name=instanceid value="{{instanceid}}">
 			<input type=hidden name=formHtmlId value="{{formHtmlId}}">
 			</form>

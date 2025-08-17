@@ -28,6 +28,21 @@
                                 <input type="hidden" id="currentSubmissionDisplayed" value="{{currentSubmissionDisplayed}}">
 
                                 <h2 class="border-bottom pb-3 pt-5 mb-4">{{header}}</h2>
+                                {{#includeFormSelect}}
+                                <div class="mb-4">
+                                    <label for="formSelect" class="fw-bold form-label">Form To Score</label>
+                                    <select onclick="scoreTableRowOnClick('{{submissionId}}')"  id="formId" class="form-select" aria-label="Select active form">
+                                        <option value="" selected disabled>Select...</option>
+                                        {{#formSelectOptions}}
+                                        {{#isSelected}}<option value="{{value}}" selected>{{name}}</option>{{/isSelected}}
+                                        {{^isSelected}}<option value="{{value}}">{{name}}</option>{{/isSelected}}
+                                        {{/formSelectOptions}}
+                                    </select>
+                                </div>
+                                {{/includeFormSelect}}
+                                {{^includeFormSelect}}
+                                <input type="hidden" id="formId" value="{{formId}}">
+                                {{/includeFormSelect}}
                                 <div class=" table-responsive">
                                     <input type="hidden" value="{{scoreWidgetId}}" id="scoreWidgetId">                                
                                     <table class="table table-bordered table-hover">
@@ -83,133 +98,15 @@
                                 {{{ScoringInstructionsTopofApplication}}}
                             </div>
 
-                            {{#applicationViewModel}}
+                            {{#formPreview}}
                             <div class="mt-4 border p-3 rounded-3">
                                 <div id="js-response-preview">
                                     {{#pageDescription}}
                                         <div class="text-center p-2 border-bottom mb-4">{{{pageDescription}}}</div>
                                     {{/pageDescription}}
-                                    {{^pageDescription}}
-                                    {{/pageDescription}}
-                                    
-            
                                     <div>
-                                        
-                                    {{#listOfFieldsClass}}
-                                        {{#isDefault}}
-                                                {{#headline}}<h2 class="border-bottom pb-3 pt-5 mb-4">{{headline}}</h2>{{/headline}}
-                                                <div class="mb-4">
-                                                    <label class="control-label mb-0" for="FormType_{{id}}">
-                                                        <h6 class="fw-bold">{{caption}}</h6>
-                                                    </label>
-                                                    <div>
-                                                        {{{fielddescription}}}
-                                                        <input readonly disabled class="form-control {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" placeholder="{{^required}}(optional){{/required}} {{#required}}{{/required}}" id="FormType_{{id}}" name="formField_{{id}}" type="{{inputtype}}" value="{{currentValue}}">
-                                                        {{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
-                                                    </div>
-                                                </div>
-                                        {{/isDefault}}
-                                        
-                                        {{#isFile}}
-                                                {{#headline}}<h2 class="border-bottom pb-3 pt-5 mb-4">{{headline}}</h2>{{/headline}}
-                                                <div class="mb-4">
-                                                    <label class="control-label mb-0" for="FormType_{{id}}">
-                                                        <h6 class="fw-bold">{{caption}}</h6>
-                                                    </label>
-                                                    <div>
-                                                        {{{fielddescription}}}
-                                                        {{#currentValue}}
-                                                            <div class="mt-2">
-                                                                <a href="{{currentFileUrl}}" target="_blank">{{currentValue}}</a>
-                                                            </div>
-                                                        {{/currentValue}}
-                                                        <input readonly disabled class="form-control {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" placeholder="{{^required}}optional{{/required}} {{#required}}{{/required}}" id="FormType_{{id}}" name="formField_{{id}}" type="{{inputtype}}" value="{{currentValue}}" >
-                                                        {{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
-                                                    </div>
-                                            </div>
-                                        {{/isFile}}
-            
-                                        {{#isTextArea}}
-                                                {{#headline}}<h2 class="border-bottom pb-3 pt-5 mb-4">{{headline}}</h2>{{/headline}}
-                                                <div class="mb-4">
-                                                    <label class="control-label" for="FormType_{{id}}">
-                                                        <h6 class="fw-bold">{{caption}}</h6>
-                                                    </label>
-                                                    <div>
-                                                        {{{fielddescription}}}
-                                                        <textarea readonly disabled rows="5" class="form-control {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" placeholder="{{^required}}(optional){{/required}} {{#required}}{{/required}}" id="FormType_{{id}}" name="formField_{{id}}" type="{{inputtype}}" >{{currentValue}}</textarea>
-                                                        {{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
-                                                    </div>
-                                                </div>
-                                        {{/isTextArea}}
-            
-                                        {{#isCheckbox}}
-                                                {{#headline}}<h2 class="border-bottom pb-3 pt-5 mb-4">{{headline}}</h2>{{/headline}}
-                                                <div class="mb-4">
-                                                    <h6 class="fw-bold">{{caption}} {{^required}}<span class="text-muted fw-light">(optional)</span>{{/required}}</h6>
-                                                    <div>
-                                                        {{{fielddescription}}}
-                                                        {{#optionList}}
-                                                            <div class="form-check">
-                                                                {{#isSelected}}
-                                                                <input onclick="return false;" class="form-check-input {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" name="formField_{{id}}" type="checkbox" id="formField_{{id}}_{{optionPtr}}" value="{{optionPtr}}" checked>
-                                                                {{/isSelected}}
-
-                                                                {{^isSelected}}
-                                                                <input onclick="return false;" class="form-check-input {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" name="formField_{{id}}" type="checkbox" id="formField_{{id}}_{{optionPtr}}" value="{{optionPtr}}">
-                                                                {{/isSelected}}
-                                                                <label class="form-check-label" for="formField_{{id}}_{{optionPtr}}">{{optionName}}</label>
-                                                            </div>
-                                                        {{/optionList}}
-                                                    </div>
-                                                    {{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
-                                                </div>
-                                        {{/isCheckbox}}
-            
-                                        {{#isRadio}}
-                                                {{#headline}}<h2 class="border-bottom pb-3 pt-5 mb-4">{{headline}}</h2>{{/headline}}
-                                                <div class="mb-4">
-                                                    <h6 class="fw-bold">{{caption}} {{^required}}<span class="text-muted fw-light">(optional)</span>{{/required}}</h6>
-                                                    <div>
-                                                        {{{fielddescription}}}
-                                                        {{#optionList}}
-                                                            <div class="form-check">
-                                                                {{#isSelected}}
-                                                                <input onclick="return false;" class="form-check-input {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" type="radio" name="formField_{{id}}" id="formField_{{id}}_{{optionPtr}}" value="{{optionPtr}}" checked>
-                                                                {{/isSelected}}
-                                                                {{^isSelected}}
-                                                                <input onclick="return false;" class="form-check-input {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" type="radio" name="formField_{{id}}" id="formField_{{id}}_{{optionPtr}}" value="{{optionPtr}}">
-                                                                {{/isSelected}}
-                                                            <label class="form-check-label" for="formField_{{id}}_{{optionPtr}}">{{optionName}}</label>
-                                                            </div>
-                                                        {{/optionList}}
-                                                    </div>
-                                                    {{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
-                                                </div>
-                                        {{/isRadio}}
-                                        {{#isSelect}}
-                                                {{#headline}}<h2 class="border-bottom pb-3 pt-5 mb-4">{{headline}}</h2>{{/headline}}
-                                                <div class="mb-4">
-                                                    <h6 class="fw-bold">{{caption}} {{^required}}<span class="text-muted fw-light">(optional)</span>{{/required}}</h6>
-                                                    <div>
-                                                        {{{fielddescription}}}
-                                                            <div class="form-select">
-                                                                <select class="mt-2 form-control {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" name="formField_{{id}}" id="formField_{{id}}" disabled readonly>
-                                                                    <option value="" selected>Choose...</option>
-                                                                    {{#optionList}}
-                                                                        <option id="formField_{{optionPtr}}" value="{{optionPtr}}">{{optionName}}</option>
-                                                                    {{/optionList}}
-                                                                </select>
-                                                                <label class="form-label" for="formField_{{optionPtr}}">{{optionName}}</label>
-                                                            </div>
-                                                    </div>
-                                                    {{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
-                                                </div>
-                                        {{/isSelect}}
-                                    {{/listOfFieldsClass}}												
-                                    
+                                        {{{formPreview}}}
                                     </div>
-
                                     <div id="js-score-widget-tools">
                                         <hr class="border-secondary my-4">
                                         <div> {{{scoringInstructions}}}</div>
@@ -233,51 +130,49 @@
                                     </div>
                                 </div>                            
                             </div>
-                            {{/applicationViewModel}}
-
+                            {{/formPreview}}
                         </div>
                        
-                    {{#applicationViewModel}}
+                    {{#formPreview}}
                     <div class="card-footer px-5 py-3 d-flex justify-content-end">
                         <div class="me-3"><button onclick="scoreTableRowOnClick('0')"class="btn btn-outline-danger">Cancel</button></div>
                         <div><button onclick="setFormSubmissionScore()" class="btn btn-primary px-5">Submit</button></div>
                     </div>
-                    {{/applicationViewModel}}
+                    {{/formPreview}}
 
                 </div>
 
                      <!-- Modal -->
-       {{#submittedApplications}}
-       <div class="modal fade" id="scorerModal{{id}}" tabindex="-1" aria-labelledby="scorerModalLabel" aria-hidden="true">
-         <div class="modal-dialog modal-dialog-centered modal-lg rounded-0">
-             <div class="modal-content rounded-0">
-                 <div class="modal-body p-5">                    
-                     <table class="table table-bordered mb-0">
-                         <thead class="table-secondary">
-                         <tr>
-                             <th scope="col">Scorer</th>
-                             <th scope="col">Date Scored</th>
-                             <th scope="col">Score</th>
-                             <th scope="col">Comments</th>
-                         </tr>
-                         </thead>
-                         <tbody>
-                             {{#submittedApplicationsDetailsRows}}
-                             <tr>
-                                 <td scope="row">{{scorerName}}</td>
-                                 <td scope="row">{{dateScored}}</td>
-                                 <td scope="row">{{scoreGraded}}</td>
-                                 <td scope="row"><div class="small">{{comment}}</div></td>
-                             </tr>
-                             {{/submittedApplicationsDetailsRows}}
-                         </tbody>
-                     </table>
-                 </div>
-             </div>
-         </div>
-     </div>
-     {{/submittedApplications}}
+                {{#submittedApplications}}
+                <div class="modal fade" id="scorerModal{{id}}" tabindex="-1" aria-labelledby="scorerModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg rounded-0">
+                        <div class="modal-content rounded-0">
+                            <div class="modal-body p-5">                    
+                                <table class="table table-bordered mb-0">
+                                    <thead class="table-secondary">
+                                    <tr>
+                                        <th scope="col">Scorer</th>
+                                        <th scope="col">Date Scored</th>
+                                        <th scope="col">Score</th>
+                                        <th scope="col">Comments</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{#submittedApplicationsDetailsRows}}
+                                        <tr>
+                                            <td scope="row">{{scorerName}}</td>
+                                            <td scope="row">{{dateScored}}</td>
+                                            <td scope="row">{{scoreGraded}}</td>
+                                            <td scope="row"><div class="small">{{comment}}</div></td>
+                                        </tr>
+                                        {{/submittedApplicationsDetailsRows}}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+                {{/submittedApplications}}
             </div>
         </div>
     </div>
@@ -288,77 +183,46 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer" data-delete></script>
     <script>
 
+        function refresh( submissionId, scoreWidgetId, sortBy) {
+            var formId = document.getElementById("formId").value;
+            console.log("refresh, submissionId: " + submissionId + ", scoreWidgetId: " + scoreWidgetId + ", sortBy: " + sortBy + ", formId: " + formId);
+            var formData = new FormData();
+            formData.append('submissionId', submissionId);
+            formData.append('scoreWidgetId', scoreWidgetId);
+            formData.append('sortBy', sortBy);
+            formData.append('formId', formId);
+            //
+            $.ajax({
+                url: "/GetSubmissionScoringData",
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false
+            }).done(function(response) {
+                var obj = JSON.parse(response);
+                console.log(obj);
+                if (obj.success) {           
+                    document.getElementById("sectionReplace").innerHTML = obj.html;
+                }else{
+                    alert(obj.errorMessage);
+                }
+            }).fail(function(data) {
+                alert("Error. The server couldn't be reached");
+            });                    
+        }
+
         function scoreTableRowOnClick(submissionId) {
                 var scoreWidgetId = document.getElementById("scoreWidgetId").value;
-                console.log("submissionId: " + submissionId + " scoreWidgetId: " + scoreWidgetId);
-                var formData = new FormData();
                 var sortBy = document.getElementById("currentSortBy").value;
-
-                formData.append('submissionId', submissionId);
-                formData.append('scoreWidgetId', scoreWidgetId);
-                formData.append('sortBy', sortBy);
-
-                $.ajax({
-                    url: "/GetSubmissionScoringData",
-                    type: "POST",
-                    data: formData,
-                    contentType: false,
-                    processData: false
-                }).done(function(response) {
-                    var obj = JSON.parse(response);
-                    console.log(obj);
-                    if (obj.success) {           
-                    //alert(obj.successMessage);
-                    document.getElementById("sectionReplace").innerHTML = obj.html;
-                    //location.reload();
-                    }else{
-                    alert(obj.errorMessage);
-                    //return false;
-                    }
-                }).fail(function(data) {
-                    alert("Error. The server couldn't be reached");
-                });
-                    
+                refresh(submissionId, scoreWidgetId, sortBy);
         }
 
         function sortTable(sortBy) {
                 var scoreWidgetId = document.getElementById("scoreWidgetId").value;
-                console.log("sortBy: " + sortBy + " scoreWidgetId: " + scoreWidgetId);
                 var submissionId = document.getElementById("currentSubmissionDisplayed").value;
-                var formData = new FormData();
-                formData.append('sortBy', sortBy);
-                formData.append('scoreWidgetId', scoreWidgetId);
-                formData.append('submissionId', submissionId);
-
-                $.ajax({
-                    url: "/GetSubmissionScoringData",
-                    type: "POST",
-                    data: formData,
-                    contentType: false,
-                    processData: false
-                }).done(function(response) {
-                    var obj = JSON.parse(response);
-                    console.log(obj);
-                    if (obj.success) {           
-                    //alert(obj.successMessage);
-                    document.getElementById("sectionReplace").innerHTML = obj.html;
-                    //location.reload();
-                    }else{
-                    alert(obj.errorMessage);
-                    //return false;
-                    }
-                }).fail(function(data) {
-                    alert("Error. The server couldn't be reached");
-                });
-                    
+                refresh(submissionId, scoreWidgetId, sortBy);
         }
 
-        /*
-        jQuery(document).ready(function($) {
-            $(".vwResults-js").click(function() {
-                
-        });
-*/
         function setFormSubmissionScore() {            
           var score = document.getElementById('score').value;
           var applicationId = document.getElementById('scoreWidgetId').value;

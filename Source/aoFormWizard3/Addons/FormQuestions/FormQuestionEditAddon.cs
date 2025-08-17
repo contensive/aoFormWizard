@@ -12,10 +12,10 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
     /// Meetings
     /// </summary>
     /// <remarks></remarks>
-    public class FormPageEditAddon : AddonBaseClass {
+    public class FormQuestionEditAddon : AddonBaseClass {
         //
-        public const string guidPortalFeature = "{0358AA13-2C29-4F82-B2DF-78D89E7DAE6A}";
-        public const string guidAddon = "{4C25B351-C03B-4235-B3CA-094CDDC70430}";
+        public const string guidPortalFeature = "{e5da4e7c-6e4b-48b8-8b88-3e4c9538733c}";
+        public const string guidAddon = "{2cb0f9fa-0573-4c71-a785-1e0798af4989}";
         // 
         // =====================================================================================
         /// <summary>
@@ -57,22 +57,26 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
             try {
                 //
                 // -- form widget required, else redirect to form widget list
-                if (request.formId <= 0) {
+                if (request.formPageId <= 0) {
                     cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormPageListAddon.guidPortalFeature);
+                    return false;
+                }
+                if (request.formId <= 0) {
+                    cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormListAddon.guidPortalFeature);
                     return false;
                 }
                 switch (request.button ?? "") {
                     case Constants.buttonCancel: {
-                            cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormPageListAddon.guidPortalFeature, $"&{Constants.rnFormId}={request.formId}");
+                            cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormQuestionListAddon.guidPortalFeature, $"&{Constants.rnFormId}={request.formId}&{Constants.rnFormPageId}={request.formPageId}");
                             return false;
                         }
                     case Constants.buttonSave: {
-                            saveFormPage(cp, request);
+                            saveForm(cp, request);
                             return true;
                         }
                     case Constants.buttonOK: {
-                            saveFormPage(cp, request);
-                            cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormPageListAddon.guidPortalFeature, $"&{Constants.rnFormId}={request.formId}");
+                            saveForm(cp, request);
+                            cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormQuestionListAddon.guidPortalFeature, $"&{Constants.rnFormId}={request.formId}&{Constants.rnFormPageId}={request.formPageId}");
                             return false;
                         }
                     case Constants.buttonDelete: {
@@ -80,7 +84,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                                 DbBaseModel.delete<FormQuestionModel>(cp, formQuestion.id);
                             }
                             DbBaseModel.delete<FormPageModel>(cp, request.formPageId);
-                            cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormPageListAddon.guidPortalFeature, $"&{Constants.rnFormId}={request.formId}");
+                            cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormQuestionListAddon.guidPortalFeature, $"&{Constants.rnFormId}={request.formId}&{Constants.rnFormPageId}={request.formPageId}");
                             return false;
                         }
                     default: {
@@ -106,17 +110,19 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 FormModel form = DbBaseModel.create<FormModel>(cp, request.formId);
                 if (form == null) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormListAddon.guidPortalFeature); }
                 FormPageModel formPage = DbBaseModel.create<FormPageModel>(cp, request.formPageId);
+                if (formPage == null) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormPageListAddon.guidPortalFeature); }
+                FormQuestionModel formQuestion = DbBaseModel.create<FormQuestionModel>(cp, request.formQuestionId);
                 // 
                 // -- add rows
                 layoutBuilder.addRow();
                 layoutBuilder.rowName = "Name";
-                layoutBuilder.rowValue = cp.Html5.InputText(Constants.rnName, 255, formPage?.name ?? "", "form-control");
-                layoutBuilder.rowHelp = "The name for this form page used by administrators to manage the form. The user will not see this name.";
+                layoutBuilder.rowValue = cp.Html5.InputText(Constants.rnName, 255, formQuestion?.name ?? "", "form-control");
+                layoutBuilder.rowHelp = "The name for this form question used by administrators to manage the form. The user will not see this name.";
                 //
                 // -- setup layout
-                layoutBuilder.title = (formPage == null) ? "Add Form Page" : "Edit Form Page";
-                layoutBuilder.portalSubNavTitle = (formPage == null ? "new page" : $"page: {formPage.name}") + $"<br>in form: '{form.name}'";
-                layoutBuilder.description = "A form page is one page of questions a user see when submitting a form online. A form can have one or more form pages. Each form page contains one or more form questions.";
+                layoutBuilder.title = (formQuestion == null) ? "Add Form Question" : "Edit Form Question";
+                layoutBuilder.portalSubNavTitle = (formQuestion == null ? "new question" : $"question: {formQuestion.name}") + $"<br>on page: '{formPage.name}'" + $"<br>of form: '{form.name}'";
+                layoutBuilder.description = "A form question is a single question presented to the user on a form page. Each form page can contain one or more questions. A form can include one or more for pages.";
                 layoutBuilder.callbackAddonGuid = guidAddon;
                 layoutBuilder.failMessage = userErrorMessage;
                 // 
@@ -124,12 +130,14 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 layoutBuilder.addFormButton(Constants.buttonOK);
                 layoutBuilder.addFormButton(Constants.buttonSave);
                 layoutBuilder.addFormButton(Constants.buttonCancel);
+                layoutBuilder.addFormButton(Constants.buttonDelete);
                 // 
                 // -- add hiddens
                 //
                 // -- set rqs for subnav links
-                cp.Doc.AddRefreshQueryString(Constants.rnFormPageId, request.formPageId);
                 cp.Doc.AddRefreshQueryString(Constants.rnFormId, request.formId);
+                cp.Doc.AddRefreshQueryString(Constants.rnFormPageId, request.formPageId);
+                cp.Doc.AddRefreshQueryString(Constants.rnFormQuestionId, request.formQuestionId);
                 //
                 return layoutBuilder.getHtml();
             } catch (Exception ex) {
@@ -140,18 +148,18 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
         // 
         // ====================================================================================================
         // 
-        private static void saveFormPage(CPBaseClass cp, RequestModel request) {
+        private static void saveForm(CPBaseClass cp, RequestModel request) {
             try {
-                var formPage = DbBaseModel.create<FormPageModel>(cp, request.formPageId);
-                if (formPage is null) {
-                    formPage = DbBaseModel.addDefault<FormPageModel>(cp);
+                var formQuestion = DbBaseModel.create<FormQuestionModel>(cp, request.formQuestionId);
+                if (formQuestion is null) {
+                    formQuestion = DbBaseModel.addDefault<FormQuestionModel>(cp);
                     //
                     // -- important. this record becomes the current focus for the get method
-                    request.formPageId = formPage.id;
+                    request.formQuestionId = formQuestion.id;
                 }
-                formPage.name = request.name;
-                formPage.formid = request.formId;
-                formPage.save(cp);
+                formQuestion.name = request.name;
+                formQuestion.formid = request.formPageId;
+                formQuestion.save(cp);
             } catch (Exception ex) {
                 cp.Site.ErrorReport(ex);
             }
@@ -172,6 +180,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 button = cp.Doc.GetText(Constants.rnButton);
                 formId = cp.Doc.GetInteger(Constants.rnFormId);
                 formPageId = cp.Doc.GetInteger(Constants.rnFormPageId);
+                formQuestionId = cp.Doc.GetInteger(Constants.rnFormQuestionId);
                 //
                 // -- individual fields for the record, request name and requestModel name match the field name (except id)
                 name = cp.Doc.GetText("name");
@@ -179,11 +188,24 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
             private CPBaseClass cp;
             //
             public string button { get; }
-            //
+            /// <summary>
+            /// form for this question  
+            /// </summary>
             public int formId { get; set; }
-            //
+            /// <summary>
+            /// page for this question
+            /// </summary>
             public int formPageId { get; set; }
+            /// <summary>
+            /// id of the question, 0 to add new question
+            /// </summary>
+            public int formQuestionId { get; set; }
             //
+            // -- fields for the record
+            //
+            /// <summary>
+            /// 
+            /// </summary>
             public string name { get; set; }
         }
     }

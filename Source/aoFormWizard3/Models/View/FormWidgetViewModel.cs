@@ -24,19 +24,19 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
         /// <summary>
         /// display the page saying the form is not ready (not configured, non-admin user)
         /// </summary>
-        public bool isNotAvailableView { get; set; }
+        public bool showNotAvailableView { get; set; }
         //
         /// <summary>
         /// display if the page is not ready and the user is admin -- select form or create form
         /// </summary>
-        public bool isSelectFormView { get; set; }
+        public bool showSelectFormView { get; set; }
         //
         /// <summary>
         /// true if the form is configured and can be displayed
         /// </summary>
-        public bool isDisplayFormView {
+        public bool showDisplayFormView {
             get {
-                return !isNotAvailableView && !isSelectFormView;
+                return !showNotAvailableView && !showSelectFormView;
             }
         }
         //
@@ -49,16 +49,15 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
         /// class added to the form edit wrapper
         /// </summary>
         public string formEditWrapperClass { get; set; }
-        //
         /// <summary>
-        /// display the form to the user to submit
+        /// show the pages of the form one at a time, or at once if multipage mode
         /// </summary>
-        public bool isFormView { get; set; }
+        public bool showFormPages { get; set; }
         //
         /// <summary>
         /// display the thank you page
         /// </summary>
-        public bool isThankYouView { get; set; }
+        public bool showThankYouPage { get; set; }
         //
         /// <summary>
         /// when true, the form displays all the pages one after the other with no navigation buttons
@@ -212,7 +211,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                         formWidget.formId = cp.Doc.GetInteger("setFormWizardFormId");
                         if (formWidget.formId == 0) {
                             var result = new FormWidgetViewModel {
-                                isSelectFormView = true,
+                                showSelectFormView = true,
                                 isEditing = isEditing,
                                 _selectOptions = []
                             };
@@ -230,7 +229,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                     // -- no form is selected
                     if (cp.User.IsAdmin) {
                         var result = new FormWidgetViewModel {
-                            isSelectFormView = true,
+                            showSelectFormView = true,
                             isEditing = isEditing,
                             _selectOptions = []
                         };
@@ -238,7 +237,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                         return result;
                     }
                     return new FormWidgetViewModel() {
-                        isNotAvailableView = true
+                        showNotAvailableView = true
                     };
                 }
                 //
@@ -258,7 +257,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 //    //
                 //    // -- if the response is not for this form, that is an error. Block
                 //    return new FormWidgetViewModel() {
-                //        isNotAvailableView = true
+                //        showNotAvailableView = true
                 //    };
                 //}
                 // 
@@ -294,7 +293,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 //
                 // -- no form, not available
                 return new FormWidgetViewModel() {
-                    isNotAvailableView = true
+                    showNotAvailableView = true
                 };
             }
             // 
@@ -307,23 +306,23 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
             resultViewData.formEditWrapperClass = resultViewData.isEditing ? "ccEditWrapper" : "";
             resultViewData.formEditLink = resultViewData.isEditing ? cp.Content.GetEditLink(FormModel.tableMetadata.contentName, form.id.ToString(), false, "", true) : "";
             resultViewData.isMultipagePreviewMode = isMultipagePreviewMode;
+            resultViewData.ThankYouCopy = form.thankyoucopy;
             //
             // -- validate the savedAnswers object
             FormResponseDataModel savedAnswers = string.IsNullOrEmpty(formResponse?.formResponseData) ? new() : cp.JSON.Deserialize<FormResponseDataModel>(formResponse.formResponseData);
             savedAnswers.pageDict ??= [];
             savedAnswers.activity ??= [];
             //
-            if (!isMultipagePreviewMode && savedAnswers.isComplete) {
-                //
-                // -- form complete, show thank you and exit
-                resultViewData.ThankYouCopy = form.thankyoucopy;
-                resultViewData.isThankYouView = true;
-                return resultViewData;
+            if(isMultipagePreviewMode) {
+                resultViewData.showFormPages = true;
+                resultViewData.showThankYouPage = true;
+            } else if (savedAnswers.isComplete) {
+                resultViewData.showFormPages = false;
+                resultViewData.showThankYouPage = true;
+            } else {
+                resultViewData.showFormPages = true;
+                resultViewData.showThankYouPage = false;
             }
-            //
-            // -- the output is the normal user output
-            resultViewData.isFormView = true;
-            // -- if editing, preview multipage mode
             //
             // -- validate the current page
             resultViewData.pageList = FormPageModel.getPageList(cp, form.id);
@@ -332,7 +331,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                     //
                     // -- no pages in the form, not admin
                     return new FormWidgetViewModel() {
-                        isNotAvailableView = true
+                        showNotAvailableView = true
                     };
                 }
                 //

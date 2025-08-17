@@ -1,4 +1,5 @@
 ﻿using Contensive.Addon.aoFormWizard3.Controllers;
+using Contensive.Addon.aoFormWizard3.Models.Db;
 using Contensive.Addon.aoFormWizard3.Models.Domain;
 using Contensive.BaseClasses;
 using Contensive.BaseClasses.LayoutBuilder;
@@ -34,13 +35,10 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 // -- validate portal environment
                 if (!cp.AdminUI.EndpointContainsPortal()) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, guidPortalFeature, ""); }
                 // 
-                // -- cancel
-                var request = new RequestModel(cp);
-                if (request.button.Equals(Constants.buttonCancel)) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, ""); }
-                // 
                 using (var app = new ApplicationModel(cp)) {
+                    var request = new RequestModel(cp);
                     string userErrorMessage = "";
-                    processView(app, request, ref userErrorMessage);
+                    if (!processView(app, request, ref userErrorMessage)) { return ""; }
                     return getView(app, request, userErrorMessage);
                 }
             } catch (Exception ex) {
@@ -50,52 +48,29 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
         }
         // 
         // ========================================================================================
-        // 
-        public static void processView(ApplicationModel app, RequestModel request, ref string errorMessage) {
+        /// <summary>
+        /// return true to display this form, false to skip the form and return
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="request"></param>
+        /// <param name="userErrorMessage"></param>
+        /// <returns></returns>
+        public static bool processView(ApplicationModel app, RequestModel request, ref string userErrorMessage) {
             CPBaseClass cp = app.cp;
             try {
-                //if (request.button == Constants.ButtonConfirmRegistration) {
-                //    for (var rowPtr = 0; rowPtr < cp.Doc.GetInteger("rowCnt"); rowPtr++) {
-                //        // 
-                //        // -- confirm registration
-                //        if (cp.Doc.GetBoolean("row" + rowPtr)) {
-                //            int registrationId = cp.Doc.GetInteger("row" + rowPtr);
-                //            if (registrationId > 0) {
-                //                MeetingRegistrationModel registration = DbBaseModel.create<MeetingRegistrationModel>(cp, registrationId);
-                //                if (registration == null) {
-                //                    errorMessage = "registration not found";
-                //                    return;
-                //                }
-                //                OrderModel order = DbBaseModel.create<OrderModel>(cp, registration.orderid);
-                //                if (order == null) {
-                //                    errorMessage = "order not found";
-                //                    return;
-                //                }
-                //                // -- cancel the registration
-                //                MeetingRegistrationModel.confirmRegistration(cp, registration, order);
-                //            }
-                //        }
-                //    }
-                //}
-                //if (request.button == Constants.ButtonCancelRegistration) {
-                //    for (var rowPtr = 0; rowPtr < cp.Doc.GetInteger("rowCnt"); rowPtr++) {
-                //        // 
-                //        // -- cancel registration
-                //        if (cp.Doc.GetBoolean("row" + rowPtr)) {
-                //            int registrationId = cp.Doc.GetInteger("row" + rowPtr);
-                //            if (registrationId > 0) {
-                //                MeetingRegistrationModel registration = DbBaseModel.create<MeetingRegistrationModel>(cp, registrationId);
-                //                if (registration == null) {
-                //                    errorMessage = "registration not found";
-                //                    return;
-                //                }
-                //                // -- cancel the registration
-                //                MeetingRegistrationModel.cancelRegistration(cp, registrationId);
-                //            }
-                //        }
-                //    }
-                //}
-                return;
+                // 
+                // -- cancel
+                if (request.button.Equals(Constants.buttonCancel)) {
+                    cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, "");
+                    return false;
+                }
+                // 
+                // -- add
+                if (request.button.Equals(Constants.ButtonAdd)) {
+                    cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormEditAddon.guidPortalFeature);
+                    return false;
+                }
+                return true;
             } catch (Exception ex) {
                 cp.Site.ErrorReport(ex);
                 throw;
@@ -118,6 +93,8 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 //
                 // -- init layoutbuilder
                 LayoutBuilderListBaseClass layoutBuilder = cp.AdminUI.CreateLayoutBuilderList();
+                //
+                // -- init parent portal data
                 // 
                 // -- setup column headers
                 layoutBuilder.addColumn();
@@ -170,7 +147,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                     layoutBuilder.setCell($"<input type=checkbox name=\"row{rowPtr}\" value=\"{row.formId}\">");
                     // 
                     string formLink = cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, FormEditAddon.guidPortalFeature) + $"&{Constants.rnFormId}={row.formId}";
-                    layoutBuilder.setCell($"<a href=\"{formLink}\">{(string.IsNullOrEmpty( row.formName) ? "(Unnamed Form)" : row.formName)}</a>", row.formName);
+                    layoutBuilder.setCell($"<a href=\"{formLink}\">{(string.IsNullOrEmpty(row.formName) ? "(Unnamed Form)" : row.formName)}</a>", row.formName);
                     //
                     string formResponseCountLink = cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, FormResponseListAddon.guidPortalFeature) + $"&{Constants.rnFormId}={row.formId}";
                     layoutBuilder.setCell($"<a href=\"{formResponseCountLink}\">{row.formResponseCount}</a>", row.formResponseCount.ToString());
@@ -189,6 +166,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 layoutBuilder.allowDownloadButton = true;
                 // 
                 // -- add buttons
+                layoutBuilder.addFormButton(Constants.ButtonAdd);
                 layoutBuilder.addFormButton(Constants.ButtonRefresh);
                 layoutBuilder.addFormButton(Constants.buttonCancel);
                 // 

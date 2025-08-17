@@ -1,4 +1,5 @@
 ﻿using Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets;
+using Contensive.Addon.aoFormWizard3.Controllers;
 using Contensive.BaseClasses;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,12 @@ namespace Contensive.Addon.aoFormWizard3.Models.Domain {
             public string formResponseName { get; set; }
             public int submitterId { get; set; }
             public string submitterName { get; set; }
+            public DateTime? started { get; set; }
+            public DateTime? submitted { get; set; }
+            /// <summary>
+            /// the json encoded object with the response from the complete submission.
+            /// </summary>
+            public string formResponseData { get; set; }
         }
         public FormResponseListDataModel(CPBaseClass cp, FormResponseListAddon.RequestModel request, string sqlOrderBy, string searchTerm, int pageNumber, int pageSize) {
             try {
@@ -31,12 +38,8 @@ namespace Contensive.Addon.aoFormWizard3.Models.Domain {
                 string sqlWhere = "(1=1)";
                 string sqlTerm = cp.Db.EncodeSQLTextLike(searchTerm);
                 sqlWhere += string.IsNullOrEmpty(searchTerm) ? "" : $" and(r.name like {sqlTerm})";
-                //if (request.meetingId != 0) {
-                //    sqlWhere += " AND (r.MeetingID=" + cp.Db.EncodeSQLNumber(request.meetingId) + ")";
-                //}
-                //if (request.filterNotConfirmed) { sqlWhere += $"and(r.confirmationdate is null)"; }
-                //if (request.filterCancelled) { sqlWhere += $"and(r.cancellationdate is not null)"; }
-                //if (request.filterFromDate>DateTime.MinValue) { sqlWhere += $"and((r.registrationdate is null)or(r.registrationdate>'1/1/1'))"; }
+                sqlWhere += request.onlySubmitted ? " and (r.dateSubmitted is not null)" : "";
+                sqlWhere += request.formId>0 ? $"and(r.formId={cp.Db.EncodeSQLNumber(request.formId)})" : "";
                 //
                 // -- record count
                 rowCount = 0;
@@ -57,7 +60,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.Domain {
                 // -- output data
                 string sql = @$"
                     select
-                        r.id as formResponseId, r.name as formResponseName,
+                        r.id as formResponseId, r.name as formResponseName,r.formResponseData,r.dateAdded as Started,r.dateSubmitted as Submitted,
                         f.id as formId, f.name as formName,
                         m.id as submitterId, m.name as submitterName
                     from 
@@ -78,8 +81,11 @@ namespace Contensive.Addon.aoFormWizard3.Models.Domain {
                             formName = cp.Utils.EncodeText(row["formName"]),
                             formResponseId = cp.Utils.EncodeInteger(row["formResponseId"]),
                             formResponseName = cp.Utils.EncodeText(row["formResponseName"]),
+                            formResponseData = cp.Utils.EncodeText(row["formResponseData"]),
                             submitterId = cp.Utils.EncodeInteger(row["submitterId"]),
-                            submitterName = cp.Utils.EncodeText(row["submitterName"])
+                            submitterName = cp.Utils.EncodeText(row["submitterName"]),
+                            started = GenericController.encodeNullableDate(row["started"]),
+                            submitted = GenericController.encodeNullableDate(row["submitted"])
                         });
                     }
                 }

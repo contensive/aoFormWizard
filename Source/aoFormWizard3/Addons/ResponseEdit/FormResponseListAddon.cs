@@ -1,9 +1,14 @@
 ﻿using Contensive.Addon.aoFormWizard3.Controllers;
+using Contensive.Addon.aoFormWizard3.Models.Db;
 using Contensive.Addon.aoFormWizard3.Models.Domain;
 using Contensive.BaseClasses;
 using Contensive.BaseClasses.LayoutBuilder;
 using Contensive.Models.Db;
 using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Security.Cryptography;
+using System.Text;
 using static Contensive.BaseClasses.LayoutBuilder.LayoutBuilderBaseClass;
 
 namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
@@ -33,15 +38,11 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 // 
                 // -- validate portal environment
                 if (!cp.AdminUI.EndpointContainsPortal()) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, guidPortalFeature, ""); }
-                //
                 // 
-                // -- cancel
                 var request = new RequestModel(cp);
-                if (request.button.Equals(Constants.buttonCancel)) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, ""); }
-                // 
                 using (var app = new ApplicationModel(cp)) {
                     string userErrorMessage = "";
-                    processView(app, request, ref userErrorMessage);
+                    if (!processView(app, request, ref userErrorMessage)) { return ""; }
                     return getView(app, request, userErrorMessage);
                 }
             } catch (Exception ex) {
@@ -52,51 +53,16 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
         // 
         // ========================================================================================
         // 
-        public static void processView(ApplicationModel app, RequestModel request, ref string errorMessage) {
+        public static bool processView(ApplicationModel app, RequestModel request, ref string errorMessage) {
             CPBaseClass cp = app.cp;
             try {
-                //if (request.button == Constants.ButtonConfirmRegistration) {
-                //    for (var rowPtr = 0; rowPtr < cp.Doc.GetInteger("rowCnt"); rowPtr++) {
-                //        // 
-                //        // -- confirm registration
-                //        if (cp.Doc.GetBoolean("row" + rowPtr)) {
-                //            int registrationId = cp.Doc.GetInteger("row" + rowPtr);
-                //            if (registrationId > 0) {
-                //                MeetingRegistrationModel registration = DbBaseModel.create<MeetingRegistrationModel>(cp, registrationId);
-                //                if (registration == null) {
-                //                    errorMessage = "registration not found";
-                //                    return;
-                //                }
-                //                OrderModel order = DbBaseModel.create<OrderModel>(cp, registration.orderid);
-                //                if (order == null) {
-                //                    errorMessage = "order not found";
-                //                    return;
-                //                }
-                //                // -- cancel the registration
-                //                MeetingRegistrationModel.confirmRegistration(cp, registration, order);
-                //            }
-                //        }
-                //    }
-                //}
-                //if (request.button == Constants.ButtonCancelRegistration) {
-                //    for (var rowPtr = 0; rowPtr < cp.Doc.GetInteger("rowCnt"); rowPtr++) {
-                //        // 
-                //        // -- cancel registration
-                //        if (cp.Doc.GetBoolean("row" + rowPtr)) {
-                //            int registrationId = cp.Doc.GetInteger("row" + rowPtr);
-                //            if (registrationId > 0) {
-                //                MeetingRegistrationModel registration = DbBaseModel.create<MeetingRegistrationModel>(cp, registrationId);
-                //                if (registration == null) {
-                //                    errorMessage = "registration not found";
-                //                    return;
-                //                }
-                //                // -- cancel the registration
-                //                MeetingRegistrationModel.cancelRegistration(cp, registrationId);
-                //            }
-                //        }
-                //    }
-                //}
-                return;
+                // 
+                // -- cancel
+                if (request.button.Equals(Constants.buttonCancel)) {
+                    cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, "");
+                    return false;
+                }
+                return true;
             } catch (Exception ex) {
                 cp.Site.ErrorReport(ex);
                 throw;
@@ -126,43 +92,107 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 layoutBuilder.columnName = "";
                 layoutBuilder.columnCaptionClass = AfwStyles.afwTextAlignCenter + AfwStyles.afwWidth20px;
                 layoutBuilder.columnCellClass = AfwStyles.afwTextAlignCenter;
+                layoutBuilder.columnVisible = true;
+                layoutBuilder.columnDownloadable = false;
                 //
                 layoutBuilder.addColumn();
                 layoutBuilder.columnCaption = "&nbsp;";
                 layoutBuilder.columnName = "";
                 layoutBuilder.columnCaptionClass = AfwStyles.afwTextAlignCenter + AfwStyles.afwWidth20px;
                 layoutBuilder.columnCellClass = AfwStyles.afwTextAlignCenter;
+                layoutBuilder.columnVisible = true;
+                layoutBuilder.columnDownloadable = false;
                 // 
                 layoutBuilder.addColumn();
-                layoutBuilder.columnCaption = "Responses";
-                layoutBuilder.columnName = "Responses";
+                layoutBuilder.columnCaption = "View";
+                layoutBuilder.columnName = "View";
                 layoutBuilder.columnCaptionClass = AfwStyles.afwTextAlignLeft;
                 layoutBuilder.columnCellClass = AfwStyles.afwTextAlignLeft;
+                layoutBuilder.columnVisible = true;
+                layoutBuilder.columnDownloadable = false;
                 // 
                 layoutBuilder.addColumn();
                 layoutBuilder.columnCaption = "Form";
                 layoutBuilder.columnName = "Form";
                 layoutBuilder.columnCaptionClass = AfwStyles.afwTextAlignLeft;
                 layoutBuilder.columnCellClass = AfwStyles.afwTextAlignLeft;
+                layoutBuilder.columnVisible = true;
+                layoutBuilder.columnDownloadable = true;
+                // 
+                layoutBuilder.addColumn();
+                layoutBuilder.columnCaption = "Started";
+                layoutBuilder.columnName = "Started";
+                layoutBuilder.columnCaptionClass = AfwStyles.afwTextAlignLeft;
+                layoutBuilder.columnCellClass = AfwStyles.afwTextAlignLeft;
+                layoutBuilder.columnVisible = true;
+                layoutBuilder.columnDownloadable = false;
+                // 
+                layoutBuilder.addColumn();
+                layoutBuilder.columnCaption = "Submitted";
+                layoutBuilder.columnName = "Submitted";
+                layoutBuilder.columnCaptionClass = AfwStyles.afwTextAlignLeft;
+                layoutBuilder.columnCellClass = AfwStyles.afwTextAlignLeft;
+                layoutBuilder.columnVisible = true;
+                layoutBuilder.columnDownloadable = false;
                 // 
                 layoutBuilder.addColumn();
                 layoutBuilder.columnCaption = "Submitter";
                 layoutBuilder.columnName = "memberId";
                 layoutBuilder.columnCaptionClass = AfwStyles.afwTextAlignLeft;
                 layoutBuilder.columnCellClass = AfwStyles.afwTextAlignLeft;
+                layoutBuilder.columnVisible = true;
+                layoutBuilder.columnDownloadable = true;
                 // 
                 // -- add filters
                 request.formId = layoutBuilder.getFilterInteger(Constants.rnFormId, viewName);
+                if(request.formId <= 0) { request.formId = FormModel.getLastestForm(cp); }
                 layoutBuilder.addFilterSelectContent("Form", Constants.rnFormId, request.formId, "forms", "", "Any Form");
                 //
-                // todo: tjis hsould be a list of users that have filled out forms
-                //
-                request.responseUserId = layoutBuilder.getFilterInteger(Constants.rnResponseUserId, viewName);
-                layoutBuilder.addFilterSelectContent("User", Constants.rnResponseUserId, request.responseUserId, "people", "", "Any User");
+                request.onlySubmitted = layoutBuilder.getFilterBoolean(Constants.rnOnlySubmitted, viewName);
+                layoutBuilder.addFilterCheckbox("Only Submitted", Constants.rnOnlySubmitted, "1", request.onlySubmitted);
                 //
                 FormResponseListDataModel data = new(cp, request, layoutBuilder.sqlOrderBy, layoutBuilder.sqlSearchTerm, layoutBuilder.paginationPageNumber, layoutBuilder.paginationPageSize);
                 //
+                // special case filter, add users in the current response select
+                request.responseUserId = layoutBuilder.getFilterInteger(Constants.rnResponseUserId, viewName);
+                List<NameValueSelected> userOptionList = [];
+                userOptionList.Add(new NameValueSelected("Any User", "0", false));
+                foreach ( var row in data.rowData) {
+                    //
+                    // -- add the submitter to the userOptionList if not already there
+                    bool found = userOptionList.Exists(x => x.value.Equals(row.submitterId.ToString()));
+                    if (!found) {
+                        userOptionList.Add(new NameValueSelected(row.submitterName, row.submitterId.ToString(), (row.submitterId == request.responseUserId)));
+                    }
+                }
+                layoutBuilder.addFilterSelect("User", Constants.rnResponseUserId, userOptionList);
+                //
+                // -- create headers from form response data
+                // -- create questionIdList, a list of question ids in the order they appear in the form
+                List<questionPageClass> questionIndexList = [];
+                var pageList = DbBaseModel.createList<FormPageModel>(cp, $"(formId={request.formId})", "sortOrder");
+                foreach (var page in pageList) {
+                    var questionList = DbBaseModel.createList<FormQuestionModel>(cp, $"(formid={page.id})", "sortOrder");
+                    foreach (var question in questionList) {
+                        //
+                        questionIndexList.Add(new questionPageClass {
+                            questionId = question.id,
+                            pageId = page.id
+                        });
+                        // 
+                        layoutBuilder.addColumn();
+                        layoutBuilder.columnCaption = question.caption;
+                        layoutBuilder.columnName = question.name;
+                        layoutBuilder.columnCaptionClass = AfwStyles.afwTextAlignLeft;
+                        layoutBuilder.columnCellClass = AfwStyles.afwTextAlignLeft;
+                        layoutBuilder.columnVisible = false;
+                        layoutBuilder.columnDownloadable = true;
+                    }
+                }
+                //
                 layoutBuilder.recordCount = data.rowCount;
+                //
+                // -- output data
                 //
                 int rowPtr = 0;
                 int rowPtrStart = layoutBuilder.paginationPageSize * (layoutBuilder.paginationPageNumber - 1);
@@ -170,20 +200,63 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 foreach (var row in data.rowData) {
                     layoutBuilder.addRow();
                     //
+                    // -- create columns for record data
+                    //
                     layoutBuilder.setCell((rowPtrStart + rowPtr + 1).ToString());
                     //
                     layoutBuilder.setCell($"<input type=checkbox name=\"row{rowPtr}\" value=\"{row.formId}\">");
                     //
-                    // -- form response
+                    // -- view
                     string formResponseCountLink = cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, FormResponseDetailsAddon.guidPortalFeature) + $"&{Constants.rnFormResponseId}={row.formResponseId}";
-                    layoutBuilder.setCell($"<a href=\"{formResponseCountLink}\">{row.formResponseName}</a>");
+                    layoutBuilder.setCell($"<a href=\"{formResponseCountLink}\">view</a>", "");
                     // 
-                    // -- form widget
+                    // -- form
                     string formLink = cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, FormEditAddon.guidPortalFeature) + $"&{Constants.rnFormId}={row.formId}";
-                    layoutBuilder.setCell($"<a href=\"{formLink}\">{row.formName}</a>");
+                    layoutBuilder.setCell($"<a href=\"{formLink}\">{row.formName}</a>", row.formName);
+                    //
+                    // -- started
+                    layoutBuilder.setCell(row.started?.ToString("G") ?? "");
+                    //
+                    // -- submitted
+                    layoutBuilder.setCell(row.submitted?.ToString("G") ?? "");
                     //
                     // -- submitter
                     layoutBuilder.setCell(row.submitterName);
+                    //
+                    // -- create columns for submitted data
+                    //
+                    var formResponseDataJson = row.formResponseData;
+                    if (string.IsNullOrEmpty(formResponseDataJson)) { continue; }
+                    FormResponseDataModel formResponseData = cp.JSON.Deserialize<FormResponseDataModel>(formResponseDataJson);
+                    foreach (var questionIndex in questionIndexList) {
+                        //
+                        // -- find the answer
+                        string cellText = "";
+                        if (formResponseData.pageDict.ContainsKey(questionIndex.pageId)) {
+                            if (formResponseData.pageDict[questionIndex.pageId].questionDict.ContainsKey(questionIndex.questionId)) {
+                                var answer = formResponseData.pageDict[questionIndex.pageId].questionDict[questionIndex.questionId];
+                                if (answer.choiceAnswerDict.Count > 0) {
+                                    //
+                                    // -- multiple choice answer
+                                    StringBuilder sb = new StringBuilder();
+                                    foreach (var choice in answer.choiceAnswerDict) {
+                                        if(choice.Value) {
+                                            //
+                                            // -- only append if the choice is selected
+                                            if (sb.Length > 0) { sb.Append(", "); }
+                                            sb.Append(choice.Key);
+                                        }
+                                    }
+                                    cellText = sb.ToString();
+                                } else if (!string.IsNullOrEmpty(answer.textAnswer)) {
+                                    //
+                                    // -- single text answer
+                                    cellText = answer.textAnswer;
+                                }
+                            }
+                        }
+                        layoutBuilder.setCell(cellText);
+                    }
                     //
                     rowPtr += 1;
                 }
@@ -194,6 +267,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 layoutBuilder.callbackAddonGuid = guidAddon;
                 layoutBuilder.paginationRecordAlias = "forms";
                 layoutBuilder.failMessage = errorMessage;
+                layoutBuilder.allowDownloadButton = true;
                 // 
                 // -- add buttons
                 //layoutBuilder.addFormButton(Constants.ButtonConfirmRegistration);
@@ -233,6 +307,15 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
             public int formPageId { get; set; }
             //
             public int responseUserId { get; set; }
+            //
+            public bool onlySubmitted { get; set; }
+        }
+        /// <summary>
+        /// questionids and their pageids
+        /// </summary>
+        public class questionPageClass {
+            public int questionId { get; set; }
+            public int pageId { get; set; }
         }
     }
 }

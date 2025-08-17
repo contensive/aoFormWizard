@@ -9,7 +9,8 @@ using System.Linq;
 namespace Contensive.Addon.aoFormWizard3.Models.View {
     public class SubmissionScoringViewModel : DesignBlockViewBaseModel {
         public List<ApplicationScoresTableRow> submittedApplications { get; set; }
-        public FormWidgetViewModel applicationViewModel { get; set; }
+        //
+        public string formPreview { get; set; } 
         public List<int> scoresDropDownOptions { get; set; }
         public List<GradeTableValues> gradeTableValues { get; set; }
         public int id { get; set; }
@@ -24,6 +25,20 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
         public string lastNameSortbyString { get; set; }
         public string averageScoreSortbyString { get; set; }
         public string header { get; set; }
+
+        public List<SubmissionScoringViewModel_SelectOptionList> formSelectOptions { get; set; } = [];
+
+        public bool includeFormSelect {
+            get {
+                return formSelectOptions != null && formSelectOptions.Count > 0;
+            }
+        }
+
+        public class SubmissionScoringViewModel_SelectOptionList {
+            public int value { get; set; }
+            public string name { get; set; }
+            public bool isSelected { get; set; }
+        }
 
         public class ApplicationScoresTableRow {
             public List<ModalDataRow> submittedApplicationsDetailsRows { get; set; }
@@ -93,6 +108,23 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 List<int> points = Enumerable.Range(1, 10).ToList();
                 points.Reverse();
                 //
+                var formSelectOptions = new List<SubmissionScoringViewModel_SelectOptionList>();
+                if (cp.Doc.GetBoolean("isSubmissionScoringTool")) {
+                    //
+                    // -- scoring tool
+                    if (cp.Doc.GetInteger("formid") > 0) {
+                        settings.formid = cp.Doc.GetInteger("formid");
+                        settings.save(cp);
+                    }
+                    foreach (FormModel form in DbBaseModel.createList<FormModel>(cp)) {
+                        formSelectOptions.Add( new SubmissionScoringViewModel_SelectOptionList {
+                            value = form.id,
+                            name = form.name,
+                            isSelected = form.id == settings.formid
+                        });
+                    }
+                }
+                //
                 var viewModel = new SubmissionScoringViewModel {
                     submittedApplications = [],
                     gradeTableValues = [],
@@ -107,10 +139,11 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                     averageScoreSortbyString = "<i class=\"fa-solid fa-sort\"></i>",
                     scoresDropDownOptions = points,
                     lastNameSortBy = 1,
-                    averageScoreSortBy = 3
+                    averageScoreSortBy = 3,
+                    formSelectOptions = formSelectOptions
                 };
                 //
-                var applicationFormModel = DbBaseModel.createFirstOfList<FormWidgetModel>(cp, "", "dateadded desc");
+                var formWidget = DbBaseModel.create<FormWidgetModel>(cp, settings.id);
                 List<FormResponseModel> formResponseList = DbBaseModel.createList<FormResponseModel>(cp, $"formid = {settings.formid} and datesubmitted is not null");
                 if (formResponseList != null) {
                     foreach (var formResponse in formResponseList) {
@@ -150,8 +183,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 }
                 hint = 10;
                 return viewModel;
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 cp.Site.ErrorReport("hint: " + hint + " " + ex);
                 throw;
             }
@@ -178,7 +210,8 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                     averageScoreSortbyString = "<i class=\"fa-solid fa-sort\"></i>",
                     scoresDropDownOptions = points,
                     lastNameSortBy = 1,
-                    averageScoreSortBy = 3
+                    averageScoreSortBy = 3,
+                    responseId = displayFormResponseId
                 };
                 //
                 var form = DbBaseModel.create<FormModel>(cp, settings.formid);
@@ -189,10 +222,16 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 //
                 var displayFormResponse = DbBaseModel.create<FormResponseModel>(cp, displayFormResponseId);
                 if (displayFormResponse != null) {
-                    viewModel.responseId = displayFormResponse.id;
-                    viewModel.applicationViewModel = FormWidgetViewModel.createForScoringWidget(cp, settings, form, displayFormResponse.memberId);
+                    //
+                    // -- Render the form with mulitpage-preview true and editing false
+                    var formWidget = new FormWidgetModel();
+                    var previewData = DesignBlockViewBaseModel.create<FormWidgetViewModel>(cp, formWidget);
+                    previewData.id = 0;
+                    previewData.instanceId = "";
+                    previewData = FormWidgetViewModel.createFromResponse(cp, previewData, true, false, form, displayFormResponse);
+                    var previewLayout = cp.Layout.GetLayout(Constants.guidLayoutFormWizard, Constants.nameLayoutFormWizard, Constants.pathFilenameLayoutFormWizard);
+                    viewModel.formPreview = cp.Mustache.Render(previewLayout, previewData);
                 }
-
                 List<FormResponseModel> formResponseList = DbBaseModel.createList<FormResponseModel>(cp, $"(formId = {settings.formid})and(datesubmitted is not null)");
                 if (formResponseList != null) {
                     hint = 2;
@@ -296,8 +335,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 }
                 hint = 10;
                 return viewModel;
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 cp.Site.ErrorReport("hint: " + hint + " " + ex);
                 throw;
             }
@@ -334,8 +372,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                         row.scorerName = groupMember.name;
                         row.comment = scoreInfo.comment;
                         rows.Add(row);
-                    }
-                    else {
+                    } else {
                         row.dateScored = "";
                         row.scoreGraded = "";
                         row.scorerName = groupMember.name;
@@ -345,8 +382,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.View {
                 }
 
                 return rows;
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 cp.Site.ErrorReport(ex);
                 throw;
             }

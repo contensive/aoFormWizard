@@ -22,7 +22,20 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
         public int responseemailid { get; set; }
         public string thankyoucopy { get; set; }
         public bool useUserProperty { get; set; }
-        public bool allowRecaptcha { get; set; }//
+        public bool allowRecaptcha { get; set; }
+        //
+        /// <summary>
+        /// get the latest form
+        /// </summary>
+        /// <param name="cp"></param>
+        /// <returns></returns>
+        public static int getLastestForm(CPBaseClass cp) {
+            using (DataTable dt = cp.Db.ExecuteQuery("select top 1 id from ccForms order by id desc")) {
+                if (dt.Rows.Count == 0) { return 0; }
+                return cp.Utils.EncodeInteger(dt.Rows[0]["id"]);
+            }
+        }
+        //
         /// <summary>
         /// Create form from the legacy form widget.
         /// </summary>

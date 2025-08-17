@@ -10,6 +10,20 @@ namespace Contensive.Addon.aoFormWizard3.Controllers {
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        internal static DateTime? encodeNullableDate(object source) {
+            if(source == null) { return null; }
+            if (source is DateTime dateTime) {
+                return dateTime;
+            }
+            return null;
+        }
+        // 
+        // ====================================================================================================
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="sourcedate"></param>
         /// <returns></returns>
         internal static string encodeBlankShortDate(DateTime sourcedate) {

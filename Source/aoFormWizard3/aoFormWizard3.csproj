@@ -122,6 +122,8 @@
     <Import Include="System.Diagnostics" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Addons\FormQuestions\FormQuestionEditAddon.cs" />
+    <Compile Include="Addons\SubmissionScoringTool.cs" />
     <Compile Include="Addons\SubmissionScoringWidget.cs" />
     <Compile Include="Addons\SetFormSubmissionScoreRemote.cs" />
     <Compile Include="Addons\DashboardWidgets\SampleFormWidget.cs" />

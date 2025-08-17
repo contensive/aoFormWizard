@@ -35,17 +35,10 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 // -- validate portal environment
                 if (!cp.AdminUI.EndpointContainsPortal()) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, guidPortalFeature, ""); }
                 // 
-                // -- cancel
-                var request = new RequestModel(cp);
-                if (request.button.Equals(Constants.buttonCancel)) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormPageEditAddon.guidPortalFeature) + $"&{Constants.rnFormPageId}={request.formPageId}"; }
-                //
-                // -- form widget and page required, else redirect to form widget list
-                if (request.formId <= 0) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormListAddon.guidPortalFeature); }
-                if (request.formPageId <= 0) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormListAddon.guidPortalFeature); }
-                // 
                 using (var app = new ApplicationModel(cp)) {
+                    var request = new RequestModel(cp);
                     string userErrorMessage = "";
-                    processView(app, request, ref userErrorMessage);
+                    if (!processView(app, request, ref userErrorMessage)) { return ""; }
                     return getView(app, request, userErrorMessage);
                 }
             } catch (Exception ex) {
@@ -56,51 +49,29 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
         // 
         // ========================================================================================
         // 
-        public static void processView(ApplicationModel app, RequestModel request, ref string errorMessage) {
+        public static bool processView(ApplicationModel app, RequestModel request, ref string userErrorMessage) {
             CPBaseClass cp = app.cp;
             try {
-                //if (request.button == Constants.ButtonConfirmRegistration) {
-                //    for (var rowPtr = 0; rowPtr < cp.Doc.GetInteger("rowCnt"); rowPtr++) {
-                //        // 
-                //        // -- confirm registration
-                //        if (cp.Doc.GetBoolean("row" + rowPtr)) {
-                //            int registrationId = cp.Doc.GetInteger("row" + rowPtr);
-                //            if (registrationId > 0) {
-                //                MeetingRegistrationModel registration = DbBaseModel.create<MeetingRegistrationModel>(cp, registrationId);
-                //                if (registration == null) {
-                //                    errorMessage = "registration not found";
-                //                    return;
-                //                }
-                //                OrderModel order = DbBaseModel.create<OrderModel>(cp, registration.orderid);
-                //                if (order == null) {
-                //                    errorMessage = "order not found";
-                //                    return;
-                //                }
-                //                // -- cancel the registration
-                //                MeetingRegistrationModel.confirmRegistration(cp, registration, order);
-                //            }
-                //        }
-                //    }
-                //}
-                //if (request.button == Constants.ButtonCancelRegistration) {
-                //    for (var rowPtr = 0; rowPtr < cp.Doc.GetInteger("rowCnt"); rowPtr++) {
-                //        // 
-                //        // -- cancel registration
-                //        if (cp.Doc.GetBoolean("row" + rowPtr)) {
-                //            int registrationId = cp.Doc.GetInteger("row" + rowPtr);
-                //            if (registrationId > 0) {
-                //                MeetingRegistrationModel registration = DbBaseModel.create<MeetingRegistrationModel>(cp, registrationId);
-                //                if (registration == null) {
-                //                    errorMessage = "registration not found";
-                //                    return;
-                //                }
-                //                // -- cancel the registration
-                //                MeetingRegistrationModel.cancelRegistration(cp, registrationId);
-                //            }
-                //        }
-                //    }
-                //}
-                return;
+                // 
+                // -- cancel
+                if (request.button.Equals(Constants.buttonCancel)) {
+                    cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormQuestionEditAddon.guidPortalFeature, $"&{Constants.rnFormId}={request.formId}&{Constants.rnFormPageId}={request.formPageId}");
+                    return false;
+                }
+                //
+                if (request.formId <= 0) {
+                    cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormListAddon.guidPortalFeature);
+                    return false;
+                }
+                if (request.formPageId <= 0) {
+                    cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormPageListAddon.guidPortalFeature, $"&{Constants.rnFormId}={request.formId}");
+                    return false;
+                }
+                if(request.button.Equals(Constants.ButtonAdd)) {
+                    cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormQuestionEditAddon.guidPortalFeature, $"&{Constants.rnFormId}={request.formId}&{Constants.rnFormPageId}={request.formPageId}");
+                    return false;
+                }
+                return true;
             } catch (Exception ex) {
                 cp.Site.ErrorReport(ex);
                 throw;
@@ -123,12 +94,18 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 //
                 // -- init layoutbuilder
                 LayoutBuilderListBaseClass layoutBuilder = cp.AdminUI.CreateLayoutBuilderList();
+                //
+                // -- init parent portal data
+                FormModel form = DbBaseModel.create<FormModel>(cp, request.formId);
+                if (form == null) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormListAddon.guidPortalFeature); }
+                FormPageModel formPage = DbBaseModel.create<FormPageModel>(cp, request.formPageId);
+                if (formPage == null) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormPageListAddon.guidPortalFeature); }
                 // 
                 // -- setup column headers
                 layoutBuilder.addColumn();
                 layoutBuilder.columnCaption = "&nbsp;";
                 layoutBuilder.columnName = "";
-                layoutBuilder.columnCaptionClass =  AfwStyles.afwWidth50px + AfwStyles.afwTextAlignCenter;
+                layoutBuilder.columnCaptionClass = AfwStyles.afwWidth50px + AfwStyles.afwTextAlignCenter;
                 layoutBuilder.columnCellClass = AfwStyles.afwTextAlignCenter;
                 layoutBuilder.columnVisible = true;
                 layoutBuilder.columnDownloadable = false;
@@ -195,7 +172,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                     layoutBuilder.setCell($"<a href=\"{formQuestionEditLink}\">{row.formQuestionName}</a>", row.formQuestionName);
                     //
                     // -- form page
-                    string formPageEditLink = cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, FormPageEditAddon.guidPortalFeature) + $"&{Constants.rnFormId}={row.formId}&{Constants.rnFormPageId}={row.formPageId}";
+                    string formPageEditLink = cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, FormQuestionEditAddon.guidPortalFeature) + $"&{Constants.rnFormId}={row.formId}&{Constants.rnFormPageId}={row.formPageId}";
                     layoutBuilder.setCell($"<a href=\"{formPageEditLink}\">{row.formPageName}</a>", row.formPageName);
                     // 
                     // -- form widget 
@@ -213,11 +190,12 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 layoutBuilder.description = "Forms are created by dropping the Form Widget on a page or by creating a form here, and adding Form-Pages, and Form-Questions to the form. Each time a user submits the form online it creates a Form Response.";
                 layoutBuilder.callbackAddonGuid = guidAddon;
                 layoutBuilder.paginationRecordAlias = "questions";
-                layoutBuilder.portalSubNavTitle = DbBaseModel.getRecordName<FormPageModel>(cp, request.formPageId);
+                layoutBuilder.portalSubNavTitle = $"page: {formPage.name}" + $"<br>in form: '{form.name}'";
                 layoutBuilder.failMessage = userErrorMessage;
                 layoutBuilder.allowDownloadButton = true;
                 // 
                 // -- add buttons
+                layoutBuilder.addFormButton(Constants.ButtonAdd);
                 layoutBuilder.addFormButton(Constants.ButtonRefresh);
                 layoutBuilder.addFormButton(Constants.buttonCancel);
                 // 
@@ -226,6 +204,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 //
                 // -- feature subnav link querystring - clicks must include these values
                 cp.Doc.AddRefreshQueryString(Constants.rnFormId, request.formId);
+                cp.Doc.AddRefreshQueryString(Constants.rnFormPageId, request.formPageId);
                 //
                 return layoutBuilder.getHtml();
             } catch (Exception ex) {
