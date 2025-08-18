@@ -1,13 +1,13 @@
-﻿using Contensive.Addon.aoFormWizard3.Controllers;
-using Contensive.Addon.aoFormWizard3.Models.Db;
-using Contensive.Addon.aoFormWizard3.Models.Domain;
+﻿using Contensive.FormWidget.Controllers;
+using Contensive.FormWidget.Models.Db;
+using Contensive.FormWidget.Models.Domain;
 using Contensive.BaseClasses;
 using Contensive.BaseClasses.LayoutBuilder;
 using Contensive.Models.Db;
 using System;
 using static Contensive.BaseClasses.LayoutBuilder.LayoutBuilderBaseClass;
 
-namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
+namespace Contensive.FormWidget.Addons {
     //
     // ========================================================================================
     /// <summary>
@@ -31,9 +31,6 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 // 
                 // -- authenticate/authorize
                 if (!cp.User.IsAdmin) { return SecurityController.getNotAuthorizedHtmlResponse(cp); }
-                // 
-                // -- validate portal environment
-                if (!cp.AdminUI.EndpointContainsPortal()) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, guidPortalFeature, ""); }
                 // 
                 using (var app = new ApplicationModel(cp)) {
                     var request = new RequestModel(cp);
@@ -59,15 +56,21 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
             CPBaseClass cp = app.cp;
             try {
                 // 
-                // -- cancel
-                if (request.button.Equals(Constants.buttonCancel)) {
-                    cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, "");
+                // -- validate portal environment
+                if (!cp.AdminUI.EndpointContainsPortal()) {
+                    RedirectController.redirectToFormList(cp);
                     return false;
                 }
                 // 
-                // -- add
+                // -- cancel button
+                if (request.button.Equals(Constants.buttonCancel)) {
+                    RedirectController.redirectToFormList(cp);
+                    return false;
+                }
+                // 
+                // -- add button
                 if (request.button.Equals(Constants.ButtonAdd)) {
-                    cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormEditAddon.guidPortalFeature);
+                    RedirectController.redirectToFormAdd(cp);   
                     return false;
                 }
                 return true;

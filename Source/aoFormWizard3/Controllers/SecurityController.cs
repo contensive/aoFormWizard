@@ -2,7 +2,7 @@
 using System;
 // -- Imports Contensive.Models.Db
 
-namespace Contensive.Addon.aoFormWizard3.Controllers {
+namespace Contensive.FormWidget.Controllers {
     // 
     // ===================================================================================
     // 

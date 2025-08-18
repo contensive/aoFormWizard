@@ -1,6 +1,6 @@
-﻿using Contensive.Addon.aoFormWizard3.Controllers;
-using Contensive.Addon.aoFormWizard3.Models.Db;
-using Contensive.Addon.aoFormWizard3.Models.Domain;
+﻿using Contensive.FormWidget.Controllers;
+using Contensive.FormWidget.Models.Db;
+using Contensive.FormWidget.Models.Domain;
 using Contensive.BaseClasses;
 using Contensive.BaseClasses.LayoutBuilder;
 using Contensive.Models.Db;
@@ -11,7 +11,7 @@ using System.Security.Cryptography;
 using System.Text;
 using static Contensive.BaseClasses.LayoutBuilder.LayoutBuilderBaseClass;
 
-namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
+namespace Contensive.FormWidget.Addons {
     //
     // ========================================================================================
     /// <summary>
@@ -36,9 +36,6 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 // -- authenticate/authorize
                 if (!cp.User.IsAdmin) { return SecurityController.getNotAuthorizedHtmlResponse(cp); }
                 // 
-                // -- validate portal environment
-                if (!cp.AdminUI.EndpointContainsPortal()) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, guidPortalFeature, ""); }
-                // 
                 var request = new RequestModel(cp);
                 using (var app = new ApplicationModel(cp)) {
                     string userErrorMessage = "";
@@ -57,9 +54,15 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
             CPBaseClass cp = app.cp;
             try {
                 // 
+                // -- validate portal environment
+                if (!cp.AdminUI.EndpointContainsPortal()) { 
+                    RedirectController.redirectToFormResponseList(cp, request.formId);
+                    return false;
+                }
+                // 
                 // -- cancel
                 if (request.button.Equals(Constants.buttonCancel)) {
-                    cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, "");
+                    RedirectController.redirectToFormPortal(cp);
                     return false;
                 }
                 return true;
@@ -263,7 +266,10 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 //
                 // -- build page
                 layoutBuilder.title = "Form Response List";
-                layoutBuilder.description = "Forms are created by dropping the Form Widget on a page or by creating a form here, and adding Form-Pages, and Form-Questions to the form. Each time a user submits the form online it creates a Form Response.";
+                layoutBuilder.description = @"
+                    This is a list of all responses to a form. A form must be selected. If no form is selected, the most recent form is used.
+                    Forms are created by dropping the Form Widget on a page or by creating a form here, and adding Form-Pages, and Form-Questions to the form. 
+                    Each time a user submits the form online it creates a Form Response.";
                 layoutBuilder.callbackAddonGuid = guidAddon;
                 layoutBuilder.paginationRecordAlias = "forms";
                 layoutBuilder.failMessage = errorMessage;

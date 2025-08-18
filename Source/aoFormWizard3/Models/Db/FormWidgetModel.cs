@@ -3,7 +3,7 @@ using Contensive.BaseClasses;
 using Contensive.DesignBlockBase.Models.Db;
 using Contensive.Models.Db;
 
-namespace Contensive.Addon.aoFormWizard3.Models.Db {
+namespace Contensive.FormWidget.Models.Db {
     public class FormWidgetModel : SettingsBaseModel {
         //
         public static DbBaseTableMetadataModel tableMetadata { get; private set; } = new DbBaseTableMetadataModel("Form Widgets", "ccFormWidgets", "default", false);        // <------ set set model Name and everywhere that matches this string

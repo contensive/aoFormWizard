@@ -2,7 +2,7 @@
 using System.Text.RegularExpressions;
 using Contensive.BaseClasses;
 
-namespace Contensive.Addon.aoFormWizard3.Controllers {
+namespace Contensive.FormWidget.Controllers {
     public class CustomContentController {
         public static bool verifyCustomContent(CPBaseClass cp, string customContentName) {
             try {

@@ -1,4 +1,4 @@
-﻿using Contensive.Addon.aoFormWizard3.Models.Db;
+﻿using Contensive.FormWidget.Models.Db;
 using Contensive.BaseClasses;
 using Contensive.BaseClasses.LayoutBuilder;
 using Contensive.DesignBlockBase.Models.View;
@@ -10,7 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace Contensive.Addon.aoFormWizard3.Models.View {
+namespace Contensive.FormWidget.Models.View {
     /// <summary>
     /// Construct the view to be displayed (the current form)
     /// </summary>

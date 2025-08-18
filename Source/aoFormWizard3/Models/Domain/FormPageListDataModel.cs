@@ -1,10 +1,10 @@
-﻿using Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets;
+﻿using Contensive.FormWidget.Addons;
 using Contensive.BaseClasses;
 using System;
 using System.Collections.Generic;
 using System.Data;
 
-namespace Contensive.Addon.aoFormWizard3.Models.Domain {
+namespace Contensive.FormWidget.Models.Domain {
     public class FormPageListDataModel {
         /// <summary>
         /// the data.
@@ -34,12 +34,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.Domain {
                 sqlWhere += $" and (p.formid={request.formId})";
                 //
                 string sqlTerm = cp.Db.EncodeSQLTextLike(searchTerm);
-                sqlWhere += string.IsNullOrEmpty(searchTerm) ? "" : $" and(f.name like {sqlTerm})";
-                if (request.formId != 0) {
-                }
-                //if (request.filterNotConfirmed) { sqlWhere += $"and(r.confirmationdate is null)"; }
-                //if (request.filterCancelled) { sqlWhere += $"and(r.cancellationdate is not null)"; }
-                //if (request.filterFromDate>DateTime.MinValue) { sqlWhere += $"and((r.registrationdate is null)or(r.registrationdate>'1/1/1'))"; }
+                sqlWhere += string.IsNullOrEmpty(searchTerm) ? "" : $" and((p.name like {sqlTerm})or(f.name like {sqlTerm}))";
                 //
                 // -- record count
                 rowCount = 0;

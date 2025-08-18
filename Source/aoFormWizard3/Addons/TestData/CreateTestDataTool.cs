@@ -1,8 +1,8 @@
-﻿using Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets;
-using Contensive.Addon.aoFormWizard3.Controllers;
-using Contensive.Addon.aoFormWizard3.Models.Db;
-using Contensive.Addon.aoFormWizard3.Models.Domain;
-using Contensive.Addon.aoFormWizard3.Views;
+﻿using Contensive.FormWidget.Addons;
+using Contensive.FormWidget.Controllers;
+using Contensive.FormWidget.Models.Db;
+using Contensive.FormWidget.Models.Domain;
+//using Contensive.FormWidget.Views;
 using Contensive.BaseClasses;
 using Contensive.Models.Db;
 using System;
@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Contensive.Addon.aoFormWizard3.Addons {
+namespace Contensive.FormWidget.Addons {
     public class CreateTestDataTool : AddonBaseClass {
         //
         public const string guidPortalFeature = "";
@@ -44,10 +44,16 @@ namespace Contensive.Addon.aoFormWizard3.Addons {
                 if (cp.ServerConfig.productionEnvironment) { return "<p>This tool is disabled because the server is a production server</p>"; }
                 // 
                 // -- Go To Forms Manager
-                if (cp.Doc.GetText("button").Equals("Go To Forms Manager")) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormListAddon.guidPortalFeature); }
+                if (cp.Doc.GetText("button").Equals("Go To Forms Manager")) {
+                    RedirectController.redirectToFormList(cp);
+                    return "";
+                }
                 // 
                 // -- cancel
-                if (cp.Doc.GetText("button").Equals(Constants.buttonCancel)) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, ""); }
+                if (cp.Doc.GetText("button").Equals(Constants.buttonCancel)) { 
+                    RedirectController.redirectToFormPortal(cp);
+                    return "";
+                }
                 // 
                 using (var app = new ApplicationModel(cp)) {
                     var layout = app.cp.AdminUI.CreateLayoutBuilder();

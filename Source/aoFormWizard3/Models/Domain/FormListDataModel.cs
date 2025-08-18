@@ -1,10 +1,10 @@
-﻿using Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets;
+﻿using Contensive.FormWidget.Addons;
 using Contensive.BaseClasses;
 using System;
 using System.Collections.Generic;
 using System.Data;
 
-namespace Contensive.Addon.aoFormWizard3.Models.Domain {
+namespace Contensive.FormWidget.Models.Domain {
     public class FormListDataModel {
         /// <summary>
         /// the data.
@@ -27,7 +27,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.Domain {
                 // -- sql where from search and filters
                 string sqlWhere = "(1=1)";
                 string sqlTerm = cp.Db.EncodeSQLTextLike(searchTerm);
-                sqlWhere += string.IsNullOrEmpty(searchTerm) ? "" : $" and(f.name like {sqlTerm})";
+                sqlWhere += string.IsNullOrEmpty(searchTerm) ? "" : $" and((f.name like {sqlTerm})or(m.name like {sqlTerm}))";
                 //if (request.meetingId != 0) {
                 //    sqlWhere += " AND (r.MeetingID=" + cp.Db.EncodeSQLNumber(request.meetingId) + ")";
                 //}

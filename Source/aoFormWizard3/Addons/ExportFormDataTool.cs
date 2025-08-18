@@ -1,4 +1,4 @@
-﻿using Contensive.Addon.aoFormWizard3.Models.Db;
+﻿using Contensive.FormWidget.Models.Db;
 using Contensive.BaseClasses;
 using Contensive.Models.Db;
 using CsvHelper;
@@ -12,7 +12,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Contensive.Addon.aoFormWizard3.Addons {
+namespace Contensive.FormWidget.Addons {
     public class ExportFormDataTool : AddonBaseClass {
         private const string buttonDownloadCSV = "Download CSV";
         private const string buttonUpdateForm = "Generate CSV";

@@ -1,11 +1,11 @@
-﻿using Contensive.Addon.aoFormWizard3.Models.Db;
-using Contensive.Addon.aoFormWizard3.Models.View;
+﻿using Contensive.FormWidget.Models.Db;
+using Contensive.FormWidget.Models.View;
 using Contensive.BaseClasses;
 using Contensive.DesignBlockBase.Controllers;
 using Contensive.Models.Db;
 using System;
 
-namespace Contensive.Addon.aoFormWizard3.Addons {
+namespace Contensive.FormWidget.Addons {
     public class SubmissionScoringTool : AddonBaseClass {
         public override object Execute(CPBaseClass cp) {
             try {

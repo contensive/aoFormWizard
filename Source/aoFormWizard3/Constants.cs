@@ -1,5 +1,5 @@
 ﻿
-namespace Contensive.Addon.aoFormWizard3 {
+namespace Contensive.FormWidget {
 
     public static class Constants {
         //

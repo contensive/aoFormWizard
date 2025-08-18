@@ -7,7 +7,7 @@ using Microsoft.VisualBasic;
 // See the LICENSE file in the project root for more information.
 
 // See Compiler::LoadXmlSolutionExtension
-namespace Contensive.Addon.aoFormWizard3.My {
+namespace Contensive.FormWidget.My {
     [Embedded()]
     [DebuggerNonUserCode()]
     [System.Runtime.CompilerServices.CompilerGenerated()]

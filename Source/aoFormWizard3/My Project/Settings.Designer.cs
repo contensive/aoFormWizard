@@ -12,7 +12,7 @@ using System.Diagnostics;
 using Microsoft.VisualBasic;
 
 
-namespace Contensive.Addon.aoFormWizard3.My {
+namespace Contensive.FormWidget.My {
 
     [System.Runtime.CompilerServices.CompilerGenerated()]
     [System.CodeDom.Compiler.GeneratedCode("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.9.0.0")]
@@ -63,7 +63,7 @@ namespace Contensive.Addon.aoFormWizard3.My {
     }
 }
 
-namespace Contensive.Addon.aoFormWizard3.My {
+namespace Contensive.FormWidget.My {
 
     [HideModuleName()]
     [DebuggerNonUserCode()]

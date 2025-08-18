@@ -1,13 +1,13 @@
-﻿using Contensive.Addon.aoFormWizard3;
-using Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets;
-using Contensive.Addon.aoFormWizard3.Controllers;
-using Contensive.Addon.aoFormWizard3.Models.Db;
-using Contensive.Addon.aoFormWizard3.Models.Domain;
+﻿using Contensive.FormWidget;
+using Contensive.FormWidget.Addons;
+using Contensive.FormWidget.Controllers;
+using Contensive.FormWidget.Models.Db;
+using Contensive.FormWidget.Models.Domain;
 using Contensive.BaseClasses;
 using Contensive.Models.Db;
 using System;
 
-namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
+namespace Contensive.FormWidget.Addons {
     // ========================================================================================
     /// <summary>
     /// Meeting Edit Feature
@@ -29,9 +29,6 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 // 
                 // -- authenticate/authorize
                 if (!cp.User.IsAdmin) { return SecurityController.getNotAuthorizedHtmlResponse(cp); }
-                // 
-                // -- validate portal environment
-                if (!cp.AdminUI.EndpointContainsPortal()) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, guidPortalFeature, ""); }
                 // 
                 string userErrorMessage = "";
                 var request = new RequestModel(cp);
@@ -56,31 +53,39 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
         public static bool processView(ApplicationModel app, RequestModel request, ref string userErrorMessage) {
             CPBaseClass cp = app.cp;
             try {
-                switch (request.button ?? "") {
-                    case Constants.buttonSave: {
-                            saveForm(cp, request);
-                            return true;
-                        }
-                    case Constants.buttonOK: {
-                            saveForm(cp, request);
-                            cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormListAddon.guidPortalFeature, "");
-                            return false;
-                        }
-                    case Constants.buttonDelete: {
-                            
-                            // -- delete the form widget but NOT the form it points to
-                            DbBaseModel.delete<FormModel>(cp, request.formId);
-                            cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormListAddon.guidPortalFeature, "");
-                            return false;
-                        }
-                    case Constants.buttonCancel: {
-                            cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormListAddon.guidPortalFeature, "");
-                            return false;
-                        }
-                    default: {
-                            return true;
-                        }
+                // 
+                // -- validate portal environment
+                if (!cp.AdminUI.EndpointContainsPortal()) { 
+                    RedirectController.redirectToFormEdit(cp, request.formId);
+                    return false;
                 }
+                // 
+                // -- cancel button
+                if (request.button.Equals(Constants.buttonCancel)) {
+                    RedirectController.redirectToFormList(cp);
+                    return false;
+                }
+                // 
+                // -- save button
+                if (request.button.Equals(Constants.buttonSave)) {
+                    saveForm(cp, request);
+                    return true;
+                }
+                // 
+                // -- ok button
+                if (request.button.Equals(Constants.buttonOK)) {
+                    saveForm(cp, request);
+                    RedirectController.redirectToFormList(cp);
+                    return false;
+                }
+                // 
+                // -- delete button
+                if (request.button.Equals(Constants.buttonDelete)) {
+                    DbBaseModel.delete<FormModel>(cp, request.formId);
+                    RedirectController.redirectToFormList(cp);
+                    return false;
+                }
+                return true;
             } catch (Exception ex) {
                 cp.Site.ErrorReport(ex);
                 throw;

@@ -88,7 +88,7 @@ using Microsoft.VisualBasic;
 /* TODO ERROR: Skipped IfDirectiveTrivia
 #If _MYTYPE <> "Empty" Then
 */
-namespace Contensive.Addon.aoFormWizard3.My {
+namespace Contensive.FormWidget.My {
 
     /* TODO ERROR: Skipped IfDirectiveTrivia
     #If _MYAPPLICATIONTYPE = "WindowsForms" OrElse _MYAPPLICATIONTYPE = "Windows" OrElse _MYAPPLICATIONTYPE = "Console" Then

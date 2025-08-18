@@ -6,7 +6,7 @@
 		install
 	-->
 	<Addon name="Form Wizard Install" guid="{B1F99A92-DD9C-4C64-9A13-6415EC0975F1}" type="Add-on">
-		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Views.OnInstallClass]]></DotNetClass>
+		<DotNetClass><![CDATA[Contensive.FormWidget.Addons.OnInstallClass]]></DotNetClass>
 	</Addon>
 	<!--
 		form widget
@@ -16,7 +16,7 @@
     	<AliasList>Dynamic Form,Form Widget</AliasList>
 		<Copy></Copy>
 		<CopyText></CopyText>
-		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Views.FormWidget]]></DotNetClass>
+		<DotNetClass><![CDATA[Contensive.FormWidget.Addons.FormWidget]]></DotNetClass>
 		<ArgumentList><![CDATA[ ]]></ArgumentList>
 		<AsAjax>No</AsAjax>
 		<Filter>No</Filter>
@@ -60,7 +60,7 @@
 		create test data, non-portal tool
 	-->
 	<Addon name="Create Form Test Data" guid="{5BBDCA38-D992-48D4-87DE-E3B2C125D786}" type="Tool">
-		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Addons.CreateTestDataTool]]></DotNetClass>
+		<DotNetClass><![CDATA[Contensive.FormWidget.Addons.CreateTestDataTool]]></DotNetClass>
 		<Admin>Yes</Admin>
 	</Addon>
 	<!--
@@ -92,7 +92,7 @@
 	<Addon name="Submission Scoring Widget" guid="{7D3BD03E-5A92-4228-8278-3115CF6C7B1E}" type="Add-on">
 		<htmldocument>Yes</htmldocument>
     	<AliasList>Application Scoring,Application Scoring Widget</AliasList>
-		<DotNetClass>Contensive.Addon.aoFormWizard3.Addons.SubmissionScoringWidget</DotNetClass>
+		<DotNetClass>Contensive.FormWidget.Addons.SubmissionScoringWidget</DotNetClass>
 		<BlockEditTools>Yes</BlockEditTools>
 		<Content>Yes</Content>
 		<Admin>Yes</Admin>
@@ -117,7 +117,7 @@
 	<Addon name="Submission Scoring Tool" guid="{50A206D7-C233-485C-ADF6-045F2EEBE33D}" type="Add-on">
 		<htmldocument>Yes</htmldocument>
     	<AliasList></AliasList>
-		<DotNetClass>Contensive.Addon.aoFormWizard3.Addons.SubmissionScoringTool</DotNetClass>
+		<DotNetClass>Contensive.FormWidget.Addons.SubmissionScoringTool</DotNetClass>
 		<BlockEditTools>Yes</BlockEditTools>
 		<Content>Yes</Content>
 		<Admin>Yes</Admin>
@@ -140,7 +140,7 @@
 		</Record>
 	</Data>
 	<Addon name="Export Form Data" guid="{8C838E47-E38F-4001-84BD-6CC83883ABEB}" type="Tool">
-		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Addons.ExportFormDataTool]]></DotNetClass>
+		<DotNetClass><![CDATA[Contensive.FormWidget.Addons.ExportFormDataTool]]></DotNetClass>
 		<Admin>Yes</Admin>
 		<RemoteMethod>yes</RemoteMethod>
 	</Addon>
@@ -148,7 +148,7 @@
 		Sample Form Widget
 	-->
 	<Data>
-		<Record content="portal features" guid="{2D0712E9-8052-4A16-BF76-E33782B5F377}" name="Form,Sample Form Widget">
+		<Record content="portal features" guid="{2D0712E9-8052-4A16-BF76-E33782B5F377}" name="Form Submissions Widget">
 			<field name="portalId">{D5B3AF11-0AD2-4E4B-B39C-81953591B673}</field>
 			<field name="parentFeatureId"></field>
 			<field name="addonId">{996B7069-1F0B-453E-A246-DAF08D869B95}</field>
@@ -159,9 +159,9 @@
 			<field name="active">false</field>
 		</Record>	
 	</Data>
-	<Addon Name="Sample Form Pie Chart Widget" Guid="{996B7069-1F0B-453E-A246-DAF08D869B95}" Type="Add-on">
+	<Addon Name="Form Submissions Widget" Guid="{996B7069-1F0B-453E-A246-DAF08D869B95}" Type="Add-on">
 		<DashboardWidget>Yes</DashboardWidget>
-		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets.SampleFormWidget]]></DotNetClass>
+		<DotNetClass><![CDATA[Contensive.FormWidget.Addons.SubmissionCountWidget]]></DotNetClass>
 	</Addon>
 
 	<!-- 
@@ -178,7 +178,7 @@
 		</Record>
 	</Data>
 	<Addon name="Form List" guid="{F2E3D417-8C2B-49FF-A568-57A04414A8A1}" type="Add-on">
-		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets.FormListAddon]]></DotNetClass>
+		<DotNetClass><![CDATA[Contensive.FormWidget.Addons.FormListAddon]]></DotNetClass>
 	</Addon>
 
 	<!-- 
@@ -195,7 +195,7 @@
 		</Record>
 	</Data>
 	<Addon name="Form Edit" guid="{3F37844D-8C72-4C77-924E-BAD55734ACCB}" type="Add-on">
-		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets.FormEditAddon]]></DotNetClass>
+		<DotNetClass><![CDATA[Contensive.FormWidget.Addons.FormEditAddon]]></DotNetClass>
 	</Addon>
 
 	<!-- 
@@ -212,7 +212,7 @@
 		</Record>
 	</Data>
 	<Addon name="Form Page List" guid="{17319699-1BDB-420D-8B17-A21B04198321}" type="Add-on">
-		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets.FormPageListAddon]]></DotNetClass>
+		<DotNetClass><![CDATA[Contensive.FormWidget.Addons.FormPageListAddon]]></DotNetClass>
 	</Addon>
 
 	<!-- 
@@ -229,7 +229,7 @@
 		</Record>
 	</Data>
 	<Addon name="Form Page Edit" guid="{4C25B351-C03B-4235-B3CA-094CDDC70430}" type="Add-on">
-		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets.FormPageEditAddon]]></DotNetClass>
+		<DotNetClass><![CDATA[Contensive.FormWidget.Addons.FormPageEditAddon]]></DotNetClass>
 	</Addon>
 
 	<!-- 
@@ -246,7 +246,7 @@
 		</Record>
 	</Data>
 	<Addon name="Form Question List" guid="{1373B564-3722-478E-B693-E007B2547B3F}" type="Add-on">
-		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets.FormQuestionListAddon]]></DotNetClass>
+		<DotNetClass><![CDATA[Contensive.FormWidget.Addons.FormQuestionListAddon]]></DotNetClass>
 	</Addon>
 
 	<!-- 
@@ -263,7 +263,7 @@
 		</Record>
 	</Data>
 	<Addon name="Form Question Edit" guid="{2cb0f9fa-0573-4c71-a785-1e0798af4989}" type="Add-on">
-		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets.FormQuestionEditAddon]]></DotNetClass>
+		<DotNetClass><![CDATA[Contensive.FormWidget.Addons.FormQuestionEditAddon]]></DotNetClass>
 	</Addon>
 
 	<!-- 
@@ -280,7 +280,7 @@
 		</Record>
 	</Data>
 	<Addon name="Form Response List" guid="{909559CA-59D3-4A1B-9915-2D69297AFE2D}" type="Add-on">
-		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets.FormResponseListAddon]]></DotNetClass>
+		<DotNetClass><![CDATA[Contensive.FormWidget.Addons.FormResponseListAddon]]></DotNetClass>
 	</Addon>
 
 	<!-- 
@@ -297,7 +297,7 @@
 		</Record>
 	</Data>
 	<Addon name="Form Response Details" guid="{1B1C0DEC-334F-4A1A-BC03-444093BEB924}" type="Add-on">
-		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets.FormResponseDetailsAddon]]></DotNetClass>
+		<DotNetClass><![CDATA[Contensive.FormWidget.Addons.FormResponseDetailsAddon]]></DotNetClass>
 	</Addon>
 
 
@@ -309,29 +309,29 @@
 		Addons
 	-->	
 	<Addon name="FormWidgetSubmit" guid="{CD4427D8-11DD-4E65-ACF9-1C2928B281F0}" type="Add-on">
-		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Views.FormWidget]]></DotNetClass>
+		<DotNetClass><![CDATA[Contensive.FormWidget.Addons.FormWidget]]></DotNetClass>
 		<RemoteMethod>yes</RemoteMethod>
 	</Addon>
 	
 	<Addon name="GetScoreDetailsModalData" guid="{20724B70-0427-4A20-9DBB-B46666F88F80}" type="Add-on">
-		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Addons.GetScoreDetailsModalData]]></DotNetClass>
+		<DotNetClass><![CDATA[Contensive.FormWidget.Addons.GetScoreDetailsModalData]]></DotNetClass>
 		<RemoteMethod>yes</RemoteMethod>
 	</Addon>
 	<Addon name="GetSubmissionScoringData" guid="{C292FD2B-416B-4909-936B-01953D0C5094}" type="Add-on">
-		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Addons.GetSubmissionScoringDataRemote]]></DotNetClass>
+		<DotNetClass><![CDATA[Contensive.FormWidget.Addons.GetSubmissionScoringDataRemote]]></DotNetClass>
 		<RemoteMethod>yes</RemoteMethod>
 	</Addon>	
 	<Addon name="SetFormSubmissionScore" guid="{5B9977D4-6EF5-4194-86E2-7A58A0E47E13}" type="Add-on">
-		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Addons.SetFormSubmissionScoreRemote]]></DotNetClass>
+		<DotNetClass><![CDATA[Contensive.FormWidget.Addons.SetFormSubmissionScoreRemote]]></DotNetClass>
 		<RemoteMethod>yes</RemoteMethod>
 	</Addon>
 	<!-- 
 		upgrade old form wizard
 	-->
-	<Addon name="Legacy Form Widge" guid="{eab0f274-5a24-458f-bf1d-1ecd10833ff3}" type="Add-on">
+	<Addon name="Legacy Form Widget" guid="{eab0f274-5a24-458f-bf1d-1ecd10833ff3}" type="Add-on">
 		<Alias>Form Widget 2</Alias>
 		<htmldocument>Yes</htmldocument>
-		<DotNetClass><![CDATA[Contensive.Addon.aoFormWizard3.Views.LegacyFormWidget]]></DotNetClass>
+		<DotNetClass><![CDATA[Contensive.FormWidget.Addons.LegacyFormWidget]]></DotNetClass>
 		<BlockEditTools>Yes</BlockEditTools>
 		<Content>No</Content>
 		<Template>No</Template>

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Data;
-using Contensive.Addon.aoFormWizard3.Models.Db;
+using Contensive.FormWidget.Models.Db;
 using Contensive.BaseClasses;
 using Contensive.Models.Db;
 using HtmlAgilityPack;
 using Microsoft.VisualBasic.CompilerServices;
 
-namespace Contensive.Addon.aoFormWizard3.Views {
+namespace Contensive.FormWidget.Addons {
     // 
     public class OnInstallClass : AddonBaseClass {
         // 

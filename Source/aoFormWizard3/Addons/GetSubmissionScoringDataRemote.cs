@@ -1,5 +1,5 @@
-﻿using Contensive.Addon.aoFormWizard3.Models.Db;
-using Contensive.Addon.aoFormWizard3.Models.View;
+﻿using Contensive.FormWidget.Models.Db;
+using Contensive.FormWidget.Models.View;
 using Contensive.BaseClasses;
 using HtmlAgilityPack;
 using System;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Contensive.Addon.aoFormWizard3.Addons {
+namespace Contensive.FormWidget.Addons {
     public class GetSubmissionScoringDataRemote : AddonBaseClass {
         public override object Execute(CPBaseClass cp) {
             var returnObj = new submissionScoringWidgetDataModel();

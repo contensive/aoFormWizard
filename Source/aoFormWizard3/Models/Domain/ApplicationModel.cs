@@ -1,7 +1,7 @@
 ﻿using Contensive.BaseClasses;
 using System;
 
-namespace Contensive.Addon.aoFormWizard3.Models.Domain {
+namespace Contensive.FormWidget.Models.Domain {
     // 
     public class ApplicationModel : IDisposable {
         // 

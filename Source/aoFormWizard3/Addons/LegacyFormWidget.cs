@@ -1,7 +1,7 @@
 ﻿using Contensive.BaseClasses;
 using System;
 
-namespace Contensive.Addon.aoFormWizard3.Views {
+namespace Contensive.FormWidget.Addons {
     // 
     public class LegacyFormWidget : AddonBaseClass {
         // 

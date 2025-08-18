@@ -1,11 +1,11 @@
-﻿using Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets;
-using Contensive.Addon.aoFormWizard3.Controllers;
+﻿using Contensive.FormWidget.Addons;
+using Contensive.FormWidget.Controllers;
 using Contensive.BaseClasses;
 using System;
 using System.Collections.Generic;
 using System.Data;
 
-namespace Contensive.Addon.aoFormWizard3.Models.Domain {
+namespace Contensive.FormWidget.Models.Domain {
     public class FormResponseListDataModel {
         /// <summary>
         /// the data.
@@ -37,7 +37,7 @@ namespace Contensive.Addon.aoFormWizard3.Models.Domain {
                 // -- sql where from search and filters
                 string sqlWhere = "(1=1)";
                 string sqlTerm = cp.Db.EncodeSQLTextLike(searchTerm);
-                sqlWhere += string.IsNullOrEmpty(searchTerm) ? "" : $" and(r.name like {sqlTerm})";
+                sqlWhere += string.IsNullOrEmpty(searchTerm) ? "" : $" and((r.name like {sqlTerm})or(f.name like {sqlTerm})or(m.name like {sqlTerm}))";
                 sqlWhere += request.onlySubmitted ? " and (r.dateSubmitted is not null)" : "";
                 sqlWhere += request.formId>0 ? $"and(r.formId={cp.Db.EncodeSQLNumber(request.formId)})" : "";
                 //

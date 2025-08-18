@@ -1,7 +1,7 @@
 ﻿using System;
 using Contensive.BaseClasses;
 
-namespace Contensive.Addon.aoFormWizard3.Controllers {
+namespace Contensive.FormWidget.Controllers {
     public class InstanceIdController {
         // 
         // ====================================================================================================

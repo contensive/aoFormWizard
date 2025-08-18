@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Contensive.Addon.aoFormWizard3.My.Resources {
+namespace Contensive.FormWidget.My.Resources {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Contensive.Addon.aoFormWizard3.My.Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Contensive.Addon.aoFormWizard3.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Contensive.FormWidget.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
+namespace Contensive.FormWidget.Addons {
     public class SampleFormWidget : AddonBaseClass {
         // Fix for CA1861: Use static readonly for the array to avoid recreating it repeatedly  
         private static readonly string[] DefaultDataLabels = {

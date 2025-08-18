@@ -2,7 +2,7 @@
 using Contensive.Models.Db;
 using System.Collections.Generic;
 
-namespace Contensive.Addon.aoFormWizard3.Models.Db {
+namespace Contensive.FormWidget.Models.Db {
     public class FormQuestionModel : DbBaseModel {
         public static DbBaseTableMetadataModel tableMetadata { get; private set; } = new DbBaseTableMetadataModel("Form Questions", "ccFormQuestions", "default", false);
         // 

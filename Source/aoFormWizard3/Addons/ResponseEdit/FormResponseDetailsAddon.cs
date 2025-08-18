@@ -1,8 +1,8 @@
-﻿using Contensive.Addon.aoFormWizard3.Controllers;
-using Contensive.Addon.aoFormWizard3.Models.Db;
-using Contensive.Addon.aoFormWizard3.Models.Domain;
-using Contensive.Addon.aoFormWizard3.Models.View;
-using Contensive.Addon.aoFormWizard3.Views;
+﻿using Contensive.FormWidget.Controllers;
+using Contensive.FormWidget.Models.Db;
+using Contensive.FormWidget.Models.Domain;
+using Contensive.FormWidget.Models.View;
+//using Contensive.FormWidget.Views;
 using Contensive.BaseClasses;
 using Contensive.BaseClasses.LayoutBuilder;
 using Contensive.DesignBlockBase.Controllers;
@@ -10,10 +10,11 @@ using Contensive.DesignBlockBase.Models.View;
 using Contensive.Models.Db;
 using HtmlAgilityPack;
 using System;
+using System.Data;
 using System.Runtime.InteropServices;
 using static Contensive.BaseClasses.LayoutBuilder.LayoutBuilderBaseClass;
 
-namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
+namespace Contensive.FormWidget.Addons {
     //
     // ========================================================================================
     /// <summary>
@@ -38,9 +39,6 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 // -- authenticate/authorize
                 if (!cp.User.IsAdmin) { return SecurityController.getNotAuthorizedHtmlResponse(cp); }
                 // 
-                // -- validate portal environment
-                if (!cp.AdminUI.EndpointContainsPortal()) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, guidPortalFeature, ""); }
-                // 
                 var request = new RequestModel(cp);
                 using (var app = new ApplicationModel(cp)) {
                     string userErrorMessage = "";
@@ -59,9 +57,15 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
             CPBaseClass cp = app.cp;
             try {
                 // 
+                // -- validate portal environment
+                if (!cp.AdminUI.EndpointContainsPortal()) {
+                    RedirectController.redirectToFormResponseList(cp, request.formId);
+                    return false;
+                }
+                // 
                 // -- cancel
                 if (request.button.Equals(Constants.buttonCancel)) {
-                    cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormResponseListAddon.guidPortalFeature);
+                    RedirectController.redirectToFormResponseList(cp, request.formId);
                     return false;
                 }
                 return true;
@@ -152,11 +156,19 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 if (!string.IsNullOrEmpty(removeFilter)) { cp.Doc.SetProperty(removeFilter, ""); }
                 //
                 button = cp.Doc.GetText(Constants.rnButton);
+                formId = cp.Doc.GetInteger(Constants.rnFormId);
                 formResponseId = cp.Doc.GetInteger(Constants.rnFormResponseId);
                 responseUserId = cp.Doc.GetInteger(Constants.rnResponseUserId);
+                //
+                // -- special case. links with just responseId can be valid
+                if(formResponseId>0 && formId == 0) {
+                    formId = FormResponseModel.getFormIdFromResponseId(cp, formResponseId);
+                }
             }
             //
             public string button { get; }
+            //
+            public int formId { get; set; }
             //
             public int formResponseId { get; set; }
             //

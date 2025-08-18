@@ -1,10 +1,12 @@
 ﻿
+using Contensive.FormWidget.Models.Domain;
 using Contensive.BaseClasses;
 using Contensive.DesignBlockBase.Models.Db;
 using Contensive.Models.Db;
+using System.Collections.Generic;
 using System.Data;
 
-namespace Contensive.Addon.aoFormWizard3.Models.Db {
+namespace Contensive.FormWidget.Models.Db {
     public class FormModel : DbBaseModel {
         //
         public static DbBaseTableMetadataModel tableMetadata { get; private set; } = new DbBaseTableMetadataModel("Forms", "ccForms", "default", false);        // <------ set set model Name and everywhere that matches this string
@@ -23,6 +25,21 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
         public string thankyoucopy { get; set; }
         public bool useUserProperty { get; set; }
         public bool allowRecaptcha { get; set; }
+        //
+        /// <summary>
+        /// get the name and id of all forms
+        /// </summary>
+        /// <param name="cp"></param>
+        /// <returns></returns>
+        public List<NameIdModel> getNameIdList(CPBaseClass cp) {
+            List<NameIdModel> result = [];
+            using (DataTable dt = cp.Db.ExecuteQuery("select name,id from ccForms where active>0 order by name")) {
+                foreach (DataRow row in dt.Rows) {
+                    result.Add(new NameIdModel(cp.Utils.EncodeText(row[0]), cp.Utils.EncodeInteger(row[1])));
+                }
+            }
+            return result;
+        }
         //
         /// <summary>
         /// get the latest form

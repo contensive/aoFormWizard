@@ -1,11 +1,11 @@
 ﻿using System;
-using Contensive.Addon.aoFormWizard3.Controllers;
-using Contensive.Addon.aoFormWizard3.Models.Db;
-using Contensive.Addon.aoFormWizard3.Models.View;
+using Contensive.FormWidget.Controllers;
+using Contensive.FormWidget.Models.Db;
+using Contensive.FormWidget.Models.View;
 using Contensive.BaseClasses;
 using Contensive.DesignBlockBase.Controllers;
 
-namespace Contensive.Addon.aoFormWizard3.Views {
+namespace Contensive.FormWidget.Addons {
     // 
     public class FormWidget : AddonBaseClass {
         // 

@@ -66,10 +66,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ContensiveDbModels, Version=20.0.0.0, Culture=neutral, PublicKeyToken=c014b235a9c6bb22, processorArchitecture=MSIL">
-      <HintPath>..\packages\Contensive.DbModels.25.7.28.2\lib\net472\ContensiveDbModels.dll</HintPath>
+      <HintPath>..\packages\Contensive.DbModels.25.8.17.3\lib\net472\ContensiveDbModels.dll</HintPath>
     </Reference>
     <Reference Include="CPBase, Version=4.1.2.0, Culture=neutral, PublicKeyToken=10b3c53389b845fb, processorArchitecture=MSIL">
-      <HintPath>..\packages\Contensive.CPBaseClass.25.7.28.2\lib\net472\CPBase.dll</HintPath>
+      <HintPath>..\packages\Contensive.CPBaseClass.25.8.17.3\lib\net472\CPBase.dll</HintPath>
     </Reference>
     <Reference Include="CsvHelper, Version=33.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
       <HintPath>..\packages\CsvHelper.33.0.1\lib\net47\CsvHelper.dll</HintPath>
@@ -122,6 +122,7 @@
     <Import Include="System.Diagnostics" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Addons\DashboardWidgets\SubmissionCountWidget.cs" />
     <Compile Include="Addons\FormQuestions\FormQuestionEditAddon.cs" />
     <Compile Include="Addons\SubmissionScoringTool.cs" />
     <Compile Include="Addons\SubmissionScoringWidget.cs" />
@@ -138,7 +139,7 @@
     <Compile Include="Addons\ResponseEdit\FormResponseDetailsAddon.cs" />
     <Compile Include="Addons\ResponseEdit\FormResponseListAddon.cs" />
     <Compile Include="Addons\TestData\CreateTestDataTool.cs" />
-    <Compile Include="Controllers\FormController.cs" />
+    <Compile Include="Controllers\RedirectController.cs" />
     <Compile Include="Controllers\SecurityController.cs" />
     <Compile Include="Models\Db\ApplicationScoresModel.cs" />
     <Compile Include="Models\Db\ApplicationScoreWidgetsModel.cs" />
@@ -149,6 +150,7 @@
     <Compile Include="Models\Domain\FormResponseListDataModel.cs" />
     <Compile Include="Models\Domain\FormPageListDataModel.cs" />
     <Compile Include="Models\Domain\FormListDataModel.cs" />
+    <Compile Include="Models\Domain\NameIdModel.cs" />
     <Compile Include="Models\View\SubmissionScoringViewModel.cs" />
     <Compile Include="My Project\MyNamespace.Static.1.Designer.cs" />
     <Compile Include="My Project\MyNamespace.Static.2.Designer.cs" />

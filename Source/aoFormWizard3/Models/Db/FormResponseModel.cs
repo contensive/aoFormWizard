@@ -1,8 +1,9 @@
-﻿using Contensive.Models.Db;
+﻿using Contensive.BaseClasses;
+using Contensive.Models.Db;
 using System;
 using System.Collections.Generic;
 
-namespace Contensive.Addon.aoFormWizard3.Models.Db {
+namespace Contensive.FormWidget.Models.Db {
     public class FormResponseModel : DbBaseModel {
         //
         public static DbBaseTableMetadataModel tableMetadata { get; private set; } = new DbBaseTableMetadataModel("Form Response", "ccFormResponse", "default", false);
@@ -27,6 +28,19 @@ namespace Contensive.Addon.aoFormWizard3.Models.Db {
         /// </summary>
         public int formId { get; set; }
         public DateTime dateSubmitted { get; set; }
+        //
+        /// <summary>
+        /// return the formId for a formResponseId
+        /// </summary>
+        /// <param name="cp"></param>
+        /// <param name="formResponseId"></param>
+        /// <returns></returns>
+        public static int getFormIdFromResponseId(CPBaseClass cp, int formResponseId) {
+            using (var dt = cp.Db.ExecuteQuery($"select formId from {tableMetadata.tableNameLower} where id={formResponseId}")) {
+                if (dt.Rows.Count == 0) { return 0; }
+                return cp.Utils.EncodeInteger(dt.Rows[0]["formId"]);
+            }
+        }
     }
     public class FormResponseDataModel {
         /// <summary>

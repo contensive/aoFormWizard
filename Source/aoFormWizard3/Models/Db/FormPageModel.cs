@@ -4,7 +4,7 @@ using Contensive.BaseClasses;
 using Contensive.Models.Db;
 using Microsoft.SqlServer.Server;
 
-namespace Contensive.Addon.aoFormWizard3.Models.Db {
+namespace Contensive.FormWidget.Models.Db {
     public class FormPageModel : DbBaseModel {
         //
         public static DbBaseTableMetadataModel tableMetadata { get; private set; } = new DbBaseTableMetadataModel("Form Pages", "ccFormPages", "default", false);

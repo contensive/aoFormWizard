@@ -1,4 +1,4 @@
-﻿using Contensive.Addon.aoFormWizard3.Models.Db;
+﻿using Contensive.FormWidget.Models.Db;
 using Contensive.BaseClasses;
 using Contensive.DesignBlockBase.Models.View;
 using Contensive.Models.Db;
@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Contensive.Addon.aoFormWizard3.Models.View {
+namespace Contensive.FormWidget.Models.View {
     public class SubmissionScoringViewModel : DesignBlockViewBaseModel {
         public List<ApplicationScoresTableRow> submittedApplications { get; set; }
         //

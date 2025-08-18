@@ -1,13 +1,13 @@
-﻿using Contensive.Addon.aoFormWizard3.Controllers;
-using Contensive.Addon.aoFormWizard3.Models.Db;
-using Contensive.Addon.aoFormWizard3.Models.Domain;
+﻿using Contensive.FormWidget.Controllers;
+using Contensive.FormWidget.Models.Db;
+using Contensive.FormWidget.Models.Domain;
 using Contensive.BaseClasses;
 using Contensive.BaseClasses.LayoutBuilder;
 using Contensive.Models.Db;
 using System;
 using static Contensive.BaseClasses.LayoutBuilder.LayoutBuilderBaseClass;
 
-namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
+namespace Contensive.FormWidget.Addons {
     //
     // ========================================================================================
     /// <summary>
@@ -32,9 +32,6 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 // -- authenticate/authorize
                 if (!cp.User.IsAdmin) { return SecurityController.getNotAuthorizedHtmlResponse(cp); }
                 // 
-                // -- validate portal environment
-                if (!cp.AdminUI.EndpointContainsPortal()) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, guidPortalFeature, ""); }
-                // 
                 using (var app = new ApplicationModel(cp)) {
                     var request = new RequestModel(cp);
                     string userErrorMessage = "";
@@ -52,22 +49,28 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
         public static bool processView(ApplicationModel app, RequestModel request, ref string errorMessage) {
             try {
                 CPBaseClass cp = app.cp;
+                // 
+                // -- validate portal environment
+                if (!cp.AdminUI.EndpointContainsPortal()) {
+                    RedirectController.redirectToFormPageList(cp, request.formId);
+                    return false;
+                }
                 //
-                // -- form widget required, else redirect to form widget list
+                // -- form required
                 if (request.formId <= 0) {
-                    cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormEditAddon.guidPortalFeature, $"&{Constants.rnFormId}={request.formId}");
+                    RedirectController.redirectToFormList(cp);
                     return false;
                 }
                 //
-                // -- cancel
+                // -- cancel button
                 if (request.button.Equals(Constants.buttonCancel)) {
-                    cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormEditAddon.guidPortalFeature, $"&{Constants.rnFormId}={request.formId}");
+                    RedirectController.redirectToFormEdit(cp, request.formId);
                     return false;
                 }
                 //
-                // -- add
+                // -- add button
                 if (request.button.Equals(Constants.ButtonAdd)) {
-                    cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormQuestionEditAddon.guidPortalFeature, $"&{Constants.rnFormId}={request.formId}");
+                    RedirectController.redirectToFormPageAdd(cp, request.formId);
                     return false;
                 }
                 return true;
@@ -96,7 +99,10 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 //
                 // -- init parent portal data
                 FormModel form = DbBaseModel.create<FormModel>(cp, request.formId);
-                if (form == null) { return cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormListAddon.guidPortalFeature); }
+                if (form == null) {
+                    RedirectController.redirectToFormList(cp);
+                    return "";
+                }
                 // 
                 // -- setup column headers
                 layoutBuilder.addColumn();
@@ -183,7 +189,9 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 //
                 // -- build page
                 layoutBuilder.title = "Form Pages";
-                layoutBuilder.description = "Forms are created by dropping the Form Widget on a page or by creating a form here, and adding Form-Pages, and Form-Questions to the form. Each time a user submits the form online it creates a Form Response.";
+                layoutBuilder.description = @"
+                    Forms are created by dropping the Form Widget on a page or by creating a form here, and adding Form-Pages, and Form-Questions to the form. 
+                    Each time a user submits the form online it creates a Form Response.";
                 layoutBuilder.callbackAddonGuid = guidAddon;
                 layoutBuilder.paginationRecordAlias = "forms";
                 layoutBuilder.portalSubNavTitle = $"form: {form.name}";
@@ -197,6 +205,7 @@ namespace Contensive.Addon.aoFormWizard3.Addons.WidgetDashboardWidgets {
                 // 
                 // -- add hiddens
                 layoutBuilder.addFormHidden("rowCnt", rowPtr);
+                layoutBuilder.addFormHidden(Constants.rnFormId, request.formId);
                 //
                 // -- feature subnav link querystring - clicks must include these values
                 cp.Doc.AddRefreshQueryString(Constants.rnFormId, request.formId);

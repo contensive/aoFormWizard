@@ -3,7 +3,7 @@ using Contensive.BaseClasses;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
 
-namespace Contensive.Addon.aoFormWizard3.Controllers {
+namespace Contensive.FormWidget.Controllers {
     public sealed class GenericController {
         // 
         // ====================================================================================================

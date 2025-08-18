@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Contensive.BaseClasses;
 
-namespace Contensive.Addon.aoFormWizard3.Contensive.Addon.AddonCollectionVb.Controllers {
+namespace Contensive.FormWidget.Contensive.Addon.AddonCollectionVb.Controllers {
     public abstract class baseModel {
         // 
         // ====================================================================================================
