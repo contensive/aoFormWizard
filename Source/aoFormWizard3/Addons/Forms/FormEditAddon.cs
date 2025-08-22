@@ -112,7 +112,7 @@ namespace Contensive.FormWidget.Addons {
                 //
                 // -- setup layout
                 layoutBuilder.title = (form == null) ? "Add Form" : "Edit Form";
-                layoutBuilder.portalSubNavTitle = (form == null) ? "" : $"form: {form.name}";
+                layoutBuilder.portalSubNavTitleList.Add($"Form: '{form.name}'");
                 layoutBuilder.description = "This form widget has the controls for the entire set of form pages. A form widget is dropped on the website and contains one or more form-pages. Each form page contains one or more form questions.";
                 layoutBuilder.callbackAddonGuid = guidAddon;
                 // 

@@ -194,7 +194,7 @@ namespace Contensive.FormWidget.Addons {
                     Each time a user submits the form online it creates a Form Response.";
                 layoutBuilder.callbackAddonGuid = guidAddon;
                 layoutBuilder.paginationRecordAlias = "forms";
-                layoutBuilder.portalSubNavTitle = $"form: {form.name}";
+                layoutBuilder.portalSubNavTitleList.Add($"Form: '{form.name}'");
                 layoutBuilder.failMessage = userErrorMessage;
                 layoutBuilder.allowDownloadButton = true;
                 // 
