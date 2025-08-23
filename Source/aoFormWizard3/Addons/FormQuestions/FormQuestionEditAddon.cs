@@ -136,7 +136,7 @@ namespace Contensive.FormWidget.Addons {
                 //
                 // -- setup layout
                 layoutBuilder.title = (formQuestion == null) ? "Add Form Question" : "Edit Form Question";
-                layoutBuilder.portalSubNavTitleList.Add($"Form: '{form.name}'");
+                layoutBuilder.portalSubNavTitleList.Add($"form: '{form.name}'");
                 layoutBuilder.portalSubNavTitleList.Add((formPage == null ? "New Page" : $"page: {formPage.name}"));
                 layoutBuilder.portalSubNavTitleList.Add((formQuestion == null ? "New Question" : $"question: {formQuestion.name}"));
                 layoutBuilder.description = "A form question is a single question presented to the user on a form page. Each form page can contain one or more questions. A form can include one or more for pages.";

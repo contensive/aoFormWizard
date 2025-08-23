@@ -204,7 +204,7 @@ namespace Contensive.FormWidget.Addons {
                 layoutBuilder.description = "Forms are created by dropping the Form Widget on a page or by creating a form here, and adding Form-Pages, and Form-Questions to the form. Each time a user submits the form online it creates a Form Response.";
                 layoutBuilder.callbackAddonGuid = guidAddon;
                 layoutBuilder.paginationRecordAlias = "questions";
-                layoutBuilder.portalSubNavTitleList.Add($"Form: '{form.name}'");
+                layoutBuilder.portalSubNavTitleList.Add($"form: '{form.name}'");
                 layoutBuilder.portalSubNavTitleList.Add((formPage == null ? "New Page" : $"page: {formPage.name}"));
                 layoutBuilder.failMessage = userErrorMessage;
                 layoutBuilder.allowDownloadButton = true;

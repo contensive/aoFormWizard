@@ -123,7 +123,7 @@ namespace Contensive.FormWidget.Addons {
                 //
                 // -- setup layout
                 layoutBuilder.title = (formPage == null) ? "Add Form Page" : "Edit Form Page";
-                layoutBuilder.portalSubNavTitleList.Add($"Form: '{form.name}'");
+                layoutBuilder.portalSubNavTitleList.Add($"form: '{form.name}'");
                 layoutBuilder.portalSubNavTitleList.Add((formPage == null ? "New Page" : $"page: {formPage.name}"));
                 layoutBuilder.description = "A form page is one page of questions a user see when submitting a form online. A form can have one or more form pages. Each form page contains one or more form questions.";
                 layoutBuilder.callbackAddonGuid = guidAddon;
