@@ -1,7 +1,5 @@
-﻿using System;
-using Contensive.BaseClasses;
-using Microsoft.VisualBasic;
-using Microsoft.VisualBasic.CompilerServices;
+﻿using Contensive.BaseClasses;
+using System;
 
 namespace Contensive.FormWidget.Controllers {
     public sealed class GenericController {
@@ -72,25 +70,25 @@ namespace Contensive.FormWidget.Controllers {
         public static string getSortOrderFromInteger(int id) {
             return id.ToString().PadLeft(7, '0');
         }
-        // 
-        // ====================================================================================================
-        public static string getDateForHtmlInput(DateTime source) {
-            if (isDateEmpty(source)) {
-                return "";
-            } else {
-                return (source.Year + Conversions.ToDouble("-") + Conversions.ToDouble(source.Month.ToString().PadLeft(2, '0')) + Conversions.ToDouble("-") + Conversions.ToDouble(source.Day.ToString().PadLeft(2, '0'))).ToString();
-            }
-        }
-        // 
-        // ====================================================================================================
-        /// <summary>
-        /// convert string into a style "height: {styleHeight};", if value is numeric it adds "px"
-        /// </summary>
-        /// <param name="styleheight"></param>
-        /// <returns></returns>
-        public static string encodeStyleHeight(string styleheight) {
-            return string.IsNullOrWhiteSpace(styleheight) ? string.Empty : "overflow:hidden;height:" + styleheight + (Information.IsNumeric(styleheight) ? "px" : string.Empty) + ";";
-        }
+        //// 
+        //// ====================================================================================================
+        //public static string getDateForHtmlInput(DateTime source) {
+        //    if (isDateEmpty(source)) {
+        //        return "";
+        //    } else {
+        //        return (source.Year + Conversions.ToDouble("-") + Conversions.ToDouble(source.Month.ToString().PadLeft(2, '0')) + Conversions.ToDouble("-") + Conversions.ToDouble(source.Day.ToString().PadLeft(2, '0'))).ToString();
+        //    }
+        //}
+        //// 
+        //// ====================================================================================================
+        ///// <summary>
+        ///// convert string into a style "height: {styleHeight};", if value is numeric it adds "px"
+        ///// </summary>
+        ///// <param name="styleheight"></param>
+        ///// <returns></returns>
+        //public static string encodeStyleHeight(string styleheight) {
+        //    return string.IsNullOrWhiteSpace(styleheight) ? string.Empty : "overflow:hidden;height:" + styleheight + (Information.IsNumeric(styleheight) ? "px" : string.Empty) + ";";
+        //}
         // 
         // ====================================================================================================
         /// <summary>

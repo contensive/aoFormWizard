@@ -1058,7 +1058,7 @@ namespace Contensive.FormWidget.Models.View {
                                         // -- answer is true (found in request)
                                         //
                                         // -- move this into a method called after save is complete, on the formResponseData field
-                                        textVersion.Append(Microsoft.VisualBasic.Constants.vbCrLf + Microsoft.VisualBasic.Constants.vbTab + formPage_Question_Option);
+                                        textVersion.Append(Environment.NewLine + "\t" + formPage_Question_Option);
                                         htmlVersion.Append("<div style=\"padding-left:20px;\">" + formPage_Question_Option + "</div>");
                                         //
                                         requestAnswer_OptionsSelectedList_Names.Add(formPage_Question_Option);
@@ -1139,11 +1139,11 @@ namespace Contensive.FormWidget.Models.View {
                                     //    }
                                     //}
                                 }
-                                textVersion.Append(Microsoft.VisualBasic.Constants.vbCrLf);
+                                textVersion.Append(Environment.NewLine);
                                 if (!string.IsNullOrEmpty(savedAnswersForm_Page_Question.textAnswer)) {
                                     //
                                     // -- invalid request. Mark the field and continue to check all the fields
-                                    textVersion.Append(Microsoft.VisualBasic.Constants.vbTab + cp.Http.CdnFilePathPrefixAbsolute + savedAnswersForm_Page_Question.textAnswer);
+                                    textVersion.Append("\t" + cp.Http.CdnFilePathPrefixAbsolute + savedAnswersForm_Page_Question.textAnswer);
                                     string filename = Path.GetFileName(savedAnswersForm_Page_Question.textAnswer);
                                     htmlVersion.Append("<div style=\"padding-left:20px;\"><a href=\"" + cp.Http.CdnFilePathPrefixAbsolute + savedAnswersForm_Page_Question.textAnswer + "\">" + filename + "</a></div>");
                                 }
@@ -1232,7 +1232,7 @@ namespace Contensive.FormWidget.Models.View {
                                         }
                                     }
                                 }
-                                textVersion.Append(Microsoft.VisualBasic.Constants.vbCrLf + Microsoft.VisualBasic.Constants.vbTab + requestAnswer_Text);
+                                textVersion.Append(Environment.NewLine + "\t" + requestAnswer_Text);
                                 htmlVersion.Append("<div style=\"padding-left:20px;\">" + requestAnswer_Text + "</div>");
                                 break;
                             }

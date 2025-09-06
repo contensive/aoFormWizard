@@ -18,7 +18,7 @@ set minorVersion=19
 set collectionName=aoFormWizard
 set collectionPath=..\collections\aoFormWizard\
 set solutionName=aoFormWizard.sln
-set binPath=..\source\aoFormWizard3\bin\debug\
+set binPath=..\source\aoFormWizard3\bin\Debug\netstandard2.0\
 set msbuildLocation=C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\
 set deploymentFolderRoot=C:\Deployments\aoFormWizard\Dev\
 
@@ -84,11 +84,12 @@ echo Build addon collection
 rem
 
 rem remove old DLL files from the collection folder
-del "%collectionPath%"\*.DLL
-del "%collectionPath%"\*.config
+del "%collectionPath%"\*.dll
+del "%collectionPath%"\*.pdb
 
 rem copy bin folder assemblies to collection folder
 copy "%binPath%*.dll" "%collectionPath%"
+copy "%binPath%*.pdb" "%collectionPath%"
 
 rem create new collection zip file
 c:

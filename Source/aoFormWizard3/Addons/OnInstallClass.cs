@@ -1,10 +1,7 @@
-﻿using System;
-using System.Data;
+﻿using Contensive.BaseClasses;
 using Contensive.FormWidget.Models.Db;
-using Contensive.BaseClasses;
 using Contensive.Models.Db;
-using HtmlAgilityPack;
-using Microsoft.VisualBasic.CompilerServices;
+using System;
 
 namespace Contensive.FormWidget.Addons {
     // 
@@ -184,7 +181,7 @@ namespace Contensive.FormWidget.Addons {
                     }
                     //
                     // -- delete legacy fields
-                    CP.Db.ExecuteNonQuery(@$"delete from ccfields where contentid={CP.Content.GetID("form widgets")} and name in (
+                    CP.Db.ExecuteNonQuery($@"delete from ccfields where contentid={CP.Content.GetID("form widgets")} and name in (
                         'addResetButton',
                         'backButtonName',
                         'continueButtonName',
