@@ -18,7 +18,8 @@ set minorVersion=19
 set collectionName=aoFormWizard
 set collectionPath=..\collections\aoFormWizard\
 set solutionName=aoFormWizard.sln
-set binPath=..\source\aoFormWizard3\bin\Debug\netstandard2.0\
+: set binPath=..\source\aoFormWizard3\bin\Debug\netstandard2.0\
+set binPath=..\source\aoFormWizard3\bin\Debug\net48\
 set msbuildLocation=C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\
 set deploymentFolderRoot=C:\Deployments\aoFormWizard\Dev\
 

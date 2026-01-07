@@ -17,6 +17,7 @@ namespace Contensive.FormWidget.Addons {
         /// <returns></returns>
         public override object Execute(CPBaseClass cp) {
             try {
+                cp.Log.Debug($"FormWidget, enter");
                 //
                 // -- these properties are passed to FormWidgetViewModel.
                 // -- the allow for a single layout to handle multipage, preview and editing modes
