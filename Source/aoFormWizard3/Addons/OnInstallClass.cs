@@ -17,7 +17,7 @@ namespace Contensive.FormWidget.Addons {
             try {
                 // 
                 // -- version used to upgrade content
-                const int version = 5;
+                const int version = 6;
                 int buildVersion = CP.Site.GetInteger("Form Wizard Version", 0);
                 CP.Site.SetProperty("Form Wizard Version", version);
                 //
@@ -236,6 +236,11 @@ namespace Contensive.FormWidget.Addons {
                     //        CP.Db.ExecuteNonQuery($"update ccFormWidgets set formId={formId} where id={CP.Utils.EncodeInteger(row["id"])}");
                     //    }
                     //}
+                }
+                if (buildVersion < 6) {
+                    //
+                    // -- remove all contentcategoryId
+                    CP.Db.ExecuteNonQuery($"delete from ccfields where name='contentcategoryid'");
                 }
                 //
                 // -- update layout

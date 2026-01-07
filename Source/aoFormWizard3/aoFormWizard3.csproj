@@ -9,8 +9,8 @@
     <PackageReference Include="Contensive.CPBaseClass" Version="25.10.4.2" />
     <PackageReference Include="Contensive.DbModels" Version="25.10.4.2" />
     <PackageReference Include="Contensive.DesignBlockBase" Version="25.9.3.1" />
-    <PackageReference Include="CsvHelper" Version="33.0.1" />
-    <PackageReference Include="HtmlAgilityPack" Version="1.12.0" />
+    <PackageReference Include="CsvHelper" Version="33.1.0" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.12.4" />
   </ItemGroup>
 
 </Project>
