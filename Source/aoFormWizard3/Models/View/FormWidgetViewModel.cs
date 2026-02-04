@@ -1222,7 +1222,13 @@ namespace Contensive.FormWidget.Models.View {
                                 } else if (currentPage.saveTypeId.Equals(2)) {
                                     // 
                                     // -- save to people
-                                    if (cp.Content.IsField("People", formPage_Question.name)) {
+                                    if (string.Equals(formPage_Question.name, "password", System.StringComparison.OrdinalIgnoreCase)) {
+                                        //
+                                        // -- special handling for password field - use cp.user.setPassword() instead of direct save
+                                        if (!string.IsNullOrEmpty(requestAnswer_Text)) {
+                                            cp.User.SetPassword(requestAnswer_Text);
+                                        }
+                                    } else if (cp.Content.IsField("People", formPage_Question.name)) {
                                         using (var cs = cp.CSNew()) {
                                             // make sure the form's field exists in the people table
                                             if (cs.Open("People", "id=" + cp.User.Id) & cs.FieldOK(formPage_Question.name)) {
