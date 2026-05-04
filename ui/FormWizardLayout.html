@@ -77,7 +77,12 @@
 					{{{formEditLink}}}
 					<div class=" {{formEditWrapperClass}}">
 
-						{{#showFormPages}}	
+						<!-- honeypot spam protection -->
+						<div style="position:absolute;left:-9999px;" aria-hidden="true">
+							<input type="text" name="website_url" tabindex="-1" autocomplete="off" value="">
+						</div>
+
+						{{#showFormPages}}
 							{{#formPageList}}
 								<!-- form page -->
 								{{{formPageEditLink}}}

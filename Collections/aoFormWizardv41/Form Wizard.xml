@@ -1,4 +1,7 @@
-<Collection name="Form Wizard" guid="{B5D1FE5B-71EC-403D-90E8-01AE7F8E18AD}" system="Yes">
+<Collection name="Form Wizard" guid="{B5D1FE5B-71EC-403D-90E8-01AE7F8E18AD}" system="Yes"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="https://contensive.s3.amazonaws.com/xsd/Collection.xsd"
+>
 	<Help></Help>
 	<addon name="Dynamic Form" guid="{8284FA0C-6C9D-43E1-9E57-8E9DD35D2DCC}" type="Add-on">
 			<Copy></Copy>

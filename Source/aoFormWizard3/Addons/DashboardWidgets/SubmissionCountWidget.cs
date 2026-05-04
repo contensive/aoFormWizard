@@ -22,12 +22,14 @@ namespace Contensive.FormWidget.Addons {
                     filterFormId = form?.id ?? 0;
                 }
                 List<DashboardWidgetBaseModel_FilterOptions> filterOptions = [];
-                foreach (var nameValue in form.getNameIdList(cp)) {
-                    filterOptions.Add(new DashboardWidgetBaseModel_FilterOptions() {
-                        filterCaption = nameValue.name,
-                        filterValue = nameValue.id.ToString(),
-                        filterActive = (filterFormId == nameValue.id)
-                    });
+                if (form is not null) {
+                    foreach (var nameValue in form.getNameIdList(cp)) {
+                        filterOptions.Add(new DashboardWidgetBaseModel_FilterOptions() {
+                            filterCaption = nameValue.name,
+                            filterValue = nameValue.id.ToString(),
+                            filterActive = (filterFormId == nameValue.id)
+                        });
+                    }
                 }
                 //
                 string url = form is null ? "" : cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, FormResponseListAddon.guidPortalFeature) + $"&{Constants.rnFormId}={filterFormId}&{Constants.rnOnlySubmitted}=1";

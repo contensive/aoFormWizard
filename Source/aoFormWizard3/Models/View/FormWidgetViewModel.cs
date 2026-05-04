@@ -920,6 +920,24 @@ namespace Contensive.FormWidget.Models.View {
             string returnHtml = string.Empty;
             int hint = 0;
             try {
+                //
+                // -- honeypot spam protection: if hidden field has a value, silently reject
+                string honeypotValue = cp.Doc.GetText("website_url");
+                if (!string.IsNullOrEmpty(honeypotValue)) {
+                    cp.Utils.AppendLog("FormSubmit, honeypot triggered - rejecting as spam");
+                    return false;
+                }
+                //
+                // -- rate limiting: block resubmission within 15 seconds
+                string rateLimitKey = $"formWizardLastSubmit-{formId}";
+                string lastSubmitStr = cp.Visit.GetText(rateLimitKey, "");
+                if (!string.IsNullOrEmpty(lastSubmitStr) && DateTime.TryParse(lastSubmitStr, out DateTime lastSubmit)) {
+                    if ((DateTime.Now - lastSubmit).TotalSeconds < 15) {
+                        cp.Utils.AppendLog("FormSubmit, rate limited - resubmit within 15s blocked");
+                        return false;
+                    }
+                }
+                //
                 string button = cp.Doc.GetText("button");
                 int srcPageId = cp.Doc.GetInteger("srcPageId");
                 //
@@ -1289,6 +1307,9 @@ namespace Contensive.FormWidget.Models.View {
                 if (currentPage == pageList.Last() && (button == submitButton)) {
                     //
                     // -- the entire form is complete
+                    //
+                    // -- record submission time for rate limiting
+                    cp.Visit.SetProperty(rateLimitKey, DateTime.Now.ToString("o"));
                     //
                     cp.Email.sendSystem(form.notificationemailid, htmlVersion.ToString());
                     if (form.responseemailid > 0) {

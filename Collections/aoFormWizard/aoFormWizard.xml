@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="windows-1252"?>
-<Collection name="Form Wizard" guid="{B5D1FE5B-71EC-403D-90E8-01AE7F8E18AD}" system="No" updatable="Yes" blockNavigatorNode="No" onInstallAddonGuid="{B1F99A92-DD9C-4C64-9A13-6415EC0975F1}">
+<Collection name="Form Wizard" guid="{B5D1FE5B-71EC-403D-90E8-01AE7F8E18AD}" system="No" updatable="Yes" blockNavigatorNode="No" onInstallAddonGuid="{B1F99A92-DD9C-4C64-9A13-6415EC0975F1}"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="https://contensive.s3.amazonaws.com/xsd/Collection.xsd"
+>
 	<HelpLink></HelpLink>
 	<Help></Help>
 	<!--
