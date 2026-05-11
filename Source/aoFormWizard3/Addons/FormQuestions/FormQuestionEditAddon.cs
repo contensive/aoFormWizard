@@ -127,12 +127,42 @@ namespace Contensive.FormWidget.Addons {
                     return "";
                 }
                 FormQuestionModel formQuestion = DbBaseModel.create<FormQuestionModel>(cp, request.formQuestionId);
-                // 
+                //
                 // -- add rows
                 layoutBuilder.addRow();
                 layoutBuilder.rowName = "Name";
                 layoutBuilder.rowValue = cp.Html5.InputText(Constants.rnName, 255, formQuestion?.name ?? "", "form-control");
-                layoutBuilder.rowHelp = "The name for this form question used by administrators to manage the form. The user will not see this name.";
+                layoutBuilder.rowHelp = "Not displayed on the site. This is a short name you give to this question so you can find it easily later.";
+                //
+                layoutBuilder.addRow();
+                layoutBuilder.rowName = "Question";
+                layoutBuilder.rowValue = cp.Html5.InputText("caption", 255, formQuestion?.caption ?? "", "form-control");
+                layoutBuilder.rowHelp = "The question you are asking (h3 headline).";
+                //
+                layoutBuilder.addRow();
+                layoutBuilder.rowName = "Description";
+                layoutBuilder.rowValue = cp.Html5.InputHtml("description", 300, formQuestion?.description ?? "");
+                layoutBuilder.rowHelp = "Optional. This description appears as regular size text below the question and above the answer area. Use this area for instructions and description to help the user understand the input required.";
+                //
+                layoutBuilder.addRow();
+                layoutBuilder.rowName = "Required";
+                layoutBuilder.rowValue = cp.Html5.CheckBox("required", formQuestion?.required ?? false);
+                layoutBuilder.rowHelp = "Check this box if the field is required for the form to be submitted.";
+                //
+                layoutBuilder.addRow();
+                layoutBuilder.rowName = "Question Type";
+                layoutBuilder.rowValue = cp.Html5.SelectList("inputTypeId", formQuestion?.inputTypeId.ToString() ?? "", "Short Text Answer,Long Text Answer,Check Boxes choose one,Radio Boxes choose many,Upload File,Select List choose one", "form-control");
+                layoutBuilder.rowHelp = "The type of field: Text for short text fields, TextArea for longer text fields, Radio (to choose one of the listed options), Checkbox (to select multiple listed options), Select (to select one listed option in a dropdown) and File (to upload an image file).";
+                //
+                layoutBuilder.addRow();
+                layoutBuilder.rowName = "Option List";
+                layoutBuilder.rowValue = cp.Html5.InputTextArea("optionList", 255, formQuestion?.optionList ?? "", "form-control");
+                layoutBuilder.rowHelp = "A short list of choices separated by commas for radio or checkbox fields. For example to create a choice between red and blue, enter \"red,blue\" (without the quotes).";
+                //
+                layoutBuilder.addRow();
+                layoutBuilder.rowName = "Section Headline";
+                layoutBuilder.rowValue = cp.Html5.InputText("headline", 255, formQuestion?.headline ?? "", "form-control");
+                layoutBuilder.rowHelp = "An optional large bold (h2 headline) caption that appears above the question. Use a headline to divide a form's questions into sections where appropriate.";
                 //
                 // -- setup layout
                 layoutBuilder.title = (formQuestion == null) ? "Add Form Question" : "Edit Form Question";
@@ -175,6 +205,12 @@ namespace Contensive.FormWidget.Addons {
                     request.formQuestionId = formQuestion.id;
                 }
                 formQuestion.name = request.name;
+                formQuestion.headline = request.headline;
+                formQuestion.caption = request.caption;
+                formQuestion.description = request.description;
+                formQuestion.required = request.required;
+                formQuestion.inputTypeId = request.inputTypeId;
+                formQuestion.optionList = request.optionList;
                 formQuestion.formid = request.formPageId;
                 formQuestion.save(cp);
             } catch (Exception ex) {
@@ -201,12 +237,18 @@ namespace Contensive.FormWidget.Addons {
                 //
                 // -- individual fields for the record, request name and requestModel name match the field name (except id)
                 name = cp.Doc.GetText("name");
+                headline = cp.Doc.GetText("headline");
+                caption = cp.Doc.GetText("caption");
+                description = cp.Doc.GetText("description");
+                required = cp.Doc.GetBoolean("required");
+                inputTypeId = cp.Doc.GetInteger("inputTypeId");
+                optionList = cp.Doc.GetText("optionList");
             }
             private CPBaseClass cp;
             //
             public string button { get; }
             /// <summary>
-            /// form for this question  
+            /// form for this question
             /// </summary>
             public int formId { get; set; }
             /// <summary>
@@ -220,10 +262,19 @@ namespace Contensive.FormWidget.Addons {
             //
             // -- fields for the record
             //
-            /// <summary>
-            /// 
-            /// </summary>
             public string name { get; set; }
+            //
+            public string headline { get; set; }
+            //
+            public string caption { get; set; }
+            //
+            public string description { get; set; }
+            //
+            public bool required { get; set; }
+            //
+            public int inputTypeId { get; set; }
+            //
+            public string optionList { get; set; }
         }
     }
 }

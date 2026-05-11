@@ -121,8 +121,13 @@ namespace Contensive.FormWidget.Addons {
                 layoutBuilder.rowValue = cp.Html5.InputText(Constants.rnName, 255, formPage?.name ?? "", "form-control");
                 layoutBuilder.rowHelp = "The name for this form page used by administrators to manage the form. The user will not see this name.";
                 //
+                layoutBuilder.addRow();
+                layoutBuilder.rowName = "Description";
+                layoutBuilder.rowValue = cp.Html5.InputHtml("description", 300, formPage?.description ?? "");
+                layoutBuilder.rowHelp = "Enter optional form instructions. These instructions appear at the top of this page.";
+                //
                 // -- setup layout
-                layoutBuilder.title = (formPage == null) ? "Add Form Page" : "Edit Form Page";
+                layoutBuilder.title = (formPage == null) ? "Add Form Page" : "Form Page";
                 layoutBuilder.portalSubNavTitleList.Add($"form: '{form.name}'");
                 layoutBuilder.portalSubNavTitleList.Add((formPage == null ? "New Page" : $"page: {formPage.name}"));
                 layoutBuilder.description = "A form page is one page of questions a user see when submitting a form online. A form can have one or more form pages. Each form page contains one or more form questions.";
@@ -160,6 +165,7 @@ namespace Contensive.FormWidget.Addons {
                     request.formPageId = formPage.id;
                 }
                 formPage.name = request.name;
+                formPage.description = request.description;
                 formPage.formid = request.formId;
                 formPage.save(cp);
             } catch (Exception ex) {
@@ -185,6 +191,7 @@ namespace Contensive.FormWidget.Addons {
                 //
                 // -- individual fields for the record, request name and requestModel name match the field name (except id)
                 name = cp.Doc.GetText("name");
+                description = cp.Doc.GetText("description");
             }
             private CPBaseClass cp;
             //
@@ -195,6 +202,8 @@ namespace Contensive.FormWidget.Addons {
             public int formPageId { get; set; }
             //
             public string name { get; set; }
+            //
+            public string description { get; set; }
         }
     }
 }

@@ -25,8 +25,32 @@ namespace Contensive.FormWidget.Controllers {
             cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormEditAddon.guidPortalFeature, $"&{Constants.rnFormId}={formId}");
         }
         //
+        // -- Form Emails
+        //
+        public static void redirectToFormEmailEdit(CPBaseClass cp, int formId) {
+            cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormEmailEditAddon.guidPortalFeature, $"&{Constants.rnFormId}={formId}");
+        }
+        //
+        // -- Form Buttons
+        //
+        public static void redirectToFormButtonEdit(CPBaseClass cp, int formId) {
+            cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormButtonEditAddon.guidPortalFeature, $"&{Constants.rnFormId}={formId}");
+        }
+        //
+        // -- Form Submit
+        //
+        public static void redirectToFormSubmitEdit(CPBaseClass cp, int formId) {
+            cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormSubmitEditAddon.guidPortalFeature, $"&{Constants.rnFormId}={formId}");
+        }
+        //
+        // -- Form Features
+        //
+        public static void redirectToFormFeatureEdit(CPBaseClass cp, int formId) {
+            cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormFeatureEditAddon.guidPortalFeature, $"&{Constants.rnFormId}={formId}");
+        }
+        //
         // -- Form Page
-        // 
+        //
         public static void redirectToFormPageList(CPBaseClass cp, int formId) {
             cp.AdminUI.RedirectToPortalFeature(Constants.guidPortalForms, FormPageListAddon.guidPortalFeature, $"&{Constants.rnFormId}={formId}");
         }
