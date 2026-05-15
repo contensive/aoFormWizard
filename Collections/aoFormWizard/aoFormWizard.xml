@@ -73,7 +73,7 @@
 		<Record content="Portals" guid="{D5B3AF11-0AD2-4E4B-B39C-81953591B673}" name="Forms">
 			<field name="defaultfeatureid"> </field>
 			<field name="collectionid">{b5d1fe5b-71ec-403d-90e8-01ae7f8e18ad}</field>
-			<field Name="icon">formwizard\dashboardIcons\form.svg</field>
+			<field Name="icon">formwizard\form.svg</field>
 		</Record>
 	</Data>
 	<!-- 
@@ -400,7 +400,6 @@
 		upgrade old form wizard
 	-->
 	<Addon name="Legacy Form Widget" guid="{eab0f274-5a24-458f-bf1d-1ecd10833ff3}" type="Add-on">
-		<Alias>Form Widget 2</Alias>
 		<htmldocument>Yes</htmldocument>
 		<DotNetClass><![CDATA[Contensive.FormWidget.Addons.LegacyFormWidget]]></DotNetClass>
 		<BlockEditTools>Yes</BlockEditTools>
@@ -836,4 +835,10 @@
 	</CDef>	
 	<ImportCollection name="JQuery">{A435BF70-041B-43D1-8A8D-5D9D59A7FCD0}</ImportCollection>
 	<Resource name="uiFormWizard.zip" type="files" path="formwizard" />
+
+	<Resource Name="layoutFiles.zip" Type="layoutFiles" Path="" />
+	<Resource Name="wwwFiles.zip" Type="wwwFiles" Path="" />
+	<Resource Name="privateFiles.zip" Type="privateFiles" Path="" />
+	<Resource Name="cdnFiles.zip" Type="cdnFiles" Path="" />
+	<Resource Name="helpFiles.zip" Type="helpFiles" Path="" />	
 </Collection>
