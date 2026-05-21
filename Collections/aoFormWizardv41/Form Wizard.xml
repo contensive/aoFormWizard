@@ -6,7 +6,6 @@
 	<addon name="Dynamic Form" guid="{8284FA0C-6C9D-43E1-9E57-8E9DD35D2DCC}" type="Add-on">
 			<Copy></Copy>
 			<CopyText></CopyText>
-			<ActiveXProgramID><![CDATA[aoFormWizard.RenderClass]]></ActiveXProgramID>
 			<DotNetClass></DotNetClass>
 			<ActiveXDLL><![CDATA[aoFormWizard.dll]]></ActiveXDLL>
 			<ArgumentList><![CDATA[FormSet=[List(Form Sets)]]]></ArgumentList>
@@ -43,7 +42,6 @@
 	<addon name="Form Wizard" guid="{2B1384C4-FD0E-4893-B3EA-11C48429382F}" type="Add-on">
 			<Copy></Copy>
 			<CopyText></CopyText>
-			<ActiveXProgramID><![CDATA[aoFormWizard.WizardClass]]></ActiveXProgramID>
 			<DotNetClass></DotNetClass>
 			<ActiveXDLL><![CDATA[aoFormWizard.dll]]></ActiveXDLL>
 			<ArgumentList></ArgumentList>
