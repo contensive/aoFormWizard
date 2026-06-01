@@ -20,10 +20,10 @@ Import-Module (Join-Path $PSScriptRoot '..\..\Contensive5\scripts\contensive-bui
 $projectRoot = (Resolve-Path "$PSScriptRoot\..").Path
 
 Invoke-ContensiveBuild `
-    -CollectionName    'aoFormWizard' `
+    -CollectionName    'Form Wizard' `
     -CollectionPath    "$projectRoot\Collections\aoFormWizard" `
     -SolutionPath      "$projectRoot\Source\aoFormWizard.sln" `
-    -BinPath           "$projectRoot\Source\aoFormWizard3\bin\$Configuration\net48" `
+    -BinPath           "$projectRoot\Source\aoFormWizard3\bin\$Configuration\netstandard2.0" `
     -DeploymentRoot    'C:\Deployments\aoFormWizard' `
     -Configuration     $Configuration `
     -CleanFolders      @(

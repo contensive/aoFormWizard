@@ -1,7 +1,7 @@
 @echo off
 setlocal
 
-@echo Build project and deploy to sprint11.sitefpo.com
+@echo Build project and deploy to sprint12.sitefpo.com
 
 rem run the build
 call "%~dp0build.cmd" /nopause
@@ -13,7 +13,7 @@ if not "%errorlevel%"=="0" (
 
 rem deploy using shared library
 powershell -NoProfile -ExecutionPolicy Bypass -Command ^
-    "Import-Module '%~dp0..\..\Contensive5\scripts\contensive-build.psm1' -Force; Invoke-ContensiveDeploy -SiteUrl 'https://sprint11.sitefpo.com/installCollection' -CollectionZip '%~dp0..\Collections\aoFormWizard\Form Wizard.zip' -SiteName 'sprint11'"
+    "Import-Module '%~dp0..\..\Contensive5\scripts\contensive-build.psm1' -Force; Invoke-ContensiveDeploy -SiteUrl 'https://sprint12.sitefpo.com/installCollection' -CollectionZip '%~dp0..\Collections\aoFormWizard\Form Wizard.zip' -SiteName 'sprint12'"
 set deployExit=%errorlevel%
 
 pause

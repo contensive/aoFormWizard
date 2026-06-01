@@ -834,7 +834,6 @@
 	<CDef Name="People" guid="{C1985DC4-C985-4406-9934-61A911543454}">		
 	</CDef>	
 	<ImportCollection name="JQuery">{A435BF70-041B-43D1-8A8D-5D9D59A7FCD0}</ImportCollection>
-	<Resource name="uiFormWizard.zip" type="files" path="formwizard" />
 
 	<Resource Name="layoutFiles.zip" Type="layoutFiles" Path="" />
 	<Resource Name="wwwFiles.zip" Type="wwwFiles" Path="" />
