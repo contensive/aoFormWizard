@@ -13,6 +13,13 @@ namespace Contensive.FormWidget.Addons {
         public override object Execute(CPBaseClass cp) {
             var returnObj = new RemoteReturnObj();
             try {
+                //
+                // -- authentication required for remote method
+                if (!cp.User.IsAuthenticated) {
+                    returnObj.success = false;
+                    returnObj.errorMessage = "Authentication required.";
+                    return returnObj;
+                }
                 int applicationId = cp.Doc.GetInteger("applicationId");
                 int score = cp.Doc.GetInteger("score");
                 int responseId = cp.Doc.GetInteger("responseId");

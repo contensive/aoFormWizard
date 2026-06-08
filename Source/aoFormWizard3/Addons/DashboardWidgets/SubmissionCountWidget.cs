@@ -51,42 +51,5 @@ namespace Contensive.FormWidget.Addons {
             }
 
         }
-        //
-        public static double getAccountsReceivable(CPBaseClass cp, int widgetFilter) {
-            DateTime dateDue = DateTime.MinValue;
-            if (widgetFilter == 0) {
-                //
-                // -- total due
-                dateDue = DateTime.MinValue;
-            } else if (widgetFilter == 1) {
-                //
-                // -- current invoices
-                dateDue = DateTime.Now;
-            } else if (widgetFilter == 2) {
-                //
-                // -- over 30 days past due
-                dateDue = DateTime.Now.AddDays(-30);
-            } else if (widgetFilter == 3) {
-                dateDue = DateTime.Now.AddDays(-60);
-            } else if (widgetFilter > 3) {
-                dateDue = DateTime.Now.AddDays(-90);
-            }
-            string sql = $@"
-                select
-                    SUM(o.TotalCharge)
-                from 
-	                orders o
-	                left join abaccounts a on a.id=o.accountId
-                where 1=1
-	                and a.Closed=0
-	                and o.dateCanceled is null
-	                and o.paidByTransactionId=0
-	                {(widgetFilter > 0 ? $"and o.dateDue<{dateDue}" : "")}";
-            using DataTable dt = cp.Db.ExecuteQuery($"select count(*) as cnt from ccvisits where (lastVisitTime >{cp.Db.EncodeSQLDate(DateTime.Now.AddMinutes(-30))})");
-            if (dt?.Rows != null) {
-                return cp.Utils.EncodeNumber(dt.Rows[0][0]);
-            }
-            return 0.0;
-        }
     }
 }

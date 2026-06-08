@@ -13,6 +13,13 @@ namespace Contensive.FormWidget.Addons {
         public override object Execute(CPBaseClass cp) {
             var returnObj = new submissionScoringWidgetDataModel();
             try {
+                //
+                // -- authentication required for remote method
+                if (!cp.User.IsAuthenticated) {
+                    returnObj.success = false;
+                    returnObj.errorMessage = "Authentication required.";
+                    return returnObj;
+                }
                 int selectedFormResponseId = cp.Doc.GetInteger("submissionId");
                 int scoreWidgetId = cp.Doc.GetInteger("scoreWidgetId");
                 int sortBy = cp.Doc.GetInteger("sortBy");
@@ -25,7 +32,25 @@ namespace Contensive.FormWidget.Addons {
                     return returnObj;
                 }
                 //
-                // -- verify they is a view record for the current user
+                // -- verify the user is in the scoring group
+                int groupId = applicationScoreWidget.groupAllowedToScore;
+                if (groupId > 0) {
+                    int memberCount = ApplicationScoreWidgetsModel.getCount<ApplicationScoreWidgetsModel>(cp, "");
+                    string groupCheckSQL = $"select count(id) as 'count' from ccMemberRules where memberid = {cp.User.Id} and groupid = {groupId}";
+                    bool userInGroup = false;
+                    using (var cs = cp.CSNew()) {
+                        if (cs.OpenSQL(groupCheckSQL)) {
+                            userInGroup = cs.GetInteger("count") > 0;
+                        }
+                    }
+                    if (!userInGroup) {
+                        returnObj.success = false;
+                        returnObj.errorMessage = "You are not authorized to view scoring data.";
+                        return returnObj;
+                    }
+                }
+                //
+                // -- verify there is a view record for the current user
                 var submissionViews = ApplicationViewsModel.getCount<ApplicationViewsModel>(cp, $"viewer = {cp.User.Id} and responseViewed = {selectedFormResponseId}");
                 if(submissionViews <= 0) {
                     var submissionView = ApplicationViewsModel.addDefault<ApplicationViewsModel>(cp);

@@ -16,6 +16,11 @@ namespace Contensive.FormWidget.Addons {
 
         public override object Execute(CPBaseClass cp) {
             try {
+                //
+                // -- admin required for export tool
+                if (!cp.User.IsAdmin) {
+                    return "<p>This tool requires administrator access.</p>";
+                }
                 int formId = cp.Doc.GetInteger(Constants.rnFormId);
                 string filePath = "";
                 string fileName = "";
@@ -55,7 +60,7 @@ namespace Contensive.FormWidget.Addons {
                     
                     if (responses.Count > 0) {
                         if (csvRows.Count > 0) {
-                            fileName = "Form_CSV_" + DateTime.Now.ToString("MM-dd-yyyy_hh_mm_ss") + ".csv";
+                            fileName = $"Form_CSV_{DateTime.Now:MM-dd-yyyy_hh_mm_ss}_{Guid.NewGuid():N}.csv";
                             filePath = cp.CdnFiles.PhysicalFilePath + fileName;
                             using (var writer = new StreamWriter(filePath))
                             using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture)) {

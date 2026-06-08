@@ -1225,9 +1225,9 @@ namespace Contensive.FormWidget.Models.View {
                                 //        }
                                 //    }
                                 //} else 
-                                if (currentPage.saveTypeId.Equals(3)) {
-                                    // 
-                                    // -- save to organization
+                                if (currentPage.saveTypeId.Equals(3) && cp.User.IsAuthenticated) {
+                                    //
+                                    // -- save to organization (requires authenticated user)
                                     if (cp.Content.IsField("organizations", formPage_Question.name)) {
                                         using (var cs = cp.CSNew()) {
                                             // make sure the form's field exists in the people table
@@ -1237,9 +1237,9 @@ namespace Contensive.FormWidget.Models.View {
                                             }
                                         }
                                     }
-                                } else if (currentPage.saveTypeId.Equals(2)) {
-                                    // 
-                                    // -- save to people
+                                } else if (currentPage.saveTypeId.Equals(2) && cp.User.IsAuthenticated) {
+                                    //
+                                    // -- save to people (requires authenticated user)
                                     if (string.Equals(formPage_Question.name, "password", System.StringComparison.OrdinalIgnoreCase)) {
                                         //
                                         // -- special handling for password field - use cp.user.setPassword() instead of direct save
