@@ -34,7 +34,7 @@ namespace Contensive.FormWidget.Addons {
                     try {
                         //
                         // -- change question type from string to integer
-                        if (CP.Db.IsTable("ccFormFields")) {
+                        if (CP.Db.IsTable("ccFormFields") && CP.Db.IsTableField("ccFormFields", "inputtypeid")) {
                             CP.Db.ExecuteNonQuery("update ccFormFields set inputtypeid=1 where inputtype='TEXT'");
                             CP.Db.ExecuteNonQuery("update ccFormFields set inputtypeid=2 where inputtype='TEXTAREA'");
                             CP.Db.ExecuteNonQuery("update ccFormFields set inputtypeid=3 where inputtype='CHECKBOX'");
@@ -181,13 +181,15 @@ namespace Contensive.FormWidget.Addons {
                 if (buildVersion < 5) {
                     try {
                         //
-                        // -- convert ccformWidgets to ccformWidgets and ccForms 
+                        // -- convert ccformWidgets to ccformWidgets and ccForms
                         // -- previously the widget had the form details but we want the user to be able to select the form
-                        foreach (var formWidget in DbBaseModel.createList<FormWidgetModel>(CP)) {
-                            if (formWidget.formId == 0) {
-                                FormModel form = FormModel.createFormFromWizard(CP, formWidget);
-                                formWidget.formId = form.id;
-                                formWidget.save(CP);
+                        if (CP.Db.IsTableField("ccFormWidgets", "formId")) {
+                            foreach (var formWidget in DbBaseModel.createList<FormWidgetModel>(CP)) {
+                                if (formWidget.formId == 0) {
+                                    FormModel form = FormModel.createFormFromWizard(CP, formWidget);
+                                    formWidget.formId = form.id;
+                                    formWidget.save(CP);
+                                }
                             }
                         }
                     } catch (Exception ex) {
