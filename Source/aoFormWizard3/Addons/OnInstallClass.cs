@@ -15,10 +15,10 @@ namespace Contensive.FormWidget.Addons {
         /// <returns></returns>
         public override object Execute(CPBaseClass CP) {
             try {
-                // 
+                //
                 // -- version used to upgrade content
-                const int version = 6;
-                int buildVersion = CP.Site.GetInteger("Form Wizard Version", 0);
+                const int version = 7;
+                int buildVersion = CP.Site.GetInteger("Form Wizard Version", version);
                 CP.Site.SetProperty("Form Wizard Version", version);
                 //
                 //if (buildVersion < 2) {
@@ -45,6 +45,7 @@ namespace Contensive.FormWidget.Addons {
                     } catch (Exception ex) {
                         CP.Log.Error(ex);
                     }
+                    CP.Site.SetProperty("Form Wizard Version", 3);
                 }
                 if (buildVersion < 4) {
                     try {
@@ -177,6 +178,7 @@ namespace Contensive.FormWidget.Addons {
                     } catch (Exception ex) {
                         CP.Log.Error(ex);
                     }
+                    CP.Site.SetProperty("Form Wizard Version", 4);
                 }
                 if (buildVersion < 5) {
                     try {
@@ -238,12 +240,15 @@ namespace Contensive.FormWidget.Addons {
                     //        CP.Db.ExecuteNonQuery($"update ccFormWidgets set formId={formId} where id={CP.Utils.EncodeInteger(row["id"])}");
                     //    }
                     //}
+                    CP.Site.SetProperty("Form Wizard Version", 5);
                 }
                 if (buildVersion < 6) {
                     //
                     // -- remove all contentcategoryId
                     CP.Db.ExecuteNonQuery($"delete from ccfields where name='contentcategoryid'");
+                    CP.Site.SetProperty("Form Wizard Version", 6);
                 }
+                CP.Site.SetProperty("Form Wizard Version", version);
                 //
                 // -- update layout
                 CP.Layout.updateLayout(Constants.guidLayoutFormWizard, Constants.nameLayoutFormWizard, Constants.pathFilenameLayoutFormWizard);

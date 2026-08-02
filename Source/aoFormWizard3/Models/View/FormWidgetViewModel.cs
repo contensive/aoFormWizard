@@ -1311,7 +1311,9 @@ namespace Contensive.FormWidget.Models.View {
                     // -- record submission time for rate limiting
                     cp.Visit.SetProperty(rateLimitKey, DateTime.Now.ToString("o"));
                     //
-                    cp.Email.sendSystem(form.notificationemailid, htmlVersion.ToString());
+                    if (form.notificationemailid > 0) {
+                        cp.Email.sendSystem(form.notificationemailid, htmlVersion.ToString());
+                    }
                     if (form.responseemailid > 0) {
                         cp.Email.sendSystem(form.responseemailid, "", cp.User.Id);
                     }
