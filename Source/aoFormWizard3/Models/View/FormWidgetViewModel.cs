@@ -126,7 +126,14 @@ namespace Contensive.FormWidget.Models.View {
         //
         public string formPageAddLink { get; set; }
         //
+        public string pageSortableId { get; set; }
+        //
         public bool isEditing { get; set; }
+        //
+        /// <summary>
+        /// when editing and a form is already selected, show the change form selector at the bottom of the preview
+        /// </summary>
+        public bool showChangeFormView { get; set; }
         //
         public List<FormPageModel> pageList { get; set; }
         //
@@ -153,6 +160,9 @@ namespace Contensive.FormWidget.Models.View {
             public string formQuestionEditLink { get; set; }
             public bool invalidAnswer { get; set; }
             public bool isReadOnly { get; set; }
+            public string questionHtmlId { get; set; }
+            public string classQuestionDraggable { get; set; }
+            public bool includeDragHandle { get; set; }
         }
         // 
         public class OptionClass {
@@ -179,6 +189,10 @@ namespace Contensive.FormWidget.Models.View {
             public string formAddLink { get; set; }
             public bool isEditing { get; set; }
             public bool isThankYouPage { get; set; }
+            public string pageHtmlId { get; set; }
+            public string classPageDraggable { get; set; }
+            public bool includeDragHandle { get; set; }
+            public string questionSortableId { get; set; }
         }
         // 
         // ====================================================================================================
@@ -198,7 +212,7 @@ namespace Contensive.FormWidget.Models.View {
                 cp.Log.Debug($"aoFormWizard.FormSetViewModel.create() start, isMultipagePreviewMode [{isEditing}], isMultipagePreviewMode [{isEditing}], formResponseId [{formResponseId}]");
                 //
                 string button = cp.Doc.GetText("button");
-                if (!isMultipagePreviewMode && cp.User.IsAdmin) {
+                if (cp.User.IsAdmin) {
                     //
                     // -- process special cases. handle create form
                     if (button.Equals("Create Form")) {
@@ -319,6 +333,11 @@ namespace Contensive.FormWidget.Models.View {
             } else if (savedAnswers.isComplete) {
                 resultViewData.showFormPages = false;
                 resultViewData.showThankYouPage = true;
+                //
+                // -- Signal form completion to the hosting addon (e.g. membership application).
+                // -- The hosting addon checks this doc property to know the form wizard finished.
+                // -- This property must always be set when the thank you page is displayed.
+                cp.Doc.SetProperty("formwizardcomplete", "true");
             } else {
                 resultViewData.showFormPages = true;
                 resultViewData.showThankYouPage = false;
@@ -432,7 +451,10 @@ namespace Contensive.FormWidget.Models.View {
                                     formQuestionEditLink = fieldEditLink,
                                     formQuestionEditWrapperClass = resultViewData.isEditing ? "ccEditWrapper" : "",
                                     invalidAnswer = savedAnswers_Page_Question.invalidAnswer,
-                                    isReadOnly = isMultipagePreviewMode
+                                    isReadOnly = isMultipagePreviewMode,
+                                    questionHtmlId = $"fq{question.id}",
+                                    classQuestionDraggable = isMultipagePreviewMode ? "formQuestionDraggable" : "",
+                                    includeDragHandle = isMultipagePreviewMode
                                 });
                                 break;
                             }
@@ -460,7 +482,10 @@ namespace Contensive.FormWidget.Models.View {
                                     formQuestionEditLink = fieldEditLink,
                                     formQuestionEditWrapperClass = resultViewData.isEditing ? "ccEditWrapper" : "",
                                     invalidAnswer = savedAnswers_Page_Question.invalidAnswer,
-                                    isReadOnly = isMultipagePreviewMode
+                                    isReadOnly = isMultipagePreviewMode,
+                                    questionHtmlId = $"fq{question.id}",
+                                    classQuestionDraggable = isMultipagePreviewMode ? "formQuestionDraggable" : "",
+                                    includeDragHandle = isMultipagePreviewMode
                                 });
                                 break;
                             }
@@ -488,7 +513,10 @@ namespace Contensive.FormWidget.Models.View {
                                     formQuestionEditLink = fieldEditLink,
                                     formQuestionEditWrapperClass = resultViewData.isEditing ? "ccEditWrapper" : "",
                                     invalidAnswer = savedAnswers_Page_Question.invalidAnswer,
-                                    isReadOnly = isMultipagePreviewMode
+                                    isReadOnly = isMultipagePreviewMode,
+                                    questionHtmlId = $"fq{question.id}",
+                                    classQuestionDraggable = isMultipagePreviewMode ? "formQuestionDraggable" : "",
+                                    includeDragHandle = isMultipagePreviewMode
                                 });
                                 break;
                             }
@@ -516,7 +544,10 @@ namespace Contensive.FormWidget.Models.View {
                                     formQuestionEditLink = fieldEditLink,
                                     formQuestionEditWrapperClass = resultViewData.isEditing ? "ccEditWrapper" : "",
                                     invalidAnswer = savedAnswers_Page_Question.invalidAnswer,
-                                    isReadOnly = isMultipagePreviewMode
+                                    isReadOnly = isMultipagePreviewMode,
+                                    questionHtmlId = $"fq{question.id}",
+                                    classQuestionDraggable = isMultipagePreviewMode ? "formQuestionDraggable" : "",
+                                    includeDragHandle = isMultipagePreviewMode
                                 });
                                 break;
                             }
@@ -546,7 +577,10 @@ namespace Contensive.FormWidget.Models.View {
                                     formQuestionEditLink = fieldEditLink,
                                     formQuestionEditWrapperClass = resultViewData.isEditing ? "ccEditWrapper" : "",
                                     invalidAnswer = savedAnswers_Page_Question.invalidAnswer,
-                                    isReadOnly = isMultipagePreviewMode
+                                    isReadOnly = isMultipagePreviewMode,
+                                    questionHtmlId = $"fq{question.id}",
+                                    classQuestionDraggable = isMultipagePreviewMode ? "formQuestionDraggable" : "",
+                                    includeDragHandle = isMultipagePreviewMode
                                 });
                                 break;
                             }
@@ -574,7 +608,10 @@ namespace Contensive.FormWidget.Models.View {
                                     formQuestionEditLink = fieldEditLink,
                                     formQuestionEditWrapperClass = resultViewData.isEditing ? "ccEditWrapper" : "",
                                     invalidAnswer = savedAnswers_Page_Question.invalidAnswer,
-                                    isReadOnly = isMultipagePreviewMode
+                                    isReadOnly = isMultipagePreviewMode,
+                                    questionHtmlId = $"fq{question.id}",
+                                    classQuestionDraggable = isMultipagePreviewMode ? "formQuestionDraggable" : "",
+                                    includeDragHandle = isMultipagePreviewMode
                                 });
                                 break;
                             }
@@ -592,7 +629,11 @@ namespace Contensive.FormWidget.Models.View {
                     resetButton = !form.addResetButton ? "" : string.IsNullOrEmpty(form.resetButtonName) ? "Reset" : form.resetButtonName,
                     submitButton = page != resultViewData.pageList.Last() ? "" : string.IsNullOrEmpty(form.submitButtonName) ? "Submit" : form.submitButtonName,
                     continueButton = page == resultViewData.pageList.Last() ? "" : string.IsNullOrEmpty(form.continueButtonName) ? "Continue" : form.continueButtonName,
-                    saveButton = !form.useUserProperty ? "" : string.IsNullOrEmpty(form.saveButtonName) ? "Save" : form.saveButtonName
+                    saveButton = !form.useUserProperty ? "" : string.IsNullOrEmpty(form.saveButtonName) ? "Save" : form.saveButtonName,
+                    pageHtmlId = $"fp{page.id}",
+                    classPageDraggable = isMultipagePreviewMode ? "formPageDraggable" : "",
+                    includeDragHandle = isMultipagePreviewMode,
+                    questionSortableId = $"questionSortable{page.id}"
                 });
                 if (!resultViewData.isMultipagePreviewMode) {
                     //
@@ -601,13 +642,21 @@ namespace Contensive.FormWidget.Models.View {
                 }
             }
             resultViewData.formPageAddLink = cp.Content.GetAddLink(FormPageModel.tableMetadata.contentName, "formid=" + form.id, false, resultViewData.isEditing);
+            resultViewData.pageSortableId = $"pageSortable{form.id}";
+            //
+            // -- when editing, allow admin to change the form selection
+            if (isMultipagePreviewMode && isEditing) {
+                resultViewData.showChangeFormView = true;
+                populateFormSelections(cp, resultViewData, form.id);
+            }
             return resultViewData;
         }
 
-        private static void populateFormSelections(CPBaseClass cp, FormWidgetViewModel asdf) {
+        private static void populateFormSelections(CPBaseClass cp, FormWidgetViewModel asdf, int currentFormId = 0) {
             using (DataTable dt = cp.Db.ExecuteQuery("select id, name from ccForms order by name")) {
                 foreach (DataRow row in dt.Rows) {
-                    asdf._selectOptions.Add(new NameValueSelected(cp.Utils.EncodeText(row["name"]), cp.Utils.EncodeInteger(row["id"]).ToString(), false));
+                    int formId = cp.Utils.EncodeInteger(row["id"]);
+                    asdf.selectOptions.Add(new NameValueSelected(cp.Utils.EncodeText(row["name"]), formId.ToString(), formId == currentFormId));
                 }
             }
         }
@@ -1320,6 +1369,11 @@ namespace Contensive.FormWidget.Models.View {
                     if (form.joingroupid != 0) {
                         cp.Group.AddUser(form.joingroupid, cp.User.Id);
                     }
+                    //
+                    // -- Signal form completion to the hosting addon (e.g. membership application).
+                    // -- The hosting addon checks this doc property to know the form wizard finished.
+                    // -- This property must always be set when the form is completed and cannot be disabled.
+                    cp.Doc.SetProperty("formwizardcomplete", "true");
                 }
 
 

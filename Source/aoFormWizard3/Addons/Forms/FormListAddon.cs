@@ -96,9 +96,10 @@ namespace Contensive.FormWidget.Addons {
                 //
                 // -- init layoutbuilder
                 LayoutBuilderListBaseClass layoutBuilder = cp.AdminUI.CreateLayoutBuilderList();
+                layoutBuilder.callbackAddonGuid = guidAddon;
                 //
                 // -- init parent portal data
-                // 
+                //
                 // -- setup column headers
                 layoutBuilder.addColumn();
                 layoutBuilder.columnCaption = "&nbsp;";
@@ -163,7 +164,6 @@ namespace Contensive.FormWidget.Addons {
                 // -- setup layout
                 layoutBuilder.title = "Form List";
                 layoutBuilder.description = "Forms are created by dropping the Form Widget on a page or by creating a form here, and adding Form-Pages, and Form-Questions to the form. Each time a user submits the form online it creates a Form Response.";
-                layoutBuilder.callbackAddonGuid = guidAddon;
                 layoutBuilder.paginationRecordAlias = "forms";
                 layoutBuilder.failMessage = userErrorMessage;
                 layoutBuilder.allowDownloadButton = true;

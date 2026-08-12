@@ -83,18 +83,37 @@
 						</div>
 
 						{{#showFormPages}}
+						<div id="{{pageSortableId}}" class="formPageSortable">
 							{{#formPageList}}
 								<!-- form page -->
-								{{{formPageEditLink}}}
-								<div class="{{formPageEditWrapperClass}} mb-4">
+								<div id="{{pageHtmlId}}" class="{{classPageDraggable}} mb-4">
+									{{#includeDragHandle}}
+									<div class="d-flex align-items-center mb-1">
+										<span class="px-1" style="cursor:grab;">
+											<i title="drag and drop to reorder page" class="fas fa-grip-vertical fa-lg formPageDragHandle"></i>
+										</span>
+										<span class="text-muted small">drag to reorder page</span>
+									</div>
+									{{/includeDragHandle}}
+									{{{formPageEditLink}}}
+									<div class="{{formPageEditWrapperClass}}">
 									<div class="card rounded-3">
 										{{#pageDescription}}
 											<div id="" class="card-header text-center p-4 formWidgetPageHeader">{{{pageDescription}}}</div>
 										{{/pageDescription}}
 										<div class="card-body px-5">
+										<div id="{{questionSortableId}}" class="formQuestionSortable">
 											{{#pageQuestionList}}
-												{{{formQuestionEditLink}}}
-												<div class="{{formQuestionEditWrapperClass}}">
+												<div id="{{questionHtmlId}}" class="{{classQuestionDraggable}}">
+													{{#includeDragHandle}}
+													<div class="d-flex align-items-center">
+														<span class="px-1" style="cursor:grab;">
+															<i title="drag and drop to reorder question" class="fas fa-grip-vertical formQuestionDragHandle"></i>
+														</span>
+													</div>
+													{{/includeDragHandle}}
+													{{{formQuestionEditLink}}}
+													<div class="{{formQuestionEditWrapperClass}}">
 													{{#isDefault}}
 														{{#headline}}<h2 class="border-bottom pb-3 pt-5 mb-4">{{headline}}</h2>{{/headline}}
 														<div class="mb-4">
@@ -203,8 +222,10 @@
 																{{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
 															</div>
 													{{/isSelect}}
+													</div>
 												</div>
 											{{/pageQuestionList}}
+										</div>
 
 											{{{formQuestionAddLink}}}
 
@@ -237,21 +258,55 @@
 											</div>
 										{{/isMultipagePreviewMode}}
 									</div>
+									</div>
 								</div>
 								<input type=hidden name=srcPageId value="{{srcPageId}}">
-								{{/formPageList}}									
+								{{/formPageList}}
+						</div>
 							{{{formPageAddLink}}}
 						{{/showFormPages}}
 
 						{{#showThankYouPage}}
-							<div class="card rounded-3">						
+							<div class="card rounded-3" data-formwidget-complete="true">
 								<div class="card card-body px-5">
 									<div class="my-5 pt-2">
 										{{{ThankYouCopy}}}
 									</div>
-								</div>		
-							</div>	
+								</div>
+							</div>
 						{{/showThankYouPage}}
+
+						{{#showChangeFormView}}
+							<div class="card rounded-3 mt-4">
+								<div class="card-header bg-white p-5">
+									<div class="alert alert-warning mb-0" role="alert">
+										<b>Administrator:</b>
+										<p>Change the form assigned to this widget.</p>
+									</div>
+								</div>
+								<div class="card-body p-5">
+									<div class="mb-5">
+										{{#hasSelectOptions}}
+											<h4 class="fw-bold border-bottom mb-4 pb-3">Select a Different Form</h4>
+											<select class="form-select" name="setFormWizardFormId" aria-label="Select Form">
+												{{#selectOptions}}
+													<option value="{{value}}" {{#selected}}selected{{/selected}}>{{name}}</option>
+												{{/selectOptions}}
+											</select>
+										{{/hasSelectOptions}}
+									</div>
+								</div>
+								<div class="card-footer rounded-bottom bg-white px-5 py-3">
+									<div class="d-flex justify-content-between">
+										<div class="me-3">
+											{{#hasSelectOptions}}<input type="submit" name="button" value="Select Form" class="btn btn-outline-primary me-3">{{/hasSelectOptions}}
+											<input type="submit" name="button" value="Create Form" class="btn btn-primary">
+										</div>
+									</div>
+									{{{inputHiddenTags}}}
+								</div>
+							</div>
+						{{/showChangeFormView}}
 
 					</div>
 				{{/showDisplayFormView}}
@@ -333,12 +388,23 @@
 			console.log("submitFormWidget, baseAjaxUrl ["+baseAjaxUrl+"]");
 			$.ajax({
 				type: 'POST',
-      			url: '/FormWidgetSubmit', 
+      			url: '/FormWidgetSubmit',
       			data: formData,
             	processData: false,
                 contentType: false,
-				success: function(result){					
+				success: function(result){
 					$("#"+workingDiv).html(result);
+					//
+					// -- When the form is complete, redirect back to the current page.
+					// -- This triggers a full page request so any hosting addon (e.g. membership application)
+					// -- can detect completion through the "formwizardcomplete" doc property
+					// -- set by the form widget during server-side execution.
+					//
+					if ($('#'+workingDiv).find('[data-formwidget-complete]').length > 0) {
+						deleteDiv(workingDiv);
+						window.location.href = window.location.pathname + window.location.search;
+						return;
+					}
 					$('#{{formHtmlId}}').html($('#'+workingDiv+' form').html());
 					deleteDiv(workingDiv);
 					$('#{{formHtmlId}}').unblock();
@@ -372,3 +438,79 @@
 		}	})();
 
 </script>
+{{#isMultipagePreviewMode}}
+<script>
+	//
+	// -- drag and drop sortable for pages and questions in multipage preview mode
+	(function() {
+		if (typeof saveFormPageSortable === "undefined") {
+			function saveFormPageSortable(listId) {
+				var e = document.getElementById(listId);
+				var s = "";
+				for (var i = 0; i < e.children.length; i++) {
+					var c = e.children[i];
+					if (c.id) {
+						if (s.length > 0) { s += ","; }
+						s += c.id;
+					}
+				}
+				jQuery.ajax({
+					dataType: "json",
+					type: "Get",
+					url: "/SaveFormPageSortable?sortlist=" + s,
+					success: function(data) {},
+					error: function(data) { console.log("error saving form page sort order"); }
+				});
+			}
+			window.saveFormPageSortable = saveFormPageSortable;
+		}
+		if (typeof saveFormQuestionSortable === "undefined") {
+			function saveFormQuestionSortable(listId) {
+				var e = document.getElementById(listId);
+				var s = "";
+				for (var i = 0; i < e.children.length; i++) {
+					var c = e.children[i];
+					if (c.id) {
+						if (s.length > 0) { s += ","; }
+						s += c.id;
+					}
+				}
+				jQuery.ajax({
+					dataType: "json",
+					type: "Get",
+					url: "/SaveFormQuestionSortable?sortlist=" + s,
+					success: function(data) {},
+					error: function(data) { console.log("error saving form question sort order"); }
+				});
+			}
+			window.saveFormQuestionSortable = saveFormQuestionSortable;
+		}
+		document.addEventListener("DOMContentLoaded", function() {
+			//
+			// -- page sortable
+			jQuery("#{{pageSortableId}}").sortable({
+				items: "> div.formPageDraggable",
+				handle: ".formPageDragHandle",
+				tolerance: "pointer",
+				placeholder: "mb-4",
+				forcePlaceholderSize: true,
+				stop: function(event, ui) {
+					saveFormPageSortable(jQuery(this).attr("id"));
+				}
+			});
+			//
+			// -- question sortable (one per page)
+			jQuery(".formQuestionSortable").sortable({
+				items: "> div.formQuestionDraggable",
+				handle: ".formQuestionDragHandle",
+				tolerance: "pointer",
+				placeholder: "mb-4",
+				forcePlaceholderSize: true,
+				stop: function(event, ui) {
+					saveFormQuestionSortable(jQuery(this).attr("id"));
+				}
+			});
+		});
+	})();
+</script>
+{{/isMultipagePreviewMode}}

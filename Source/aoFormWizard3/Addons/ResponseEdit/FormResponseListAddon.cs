@@ -88,7 +88,8 @@ namespace Contensive.FormWidget.Addons {
                 //
                 // -- init layoutbuilder
                 LayoutBuilderListBaseClass layoutBuilder = cp.AdminUI.CreateLayoutBuilderList();
-                // 
+                layoutBuilder.callbackAddonGuid = guidAddon;
+                //
                 // -- setup column headers
                 layoutBuilder.addColumn();
                 layoutBuilder.columnCaption = "&nbsp;";
@@ -270,7 +271,6 @@ namespace Contensive.FormWidget.Addons {
                     This is a list of all responses to a form. A form must be selected. If no form is selected, the most recent form is used.
                     Forms are created by dropping the Form Widget on a page or by creating a form here, and adding Form-Pages, and Form-Questions to the form. 
                     Each time a user submits the form online it creates a Form Response.";
-                layoutBuilder.callbackAddonGuid = guidAddon;
                 layoutBuilder.paginationRecordAlias = "forms";
                 layoutBuilder.failMessage = errorMessage;
                 layoutBuilder.allowDownloadButton = true;

@@ -396,7 +396,15 @@
 		<DotNetClass><![CDATA[Contensive.FormWidget.Addons.SetFormSubmissionScoreRemote]]></DotNetClass>
 		<RemoteMethod>yes</RemoteMethod>
 	</Addon>
-	<!-- 
+	<Addon name="SaveFormPageSortable" guid="{A1B2C3D4-E5F6-4A7B-8C9D-0E1F2A3B4C5D}" type="Add-on">
+		<DotNetClass><![CDATA[Contensive.FormWidget.Addons.SaveFormPageSortableRemote]]></DotNetClass>
+		<RemoteMethod>yes</RemoteMethod>
+	</Addon>
+	<Addon name="SaveFormQuestionSortable" guid="{D4C3B2A1-6F5E-7B4A-9D8C-1F0E3A2B5C4D}" type="Add-on">
+		<DotNetClass><![CDATA[Contensive.FormWidget.Addons.SaveFormQuestionSortableRemote]]></DotNetClass>
+		<RemoteMethod>yes</RemoteMethod>
+	</Addon>
+	<!--
 		upgrade old form wizard
 	-->
 	<Addon name="Legacy Form Widget" guid="{eab0f274-5a24-458f-bf1d-1ecd10833ff3}" type="Add-on">
