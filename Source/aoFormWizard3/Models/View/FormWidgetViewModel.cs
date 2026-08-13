@@ -453,8 +453,8 @@ namespace Contensive.FormWidget.Models.View {
                                     invalidAnswer = savedAnswers_Page_Question.invalidAnswer,
                                     isReadOnly = isMultipagePreviewMode,
                                     questionHtmlId = $"fq{question.id}",
-                                    classQuestionDraggable = isMultipagePreviewMode ? "formQuestionDraggable" : "",
-                                    includeDragHandle = isMultipagePreviewMode
+                                    classQuestionDraggable = isMultipagePreviewMode && isEditing ? "formQuestionDraggable" : "",
+                                    includeDragHandle = isMultipagePreviewMode && isEditing
                                 });
                                 break;
                             }
@@ -484,8 +484,8 @@ namespace Contensive.FormWidget.Models.View {
                                     invalidAnswer = savedAnswers_Page_Question.invalidAnswer,
                                     isReadOnly = isMultipagePreviewMode,
                                     questionHtmlId = $"fq{question.id}",
-                                    classQuestionDraggable = isMultipagePreviewMode ? "formQuestionDraggable" : "",
-                                    includeDragHandle = isMultipagePreviewMode
+                                    classQuestionDraggable = isMultipagePreviewMode && isEditing ? "formQuestionDraggable" : "",
+                                    includeDragHandle = isMultipagePreviewMode && isEditing
                                 });
                                 break;
                             }
@@ -515,8 +515,8 @@ namespace Contensive.FormWidget.Models.View {
                                     invalidAnswer = savedAnswers_Page_Question.invalidAnswer,
                                     isReadOnly = isMultipagePreviewMode,
                                     questionHtmlId = $"fq{question.id}",
-                                    classQuestionDraggable = isMultipagePreviewMode ? "formQuestionDraggable" : "",
-                                    includeDragHandle = isMultipagePreviewMode
+                                    classQuestionDraggable = isMultipagePreviewMode && isEditing ? "formQuestionDraggable" : "",
+                                    includeDragHandle = isMultipagePreviewMode && isEditing
                                 });
                                 break;
                             }
@@ -546,8 +546,8 @@ namespace Contensive.FormWidget.Models.View {
                                     invalidAnswer = savedAnswers_Page_Question.invalidAnswer,
                                     isReadOnly = isMultipagePreviewMode,
                                     questionHtmlId = $"fq{question.id}",
-                                    classQuestionDraggable = isMultipagePreviewMode ? "formQuestionDraggable" : "",
-                                    includeDragHandle = isMultipagePreviewMode
+                                    classQuestionDraggable = isMultipagePreviewMode && isEditing ? "formQuestionDraggable" : "",
+                                    includeDragHandle = isMultipagePreviewMode && isEditing
                                 });
                                 break;
                             }
@@ -579,8 +579,8 @@ namespace Contensive.FormWidget.Models.View {
                                     invalidAnswer = savedAnswers_Page_Question.invalidAnswer,
                                     isReadOnly = isMultipagePreviewMode,
                                     questionHtmlId = $"fq{question.id}",
-                                    classQuestionDraggable = isMultipagePreviewMode ? "formQuestionDraggable" : "",
-                                    includeDragHandle = isMultipagePreviewMode
+                                    classQuestionDraggable = isMultipagePreviewMode && isEditing ? "formQuestionDraggable" : "",
+                                    includeDragHandle = isMultipagePreviewMode && isEditing
                                 });
                                 break;
                             }
@@ -610,8 +610,8 @@ namespace Contensive.FormWidget.Models.View {
                                     invalidAnswer = savedAnswers_Page_Question.invalidAnswer,
                                     isReadOnly = isMultipagePreviewMode,
                                     questionHtmlId = $"fq{question.id}",
-                                    classQuestionDraggable = isMultipagePreviewMode ? "formQuestionDraggable" : "",
-                                    includeDragHandle = isMultipagePreviewMode
+                                    classQuestionDraggable = isMultipagePreviewMode && isEditing ? "formQuestionDraggable" : "",
+                                    includeDragHandle = isMultipagePreviewMode && isEditing
                                 });
                                 break;
                             }
@@ -631,8 +631,8 @@ namespace Contensive.FormWidget.Models.View {
                     continueButton = page == resultViewData.pageList.Last() ? "" : string.IsNullOrEmpty(form.continueButtonName) ? "Continue" : form.continueButtonName,
                     saveButton = !form.useUserProperty ? "" : string.IsNullOrEmpty(form.saveButtonName) ? "Save" : form.saveButtonName,
                     pageHtmlId = $"fp{page.id}",
-                    classPageDraggable = isMultipagePreviewMode ? "formPageDraggable" : "",
-                    includeDragHandle = isMultipagePreviewMode,
+                    classPageDraggable = isMultipagePreviewMode && isEditing ? "formPageDraggable" : "",
+                    includeDragHandle = isMultipagePreviewMode && isEditing,
                     questionSortableId = $"questionSortable{page.id}"
                 });
                 if (!resultViewData.isMultipagePreviewMode) {

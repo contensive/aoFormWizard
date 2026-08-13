@@ -632,13 +632,9 @@
 		</Field>
 		
 		<!--
-			deprecated
+			formsetid field removed - was deprecated and caused admin edit errors because the column
+			does not exist in the ccFormPages table (replaced by formid)
 		-->
-		<Field Name="formsetid" active="false" AdminOnly="False" Authorable="false" Caption="Form Set (deprecated)" DeveloperOnly="False" EditSortPriority="1000" FieldType="Lookup" HTMLContent="False" IndexColumn="10" IndexSortDirection="" IndexSortOrder="99" IndexWidth="40" RedirectID="" RedirectPath="" Required="true" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" EditTab="Form" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="Form Widgets" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
-			<HelpDefault>
-				<![CDATA[Select the FormSet. A FormSet is an online form placed on a page. It can have one or more pages (forms).]]>
-			</HelpDefault>
-		</Field>
 		<Field Name="body" active="True" Authorable="false" Caption="body (deprecated)" FieldType="HTML" EditTab="deprecated" AdminOnly="true" DeveloperOnly="False" EditSortPriority="9999" HTMLContent="True" IndexColumn="-1" IndexSortDirection="" IndexSortOrder="0" IndexWidth="0" RedirectID="" RedirectPath="" Required="False" TextBuffered="False" UniqueName="False" DefaultValue="" RSSTitle="False" RSSDescription="False" MemberSelectGroup="" Scramble="False" LookupList="" NotEditable="False" Password="False" ReadOnly="False" ManyToManyRulePrimaryField="" ManyToManyRuleSecondaryField="" IsModified="False" IsBaseField="False" LookupContent="" RedirectContent="" ManyToManyContent="" ManyToManyRuleContent="" >
 			<HelpDefault>
 				<![CDATA[ ]]>

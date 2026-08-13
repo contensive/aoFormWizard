@@ -17,7 +17,7 @@ namespace Contensive.FormWidget.Addons {
             try {
                 //
                 // -- version used to upgrade content
-                const int version = 7;
+                const int version = 8;
                 int buildVersion = CP.Site.GetInteger("Form Wizard Version", version);
                 CP.Site.SetProperty("Form Wizard Version", version);
                 //
@@ -247,6 +247,13 @@ namespace Contensive.FormWidget.Addons {
                     // -- remove all contentcategoryId
                     CP.Db.ExecuteNonQuery($"delete from ccfields where name='contentcategoryid'");
                     CP.Site.SetProperty("Form Wizard Version", 6);
+                }
+                if (buildVersion < 8) {
+                    //
+                    // -- remove deprecated formsetid field from Form Pages content definition
+                    // -- the column does not exist in ccFormPages (replaced by formid) and causes admin edit errors
+                    CP.Db.ExecuteNonQuery($"delete from ccfields where contentid={CP.Content.GetID("Form Pages")} and name='formsetid'");
+                    CP.Site.SetProperty("Form Wizard Version", 8);
                 }
                 CP.Site.SetProperty("Form Wizard Version", version);
                 //

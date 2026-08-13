@@ -132,31 +132,47 @@ namespace Contensive.FormWidget.Addons {
                 layoutBuilder.columnCellClass = AfwStyles.afwTextAlignCenter;
                 layoutBuilder.columnVisible = true;
                 layoutBuilder.columnDownloadable = false;
-                // 
+                //
                 layoutBuilder.addColumn();
-                layoutBuilder.columnCaption = "Form Question";
-                layoutBuilder.columnName = "FormQuestion";
-                layoutBuilder.columnCaptionClass = AfwStyles.afwWidth400px + AfwStyles.afwTextAlignLeft;
+                layoutBuilder.columnCaption = "Question Name";
+                layoutBuilder.columnName = "QuestionName";
+                layoutBuilder.columnCaptionClass = AfwStyles.afwTextAlignLeft;
                 layoutBuilder.columnCellClass = AfwStyles.afwTextAlignLeft;
                 layoutBuilder.columnVisible = true;
                 layoutBuilder.columnDownloadable = true;
-                // 
+                //
+                layoutBuilder.addColumn();
+                layoutBuilder.columnCaption = "Question";
+                layoutBuilder.columnName = "Question";
+                layoutBuilder.columnCaptionClass = AfwStyles.afwTextAlignLeft;
+                layoutBuilder.columnCellClass = AfwStyles.afwTextAlignLeft;
+                layoutBuilder.columnVisible = true;
+                layoutBuilder.columnDownloadable = true;
+                //
+                layoutBuilder.addColumn();
+                layoutBuilder.columnCaption = "Type";
+                layoutBuilder.columnName = "Type";
+                layoutBuilder.columnCaptionClass = AfwStyles.afwTextAlignLeft;
+                layoutBuilder.columnCellClass = AfwStyles.afwTextAlignLeft;
+                layoutBuilder.columnVisible = true;
+                layoutBuilder.columnDownloadable = true;
+                //
+                layoutBuilder.addColumn();
+                layoutBuilder.columnCaption = "Required";
+                layoutBuilder.columnName = "Required";
+                layoutBuilder.columnCaptionClass = AfwStyles.afwTextAlignLeft;
+                layoutBuilder.columnCellClass = AfwStyles.afwTextAlignLeft;
+                layoutBuilder.columnVisible = true;
+                layoutBuilder.columnDownloadable = true;
+                //
                 layoutBuilder.addColumn();
                 layoutBuilder.columnCaption = "Form Page";
                 layoutBuilder.columnName = "FormPage";
-                layoutBuilder.columnCaptionClass = AfwStyles.afwWidth400px + AfwStyles.afwTextAlignLeft;
+                layoutBuilder.columnCaptionClass = AfwStyles.afwTextAlignLeft;
                 layoutBuilder.columnCellClass = AfwStyles.afwTextAlignLeft;
                 layoutBuilder.columnVisible = true;
                 layoutBuilder.columnDownloadable = true;
-                // 
-                layoutBuilder.addColumn();
-                layoutBuilder.columnCaption = "Form";
-                layoutBuilder.columnName = "Form";
-                layoutBuilder.columnCaptionClass = AfwStyles.afwWidth400px + AfwStyles.afwTextAlignLeft;
-                layoutBuilder.columnCellClass = AfwStyles.afwTextAlignLeft;
-                layoutBuilder.columnVisible = true;
-                layoutBuilder.columnDownloadable = true;
-                // 
+                //
                 layoutBuilder.addColumn();
                 layoutBuilder.columnCaption = "Sort Order";
                 layoutBuilder.columnName = "SortOrder";
@@ -164,7 +180,7 @@ namespace Contensive.FormWidget.Addons {
                 layoutBuilder.columnCellClass = AfwStyles.afwWidth100px + AfwStyles.afwTextAlignLeft;
                 layoutBuilder.columnVisible = true;
                 layoutBuilder.columnDownloadable = true;
-                // 
+                //
                 // -- add filters
                 //
                 // -- get data
@@ -182,17 +198,22 @@ namespace Contensive.FormWidget.Addons {
                     //
                     layoutBuilder.setCell($"<input type=checkbox name=\"row{rowPtr}\" value=\"{row.formPageId}\">");
                     //
-                    // -- form question
+                    // -- question name
                     string formQuestionEditLink = cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, FormQuestionEditAddon.guidPortalFeature) + $"&{Constants.rnFormId}={row.formId}&{Constants.rnFormPageId}={row.formPageId}&{Constants.rnFormQuestionId}={row.formQuestionId}";
                     layoutBuilder.setCell($"<a href=\"{formQuestionEditLink}\">{row.formQuestionName}</a>", row.formQuestionName);
+                    //
+                    // -- question (caption)
+                    layoutBuilder.setCell(row.formQuestionCaption);
+                    //
+                    // -- type
+                    layoutBuilder.setCell(FormQuestionModel.getInputTypeName(row.formQuestionInputTypeId));
+                    //
+                    // -- required
+                    layoutBuilder.setCell(row.formQuestionRequired ? "Yes" : "No");
                     //
                     // -- form page
                     string formPageEditLink = cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, FormQuestionEditAddon.guidPortalFeature) + $"&{Constants.rnFormId}={row.formId}&{Constants.rnFormPageId}={row.formPageId}";
                     layoutBuilder.setCell($"<a href=\"{formPageEditLink}\">{row.formPageName}</a>", row.formPageName);
-                    // 
-                    // -- form widget 
-                    string formLink = cp.AdminUI.GetPortalFeatureLink(Constants.guidPortalForms, FormEditAddon.guidPortalFeature) + $"&{Constants.rnFormId}={row.formId}";
-                    layoutBuilder.setCell($"<a href=\"{formLink}\">{row.formName}</a>", row.formName);
                     //
                     // -- sort order
                     layoutBuilder.setCell(row.formQuestionSortOrder);

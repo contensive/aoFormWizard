@@ -16,9 +16,12 @@ namespace Contensive.FormWidget.Models.Domain {
         public int rowCount { get; set; } = 0;
         //
         public class RowDataModel {
-            // 
+            //
             public int formQuestionId { get; set; }
             public string formQuestionName { get; set; }
+            public string formQuestionCaption { get; set; }
+            public int formQuestionInputTypeId { get; set; }
+            public bool formQuestionRequired { get; set; }
             public string formQuestionSortOrder { get; set; }
             public int formPageId { get; set; }
             public string formPageName { get; set; }
@@ -60,7 +63,7 @@ namespace Contensive.FormWidget.Models.Domain {
                 // -- output data
                 string sql = @$"
                     select
-                        q.id as formQuestionId,q.name as formQuestionName,q.sortOrder as formQuestionSortOrder,
+                        q.id as formQuestionId,q.name as formQuestionName,q.caption as formQuestionCaption,q.inputTypeId as formQuestionInputTypeId,q.required as formQuestionRequired,q.sortOrder as formQuestionSortOrder,
                         p.id as formPageId, p.name as formPageName, p.sortOrder as formPageSortOrder,
                         f.id as formId, f.name as formName
                     from 
@@ -79,6 +82,9 @@ namespace Contensive.FormWidget.Models.Domain {
                         rowData.Add(new RowDataModel() {
                             formQuestionId = cp.Utils.EncodeInteger(row["formQuestionId"]),
                             formQuestionName = cp.Utils.EncodeText(row["formQuestionName"]),
+                            formQuestionCaption = cp.Utils.EncodeText(row["formQuestionCaption"]),
+                            formQuestionInputTypeId = cp.Utils.EncodeInteger(row["formQuestionInputTypeId"]),
+                            formQuestionRequired = cp.Utils.EncodeBoolean(row["formQuestionRequired"]),
                             formQuestionSortOrder = cp.Utils.EncodeText(row["formQuestionSortOrder"]),
                             formPageId = cp.Utils.EncodeInteger(row["formPageId"]),
                             formPageName = cp.Utils.EncodeText(row["formPageName"]),
