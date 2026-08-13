@@ -117,7 +117,7 @@
 										{{#pageDescription}}
 											<div id="" class="card-header text-center p-4 formWidgetPageHeader">{{{pageDescription}}}</div>
 										{{/pageDescription}}
-										<div class="card-body px-5">
+										<div class="card-body px-5 pt-4 pb-0">
 										<div id="{{questionSortableId}}" class="formQuestionSortable">
 											{{#pageQuestionList}}
 												<div id="{{questionHtmlId}}" class="{{classQuestionDraggable}}">
@@ -254,19 +254,19 @@
 										{{^isMultipagePreviewMode}}
 											<div class="card-footer px-5 py-3">
 												{{#previousButton}}
-													<button class="btn btn-outline-primary js-formWidgetButton" name="button" type="submit" value="{{previousButton}}">{{previousButton}}</button>
+													<button class="btn btn-outline-primary me-3 js-formWidgetButton" name="button" type="submit" value="{{previousButton}}">{{previousButton}}</button>
 												{{/previousButton}}
 												{{#resetButton}}
-													<button class="btn btn-danger js-formWidgetButton" name="button" type="submit" value="{{resetButton}}">{{resetButton}}</button>
+													<button class="btn btn-danger me-3 js-formWidgetButton" name="button" type="submit" value="{{resetButton}}">{{resetButton}}</button>
 												{{/resetButton}}
 												{{#continueButton}}
-													<button class="btn btn-primary js-formWidgetButton" name="button" type="submit" value="{{continueButton}}">{{continueButton}}</button>
+													<button class="btn btn-primary me-3 js-formWidgetButton" name="button" type="submit" value="{{continueButton}}">{{continueButton}}</button>
 												{{/continueButton}}
 												{{#saveButton}}
-													<button class="btn btn-primary js-formWidgetButton" name="button" type="submit" value="{{saveButton}}">{{saveButton}}</button>
+													<button class="btn btn-primary me-3 js-formWidgetButton" name="button" type="submit" value="{{saveButton}}">{{saveButton}}</button>
 												{{/saveButton}}
 												{{#submitButton}}
-													<button class="btn btn-primary js-formWidgetButton" name="button" type="submit" value="{{submitButton}}">{{submitButton}}</button>
+													<button class="btn btn-primary me-3 js-formWidgetButton" name="button" type="submit" value="{{submitButton}}">{{submitButton}}</button>
 												{{/submitButton}}
 											</div>
 										{{/isMultipagePreviewMode}}

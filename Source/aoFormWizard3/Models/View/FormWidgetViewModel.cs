@@ -629,7 +629,7 @@ namespace Contensive.FormWidget.Models.View {
                     resetButton = !form.addResetButton ? "" : string.IsNullOrEmpty(form.resetButtonName) ? "Reset" : form.resetButtonName,
                     submitButton = page != resultViewData.pageList.Last() ? "" : string.IsNullOrEmpty(form.submitButtonName) ? "Submit" : form.submitButtonName,
                     continueButton = page == resultViewData.pageList.Last() ? "" : string.IsNullOrEmpty(form.continueButtonName) ? "Continue" : form.continueButtonName,
-                    saveButton = !form.useUserProperty ? "" : string.IsNullOrEmpty(form.saveButtonName) ? "Save" : form.saveButtonName,
+                    saveButton = !form.useUserProperty || resultViewData.pageList.Count == 1 ? "" : string.IsNullOrEmpty(form.saveButtonName) ? "Save" : form.saveButtonName,
                     pageHtmlId = $"fp{page.id}",
                     classPageDraggable = isMultipagePreviewMode && isEditing ? "formPageDraggable" : "",
                     includeDragHandle = isMultipagePreviewMode && isEditing,
@@ -942,7 +942,7 @@ namespace Contensive.FormWidget.Models.View {
                             resetButton = !form.addResetButton ? "" : string.IsNullOrEmpty(form.resetButtonName) ? "Reset" : form.resetButtonName,
                             submitButton = page != pageList.Last() ? "" : string.IsNullOrEmpty(form.submitButtonName) ? "Submit" : form.submitButtonName,
                             continueButton = page == pageList.Last() ? "" : string.IsNullOrEmpty(form.continueButtonName) ? "Continue" : form.continueButtonName,
-                            saveButton = !form.useUserProperty ? "" : string.IsNullOrEmpty(form.saveButtonName) ? "Save" : form.saveButtonName
+                            saveButton = !form.useUserProperty || pageList.Count == 1 ? "" : string.IsNullOrEmpty(form.saveButtonName) ? "Save" : form.saveButtonName
                         };
                         formWidgetViewData.formPageList.Add(currentEditingPage);
                     }
