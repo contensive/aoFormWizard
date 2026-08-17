@@ -426,6 +426,17 @@
 						window.location.href = window.location.pathname + window.location.search;
 						return;
 					}
+					//
+					// -- reset any existing recaptcha widgets before replacing DOM to avoid stale state
+					var formEl = document.getElementById('{{formHtmlId}}');
+					if (formEl && typeof grecaptcha !== 'undefined') {
+						var recaptchaContainers = formEl.querySelectorAll('[data-recaptcha-widget-id]');
+						recaptchaContainers.forEach(function(el) {
+							try {
+								grecaptcha.reset(parseInt(el.getAttribute('data-recaptcha-widget-id'), 10));
+							} catch(e) { /* widget may already be gone */ }
+						});
+					}
 					$('#{{formHtmlId}}').html($('#'+workingDiv+' form').html());
 					deleteDiv(workingDiv);
 					$('#{{formHtmlId}}').unblock();

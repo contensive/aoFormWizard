@@ -387,13 +387,19 @@ namespace Contensive.FormWidget.Models.View {
                 if (form.allowRecaptcha && !savedAnswers.recaptchaSuccess && !resultViewData.isMultipagePreviewMode) {
                     //
                     cp.Log.Debug($"aoFormWizard.FormSetViewModel.create(), add recaptcha display");
-                    // 
+                    //
                     resultViewData.allowRecaptcha = form.allowRecaptcha;
                     //const string recaptchaDisplayAddonGuid = "{E9E51C6E-9152-4284-A44F-D3ABC423AB90}";
                     //formViewData.recaptchaHTML = cp.Addon.Execute(recaptchaDisplayAddonGuid);
                     resultViewData.recaptchaHTML = cp.Addon.Execute(Constants.guidAddonRecaptchav2);
                     if (cp.UserError.OK()) {
                         savedAnswers.recaptchaSuccess = true;
+                        //
+                        // -- persist recaptchaSuccess so the widget is not re-rendered on subsequent AJAX requests
+                        if (formResponse != null) {
+                            formResponse.formResponseData = cp.JSON.Serialize(savedAnswers);
+                            formResponse.save(cp);
+                        }
                     }
                     //
                     cp.Log.Debug($"aoFormWizard.FormSetViewModel.create(), return recaptchaHTML [{cp.Utils.EncodeHTML(resultViewData.recaptchaHTML)}]");
@@ -719,13 +725,19 @@ namespace Contensive.FormWidget.Models.View {
                     if (form.allowRecaptcha && !formWidgetViewData.isEditing && !savedAnswers.recaptchaSuccess) {
                         //
                         cp.Log.Debug($"aoFormWizard.FormSetViewModel.create(), add recaptcha");
-                        // 
+                        //
                         formWidgetViewData.allowRecaptcha = form.allowRecaptcha;
                         //const string recaptchaDisplayAddonGuid = "{E9E51C6E-9152-4284-A44F-D3ABC423AB90}";
                         //formViewData.recaptchaHTML = cp.Addon.Execute(recaptchaDisplayAddonGuid);
                         formWidgetViewData.recaptchaHTML = cp.Addon.Execute(Constants.guidAddonRecaptchav2);
                         if (cp.UserError.OK()) {
                             savedAnswers.recaptchaSuccess = true;
+                            //
+                            // -- persist recaptchaSuccess so the widget is not re-rendered on subsequent AJAX requests
+                            if (userFormResponse != null) {
+                                userFormResponse.formResponseData = cp.JSON.Serialize(savedAnswers);
+                                userFormResponse.save(cp);
+                            }
                         }
                         //
                         cp.Log.Debug($"aoFormWizard.FormSetViewModel.create(), return recaptchaHTML [{cp.Utils.EncodeHTML(formWidgetViewData.recaptchaHTML)}]");
