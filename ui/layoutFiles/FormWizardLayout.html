@@ -245,7 +245,7 @@
 											{{#allowRecaptcha}}
 												<div class="mb-4">
 													<label class="control-label mb-0">
-														[recaptcha]
+														{{{recaptchaHTML}}}
 													</label>
 												</div>
 											{{/allowRecaptcha}}
@@ -359,23 +359,31 @@
 				{{#allowRecaptcha}}
 					//
 					// -- submit form with Recaptcha
-					if(typeof grecaptcha !== 'undefined'){
-						var response = grecaptcha.getResponse();
-						console.log("form widget submit action, recaptcha");
-						if(response != '0' && response != ''){
+					// -- find the recaptcha widget inside this specific form
+					var formEl = document.getElementById('{{formHtmlId}}');
+					var recaptchaContainer = formEl ? formEl.querySelector('[id^="recaptcha_"]') : null;
+					if (typeof grecaptcha !== 'undefined' && recaptchaContainer) {
+						var widgetIndex = recaptchaContainer.getAttribute('data-recaptcha-widget-id');
+						var response = '';
+						if (widgetIndex !== null) {
+							response = grecaptcha.getResponse(parseInt(widgetIndex, 10));
+						} else {
+							response = grecaptcha.getResponse();
+						}
+						console.log("form widget submit action, recaptcha response: " + response);
+						if (response !== '' && response !== '0') {
 							console.log('recaptcha completed');
 							submitFormWidget(formData, isSaveButton);
-						}else{
-							//recaptcha has not been completed or failed
+						} else {
 							event.preventDefault();
-							alert("Please complete the recptcha");
+							alert("Please complete the recaptcha");
 							return false;
 						}
-					}else{
-					//
-					// -- google recapcha not valid, just submit
-					console.log("form widget submit action, recaptcha failed");
-					submitFormWidget(formData, isSaveButton);
+					} else {
+						//
+						// -- grecaptcha not loaded or widget not found, just submit
+						console.log("form widget submit action, recaptcha not available");
+						submitFormWidget(formData, isSaveButton);
 					}
 				{{/allowRecaptcha}}
 				/*
