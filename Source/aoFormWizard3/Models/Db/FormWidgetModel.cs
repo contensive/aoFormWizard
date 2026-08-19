@@ -23,7 +23,7 @@ namespace Contensive.FormWidget.Models.Db {
             // 
             // -- create default formset
             resultWidget = addDefault<FormWidgetModel>(cp);
-            resultWidget.name = "Form Widget " + resultWidget.id + " added to page " + cp.Doc.PageId + ", " + cp.Doc.PageName;
+            resultWidget.name = $"Form Widget {resultWidget.id}";
             resultWidget.ccguid = settingsGuid;
             resultWidget.save(cp);
             //
@@ -33,7 +33,7 @@ namespace Contensive.FormWidget.Models.Db {
                 //
                 // -- there are no forms, so this is the first, create the sample
                 FormModel form = DbBaseModel.addDefault<FormModel>(cp);
-                form.name = "Form 1 of the form-widget added to page [" + cp.Doc.PageId + ", " + cp.Doc.PageName + "]";
+                form.name = "Sample Form";
                 form.addResetButton = false;
                 form.resetButtonName = "Reset";
                 form.backButtonName = "Previous";
@@ -47,7 +47,7 @@ namespace Contensive.FormWidget.Models.Db {
                 // 
                 // -- add form one
                 FormPageModel formPageOne = addDefault<FormPageModel>(cp);
-                formPageOne.name = "Form #1 of " + form.name;
+                formPageOne.name = "Page 1";
                 formPageOne.formid = form.id;
                 formPageOne.description = "<h2>Form 1: Sample Form Content</h2>" + "<p>This form was automatically created by the Form Design Block.</p>" + "<p>A Dynamic Form is a list of Form Fields that you create and configure. Users complete the form and submit responses.</p>";
                 formPageOne.sortOrder = "1";
@@ -111,7 +111,7 @@ namespace Contensive.FormWidget.Models.Db {
                 // 
                 // -- add form page two
                 FormPageModel formPageTwo = addDefault<FormPageModel>(cp);
-                formPageTwo.name = "Form 2 of the form-widget added to page " + cp.Doc.PageId + ", " + cp.Doc.PageName;
+                formPageTwo.name = "Page 2";
                 formPageTwo.formid = form.id;
                 formPageTwo.description = "<h2>Form 2: Sample Form Content Form</h2>" + "<p>This is the second form in the form wizard.</p>";
                 formPageTwo.sortOrder = "2";
