@@ -19,6 +19,12 @@ namespace Contensive.FormWidget.Addons {
             try {
                 cp.Log.Debug($"FormWidget, enter");
                 //
+                // -- if called as a remote method without an instanceId (e.g. bot hitting /FormWidgetSubmit directly), exit gracefully
+                if (!cp.User.IsEditing() && string.IsNullOrEmpty(cp.Doc.GetText("instanceId"))) {
+                    cp.Log.Warn($"FormWidget, called without instanceId, user [{cp.User.Id}:{cp.User.Name}], visit [{cp.Visit.Id}], visitor [{cp.Visitor.Id}]");
+                    return string.Empty;
+                }
+                //
                 // -- these properties are passed to FormWidgetViewModel.
                 // -- the allow for a single layout to handle multipage, preview and editing modes
                 // -- called from the widget, the are all true if the user is editing
