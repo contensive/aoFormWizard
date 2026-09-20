@@ -7,10 +7,13 @@ namespace Contensive.FormWidget.Models.Db {
     public class FormWidgetModel : SettingsBaseModel {
         //
         public static DbBaseTableMetadataModel tableMetadata { get; private set; } = new DbBaseTableMetadataModel("Form Widgets", "ccFormWidgets", "default", false);        // <------ set set model Name and everywhere that matches this string
-        // 
+        //
         // ====================================================================================================
         // -- instance properties
         public int formId { get; set; }
+        public string anchorTag { get; set; }
+        public int animateStyleId { get; set; }
+        public int animateSpeedId { get; set; }
         // 
         // ====================================================================================================
         public new static FormWidgetModel createOrAddSettings(CPBaseClass cp, string settingsGuid, string recordNameOrSuffix) {
