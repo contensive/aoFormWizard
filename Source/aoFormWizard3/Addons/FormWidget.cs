@@ -29,8 +29,11 @@ namespace Contensive.FormWidget.Addons {
                 // -- the allow for a single layout to handle multipage, preview and editing modes
                 // -- called from the widget, the are all true if the user is editing
                 // -- called from the applciatioin scoring widget, and from the submission details page, same but no editing
-                cp.Doc.SetProperty("isMultipagePreviewMode", cp.User.IsEditing());
-                cp.Doc.SetProperty("isEditing", cp.User.IsEditing());
+                // -- if this form is used on the admin site, do not show editing features
+                bool isOnAdminSite = (cp.Request.PathPage ?? "") == (cp.Site.GetText("adminurl") ?? "");
+                bool isEditing = cp.User.IsEditing() && !isOnAdminSite;
+                cp.Doc.SetProperty("isMultipagePreviewMode", isEditing);
+                cp.Doc.SetProperty("isEditing", isEditing);
                 // -- use the lasted submission for the current session
                 cp.Doc.SetProperty("formResponseId", 0);
                 return DesignBlockController.renderWidget<FormWidgetModel, FormWidgetViewModel>(cp,

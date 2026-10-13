@@ -34,6 +34,7 @@ namespace Contensive.FormWidget {
         public const string ButtonCancelRegistration = "Cancel Registration";
         public const string ButtonRefresh = "Refresh";
         public const string ButtonAdd = "Add";
+        public const string ButtonPrint = "Print";
         //
         // -- request names
         public const string rnButton = "button";

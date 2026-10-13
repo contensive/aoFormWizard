@@ -109,6 +109,9 @@ namespace Contensive.FormWidget.Addons {
                 var previewLayout = cp.Layout.GetLayout(Constants.guidLayoutFormWizard, Constants.nameLayoutFormWizard, Constants.pathFilenameLayoutFormWizard);
                 string renderedForm = cp.Mustache.Render(previewLayout, previewData);
                 //
+                // -- strip any edit wrapper links/tabs that may appear in the rendered form preview
+                renderedForm = stripEditWrappers(renderedForm);
+                //
                 LayoutBuilderNameValueBaseClass contentLB = cp.AdminUI.CreateLayoutBuilderNameValue();
                 //
                 contentLB.addRow();
@@ -127,16 +130,36 @@ namespace Contensive.FormWidget.Addons {
                 contentLB.rowName = "";
                 contentLB.rowValue = renderedForm;
                 //
-                layoutBuilder.body = contentLB.getHtml();
+                // -- wrap body in a printable container with print styles
+                string printStyles = ""
+                    + "<style>"
+                    + "@media print {"
+                    + "  body * { visibility: hidden !important; }"
+                    + "  #formResponsePrintArea, #formResponsePrintArea * { visibility: visible !important; }"
+                    + "  #formResponsePrintArea { position: absolute; left: 0; top: 0; width: 100%; }"
+                    + "}"
+                    + "</style>";
+                string printScript = ""
+                    + "<script>"
+                    + "document.addEventListener('DOMContentLoaded',function(){"
+                    + "  var btns=document.querySelectorAll('input[type=submit][value=Print],button[value=Print]');"
+                    + "  btns.forEach(function(btn){"
+                    + "    btn.addEventListener('click',function(e){e.preventDefault();window.print();});"
+                    + "  });"
+                    + "});"
+                    + "</script>";
+                string contentHtml = contentLB.getHtml();
+                layoutBuilder.body = $"{printStyles}<div id=\"formResponsePrintArea\">{contentHtml}</div>{printScript}";
                 //
                 // -- build page
                 layoutBuilder.title = "Form Response Details";
                 layoutBuilder.description = "";
                 layoutBuilder.callbackAddonGuid = guidAddon;
                 layoutBuilder.failMessage = errorMessage;
-                // 
+                //
                 // -- add buttons
                 layoutBuilder.addFormButton(Constants.ButtonRefresh);
+                layoutBuilder.addFormButton(Constants.ButtonPrint);
                 layoutBuilder.addFormButton(Constants.buttonCancel);
                 //
                 // -- feature subnav link querystring - clicks must include these values
@@ -149,6 +172,38 @@ namespace Contensive.FormWidget.Addons {
                 throw;
             }
         }
+        /// <summary>
+        /// Remove any Contensive edit wrapper markup (edit tabs/links) from the rendered form HTML
+        /// so the response details page is always read-only with no edit UI.
+        /// </summary>
+        private static string stripEditWrappers(string html) {
+            if (string.IsNullOrEmpty(html)) { return html; }
+            var doc = new HtmlDocument();
+            doc.LoadHtml(html);
+            // -- remove edit wrapper anchor tags (class contains "ccEditWrapper" link elements)
+            var editLinks = doc.DocumentNode.SelectNodes("//a[contains(@class,'ccEditWrapperLink')]");
+            if (editLinks != null) {
+                foreach (var node in editLinks) {
+                    node.Remove();
+                }
+            }
+            // -- remove edit tab containers
+            var editTabs = doc.DocumentNode.SelectNodes("//*[contains(@class,'ccEditTab')]");
+            if (editTabs != null) {
+                foreach (var node in editTabs) {
+                    node.Remove();
+                }
+            }
+            // -- remove any remaining ccContentHoverTag elements
+            var hoverTags = doc.DocumentNode.SelectNodes("//*[contains(@class,'ccContentHoverTag')]");
+            if (hoverTags != null) {
+                foreach (var node in hoverTags) {
+                    node.Remove();
+                }
+            }
+            return doc.DocumentNode.OuterHtml;
+        }
+        //
         public class RequestModel {
             //
             public RequestModel(CPBaseClass cp) {
