@@ -8,7 +8,6 @@ using Contensive.BaseClasses.LayoutBuilder;
 using Contensive.DesignBlockBase.Controllers;
 using Contensive.DesignBlockBase.Models.View;
 using Contensive.Models.Db;
-using HtmlAgilityPack;
 using System;
 using System.Data;
 using System.Runtime.InteropServices;
@@ -101,6 +100,11 @@ namespace Contensive.FormWidget.Addons {
                 PersonModel submittedBy = DbBaseModel.create<PersonModel>(cp, response.memberId);
                 //
                 // -- Render the form with mulitpage-preview true and editing false
+                // -- Disable editing via visit property so GetEditLink returns empty, then restore
+                bool savedAllowEditing = cp.Visit.GetBoolean("AllowEditing");
+                if (savedAllowEditing) {
+                    cp.Visit.SetProperty("AllowEditing", false);
+                }
                 var formWidget = new FormWidgetModel();
                 var previewData = DesignBlockViewBaseModel.create<FormWidgetViewModel>(cp, formWidget);
                 previewData.id = 0;
@@ -108,9 +112,9 @@ namespace Contensive.FormWidget.Addons {
                 previewData = FormWidgetViewModel.createFromResponse(cp, previewData, true, false, form, response);
                 var previewLayout = cp.Layout.GetLayout(Constants.guidLayoutFormWizard, Constants.nameLayoutFormWizard, Constants.pathFilenameLayoutFormWizard);
                 string renderedForm = cp.Mustache.Render(previewLayout, previewData);
-                //
-                // -- strip any edit wrapper links/tabs that may appear in the rendered form preview
-                renderedForm = stripEditWrappers(renderedForm);
+                if (savedAllowEditing) {
+                    cp.Visit.SetProperty("AllowEditing", true);
+                }
                 //
                 LayoutBuilderNameValueBaseClass contentLB = cp.AdminUI.CreateLayoutBuilderNameValue();
                 //
@@ -171,37 +175,6 @@ namespace Contensive.FormWidget.Addons {
                 cp.Site.ErrorReport(ex);
                 throw;
             }
-        }
-        /// <summary>
-        /// Remove any Contensive edit wrapper markup (edit tabs/links) from the rendered form HTML
-        /// so the response details page is always read-only with no edit UI.
-        /// </summary>
-        private static string stripEditWrappers(string html) {
-            if (string.IsNullOrEmpty(html)) { return html; }
-            var doc = new HtmlDocument();
-            doc.LoadHtml(html);
-            // -- remove edit wrapper anchor tags (class contains "ccEditWrapper" link elements)
-            var editLinks = doc.DocumentNode.SelectNodes("//a[contains(@class,'ccEditWrapperLink')]");
-            if (editLinks != null) {
-                foreach (var node in editLinks) {
-                    node.Remove();
-                }
-            }
-            // -- remove edit tab containers
-            var editTabs = doc.DocumentNode.SelectNodes("//*[contains(@class,'ccEditTab')]");
-            if (editTabs != null) {
-                foreach (var node in editTabs) {
-                    node.Remove();
-                }
-            }
-            // -- remove any remaining ccContentHoverTag elements
-            var hoverTags = doc.DocumentNode.SelectNodes("//*[contains(@class,'ccContentHoverTag')]");
-            if (hoverTags != null) {
-                foreach (var node in hoverTags) {
-                    node.Remove();
-                }
-            }
-            return doc.DocumentNode.OuterHtml;
         }
         //
         public class RequestModel {

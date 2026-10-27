@@ -16,9 +16,22 @@
 		font-weight: 700;
 	}
 	.formCaption {
-		font-weight: 500;
+		font-weight: 700 !important;
 		font-size: 1em;
 		margin-bottom: 5px;
+	}
+	.form-check-label {
+		color: inherit !important;
+		opacity: 1 !important;
+	}
+	.formFieldContent {
+		margin-left: 2rem;
+	}
+	.formOptionGroup {
+		background-color: #e9ecef;
+		border: 1px solid #ced4da;
+		border-radius: .375rem;
+		padding: .375rem .75rem;
 	}
 	.formPageSortable,
 	[data-formwidget-complete] {
@@ -136,7 +149,7 @@
 															<label class="control-label mb-0" for="formField_{{id}}">
 																<p class="formCaption">{{caption}}{{#required}} <span class="formRequired">*</span>{{/required}}</p>
 															</label>
-															<div>
+															<div class="formFieldContent">
 																{{{fielddescription}}}
 																<input class="form-control {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" id="formField_{{id}}" name="formField_{{id}}" type="{{inputtype}}" value="{{currentValue}}" {{#required}}required{{/required}}>
 																{{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
@@ -151,7 +164,7 @@
 															<label class="control-label mb-0" for="formField_{{id}}">
 																<p class="formCaption">{{caption}}{{#required}} <span class="formRequired">*</span>{{/required}}</p>
 															</label>
-															<div>
+															<div class="formFieldContent">
 																{{{fielddescription}}}
 																{{#currentValue}}
 																	<div class="mt-2">
@@ -171,7 +184,7 @@
 															<label class="control-label" for="formField_{{id}}">
 																<p class="formCaption">{{caption}}{{#required}} <span class="formRequired">*</span>{{/required}}</p>
 															</label>
-															<div>
+															<div class="formFieldContent">
 																{{{fielddescription}}}
 																<textarea rows="5" class="form-control {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" id="formField_{{id}}" name="formField_{{id}}" type="{{inputtype}}" {{#required}}required{{/required}}>{{currentValue}}</textarea>
 																{{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
@@ -184,8 +197,9 @@
 														{{#headline}}<p class="formHeadline border-bottom pb-2 pt-4 mb-4">{{headline}}</p>{{/headline}}
 														<div class="mb-4">
 															<p class="formCaption">{{caption}}{{#required}} <span class="formRequired">*</span>{{/required}}</p>
-															<div>
+															<div class="formFieldContent">
 																{{{fielddescription}}}
+																<div class="formOptionGroup">
 																{{#optionList}}
 																	<div class="form-check">
 																		<input class="form-check-input {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" name="formField_{{id}}" type="checkbox" id="formField_{{id}}_{{optionPtr}}" value="{{optionPtr}}" {{#isSelected}}checked{{/isSelected}}>
@@ -193,6 +207,7 @@
 																		<label class="form-check-label" for="formField_{{id}}_{{optionPtr}}">{{optionName}}</label>
 																	</div>
 																{{/optionList}}
+																</div>
 															</div>
 															{{#invalidAnswer}}<div class="invalid-feedback">This question is required.</div>{{/invalidAnswer}}
 														</div>
@@ -202,8 +217,9 @@
 														{{#headline}}<p class="formHeadline border-bottom pb-2 pt-4 mb-4">{{headline}}</p>{{/headline}}
 														<div class="mb-4">
 															<p class="formCaption">{{caption}}{{#required}} <span class="formRequired">*</span>{{/required}}</p>
-															<div>
+															<div class="formFieldContent">
 																{{{fielddescription}}}
+																<div class="formOptionGroup">
 																{{#optionList}}
 																	<div class="form-check">
 																		<input class="form-check-input {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" type="radio" name="formField_{{id}}" id="formField_{{id}}_{{optionPtr}}" value="{{optionPtr}}"  {{#isSelected}}checked{{/isSelected}}>
@@ -211,6 +227,7 @@
 																		<label class="form-check-label" for="formField_{{id}}_{{optionPtr}}">{{optionName}}</label>
 																	</div>
 																{{/optionList}}
+																</div>
 															</div>
 															{{#invalidAnswer}}
 																<div class="invalid-feedback">This question is required.</div>
@@ -222,7 +239,7 @@
 															{{#headline}}<p class="formHeadline border-bottom pb-2 pt-4 mb-4">{{headline}}</p>{{/headline}}
 															<div class="mb-4">
 																<p class="formCaption">{{caption}}{{#required}} <span class="formRequired">*</span>{{/required}}</p>
-																<div>
+																<div class="formFieldContent">
 																	{{{fielddescription}}}
 																	<select class="form-control {{#invalidAnswer}}is-invalid{{/invalidAnswer}}" name="formField_{{id}}" id="formField_{{id}}" {{#required}}required{{/required}}>
 																		<option value="">Choose...</option>
@@ -243,7 +260,8 @@
 											{{{formQuestionAddLink}}}
 
 											{{#allowRecaptcha}}
-												<div class="mb-4">
+												<div class="mb-4 formWidgetRecaptcha">
+													<script>console.log("formWidget recaptcha rendered on page: {{pageHtmlId}}");</script>
 													<label class="control-label mb-0">
 														{{{recaptchaHTML}}}
 													</label>

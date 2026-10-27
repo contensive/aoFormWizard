@@ -193,6 +193,8 @@ namespace Contensive.FormWidget.Models.View {
             public string classPageDraggable { get; set; }
             public bool includeDragHandle { get; set; }
             public string questionSortableId { get; set; }
+            public bool allowRecaptcha { get; set; }
+            public string recaptchaHTML { get; set; }
         }
         // 
         // ====================================================================================================
@@ -383,15 +385,17 @@ namespace Contensive.FormWidget.Models.View {
                     continue;
                 }
                 //
-                // -- recapcha
-                if (form.allowRecaptcha && !savedAnswers.recaptchaSuccess && !resultViewData.isMultipagePreviewMode) {
+                // -- recaptcha - only add to the first page of the form
+                bool pageAllowRecaptcha = false;
+                string pageRecaptchaHTML = "";
+                if (form.allowRecaptcha && !savedAnswers.recaptchaSuccess && !resultViewData.isMultipagePreviewMode && page.id == resultViewData.pageList.First().id) {
                     //
                     cp.Log.Debug($"aoFormWizard.FormSetViewModel.create(), add recaptcha display");
                     //
-                    resultViewData.allowRecaptcha = form.allowRecaptcha;
-                    //const string recaptchaDisplayAddonGuid = "{E9E51C6E-9152-4284-A44F-D3ABC423AB90}";
-                    //formViewData.recaptchaHTML = cp.Addon.Execute(recaptchaDisplayAddonGuid);
-                    resultViewData.recaptchaHTML = cp.Addon.Execute(Constants.guidAddonRecaptchav2);
+                    resultViewData.allowRecaptcha = true;
+                    pageAllowRecaptcha = true;
+                    pageRecaptchaHTML = cp.Addon.Execute(Constants.guidAddonRecaptchav2);
+                    resultViewData.recaptchaHTML = pageRecaptchaHTML;
                     if (cp.UserError.OK()) {
                         savedAnswers.recaptchaSuccess = true;
                         //
@@ -402,7 +406,7 @@ namespace Contensive.FormWidget.Models.View {
                         }
                     }
                     //
-                    cp.Log.Debug($"aoFormWizard.FormSetViewModel.create(), return recaptchaHTML [{cp.Utils.EncodeHTML(resultViewData.recaptchaHTML)}]");
+                    cp.Log.Debug($"aoFormWizard.FormSetViewModel.create(), return recaptchaHTML [{cp.Utils.EncodeHTML(pageRecaptchaHTML)}]");
                     //
                 }
                 //
@@ -639,7 +643,9 @@ namespace Contensive.FormWidget.Models.View {
                     pageHtmlId = $"fp{page.id}",
                     classPageDraggable = isMultipagePreviewMode && isEditing ? "formPageDraggable" : "",
                     includeDragHandle = isMultipagePreviewMode && isEditing,
-                    questionSortableId = $"questionSortable{page.id}"
+                    questionSortableId = $"questionSortable{page.id}",
+                    allowRecaptcha = pageAllowRecaptcha,
+                    recaptchaHTML = pageRecaptchaHTML
                 });
                 if (!resultViewData.isMultipagePreviewMode) {
                     //
@@ -721,15 +727,17 @@ namespace Contensive.FormWidget.Models.View {
                     //-- skip to the current page
                     if (page.id != savedAnswers.currentPageid && !formWidgetViewData.isEditing) { continue; }
                     //
-                    // -- recapcha
-                    if (form.allowRecaptcha && !formWidgetViewData.isEditing && !savedAnswers.recaptchaSuccess) {
+                    // -- recaptcha - only add to the first page of the form
+                    bool pageAllowRecaptcha = false;
+                    string pageRecaptchaHTML = "";
+                    if (form.allowRecaptcha && !formWidgetViewData.isEditing && !savedAnswers.recaptchaSuccess && page.id == pageList.First().id) {
                         //
                         cp.Log.Debug($"aoFormWizard.FormSetViewModel.create(), add recaptcha");
                         //
-                        formWidgetViewData.allowRecaptcha = form.allowRecaptcha;
-                        //const string recaptchaDisplayAddonGuid = "{E9E51C6E-9152-4284-A44F-D3ABC423AB90}";
-                        //formViewData.recaptchaHTML = cp.Addon.Execute(recaptchaDisplayAddonGuid);
-                        formWidgetViewData.recaptchaHTML = cp.Addon.Execute(Constants.guidAddonRecaptchav2);
+                        formWidgetViewData.allowRecaptcha = true;
+                        pageAllowRecaptcha = true;
+                        pageRecaptchaHTML = cp.Addon.Execute(Constants.guidAddonRecaptchav2);
+                        formWidgetViewData.recaptchaHTML = pageRecaptchaHTML;
                         if (cp.UserError.OK()) {
                             savedAnswers.recaptchaSuccess = true;
                             //
@@ -740,7 +748,7 @@ namespace Contensive.FormWidget.Models.View {
                             }
                         }
                         //
-                        cp.Log.Debug($"aoFormWizard.FormSetViewModel.create(), return recaptchaHTML [{cp.Utils.EncodeHTML(formWidgetViewData.recaptchaHTML)}]");
+                        cp.Log.Debug($"aoFormWizard.FormSetViewModel.create(), return recaptchaHTML [{cp.Utils.EncodeHTML(pageRecaptchaHTML)}]");
                         //
                     }
                     //
@@ -954,7 +962,9 @@ namespace Contensive.FormWidget.Models.View {
                             resetButton = !form.addResetButton ? "" : string.IsNullOrEmpty(form.resetButtonName) ? "Reset" : form.resetButtonName,
                             submitButton = page != pageList.Last() ? "" : string.IsNullOrEmpty(form.submitButtonName) ? "Submit" : form.submitButtonName,
                             continueButton = page == pageList.Last() ? "" : string.IsNullOrEmpty(form.continueButtonName) ? "Continue" : form.continueButtonName,
-                            saveButton = !form.useUserProperty || pageList.Count == 1 ? "" : string.IsNullOrEmpty(form.saveButtonName) ? "Save" : form.saveButtonName
+                            saveButton = !form.useUserProperty || pageList.Count == 1 ? "" : string.IsNullOrEmpty(form.saveButtonName) ? "Save" : form.saveButtonName,
+                            allowRecaptcha = pageAllowRecaptcha,
+                            recaptchaHTML = pageRecaptchaHTML
                         };
                         formWidgetViewData.formPageList.Add(currentEditingPage);
                     }
