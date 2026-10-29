@@ -17,7 +17,7 @@ namespace Contensive.FormWidget.Addons {
             try {
                 //
                 // -- version used to upgrade content
-                const int version = 8;
+                const int version = 9;
                 int buildVersion = CP.Site.GetInteger("Form Wizard Version", version);
                 CP.Site.SetProperty("Form Wizard Version", version);
                 //
@@ -254,6 +254,43 @@ namespace Contensive.FormWidget.Addons {
                     // -- the column does not exist in ccFormPages (replaced by formid) and causes admin edit errors
                     CP.Db.ExecuteNonQuery($"delete from ccfields where contentid={CP.Content.GetID("Form Pages")} and name='formsetid'");
                     CP.Site.SetProperty("Form Wizard Version", 8);
+                }
+                if (buildVersion < 9) {
+                    try {
+                        //
+                        // -- version 9: clean up duplicate records caused by GUID changes
+                        // -- the XML installer runs before OnInstall. It matched records by ccguid:
+                        // --   old GUIDs (patterned/sequential) were not found, so new records were inserted with new GUIDs
+                        // --   the old records (old GUIDs) remain, creating duplicates
+                        // -- delete the old records by their deprecated GUIDs to remove the duplicates
+                        //
+                        // -- deprecated addon GUIDs (ccAddons table)
+                        string[] deprecatedAddonGuids = new[] {
+                            "{B2C3D4E5-F6A7-4B8C-9D0E-1F2A3B4C5D6E}",  // Form Email Edit (now {10B3EDAA-7F17-47F3-8077-DECCFA3009E5})
+                            "{D4E5F6A7-B8C9-4D0E-1F2A-3B4C5D6E7F80}",  // Form Button Edit (now {81C29237-0DAF-4327-9945-BC62ADA73F75})
+                            "{F6A7B8C9-D0E1-4F2A-3B4C-5D6E7F809112}",  // Form Submit Edit (now {BEB3212E-6235-4ACA-8076-D503B6BFDF2A})
+                            "{B8C9D0E1-F2A3-4B4C-5D6E-7F8091122334}",  // Form Feature Edit (now {974B7A89-1A09-4896-9A93-DA10CB271DF8})
+                            "{A1B2C3D4-E5F6-4A7B-8C9D-0E1F2A3B4C5D}",  // SaveFormPageSortable (now {2BEA68F9-8111-49C0-88AD-8B5634AF0AA3})
+                            "{D4C3B2A1-6F5E-7B4A-9D8C-1F0E3A2B5C4D}"   // SaveFormQuestionSortable (now {FBEFF46F-32B3-4219-A4A9-88E7E905FAAB})
+                        };
+                        foreach (string oldGuid in deprecatedAddonGuids) {
+                            CP.Db.ExecuteNonQuery($"delete from ccAddons where ccguid={CP.Db.EncodeSQLText(oldGuid)}");
+                        }
+                        //
+                        // -- deprecated portal feature GUIDs (ccAggrFunction table)
+                        string[] deprecatedFeatureGuids = new[] {
+                            "{A1B2C3D4-E5F6-4A7B-8C9D-0E1F2A3B4C5D}",  // Form-Emails (now {67751042-5E19-4275-B6FA-6E9C90901DB1})
+                            "{C3D4E5F6-A7B8-4C9D-0E1F-2A3B4C5D6E7F}",  // Form-Buttons (now {A281B800-AE0C-4E0B-9BFB-3CE263ED2114})
+                            "{E5F6A7B8-C9D0-4E1F-2A3B-4C5D6E7F8091}",  // Form-Submit (now {0F89C402-028F-4EBA-B000-EE04F3E54253})
+                            "{A7B8C9D0-E1F2-4A3B-4C5D-6E7F80911223}"   // Form-Features (now {621CFCBF-00B5-41EC-AF77-503CB24AB094})
+                        };
+                        foreach (string oldGuid in deprecatedFeatureGuids) {
+                            CP.Db.ExecuteNonQuery($"delete from ccAggrFunction where ccguid={CP.Db.EncodeSQLText(oldGuid)}");
+                        }
+                    } catch (Exception ex) {
+                        CP.Log.Error(ex);
+                    }
+                    CP.Site.SetProperty("Form Wizard Version", 9);
                 }
                 CP.Site.SetProperty("Form Wizard Version", version);
                 //

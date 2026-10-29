@@ -13,8 +13,8 @@ namespace Contensive.FormWidget.Addons {
     /// </summary>
     public class FormSubmitEditAddon : AddonBaseClass {
         //
-        public const string guidPortalFeature = "{E5F6A7B8-C9D0-4E1F-2A3B-4C5D6E7F8091}";
-        public const string guidAddon = "{F6A7B8C9-D0E1-4F2A-3B4C-5D6E7F809112}";
+        public const string guidPortalFeature = "{0F89C402-028F-4EBA-B000-EE04F3E54253}";
+        public const string guidAddon = "{BEB3212E-6235-4ACA-8076-D503B6BFDF2A}";
         //
         // =====================================================================================
         /// <summary>
