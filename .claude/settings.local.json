@@ -5,7 +5,8 @@
       "WebFetch(domain:raw.githubusercontent.com)",
       "Bash(git rm:*)",
       "Bash(grep:*)",
-      "WebFetch(domain:contensive.s3.amazonaws.com)"
+      "WebFetch(domain:contensive.s3.amazonaws.com)",
+      "Bash(npx --yes resvg-cli:*)"
     ]
   }
 }

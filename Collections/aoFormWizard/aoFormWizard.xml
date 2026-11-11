@@ -4,7 +4,9 @@
   xsi:noNamespaceSchemaLocation="https://contensive.s3.amazonaws.com/xsd/Collection.xsd"
 >
 	<HelpLink></HelpLink>
-	<Help></Help>
+	<Help>Build professional multi-page forms and place them anywhere on your site without writing code. Each form supports multiple question types including text fields, text areas, checkboxes, radio buttons, drop-down selects, and file uploads, all organized across as many pages as you need with drag-and-drop reordering. Built-in features include customizable button labels, reCAPTCHA bot detection, automatic notification emails to administrators, auto-responder emails to submitters, a configurable thank-you page, and the option to add users to a group on completion.
+
+Manage every form through a dedicated admin portal with a complete response list, individual submission detail views with print support, CSV data export, and a dashboard widget that displays submission counts at a glance. For application-style workflows, the Submission Scoring widget lets authorized reviewers score and comment on individual responses, making Form Wizard ideal for membership applications, grant reviews, and other evaluation processes.</Help>
 	<!--
 		install
 	-->
