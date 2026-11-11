@@ -264,7 +264,7 @@ namespace Contensive.FormWidget.Addons {
                         // --   the old records (old GUIDs) remain, creating duplicates
                         // -- delete the old records by their deprecated GUIDs to remove the duplicates
                         //
-                        // -- deprecated addon GUIDs (ccAddons table)
+                        // -- deprecated addon GUIDs (ccaggregatefunction table)
                         string[] deprecatedAddonGuids = new[] {
                             "{B2C3D4E5-F6A7-4B8C-9D0E-1F2A3B4C5D6E}",  // Form Email Edit (now {10B3EDAA-7F17-47F3-8077-DECCFA3009E5})
                             "{D4E5F6A7-B8C9-4D0E-1F2A-3B4C5D6E7F80}",  // Form Button Edit (now {81C29237-0DAF-4327-9945-BC62ADA73F75})
@@ -274,7 +274,7 @@ namespace Contensive.FormWidget.Addons {
                             "{D4C3B2A1-6F5E-7B4A-9D8C-1F0E3A2B5C4D}"   // SaveFormQuestionSortable (now {FBEFF46F-32B3-4219-A4A9-88E7E905FAAB})
                         };
                         foreach (string oldGuid in deprecatedAddonGuids) {
-                            CP.Db.ExecuteNonQuery($"delete from ccAddons where ccguid={CP.Db.EncodeSQLText(oldGuid)}");
+                            CP.Db.ExecuteNonQuery($"delete from ccaggregatefunction where ccguid={CP.Db.EncodeSQLText(oldGuid)}");
                         }
                         //
                         // -- deprecated portal feature GUIDs (ccAggrFunction table)
