@@ -273,11 +273,13 @@ namespace Contensive.FormWidget.Addons {
                             "{A1B2C3D4-E5F6-4A7B-8C9D-0E1F2A3B4C5D}",  // SaveFormPageSortable (now {2BEA68F9-8111-49C0-88AD-8B5634AF0AA3})
                             "{D4C3B2A1-6F5E-7B4A-9D8C-1F0E3A2B5C4D}"   // SaveFormQuestionSortable (now {FBEFF46F-32B3-4219-A4A9-88E7E905FAAB})
                         };
-                        foreach (string oldGuid in deprecatedAddonGuids) {
-                            CP.Db.ExecuteNonQuery($"delete from ccaggregatefunction where ccguid={CP.Db.EncodeSQLText(oldGuid)}");
+                        foreach (string oldGuid in deprecatedAddonGuids)
+                        {
+                            CP.Db.ExecuteNonQuery($"delete from ccaggregatefunctions where ccguid={CP.Db.EncodeSQLText(oldGuid)}");
                         }
                         //
-                        // -- deprecated portal feature GUIDs (ccAggrFunction table)
+                        // -- deprecated portal feature GUIDs (ccaggregatefunctions
+                        //  table)
                         string[] deprecatedFeatureGuids = new[] {
                             "{A1B2C3D4-E5F6-4A7B-8C9D-0E1F2A3B4C5D}",  // Form-Emails (now {67751042-5E19-4275-B6FA-6E9C90901DB1})
                             "{C3D4E5F6-A7B8-4C9D-0E1F-2A3B4C5D6E7F}",  // Form-Buttons (now {A281B800-AE0C-4E0B-9BFB-3CE263ED2114})
@@ -285,7 +287,7 @@ namespace Contensive.FormWidget.Addons {
                             "{A7B8C9D0-E1F2-4A3B-4C5D-6E7F80911223}"   // Form-Features (now {621CFCBF-00B5-41EC-AF77-503CB24AB094})
                         };
                         foreach (string oldGuid in deprecatedFeatureGuids) {
-                            CP.Db.ExecuteNonQuery($"delete from ccAggrFunction where ccguid={CP.Db.EncodeSQLText(oldGuid)}");
+                            CP.Db.ExecuteNonQuery($"delete from ccaggregatefunctions where ccguid={CP.Db.EncodeSQLText(oldGuid)}");
                         }
                     } catch (Exception ex) {
                         CP.Log.Error(ex);
